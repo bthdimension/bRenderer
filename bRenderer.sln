@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bRenderer", "framework\os_specific\windows\windows.vcxproj", "{7F1DCBC4-75C9-4514-A335-4C657CCC8251}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bRenderer", "projects\windows\windows.vcxproj", "{7F1DCBC4-75C9-4514-A335-4C657CCC8251}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

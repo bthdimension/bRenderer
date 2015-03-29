@@ -45,7 +45,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\external_libraries\glew-1.12.0\include;$(SolutionDir)\external_libraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\external_libraries\boost;$(SolutionDir)\framework\implementation;$(SolutionDir)\framework\headers;$(SolutionDir)\framework\os_specific\windows;$(SolutionDir)\examples\headers;$(SolutionDir)\examples\implementation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\external_libraries\glew-1.12.0\include;$(SolutionDir)\external_libraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\external_libraries\boost;$(SolutionDir)\framework\implementation;$(SolutionDir)\framework\headers;$(SolutionDir)\framework\os_specific\windows;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\projects\windows\implementation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,16 +71,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\examples\implementation\TriangleTest.cpp" />
-    <ClCompile Include="..\..\implementation\Logger.cpp" />
-    <ClCompile Include="bRenderer.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\framework\implementation\Logger.cpp" />
+    <ClCompile Include="..\..\framework\os_specific\windows\bRenderer.cpp" />
+    <ClCompile Include="implementation\main.cpp" />
+    <ClCompile Include="implementation\TriangleTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\examples\headers\TriangleTest.h" />
-    <ClInclude Include="..\..\headers\Logger.h" />
-    <ClInclude Include="bRenderer.h" />
-    <ClInclude Include="Framework_GL.h" />
+    <ClInclude Include="..\..\framework\headers\Logger.h" />
+    <ClInclude Include="..\..\framework\os_specific\windows\bRenderer.h" />
+    <ClInclude Include="..\..\framework\os_specific\windows\Framework_GL.h" />
+    <ClInclude Include="headers\TriangleTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

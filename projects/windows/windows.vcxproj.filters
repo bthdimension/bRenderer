@@ -25,37 +25,39 @@
     <Filter Include="Header Files\Framework\Win32">
       <UniqueIdentifier>{de05ddb8-f77e-4cff-a5cc-f0c6f4f4c41d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Examples">
+    <Filter Include="Source Files\Project">
       <UniqueIdentifier>{ac08dc30-79d6-4699-82ae-45a3c9c61c62}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Examples">
+    <Filter Include="Header Files\Project">
       <UniqueIdentifier>{77dc4115-d7ee-4b40-b098-08e068022ccb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\implementation\Logger.cpp">
+    <ClCompile Include="implementation\TriangleTest.cpp">
+      <Filter>Source Files\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\implementation\Logger.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\os_specific\windows\bRenderer.cpp">
       <Filter>Source Files\Framework\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="bRenderer.cpp">
-      <Filter>Source Files\Framework\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\..\..\examples\implementation\TriangleTest.cpp">
-      <Filter>Source Files\Examples</Filter>
+    <ClCompile Include="implementation\main.cpp">
+      <Filter>Source Files\Project</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bRenderer.h">
+    <ClInclude Include="headers\TriangleTest.h">
+      <Filter>Header Files\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\os_specific\windows\bRenderer.h">
       <Filter>Header Files\Framework\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Framework_GL.h">
+    <ClInclude Include="..\..\framework\os_specific\windows\Framework_GL.h">
       <Filter>Header Files\Framework\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\headers\Logger.h">
-      <Filter>Header Files\Framework\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\examples\headers\TriangleTest.h">
-      <Filter>Header Files\Examples</Filter>
+    <ClInclude Include="..\..\framework\headers\Logger.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
