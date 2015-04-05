@@ -1,63 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Project">
+      <UniqueIdentifier>{a125e7c8-332b-4a2e-a6fd-176a8a9611bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="bRenderer">
+      <UniqueIdentifier>{fbf0f5b8-7c47-4f4f-a392-f2705045e42b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="bRenderer\os_specific">
+      <UniqueIdentifier>{8dd8f481-ba73-498e-8270-a5197aa17abb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Framework">
-      <UniqueIdentifier>{4bb62e16-eabc-4ec1-b347-15105ebc0f56}</UniqueIdentifier>
+    <Filter Include="bRenderer\headers">
+      <UniqueIdentifier>{16bde05f-772b-4f07-963e-92ad9e0c72f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Framework\Win32">
-      <UniqueIdentifier>{596ff828-50d1-4a4e-addb-2bdcc634c241}</UniqueIdentifier>
+    <Filter Include="bRenderer\implementation">
+      <UniqueIdentifier>{7fcac81e-1e30-4437-b2a2-489fa3457e06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Framework">
-      <UniqueIdentifier>{f16087b9-5df7-4b46-b45f-fd86a47dd3f7}</UniqueIdentifier>
+    <Filter Include="bRenderer\os_specific\ios">
+      <UniqueIdentifier>{60856202-129e-4f9a-b65c-9b3ee643a5ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Framework\Win32">
-      <UniqueIdentifier>{de05ddb8-f77e-4cff-a5cc-f0c6f4f4c41d}</UniqueIdentifier>
+    <Filter Include="bRenderer\os_specific\desktop">
+      <UniqueIdentifier>{df22f144-8adc-4ddc-97de-19831ca48dcc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Project">
-      <UniqueIdentifier>{ac08dc30-79d6-4699-82ae-45a3c9c61c62}</UniqueIdentifier>
+    <Filter Include="Project\headers">
+      <UniqueIdentifier>{bd45fb12-af0b-40d3-81be-900a11d9e871}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Project">
-      <UniqueIdentifier>{77dc4115-d7ee-4b40-b098-08e068022ccb}</UniqueIdentifier>
+    <Filter Include="Project\implementation">
+      <UniqueIdentifier>{e1590151-8d67-4f96-829e-8c1e406388b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp">
+      <Filter>bRenderer\os_specific\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
     <ClCompile Include="implementation\TriangleTest.cpp">
-      <Filter>Source Files\Project</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\framework\implementation\Logger.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\framework\os_specific\windows\bRenderer.cpp">
-      <Filter>Source Files\Framework\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="implementation\main.cpp">
-      <Filter>Source Files\Project</Filter>
+      <Filter>Project\implementation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\bRenderer\headers\Logger.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\bRenderer_GL.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\bRenderer.h">
+      <Filter>bRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\OSdetect.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
     <ClInclude Include="headers\TriangleTest.h">
-      <Filter>Header Files\Project</Filter>
+      <Filter>Project\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\os_specific\windows\bRenderer.h">
-      <Filter>Header Files\Framework\Win32</Filter>
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h">
+      <Filter>bRenderer\os_specific\ios</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\os_specific\windows\Framework_GL.h">
-      <Filter>Header Files\Framework\Win32</Filter>
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\bRenderer_view.h">
+      <Filter>bRenderer\os_specific\ios</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\headers\Logger.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bRenderer\os_specific\ios\bRenderer_view.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
   </ItemGroup>
 </Project>

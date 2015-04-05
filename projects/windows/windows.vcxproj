@@ -45,12 +45,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\external_libraries\glew-1.12.0\include;$(SolutionDir)\external_libraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\external_libraries\boost;$(SolutionDir)\framework\implementation;$(SolutionDir)\framework\headers;$(SolutionDir)\framework\os_specific\windows;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\projects\windows\implementation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\externalLibraries\boost;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\projects\windows\implementation;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\external_libraries\glfw-3.1.bin.WIN32\lib-vc2013;$(SolutionDir)\external_libraries\glew-1.12.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\lib\Release\Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -60,27 +60,34 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\external_libraries\glew-1.12.0\include;$(SolutionDir)\external_libraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\external_libraries\boost;$(SolutionDir)\framework\implementation;$(SolutionDir)\framework\headers;$(SolutionDir)\framework\os_specific\windows;$(SolutionDir)\examples\headers;$(SolutionDir)\examples\implementation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\externalLibraries\boost;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\projects\windows\implementation;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\external_libraries\glfw-3.1.bin.WIN32\lib-vc2013;$(SolutionDir)\external_libraries\glew-1.12.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\lib\Release\Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\framework\implementation\Logger.cpp" />
-    <ClCompile Include="..\..\framework\os_specific\windows\bRenderer.cpp" />
-    <ClCompile Include="implementation\main.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp" />
     <ClCompile Include="implementation\TriangleTest.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\framework\headers\Logger.h" />
-    <ClInclude Include="..\..\framework\os_specific\windows\bRenderer.h" />
-    <ClInclude Include="..\..\framework\os_specific\windows\Framework_GL.h" />
+    <ClInclude Include="..\..\bRenderer\bRenderer.h" />
+    <ClInclude Include="..\..\bRenderer\headers\bRenderer_GL.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Logger.h" />
+    <ClInclude Include="..\..\bRenderer\headers\OSdetect.h" />
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h" />
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\bRenderer_view.h" />
     <ClInclude Include="headers\TriangleTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bRenderer\os_specific\ios\bRenderer_view.mm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

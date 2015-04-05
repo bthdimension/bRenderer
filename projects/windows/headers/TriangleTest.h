@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Framework_GL.h"
-#include "Logger.h"
+#include "bRenderer.h"
 
 class TriangleTest
 {
