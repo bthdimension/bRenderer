@@ -1,8 +1,19 @@
 #pragma once
+
+/* bRenderer includes */
 #include "headers/OSdetect.h"
 #include "headers/bRenderer_GL.h"
 #include "headers/Logger.h"
-#include <sstream>  
+#include "headers/FileHandler.h"
+#include "headers/MatrixStack.h"
+#include "headers/Camera.h"
+
+/* Flamework includes*/
+#include "headers/Model.h"
+#include "headers/Texture.h"
+
+/* vmmlib includes */
+#include "vmmlib/addendum.hpp"
 
 namespace bRenderer
 {
@@ -21,6 +32,10 @@ namespace bRenderer
 	/**	@brief Returns the height of the window in pixels
 	 */
 	GLint getWindowHeight();
+
+	/**	@brief Returns the aspect ratio of the window
+	*/
+	GLfloat getAspectRatio();
 
 #ifdef OS_DESKTOP
     /* Window settings exclusively for desktop operating systems */
@@ -111,5 +126,48 @@ namespace bRenderer
 	 */
 	void terminateRenderer();
 
+	/**	@brief Load a 3D model
+	 *	@param[in] fileName File name including extension
+	 *	@param[in] flipT Flip T axis of texture
+	 *	@param[in] flipZ Flip Z axis of the geometry
+	 */
+	  ////////////////////////////////////////////////////////////////////////////////////////
+	 // TODO: give the option to load shaders and textures with different names than model //
+	////////////////////////////////////////////////////////////////////////////////////////
+	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ);
+
+	/**	@brief Load a texture
+	 *	@param[in] fileName File name
+	 */
+	TexturePtr loadTexture(const std::string &fileName);
+
+	/**	@brief Load a shader
+	 *	@param[in] shaderName Name of shader
+	 */
+	ShaderPtr loadShader(const std::string &shaderName);
+
+	/**	@brief Load a shader
+	 *	@param[in] name Name of material
+	 *	@param[in] materialData
+	 */
+	MaterialPtr createMaterial(const std::string &name, const MaterialData &materialData);
+
+	/**	@brief Get a 3D model
+	 *	@param[in] name Name of the model
+	 */
+	ModelPtr    getModel(const std::string &name);
+
+	/**	@brief Get a 3D model
+	*	@param[in] name Name of the model
+	*/
+	ModelPtr    getModel(const std::string &name);
+
+	/**	@brief Create a 3D perspective
+	 *	@param[in] fov Field of view
+	 *	@param[in] aspect Aspect ratio
+	 *	@param[in] near Near clipping plane
+	 *	@param[in] far Far clipping plane
+	 */
+	vmml::mat4f createPerspective(float fov, float aspect, float near, float far);
 
 } // namespace bRenderer

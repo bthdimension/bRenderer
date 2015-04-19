@@ -45,7 +45,7 @@
         return nil;
     }
     
-    CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+    eaglLayer = (CAEAGLLayer *)self.layer;
     
     // set the surface to not be transparent
     eaglLayer.opaque = TRUE;
@@ -53,8 +53,8 @@
     // configure the properties of the canvas
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking,
-                                    kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
-                                    nil];
+                                     kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
+                                     nil];
     
     // create an OpenGL ES 2.0 context
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -73,6 +73,15 @@
     
     // initial time is not set at this point because the renderer hasn't fully started yet
     initialTime = -1.0;
+    
+    // create buffers
+    [self createFramebuffer];
+    
+    // pass width and height of the view to the renderer
+    bRenderer::setWindowSize(framebufferWidth, framebufferHeight);
+    
+    // set viewport
+    glViewport(0, 0, framebufferWidth, framebufferHeight);
     
     return self;
 }
@@ -100,9 +109,6 @@
     // attach the color buffer to the framebuffer
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
     
-    // pass width and height of the view to the renderer
-    bRenderer::setWindowSize(framebufferWidth, framebufferHeight);
-
     // create a depth renderbuffer
     glGenRenderbuffers(1, &depthRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
@@ -153,9 +159,7 @@
     {
 		// only render if the renderer is supposed to be running
 		if(bRenderer::isRunning()){
-			// set current context
-			[EAGLContext setCurrentContext:context];
-        
+			   
 			if (!defaultFramebuffer)
 				[self createFramebuffer];
         
@@ -163,6 +167,9 @@
         
 			bRenderer::render();
         
+            // set current context
+            [EAGLContext setCurrentContext:context];
+            
 			// display the color buffer to the screen
 			glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
 			[context presentRenderbuffer:GL_RENDERBUFFER];

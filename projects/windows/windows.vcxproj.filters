@@ -4,32 +4,47 @@
     <Filter Include="Project">
       <UniqueIdentifier>{a125e7c8-332b-4a2e-a6fd-176a8a9611bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="bRenderer">
-      <UniqueIdentifier>{fbf0f5b8-7c47-4f4f-a392-f2705045e42b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\os_specific">
-      <UniqueIdentifier>{8dd8f481-ba73-498e-8270-a5197aa17abb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\headers">
-      <UniqueIdentifier>{16bde05f-772b-4f07-963e-92ad9e0c72f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\implementation">
-      <UniqueIdentifier>{7fcac81e-1e30-4437-b2a2-489fa3457e06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\os_specific\ios">
-      <UniqueIdentifier>{60856202-129e-4f9a-b65c-9b3ee643a5ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\os_specific\desktop">
-      <UniqueIdentifier>{df22f144-8adc-4ddc-97de-19831ca48dcc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Project\headers">
       <UniqueIdentifier>{bd45fb12-af0b-40d3-81be-900a11d9e871}</UniqueIdentifier>
     </Filter>
     <Filter Include="Project\implementation">
       <UniqueIdentifier>{e1590151-8d67-4f96-829e-8c1e406388b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="bRenderer">
+      <UniqueIdentifier>{e8cf42b4-fac0-4d93-bfae-e7429679da68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\headers">
+      <UniqueIdentifier>{16d2bc48-8ab1-4923-8633-409e44b7d9dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\headers\Flamework">
+      <UniqueIdentifier>{e8e32f02-338c-41a1-bb2b-e8b6df92320b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\implementation">
+      <UniqueIdentifier>{7a4352d0-57ec-420c-b604-edd8383e2e7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\os_specific">
+      <UniqueIdentifier>{06e3cb0f-ae95-4464-8e54-2a452e03a877}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\os_specific\desktop">
+      <UniqueIdentifier>{9573c752-0da8-4f3e-aa16-5ed95c3a5e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\os_specific\ios">
+      <UniqueIdentifier>{226c6832-decf-41a8-9981-b59e049ad19f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\implementation\Flamework">
+      <UniqueIdentifier>{924f3972-fde8-47cc-9a51-f6afa368c1d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\obj">
+      <UniqueIdentifier>{1b92df65-8065-47c1-a350-76cdb26199c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\data">
+      <UniqueIdentifier>{ca0ad66b-bfed-4af4-8925-cb71e1960e9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
@@ -39,39 +54,149 @@
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Project</Filter>
+    <ClCompile Include="..\..\bRenderer\implementation\bRenderer.cpp">
+      <Filter>bRenderer\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="implementation\TriangleTest.cpp">
-      <Filter>Project\implementation</Filter>
+    <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp">
+      <Filter>bRenderer\os_specific\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Model.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\obj\obj.cpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Material.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData.cpp">
+      <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\bRenderer\headers\Logger.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\bRenderer_GL.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
       <Filter>bRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\TextureData.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Texture.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ShaderData.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Shader.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="headers\TriangleTest.h">
-      <Filter>Project\headers</Filter>
+    <ClInclude Include="..\..\bRenderer\headers\ModelData.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Model.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\MaterialData.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Material.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Logger.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\IDrawable.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\GeometryData.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Geometry.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\bRenderer_GL.h">
+      <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h">
       <Filter>bRenderer\os_specific\ios</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\os_specific\ios\bRenderer_view.h">
-      <Filter>bRenderer\os_specific\ios</Filter>
+    <ClInclude Include="..\..\bRenderer\headers\FileHandler.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\obj\obj.hpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Camera.h">
+      <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\bRenderer\os_specific\ios\bRenderer_view.mm">
+    <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
+    <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\data\menu.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\menu.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\torch.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\torch.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\torch.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\menu.frag">
+      <Filter>Project\data</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\data\menutex.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\torchSurface_Color.png">
+      <Filter>Project\data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

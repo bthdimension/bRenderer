@@ -1,6 +1,11 @@
 #include "../../headers/OSdetect.h"
+
 #ifdef OS_DESKTOP
+
+#include <boost/lexical_cast.hpp>
 #include "../../bRenderer.h"
+
+using boost::lexical_cast;
 
 namespace bRenderer
 {
@@ -28,10 +33,7 @@ namespace bRenderer
 	{
 		windowWidth = width;
 		windowHeight = height;
-
-		std::ostringstream sizeInfo;
-		sizeInfo << "width: " << windowWidth << ", height: " << windowHeight;
-		log(sizeInfo.str(), LM_SYS);
+		log("width: " + lexical_cast<std::string>(windowWidth) + ", height: " + lexical_cast<std::string>(windowWidth), LM_SYS);
 	}
 
 	/* External functions */

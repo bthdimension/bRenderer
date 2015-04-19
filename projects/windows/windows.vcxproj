@@ -45,12 +45,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\externalLibraries\boost;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\projects\windows\implementation;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\lib\Release\Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\lib\Release\Win32;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -60,34 +60,73 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\externalLibraries\boost;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\projects\windows\implementation;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\lib\Release\Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\externalLibraries\glew-1.12.0\lib\Release\Win32;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\bRenderer\implementation\bRenderer.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Material.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Model.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
+    <ClCompile Include="..\..\bRenderer\obj\obj.cpp" />
+    <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp" />
-    <ClCompile Include="implementation\TriangleTest.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
     <ClInclude Include="..\..\bRenderer\headers\bRenderer_GL.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Geometry.h" />
+    <ClInclude Include="..\..\bRenderer\headers\GeometryData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\IDrawable.h" />
     <ClInclude Include="..\..\bRenderer\headers\Logger.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Material.h" />
+    <ClInclude Include="..\..\bRenderer\headers\MaterialData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Model.h" />
+    <ClInclude Include="..\..\bRenderer\headers\ModelData.h" />
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
+    <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Texture.h" />
+    <ClInclude Include="..\..\bRenderer\headers\TextureData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
+    <ClInclude Include="..\..\bRenderer\obj\obj.hpp" />
+    <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp" />
     <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h" />
-    <ClInclude Include="..\..\bRenderer\os_specific\ios\bRenderer_view.h" />
-    <ClInclude Include="headers\TriangleTest.h" />
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\bRenderer\os_specific\ios\bRenderer_view.mm" />
+    <None Include="..\..\bRenderer\os_specific\ios\BView.mm" />
+    <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm" />
+    <None Include="..\data\menu.frag" />
+    <None Include="..\data\menu.mtl" />
+    <None Include="..\data\menu.vert" />
+    <None Include="..\data\torch.frag" />
+    <None Include="..\data\torch.mtl" />
+    <None Include="..\data\torch.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\data\menutex.png" />
+    <Image Include="..\data\torchSurface_Color.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

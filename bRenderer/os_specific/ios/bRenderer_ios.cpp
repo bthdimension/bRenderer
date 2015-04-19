@@ -1,5 +1,7 @@
 #include "../../headers/OSdetect.h"
+
 #ifdef OS_IOS
+
 #include "../../bRenderer.h"
 #include "bLinkToView.h"
 
