@@ -1,16 +1,22 @@
-#pragma once
+#ifndef B_BRENDERER_H
+#define B_BRENDERER_H
 
 /* bRenderer includes */
 #include "headers/OSdetect.h"
-#include "headers/bRenderer_GL.h"
+#include "headers/Renderer_GL.h"
 #include "headers/Logger.h"
 #include "headers/FileHandler.h"
+#include "headers/Renderer.h"
+#include "headers/RenderProject.h"
 #include "headers/MatrixStack.h"
 #include "headers/Camera.h"
 
 /* Flamework includes*/
 #include "headers/Model.h"
 #include "headers/Texture.h"
+#include "headers/ModelData.h"
+#include "headers/TextureData.h"
+#include "headers/ShaderData.h"
 
 /* vmmlib includes */
 #include "vmmlib/addendum.hpp"
@@ -24,6 +30,10 @@ namespace bRenderer
 	/**	@brief Returns true if the renderer is running 
 	 */
 	bool isRunning();
+    
+    /**	@brief Returns true if the application runs in fullscreen mode
+     */
+    bool isFullscreen();
 
 	/**	@brief Returns the width of the window in pixels
 	 */
@@ -33,9 +43,29 @@ namespace bRenderer
 	 */
 	GLint getWindowHeight();
 
+	/**	@brief Gets the size of the window in pixels
+	 *	@param[in] width The width of the window
+	 *	@param[in] height The height of the window
+	 */
+	void getWindowSize(GLint* width, GLint* height);
+
 	/**	@brief Returns the aspect ratio of the window
-	*/
+	 */
 	GLfloat getAspectRatio();
+    
+    /**	@brief Returns the x position of the window in pixels
+     */
+    GLint getWindowPositionX();
+    
+    /**	@brief Returns the y position of the window in pixels
+     */
+    GLint getWindowPositionY();
+
+	/**	@brief Gets the position of the upper left corner of the window
+	 *	@param[in] x The x position of the upper left corner of the window
+	 *	@param[in] y The y position of the upper left corner of the window
+	 */
+	void getWindowPosition(GLint* x, GLint* y);
 
 #ifdef OS_DESKTOP
     /* Window settings exclusively for desktop operating systems */
@@ -46,6 +76,13 @@ namespace bRenderer
 	 *	This is useful if GLFW functionality is used within the application.
 	 */
 	GLFWwindow* getWindow();
+    
+#endif
+    
+    /**	@brief Sets the width of the window in pixels
+     *	@param[in] width The width in pixels
+     */
+    void setWindowFullscreen(bool fullscreen);
 
 	/**	@brief Sets the width of the window in pixels
 	 *	@param[in] width The width in pixels
@@ -63,48 +100,58 @@ namespace bRenderer
 	 */
 	void setWindowSize(GLint width, GLint height);
 
-#endif
+	/**	@brief Sets the position of the upper left corner of the window
+	 *	@param[in] x The x position of the upper left corner of the window
+	 *	@param[in] y The y position of the upper left corner of the window
+	 */
+	void setWindowPosition(GLint x, GLint y);
 
-	/**	@brief Defines a function that gets called when initializing the renderer
+	/**	@brief Sets the project instance to be used for function calls 
+	 *
+	 *	The init, loop and terminate function of the set instance get called automatically.
+	 *
+	 *	@param[in] p The project instance
+	 */
+	void setRenderProject(RenderProject *p);
+
+	/**	@brief Sets a static function that gets called when initializing the renderer
 	 *	
 	 *	In an application a function can be defined that gets called immediately after the renderer is initialized.
 	 *
 	 *	@param[in] f The function to be called
 	 */
-	void defineInitFunction(void(*f)());
+	void setInitFunction(void(*f)());
 
-	/**	@brief Defines a function that gets called repeatedly when looping
-	*
-	*	The defined function gets called repeatedly while the renderer is running. 
-	*	Usually the scene gets drawn and setup in the defined function.
-	*
-	*	@param[in] f The function to be called
-	*/
-	void defineLoopFunction(void(*f)(const double deltaTime, const double elapsedTime));
+	/**	@brief Sets a static function that gets called repeatedly when looping
+	 *
+	 *	The set function gets called repeatedly while the renderer is running.
+	 *	Usually the scene gets drawn and setup in the defined function.
+	 *
+	 *	@param[in] f The function to be called
+	 */
+	void setLoopFunction(void(*f)(const double deltaTime, const double elapsedTime));
 
-	/**	@brief Defines a function that gets called when terminating the renderer 
-	*
-	*	The defined function gets called when the renderer is terminated. 
-	*	Here allocated memory can be freed, instances deleted and statuses changed.
-	*
-	*	@param[in] f The function to be called
-	*/
-	void defineTerminateFunction(void(*f)());
+	/**	@brief Sets a static function that gets called when terminating the renderer 
+	 *
+	 *	The set function gets called when the renderer is terminated.
+	 *	Here allocated memory can be freed, instances deleted and statuses changed.
+	 *
+	 *	@param[in] f The function to be called
+	 */
+	void setTerminateFunction(void(*f)());
 
-#ifdef OS_IOS
     /* Initialization method for iOS without full screen and window size options */
 
 	/**	@brief Do all necessary initializations for the renderer to be ready to run
 	 */
 	bool initRenderer();
-#endif
-#ifdef OS_DESKTOP
+
     /* Initialization methods for desktop with full screen and window size options */
 
 	/**	@brief Do all necessary initializations for the renderer to be ready to run
 	 *	@param[in] fullscreen Decides whether or not the application runs in full screen mode
 	 */
-	bool initRenderer(bool fullscreen = false);
+	bool initRenderer(bool fullscreen);
 
 	/**	@brief Do all necessary initializations for the renderer to be ready to run
  	 *	@param[in] width The width of the window in pixels
@@ -112,7 +159,6 @@ namespace bRenderer
 	 *	@param[in] fullscreen Decides whether or not the application runs in full screen mode
 	 */
 	bool initRenderer(GLint width, GLint height, bool fullscreen = false);
-#endif
 
 	/**	@brief Start the render loop
 	 */
@@ -158,8 +204,8 @@ namespace bRenderer
 	ModelPtr    getModel(const std::string &name);
 
 	/**	@brief Get a 3D model
-	*	@param[in] name Name of the model
-	*/
+	 *	@param[in] name Name of the model
+	 */
 	ModelPtr    getModel(const std::string &name);
 
 	/**	@brief Create a 3D perspective
@@ -170,4 +216,13 @@ namespace bRenderer
 	 */
 	vmml::mat4f createPerspective(float fov, float aspect, float near, float far);
 
+	/**	@brief Create a simple look at matrix
+	 *	@param[in] eye Specifies the position of the eye point
+	 *	@param[in] target Specifies the position of the reference point
+	 *	@param[in] up Specifies the direction of the up vector
+	 */
+	vmml::mat4f lookAt(vmml::vec3f eye, vmml::vec3f target, vmml::vec3f up);
+
 } // namespace bRenderer
+
+#endif /* defined(B_BRENDERER_H) */

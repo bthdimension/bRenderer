@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef FRAMEWORK_MATERIAL_H
-#define FRAMEWORK_MATERIAL_H
+#ifndef B_MATERIAL_H
+#define B_MATERIAL_H
 
 #include <memory>
 #include "Shader.h"
@@ -61,4 +61,4 @@ private:
 
 typedef std::shared_ptr< Material > MaterialPtr;
 
-#endif
+#endif /* defined(B_MATERIAL_H) */

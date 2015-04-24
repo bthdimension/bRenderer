@@ -6,12 +6,12 @@
 //
 //
 
-#ifndef FRAMEWORK_GEOMETRY_DATA_H
-#define FRAMEWORK_GEOMETRY_DATA_H
+#ifndef B_GEOMETRY_DATA_H
+#define B_GEOMETRY_DATA_H
 
 #include <vector>
 #include <unordered_map>
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 #include "vmmlib/vector.hpp"
 #include "MaterialData.h"
 #include "Texture.h"
@@ -85,4 +85,4 @@ struct GeometryData
 
 typedef std::shared_ptr< GeometryData > GeometryDataPtr;
 
-#endif
+#endif /* defined(B_GEOMETRY_DATA_H) */

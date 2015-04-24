@@ -96,6 +96,12 @@
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\implementation\ProjectMain.cpp">
+      <Filter>Project\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
@@ -143,9 +149,6 @@
     <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h">
       <Filter>bRenderer\os_specific\ios</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\bRenderer_GL.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h">
       <Filter>bRenderer\os_specific\ios</Filter>
     </ClInclude>
@@ -164,6 +167,21 @@
     <ClInclude Include="..\..\bRenderer\headers\Camera.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Renderer.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\RenderProject.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\ProjectMain.h">
+      <Filter>Project\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\View.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
@@ -172,10 +190,25 @@
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
+    <None Include="..\..\bRenderer\os_specific\ios\TextureData.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\data\menu.frag">
+      <Filter>Project\data</Filter>
+    </None>
     <None Include="..\data\menu.mtl">
       <Filter>Project\data</Filter>
     </None>
     <None Include="..\data\menu.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\sparks.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\sparks.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\sparks.vert">
       <Filter>Project\data</Filter>
     </None>
     <None Include="..\data\torch.frag">
@@ -187,7 +220,22 @@
     <None Include="..\data\torch.vert">
       <Filter>Project\data</Filter>
     </None>
-    <None Include="..\data\menu.frag">
+    <None Include="..\data\flame.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\flame.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\flame.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\cave_start.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\cave_start.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\cave_start.vert">
       <Filter>Project\data</Filter>
     </None>
   </ItemGroup>
@@ -195,7 +243,25 @@
     <Image Include="..\data\menutex.png">
       <Filter>Project\data</Filter>
     </Image>
+    <Image Include="..\data\particle.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\particle_f.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\sparks.png">
+      <Filter>Project\data</Filter>
+    </Image>
     <Image Include="..\data\torchSurface_Color.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\flame.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\caveStart_d.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\caveStart_n.png">
       <Filter>Project\data</Filter>
     </Image>
   </ItemGroup>

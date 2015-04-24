@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef B_CAMERA_H
+#define B_CAMERA_H
 
 #include <memory>
 #include <iostream>	
@@ -29,4 +29,4 @@ private:
 
 typedef std::shared_ptr<Camera> CameraPtr;
 
-#endif /* defined(CAMERA_H) */
+#endif /* defined(B_CAMERA_H) */

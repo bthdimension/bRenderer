@@ -1,8 +1,14 @@
 #include "../../headers/FileHandler.h"
+#include "../../headers/Logger.h"
 
 namespace bRenderer
 {
 	
+	void setStandardFilePath(const std::string &path)
+	{
+		log("Standard file path cannot be set on iOS", LM_WARNING);
+	}
+
 	std::string getFilePath(const std::string &fileName)
     {
         NSString *fullFile = [NSString stringWithCString:fileName.c_str()

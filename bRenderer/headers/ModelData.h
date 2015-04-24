@@ -6,13 +6,13 @@
 //
 //
 
-#ifndef FRAMEWORK_MODEL_DATA_H
-#define FRAMEWORK_MODEL_DATA_H
+#ifndef B_MODEL_DATA_H
+#define B_MODEL_DATA_H
 
 #include <memory>
 #include <string>
 #include <map>
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 #include "GeometryData.h"
 
 class ModelDataImpl;
@@ -38,4 +38,4 @@ private:
     bool            _flipZ;
 };
 
-#endif
+#endif /* defined(B_MODEL_DATA_H) */

@@ -9,113 +9,217 @@ namespace bRenderer
 {
     /* Internal variables */
     
-    static bool initialized = false;
-    static bool running = false;
+    static bool _initialized = false;
+    static bool _running = false;
+    static bool _fullscreen = true;
     
-    static GLint windowWidth = 640;
-    static GLint windowHeight = 480;
+//    static GLint _width = 640;
+//    static GLint _height = 480;
     
-    static double currentTime = 0;
-    static double elapsedTime = 0;
+    static double _currentTime = 0;
+    static double _elapsedTime = 0;
     
-    static void(*initFunction)();
-    static void(*loopFunction)(const double deltaTime, const double elapsedTime);
-    static void(*terminateFunction)();
-    
+	RenderProject * _renderProject;
+
+    static void(*_initFunction)();
+    static void(*_loopFunction)(const double deltaTime, const double elapsedTime);
+    static void(*_terminateFunction)();
     
     /* Internal functions */
     
-    void setTime(double t)
+    void passFullscreen(bool f)
     {
-        currentTime = t;
+        _fullscreen = f;
     }
     
-    void setWindowSize(GLint width, GLint height)
+    void passRunning(bool r)
     {
-        windowWidth = width;
-        windowHeight = height;
+        _running = r;
+    }
+    
+    void passTime(double t)
+    {
+        _currentTime = t;
+        
     }
     
     /* External functions */
     
     bool isInitialized()
     {
-        return initialized;
+        return _initialized;
     }
     
     bool isRunning()
     {
-        return running;
+        return _running;
+    }
+    
+    bool isFullscreen()
+    {
+        return _fullscreen;
     }
     
     GLint getWindowWidth()
     {
-        return windowWidth;
+        return getViewWidth();
     }
     
     GLint getWindowHeight()
     {
-        return windowHeight;
+        return getViewHeight();
     }
     
-    void defineInitFunction(void(*f)())
+    GLint getWindowPositionX()
     {
-        initFunction = f;
+        return getViewPositionX();
     }
     
-    void defineLoopFunction(void(*f)(const double deltaTime, const double elapsedTime))
+    GLint getWindowPositionY()
     {
-        loopFunction = f;
+        return getViewPositionY();
     }
     
-    void defineTerminateFunction(void(*f)())
+    void getWindowPosition(GLint* x, GLint* y)
     {
-        terminateFunction = f;
+        *x = getViewPositionX();
+        *y = getViewPositionY();
+    }
+    
+    void setWindowFullscreen(bool fullscreen)
+    {
+        if(fullscreen)
+            setViewFullScreen();
+        else
+            log("Set width and height to set fullscreen to flase", LM_WARNING);
+    }
+    
+    void setWindowWidth(GLint width)
+    {
+        setViewSize(width, getViewHeight());
+    }
+
+    void setWindowHeight(GLint height)
+    {
+        setViewSize(getViewWidth(), height);
+    }
+    
+    void setWindowSize(GLint width, GLint height)
+    {
+        setViewSize(width, height);
+    }
+    
+    void setWindowPosition(GLint x, GLint y)
+    {
+        setViewPosition(x, y);
+    }
+    
+	void setRenderProject(RenderProject *p)
+	{
+		_renderProject = p;
+	}
+
+    void setInitFunction(void(*f)())
+    {
+        _initFunction = f;
+    }
+    
+    void setLoopFunction(void(*f)(const double deltaTime, const double elapsedTime))
+    {
+        _loopFunction = f;
+    }
+    
+    void setTerminateFunction(void(*f)())
+    {
+        _terminateFunction = f;
     }
     
     bool initRenderer()
     {
         log("Initializing bRenderer", LM_SYS);
         
-        if (initFunction)
-            initFunction();
+        if (_initFunction)
+            _initFunction();
+
+		if (_renderProject)
+			_renderProject->initFunction();
         
-        initialized = true;
+        _initialized = true;
         
         return true;
     }
+
+	bool initRenderer(bool fullscreen)
+	{
+        if(!fullscreen)
+            log("Can't set fullscreen to flase without setting width and height on iOS.", LM_WARNING);
+        
+        setViewFullScreen();
+		if (initRenderer())
+			return true;
+		else
+			return false;
+	}
+
+	bool initRenderer(GLint width, GLint height, bool fullscreen)
+	{
+        if(fullscreen){
+            log("Can't set width and height when using fullscreen on iOS.", LM_WARNING);
+            setViewFullScreen();
+        }
+        else{
+            setViewSize(width, height);
+        }
+        
+		if (initRenderer())
+			return true;
+		else
+			return false;
+	}
     
     void runRenderer()
     {
-        running = true;
+        _running = true;
+        setRunning(_running);
 		log("Renderer started", LM_SYS);
     }
 
 	void render()
 	{
 		// render here
-		if (loopFunction)
-			loopFunction(currentTime-elapsedTime, currentTime);
+		if (_loopFunction)
+			_loopFunction(_currentTime-_elapsedTime, _currentTime);
+
+		if (_renderProject)
+			_renderProject->loopFunction(_currentTime-_elapsedTime, _currentTime);
 
 		// adjust time 
-		elapsedTime = currentTime;
+		_elapsedTime = _currentTime;
 	}
     
     void stopRenderer()
     {
-        running = false;
+        _running = false;
+        setRunning(_running);
         log("Renderer stopped", LM_SYS);
     }
     
     void terminateRenderer()
     {
-        running = false;
-        initialized = false;
+        _running = false;
+        _initialized = false;
         
-        if (terminateFunction)
-            terminateFunction();
+        if (_terminateFunction)
+            _terminateFunction();
+
+		if (_renderProject)
+			_renderProject->terminateFunction();
         
-        log("Renderer terminated", LM_SYS);
+        setRunning(_running);
+        
+        log("Renderer terminated", LM_SYS);        
+        
+//        exit(0);
     }
     
     

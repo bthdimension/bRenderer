@@ -8,13 +8,13 @@
 //  Reworked by David Steiner
 //
 
-#ifndef FRAMEWORK_TEXTURE_H
-#define FRAMEWORK_TEXTURE_H
+#ifndef B_TEXTURE_H
+#define B_TEXTURE_H
 
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 
 class TextureData;
 
@@ -34,4 +34,4 @@ private:
 
 typedef std::shared_ptr< Texture >  TexturePtr;
 
-#endif
+#endif /* defined(B_TEXTURE_H) */

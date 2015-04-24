@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef FRAMEWORK_SHADER_DATA_H
-#define FRAMEWORK_SHADER_DATA_H
+#ifndef B_SHADER_DATA_H
+#define B_SHADER_DATA_H
 
 #include <string>
 
@@ -33,4 +33,4 @@ private:
     std::string loadSrc(const std::string &fileName);
 };
 
-#endif
+#endif /* defined(B_SHADER_DATA_H) */

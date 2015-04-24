@@ -2,9 +2,61 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "BView.h"
-#include "../../bRenderer.h"
 #include "bLinkToView.h"
+#include "../../bRenderer.h"
 
+/* Link to Renderer */
+namespace bRenderer
+{
+    /* Internal variables */
+    BView *view;
+    
+    /* External functions */
+    
+    GLint getViewWidth()
+    {
+        return [view getViewWidth];
+    }
+    
+    GLint getViewHeight()
+    {
+        return [view getViewHeight];
+    }
+    
+    GLint getViewPositionX()
+    {
+        return [view getViewPositionX];
+    }
+    
+    GLint getViewPositionY()
+    {
+        return [view getViewPositionY];
+    }
+    
+    void setRunning(bool r)
+    {
+        if(r)
+            [view runRenderer];
+        else
+            [view stopRenderer];
+    }
+    
+    void setViewFullScreen()
+    {
+        [view setFullscreen];
+    }
+
+    void setViewSize(GLint width, GLint height)
+    {
+        [view setViewWidth:width setViewHeight:height];
+    }
+    
+    void setViewPosition(GLint x, GLint y)
+    {
+        [view setViewPositionX:x setViewPositionY:y];
+    }
+    
+} // namespace bRenderer
 
 @interface BView (PrivateMethods)
 /* Private methods */
@@ -45,6 +97,8 @@
         return nil;
     }
     
+    bRenderer::view = self;
+    
     eaglLayer = (CAEAGLLayer *)self.layer;
     
     // set the surface to not be transparent
@@ -65,8 +119,10 @@
         return nil;
     }
     
+    // set view size to fullscreen
+    [self setFullscreen];
     
-    //default values for our OpenGL buffers
+    // default values for our OpenGL buffers
     defaultFramebuffer = 0;
     colorRenderbuffer = 0;
     depthRenderbuffer = 0;
@@ -76,13 +132,7 @@
     
     // create buffers
     [self createFramebuffer];
-    
-    // pass width and height of the view to the renderer
-    bRenderer::setWindowSize(framebufferWidth, framebufferHeight);
-    
-    // set viewport
-    glViewport(0, 0, framebufferWidth, framebufferHeight);
-    
+
     return self;
 }
 
@@ -103,8 +153,8 @@
     // get the storage from iOS so it can be displayed in the view
     [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
     // get the frame's width and height
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &framebufferWidth);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &framebufferHeight);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
     
     // attach the color buffer to the framebuffer
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
@@ -113,7 +163,7 @@
     glGenRenderbuffers(1, &depthRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
     // create the storage for the buffer, optimized for depth values, same size as the colorRenderbuffer
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, framebufferWidth, framebufferHeight);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
     // attach the depth buffer to the framebuffer
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
 
@@ -153,7 +203,7 @@
     if(initialTime < 0)
         initialTime = (int)[displayLink timestamp];
     
-    bRenderer::setTime(([displayLink timestamp] - initialTime));
+    bRenderer::passTime(([displayLink timestamp] - initialTime));
 
     if (context != nil)
     {
@@ -193,7 +243,7 @@
         // add the display link to the run loop (will be called 60 times per second)
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         
-        bRenderer::runRenderer();
+        bRenderer::passRunning(true);
     }
 }
 
@@ -204,7 +254,7 @@
         [displayLink invalidate];
         displayLink = nil;
         
-        bRenderer::stopRenderer();
+        bRenderer::passRunning(false);
     }
 }
 
@@ -213,6 +263,70 @@
     [self stopRenderer];
     bRenderer::terminateRenderer();
 }
+
+- (int) getViewWidth
+{
+    return self.frame.size.width;
+}
+
+- (int) getViewHeight
+{
+    return self.frame.size.height;
+}
+
+- (int) getViewPositionX
+{
+    return self.center.x - [self getViewWidth]*0.5;
+}
+
+- (int) getViewPositionY
+{
+    return self.center.y - [self getViewHeight]*0.5;
+}
+
+
+/* Set view to fullscreen */
+- (void) setFullscreen
+{
+    // set width and height to fullscreen
+    width = [[UIScreen mainScreen] bounds].size.width;
+    height = [[UIScreen mainScreen] bounds].size.height;
+    
+    CGRect newFrame = self.frame;
+    newFrame.size.width = width;
+    newFrame.size.height = height;
+    [self setFrame:newFrame];
+    
+    // set viewport
+    glViewport(0, 0, width , height);
+    
+    // pass width, height and fullscreen of the view to the renderer
+    bRenderer::passFullscreen(true);
+}
+
+/* Set width and height of the view */
+- (void) setViewWidth:(GLint)w setViewHeight:(GLint)h
+{
+    width = w;
+    height = h;
+    CGRect newFrame = self.frame;
+    newFrame.size.width = w;
+    newFrame.size.height = h;
+    [self setFrame:newFrame];
+    
+    // set viewport
+    glViewport(0, 0, w , h);
+    
+    // pass width, height and fullscreen of the view to the renderer
+    bRenderer::passFullscreen(false);
+}
+
+/* Set x and y position of the view */
+- (void) setViewPositionX:(GLint)x setViewPositionY:(GLint)y
+{
+    self.frame = CGRectMake(x, y, self.frame.size.width, self.frame.size.height);
+}
+
 
 /* As soon as the view is resized or new subviews are added, this method is called,
  * apparently the framebuffers are invalid in this case so they are deleted and recreated 

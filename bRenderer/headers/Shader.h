@@ -7,14 +7,14 @@
 //  Created by Rahul Mukhi on 1/9/13.
 //
 
-#ifndef FRAMEWORK_SHADER_H
-#define FRAMEWORK_SHADER_H
+#ifndef B_SHADER_H
+#define B_SHADER_H
 
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include "vmmlib/matrix.hpp"
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 #include "Texture.h"
 
 
@@ -85,4 +85,4 @@ private:
 
 typedef std::shared_ptr< Shader > ShaderPtr;
 
-#endif
+#endif /* defined(B_SHADER_H) */

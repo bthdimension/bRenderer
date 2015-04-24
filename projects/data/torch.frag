@@ -1,4 +1,4 @@
-# version 120
+#version 120
 
 uniform lowp mat4 ViewMatrix;
 uniform lowp mat4 ModelMatrix;

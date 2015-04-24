@@ -8,7 +8,6 @@
 
 #include "../headers/Texture.h"
 #include "../headers/TextureData.h"
-#include "../headers/bRenderer_GL.h"
 
 Texture::Texture(const TextureData &data)
 {

@@ -3,14 +3,21 @@
 #import "ViewController.h"
 #import "BView.h"
 
+@interface AppDelegate () {
+@private
+    ViewController *viewController;
+}
+
+@end
+
 @implementation AppDelegate
 
 @synthesize window;
-@synthesize glView;
+@synthesize bView;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    ViewController *viewController = [[ViewController alloc] init];
+    viewController = [[ViewController alloc] init];
     [self.window setRootViewController:viewController];
     [self.window makeKeyAndVisible];
     return YES;
@@ -18,20 +25,20 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    // stop the renderer when the app isn't active
-    [glView stopRenderer];
+    // pass event to view controller holding the c++ application
+    [viewController appWillResignActive];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // run the renderer as soon as the app is active
-    [glView runRenderer];
+    // pass event to view controller holding the c++ application
+    [viewController appDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // terminate renderer before the app is closed
-    [glView terminateRenderer];
+    // pass event to view controller holding the c++ application
+    [viewController appWillTerminate];
 }
 
 @end

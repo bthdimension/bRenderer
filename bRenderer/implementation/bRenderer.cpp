@@ -1,7 +1,4 @@
 #include "../bRenderer.h"
-#include "../headers/ModelData.h"
-#include "../headers/TextureData.h"
-#include "../headers/ShaderData.h"
 
 namespace bRenderer
 {
@@ -20,10 +17,6 @@ namespace bRenderer
 	std::string defaultMaterialName = "default";
 
 	/* Internal functions */
-
-	GLfloat getAspectRatio(){
-		return (GLfloat)getWindowWidth() / (GLfloat)getWindowHeight();
-	}
 
 	std::string getRawName(const std::string &fileName, std::string *ext = nullptr)
 	{
@@ -84,6 +77,16 @@ namespace bRenderer
 	}
 
 	/* External functions */
+
+	void getWindowSize(GLint* width, GLint* height)
+	{
+		*width = getWindowWidth();
+		*height = getWindowHeight();
+	}
+
+	GLfloat getAspectRatio(){
+		return (GLfloat)getWindowWidth() / (GLfloat)getWindowHeight();
+	}
 
 	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ)
 	{
@@ -158,6 +161,21 @@ namespace bRenderer
 
 
 		return perspective;
+	}
+
+	vmml::mat4f lookAt(vmml::vec3f eye, vmml::vec3f target, vmml::vec3f up)
+	{
+		vmml::vec3f zaxis = vmml::normalize(eye - target);
+		vmml::vec3f xaxis = vmml::normalize(vmml::cross<3>(up, zaxis));
+		vmml::vec3f yaxis = vmml::cross<3>(zaxis, xaxis);
+
+		vmml::mat4f view;
+		view.set_row(0, vmml::vec4f(xaxis.x(), xaxis.y(), xaxis.z(), -vmml::dot(xaxis, eye)));
+		view.set_row(1, vmml::vec4f(yaxis.x(), yaxis.y(), yaxis.z(), -vmml::dot(yaxis, eye)));
+		view.set_row(2, vmml::vec4f(zaxis.x(), zaxis.y(), zaxis.z(), -vmml::dot(zaxis, eye)));
+		view.set_row(3, vmml::vec4f(0, 0, 0, 1.0));
+
+		return view;
 	}
 
 } // namespace bRenderer

@@ -1,6 +1,7 @@
-#pragma once
+#ifndef B_LOGGER_H
+#define B_LOGGER_H
 
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 #include <iostream>
 #include <string>
 
@@ -35,3 +36,4 @@ namespace bRenderer
 
 } // namespace bRenderer
 
+#endif /* defined(B_LOGGER_H) */

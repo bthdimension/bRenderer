@@ -7,7 +7,6 @@
 //
 
 #include "../headers/Geometry.h"
-#include "../headers/bRenderer_GL.h"
 
 
 void Geometry::initialize(GeometryDataPtr geometryData)
@@ -59,7 +58,8 @@ void Geometry::draw(GLenum mode)
 {
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     
-    if (_material) _material->bind();
+    if (_material) 
+		_material->bind();
     
     glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
     

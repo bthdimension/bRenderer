@@ -9,8 +9,8 @@
 //  Reworked by David Steiner
 //
 
-#ifndef FRAMEWORK_MODEL_H
-#define FRAMEWORK_MODEL_H
+#ifndef B_MODEL_H
+#define B_MODEL_H
 
 #include <memory>
 #include <string>
@@ -18,7 +18,7 @@
 #include "IDrawable.h"
 #include "Geometry.h"
 #include "Material.h"
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 
 class ModelData;
 
@@ -55,4 +55,4 @@ private:
 
 typedef std::shared_ptr<Model> ModelPtr;
 
-#endif
+#endif /* defined(B_MODEL_H) */

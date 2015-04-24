@@ -11,86 +11,138 @@ namespace bRenderer
 {
 	/* Internal variables */
 
-	static bool initialized = false;
-	static bool running = false;
-	
-	GLFWwindow* window;
+	char *_windowTitle = "bRenderer";
 
-	static GLint windowWidth = 640;
-	static GLint windowHeight = 480;
+	GLFWwindow *_window;
 
-	static double elapsedTime = 0;
+	static bool _initialized = false;
+	static bool _running = false;
+	static bool _fullscreen = true;
 
-	static void(*initFunction)();
-	static void(*loopFunction)(const double deltaTime, const double elapsedTime);
-	static void(*terminateFunction)();
-    
-    static GLint defaultFramebuffer = -1;
+	static GLint _width = 640;
+	static GLint _height = 480;
+
+	static double _currentTime = 0;
+	static double _elapsedTime = 0;
+
+	RenderProject * _renderProject;
+
+	static void(*_initFunction)();
+	static void(*_loopFunction)(const double deltaTime, const double elapsedTime);
+	static void(*_terminateFunction)();
 
 	/* Internal functions */
 
 	void windowSizeChanged(GLFWwindow* window, int width, int height)
 	{
-		windowWidth = width;
-		windowHeight = height;
-		log("width: " + lexical_cast<std::string>(windowWidth) + ", height: " + lexical_cast<std::string>(windowWidth), LM_SYS);
+		_width = width;
+		_height = height;
+		glViewport(0, 0, _width, _height);
+		log("width: " + lexical_cast<std::string>(_width) + ", height: " + lexical_cast<std::string>(_height), LM_SYS);
 	}
 
 	/* External functions */
 
 	bool isInitialized()
 	{
-		return initialized;
+		return _initialized;
 	}
 
 	bool isRunning()
 	{
-		return running;
+		return _running;
+	}
+
+	bool isFullscreen()
+	{
+		return _fullscreen;
 	}
 
 	GLint getWindowWidth()
 	{
-		return windowWidth;
+		return _width;
 	}
 
 	GLint getWindowHeight()
 	{
-		return windowHeight;
+		return _height;
+	}
+
+    GLint getWindowPositionX()
+    {
+        int x, y;
+        glfwGetWindowPos(_window, &x, &y);
+        return x;
+    }
+    
+    GLint getWindowPositionY()
+    {
+        int x, y;
+        glfwGetWindowPos(_window, &x, &y);
+        return y;
+    }
+    
+	void getWindowPosition(GLint* x, GLint* y)
+	{
+		glfwGetWindowPos(_window, x, y);
 	}
 
 	GLFWwindow* getWindow()
 	{
-		return window;
+		return _window;
+	}
+
+	void setWindowFullscreen(bool fullscreen)
+	{
+		log("Not yet supported on desktop systems", LM_WARNING);
 	}
 
 	void setWindowWidth(GLint width)
 	{
-		glfwSetWindowSize(window, width, windowHeight);
+		glfwSetWindowSize(_window, width, _height);
 	}
 	
 	void setWindowHeight(GLint height)
 	{
-		glfwSetWindowSize(window, windowWidth, height);
+		glfwSetWindowSize(_window, _width, height);
 	}
 
 	void setWindowSize(GLint width, GLint height)
 	{
-		glfwSetWindowSize(window, width, height);
+		glfwSetWindowSize(_window, width, height);
 	}
 
-	void defineInitFunction(void(*f)())
+	void setWindowPosition(GLint x, GLint y)
 	{
-		initFunction = f;
+		glfwSetWindowPos(_window, x, y);
 	}
 
-	void defineLoopFunction(void(*f)(const double deltaTime, const double elapsedTime))
+	void setRenderProject(RenderProject *p)
 	{
-		loopFunction = f;
+		_renderProject = p;
 	}
 
-	void defineTerminateFunction(void(*f)())
+	void setInitFunction(void(*f)())
 	{
-		terminateFunction = f;
+		_initFunction = f;
+	}
+
+	void setLoopFunction(void(*f)(const double deltaTime, const double elapsedTime))
+	{
+		_loopFunction = f;
+	}
+
+	void setTerminateFunction(void(*f)())
+	{
+		_terminateFunction = f;
+	}
+
+	bool initRenderer()
+	{
+		if (initRenderer(false))
+			return true;
+		else
+			return false;
 	}
 
 	bool initRenderer(bool fullscreen)
@@ -102,22 +154,20 @@ namespace bRenderer
 			return false;
 
 		// Create a windowed mode window and its OpenGL context 
-		if (fullscreen)
-			window = glfwCreateWindow(windowWidth, windowHeight, "GLFW Window", glfwGetPrimaryMonitor(), NULL);
-		else
-			window = glfwCreateWindow(windowWidth, windowHeight, "GLFW Window", NULL, NULL);
-
-		if (!window)
+		_window = glfwCreateWindow(_width, _height, _windowTitle, fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+		_fullscreen = fullscreen;
+		
+		if (!_window)
 		{
 			glfwTerminate();
 			return false;
 		}
 
 		// Make the window's context current 
-		glfwMakeContextCurrent(window);
+		glfwMakeContextCurrent(_window);
 
 		// Add resize handler 
-		glfwSetWindowSizeCallback(window, windowSizeChanged);
+		glfwSetWindowSizeCallback(_window, windowSizeChanged);
 
 		log("Window and Context created", LM_SYS);
 
@@ -131,18 +181,21 @@ namespace bRenderer
 		}
 		log("Using GLEW ", glewGetString(GLEW_VERSION), LM_SYS);
 
-		if (initFunction)
-			initFunction();
+		if (_initFunction)
+			_initFunction();
 
-		initialized = true;
+		if (_renderProject)
+			_renderProject->initFunction();
+
+		_initialized = true;
 		
 		return true;
 	}
 
 	bool initRenderer(GLint width, GLint height, bool fullscreen)
 	{
-		windowWidth = width;
-		windowHeight = height;
+		_width = width;
+		_height = height;
 
 		if (initRenderer(fullscreen))
 			return true;
@@ -152,43 +205,52 @@ namespace bRenderer
 
 	void runRenderer()
 	{
-		running = true;
-		glfwSetWindowShouldClose(window, GL_FALSE);
+		_running = true;
+		glfwSetWindowShouldClose(_window, GL_FALSE);
         log("Renderer started", LM_SYS);
 
 		// Loop until the user closes the window 
-		while (running && !glfwWindowShouldClose(window))
+		while (_running && !glfwWindowShouldClose(_window))
 		{
 			double time = glfwGetTime();
 			
 			// Render here
-			if (loopFunction)
-				loopFunction(time-elapsedTime, time);
+			if (_loopFunction)
+				_loopFunction(time-_elapsedTime, time);
+
+			if (_renderProject)
+				_renderProject->loopFunction(time - _elapsedTime, time);
 			
 			// Adjust time 
-			elapsedTime = time;
+			_elapsedTime = time;
 
 			// Swap front and back buffers 
-			glfwSwapBuffers(window);
+			glfwSwapBuffers(_window);
 
 			// Poll for and process events
 			glfwPollEvents();
 		}
+
+		if (glfwWindowShouldClose(_window))
+			terminateRenderer();
 	}
 
 	void stopRenderer()
 	{
-		running = false;
+		_running = false;
         log("Renderer stopped", LM_SYS);
 	}
 
 	void terminateRenderer()
 	{
-		running = false;
-		initialized = false;
+		_running = false;
+		_initialized = false;
 
-		if (terminateFunction)
-			terminateFunction();
+		if (_terminateFunction)
+			_terminateFunction();
+
+		if (_renderProject)
+			_renderProject->terminateFunction();
 
 		glfwTerminate();
 		log("Renderer terminated", LM_SYS);

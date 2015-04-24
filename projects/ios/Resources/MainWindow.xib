@@ -13,7 +13,7 @@
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <customObject id="13" userLabel="AppDelegate" customClass="AppDelegate">
             <connections>
-                <outlet property="glView" destination="12" id="15"/>
+                <outlet property="bView" destination="12" id="15"/>
                 <outlet property="window" destination="2" id="16"/>
             </connections>
         </customObject>

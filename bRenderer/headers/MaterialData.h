@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef FRAMEWORK_MATERIAL_DATA_H
-#define FRAMEWORK_MATERIAL_DATA_H
+#ifndef B_MATERIAL_DATA_H
+#define B_MATERIAL_DATA_H
 
 #include <unordered_map>
 
@@ -24,4 +24,4 @@ struct MaterialData
     std::string name;
 };
 
-#endif
+#endif /* defined(B_MATERIAL_DATA_H) */

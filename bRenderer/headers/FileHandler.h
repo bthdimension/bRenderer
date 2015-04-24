@@ -1,23 +1,16 @@
-#pragma once
+#ifndef B_FILE_HANDLER_H
+#define B_FILE_HANDLER_H
 
 #include "OSdetect.h"
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 #include <string>
 
 namespace bRenderer
 {
-
-#ifdef OS_DESKTOP
-	/* On desktop systems the standard lookup path for files can be specified  */
-
-	// TODO: Add a search system that makes this function obsolete
-
-	/**	@brief Specify the standard path to user files
+	/**	@brief On desktop systems the standard lookup path for files can be specified
 	*	@param[in] path
 	*/
 	void setStandardFilePath(const std::string &path);
-
-#endif
 
 	/**	@brief Get the full path to a file
 	*	@param[in] fileName
@@ -31,3 +24,4 @@ namespace bRenderer
 
 } // namespace bRenderer
 
+#endif /* defined(B_FILE_HANDLER_H) */

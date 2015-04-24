@@ -1,0 +1,28 @@
+#  ==========================================================================
+#  
+#  Wavefront OBJ format exported by Red-i Productions' "Riptide Pro"
+#     (a commercial plugin for Cinema 4D PC & Mac, R9.6 or later)
+#  
+#  Red-i Productions
+#  http://skinprops.com
+#  
+#  ==========================================================================
+mtllib flame.mtl
+v -0.5 -0.5 -0
+v 0.5 -0.5 -0
+v -0.5 0.5 -0
+v 0.5 0.5 -0
+# 4 vertices
+
+vt 0.00000 0.00000
+vt 0.00000 1.00000
+vt 1.00000 1.00000
+vt 0.00000 0.00000
+vt 1.00000 1.00000
+vt 1.00000 0.00000
+# 6 texture coordinates
+
+usemtl flame
+f 4/3 3/2 1/1
+f 2/6 4/5 1/4
+# 2 facets

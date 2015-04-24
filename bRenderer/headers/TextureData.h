@@ -6,12 +6,12 @@
 //
 //
 
-#ifndef FRAMEWORK_TEXTURE_DATA_H
-#define FRAMEWORK_TEXTURE_DATA_H
+#ifndef B_TEXTURE_DATA_H
+#define B_TEXTURE_DATA_H
 
 #include <memory>
 #include <string>
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 
 typedef std::shared_ptr< GLubyte > ImageDataPtr;
     
@@ -35,4 +35,4 @@ private:
     ImageDataPtr    _imageData;
 };
 
-#endif
+#endif /* defined(B_TEXTURE_DATA_H) */

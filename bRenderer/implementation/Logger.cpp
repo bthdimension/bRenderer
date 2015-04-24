@@ -2,7 +2,7 @@
 
 namespace bRenderer
 {
-	void log(const std::string &msg, LogMode mode)
+	std::string getTag(LogMode mode)
 	{
 		std::string tag;
 		switch (mode)
@@ -22,8 +22,13 @@ namespace bRenderer
 		default:
 			break;
 		}
-		
-		std::cout << tag << ": " << msg << std::endl;
+
+		return tag;
+	}
+
+	void log(const std::string &msg, LogMode mode)
+	{
+		std::cout << getTag(mode) << ": " << msg << std::endl;
 	}
 
 	void log(const GLubyte *arg, LogMode mode)
@@ -32,16 +37,8 @@ namespace bRenderer
 	}
 
 	void log(const std::string &msg, const GLubyte *arg, LogMode mode)
-	{
-		const int argumentLength = (sizeof(arg) / sizeof(*arg));		
-		std::string message = msg;
-
-		for (int i = 0; i < argumentLength; i++)
-		{
-			message += arg[i];
-		}
-
-		log(message, mode);
+	{	
+		std::cout << getTag(mode) << ": " << msg << arg << std::endl;
 	}
 
 } // namespace bRenderer

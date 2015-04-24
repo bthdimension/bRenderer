@@ -9,8 +9,8 @@
 //  Reworked by David Steiner
 //
 
-#ifndef FRAMEWORK_GEOMETRY_H
-#define FRAMEWORK_GEOMETRY_H
+#ifndef B_GEOMETRY_H
+#define B_GEOMETRY_H
 
 #include <string>
 #include <fstream>
@@ -19,7 +19,7 @@
 #include "Material.h"
 #include "Texture.h"
 
-#include "bRenderer_GL.h"
+#include "Renderer_GL.h"
 
 
 class Geometry
@@ -61,4 +61,4 @@ private:
 
 typedef std::shared_ptr<Geometry> GeometryPtr;
 
-#endif
+#endif /* defined(B_GEOMETRY_H) */

@@ -1,8 +1,10 @@
-#pragma once
+#ifndef B_LINK_TO_VIEW_H
+#define B_LINK_TO_VIEW_H
+
 #include "../../headers/OSdetect.h"
 #ifdef OS_IOS
 
-#include "../../headers/bRenderer_GL.h"
+#include "../../headers/Renderer_GL.h"
 
 /* These functions get called by the view class and serve as a bridge between the Objective-C and the c++ code */
 
@@ -10,12 +12,30 @@ namespace bRenderer
 {
 	void render();
 
-	void setTime(double t);
+    void passFullscreen(bool f);
     
-    void setWindowSize(GLint width, GLint height);
+    void passRunning(bool r);
     
-    // TODO: Here user interactions could be passed as well
+	void passTime(double t);
+    
+    GLint getViewWidth();
+    
+    GLint getViewHeight();
+    
+    GLint getViewPositionX();
+    
+    GLint getViewPositionY();
+    
+    void setRunning(bool r);
+    
+    void setViewFullScreen();
+    
+    void setViewSize(GLint width, GLint height);
+    
+    void setViewPosition(GLint x, GLint y);
     
 } // namespace bRenderer
 
 #endif
+
+#endif /* defined(B_LINK_TO_VIEW_H) */

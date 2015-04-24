@@ -1,4 +1,6 @@
-#pragma once
+#ifndef B_OS_DETECT_H
+#define B_OS_DETECT_H
+
 
 #ifdef _WIN32
 /* Windows 32-bit and 64-bit */
@@ -25,3 +27,5 @@
 /* Probably unsupported */
 #define OS_DESKTOP
 #endif
+
+#endif /* defined(B_OS_DETECT_H) */

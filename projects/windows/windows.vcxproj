@@ -45,7 +45,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -60,7 +60,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\windows\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -79,6 +79,7 @@
     <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Model.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
@@ -88,11 +89,12 @@
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp" />
+    <ClCompile Include="..\implementation\ProjectMain.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
-    <ClInclude Include="..\..\bRenderer\headers\bRenderer_GL.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
     <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
     <ClInclude Include="..\..\bRenderer\headers\Geometry.h" />
     <ClInclude Include="..\..\bRenderer\headers\GeometryData.h" />
@@ -104,28 +106,48 @@
     <ClInclude Include="..\..\bRenderer\headers\Model.h" />
     <ClInclude Include="..\..\bRenderer\headers\ModelData.h" />
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Renderer.h" />
+    <ClInclude Include="..\..\bRenderer\headers\RenderProject.h" />
     <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\Texture.h" />
     <ClInclude Include="..\..\bRenderer\headers\TextureData.h" />
     <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
+    <ClInclude Include="..\..\bRenderer\headers\View.h" />
     <ClInclude Include="..\..\bRenderer\obj\obj.hpp" />
     <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp" />
     <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h" />
     <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h" />
+    <ClInclude Include="..\headers\ProjectMain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm" />
+    <None Include="..\..\bRenderer\os_specific\ios\TextureData.mm" />
+    <None Include="..\data\cave_start.frag" />
+    <None Include="..\data\cave_start.mtl" />
+    <None Include="..\data\cave_start.vert" />
+    <None Include="..\data\flame.frag" />
+    <None Include="..\data\flame.mtl" />
+    <None Include="..\data\flame.vert" />
     <None Include="..\data\menu.frag" />
     <None Include="..\data\menu.mtl" />
     <None Include="..\data\menu.vert" />
+    <None Include="..\data\sparks.frag" />
+    <None Include="..\data\sparks.mtl" />
+    <None Include="..\data\sparks.vert" />
     <None Include="..\data\torch.frag" />
     <None Include="..\data\torch.mtl" />
     <None Include="..\data\torch.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\data\caveStart_d.png" />
+    <Image Include="..\data\caveStart_n.png" />
+    <Image Include="..\data\flame.png" />
     <Image Include="..\data\menutex.png" />
+    <Image Include="..\data\particle.png" />
+    <Image Include="..\data\particle_f.png" />
+    <Image Include="..\data\sparks.png" />
     <Image Include="..\data\torchSurface_Color.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

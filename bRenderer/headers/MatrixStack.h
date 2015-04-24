@@ -1,5 +1,5 @@
-#ifndef MatrixStack_H
-#define MatrixStack_H
+#ifndef B_MATRIX_STACK_H
+#define B_MATRIX_STACK_H
 
 #include <iostream>
 #include "vmmlib/addendum.hpp"
@@ -23,4 +23,4 @@ private:
     std::stack<vmml::mat4f> normalMatrixStack;
 };
 
-#endif /* defined(MatrixStack_H) */
+#endif /* defined(B_MATRIX_STACK_H) */

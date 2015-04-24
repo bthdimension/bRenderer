@@ -39,7 +39,12 @@ TextureData &TextureData::load(const std::string &fileName)
     CGContextRef spriteContext = CGBitmapContextCreate(_imageData.get(), _width, _height, BITS_PER_COMPONENT, _width * COMPONENTS,
                                                        CGImageGetColorSpace(textureImage), kCGImageAlphaPremultipliedLast);
     
+    // flip vertically
+    CGContextTranslateCTM(spriteContext, 0, _height);
+    CGContextScaleCTM(spriteContext, 1.0, -1.0);
+    
     CGContextDrawImage(spriteContext, CGRectMake(0, 0, _width, _height), textureImage);
+    
     CGContextRelease(spriteContext);
     
     return *this;

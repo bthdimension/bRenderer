@@ -8,7 +8,6 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include "../headers/bRenderer_GL.h"
 #include "../headers/Logger.h"
 #include "../headers/GeometryData.h"
 #include "../headers/ShaderData.h"
