@@ -87,15 +87,16 @@
     <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp" />
-    <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp" />
     <ClCompile Include="..\implementation\ProjectMain.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
-    <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
     <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
+    <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
     <ClInclude Include="..\..\bRenderer\headers\Geometry.h" />
     <ClInclude Include="..\..\bRenderer\headers\GeometryData.h" />
     <ClInclude Include="..\..\bRenderer\headers\IDrawable.h" />
@@ -107,12 +108,12 @@
     <ClInclude Include="..\..\bRenderer\headers\ModelData.h" />
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h" />
     <ClInclude Include="..\..\bRenderer\headers\Renderer.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
     <ClInclude Include="..\..\bRenderer\headers\RenderProject.h" />
     <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\Texture.h" />
     <ClInclude Include="..\..\bRenderer\headers\TextureData.h" />
-    <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
     <ClInclude Include="..\..\bRenderer\headers\View.h" />
     <ClInclude Include="..\..\bRenderer\obj\obj.hpp" />
     <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp" />
@@ -123,7 +124,8 @@
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm" />
-    <None Include="..\..\bRenderer\os_specific\ios\TextureData.mm" />
+    <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm" />
+    <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
     <None Include="..\data\cave_start.frag" />
     <None Include="..\data\cave_start.mtl" />
     <None Include="..\data\cave_start.vert" />

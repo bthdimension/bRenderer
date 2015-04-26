@@ -78,15 +78,15 @@ namespace bRenderer
 
 	/* External functions */
 
-	void getWindowSize(GLint* width, GLint* height)
-	{
-		*width = getWindowWidth();
-		*height = getWindowHeight();
-	}
+	//void getWindowSize(GLint* width, GLint* height)
+	//{
+	//	*width = getWindowWidth();
+	//	*height = getWindowHeight();
+	//}
 
-	GLfloat getAspectRatio(){
-		return (GLfloat)getWindowWidth() / (GLfloat)getWindowHeight();
-	}
+	//GLfloat getAspectRatio(){
+	//	return (GLfloat)getWindowWidth() / (GLfloat)getWindowHeight();
+	//}
 
 	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ)
 	{

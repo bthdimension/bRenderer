@@ -7,6 +7,7 @@
 #include "headers/Logger.h"
 #include "headers/FileHandler.h"
 #include "headers/Renderer.h"
+#include "headers/View.h"
 #include "headers/RenderProject.h"
 #include "headers/MatrixStack.h"
 #include "headers/Camera.h"
@@ -23,6 +24,14 @@
 
 namespace bRenderer
 {
+	/**	@brief Returns a pointer to the view of the renderer
+	 *
+	 *	This function returns a pointer to the view of the renderer. The view is where the OpenGL context and
+	 *	on desktop systems a window is created and managed. On iOS a UIView is created instead.
+	 *
+	 */
+	View *getView();
+
 	/**	@brief Returns true if the renderer has already been initialized
 	 */
 	bool isInitialized();
@@ -31,81 +40,6 @@ namespace bRenderer
 	 */
 	bool isRunning();
     
-    /**	@brief Returns true if the application runs in fullscreen mode
-     */
-    bool isFullscreen();
-
-	/**	@brief Returns the width of the window in pixels
-	 */
-	GLint getWindowWidth();
-
-	/**	@brief Returns the height of the window in pixels
-	 */
-	GLint getWindowHeight();
-
-	/**	@brief Gets the size of the window in pixels
-	 *	@param[in] width The width of the window
-	 *	@param[in] height The height of the window
-	 */
-	void getWindowSize(GLint* width, GLint* height);
-
-	/**	@brief Returns the aspect ratio of the window
-	 */
-	GLfloat getAspectRatio();
-    
-    /**	@brief Returns the x position of the window in pixels
-     */
-    GLint getWindowPositionX();
-    
-    /**	@brief Returns the y position of the window in pixels
-     */
-    GLint getWindowPositionY();
-
-	/**	@brief Gets the position of the upper left corner of the window
-	 *	@param[in] x The x position of the upper left corner of the window
-	 *	@param[in] y The y position of the upper left corner of the window
-	 */
-	void getWindowPosition(GLint* x, GLint* y);
-
-#ifdef OS_DESKTOP
-    /* Window settings exclusively for desktop operating systems */
-
-	/**	@brief Returns the GLFW window 
-	 *
-	 *	This function returns the window created using GLFW. 
-	 *	This is useful if GLFW functionality is used within the application.
-	 */
-	GLFWwindow* getWindow();
-    
-#endif
-    
-    /**	@brief Sets the width of the window in pixels
-     *	@param[in] width The width in pixels
-     */
-    void setWindowFullscreen(bool fullscreen);
-
-	/**	@brief Sets the width of the window in pixels
-	 *	@param[in] width The width in pixels
-	 */
-	void setWindowWidth(GLint width);
-
-	/**	@brief Sets the height of the window in pixels
-	 *	@param[in] height The height in pixels
-	 */
-	void setWindowHeight(GLint height);
-
-	/**	@brief Sets the size of the window in pixels
-	 *	@param[in] width The width in pixels
-	 *	@param[in] height The height in pixels
-	 */
-	void setWindowSize(GLint width, GLint height);
-
-	/**	@brief Sets the position of the upper left corner of the window
-	 *	@param[in] x The x position of the upper left corner of the window
-	 *	@param[in] y The y position of the upper left corner of the window
-	 */
-	void setWindowPosition(GLint x, GLint y);
-
 	/**	@brief Sets the project instance to be used for function calls 
 	 *
 	 *	The init, loop and terminate function of the set instance get called automatically.

@@ -10,30 +10,10 @@
 
 namespace bRenderer
 {
-	void render();
+    /**	@brief Draw the scene
+     */
+    void draw();
 
-    void passFullscreen(bool f);
-    
-    void passRunning(bool r);
-    
-	void passTime(double t);
-    
-    GLint getViewWidth();
-    
-    GLint getViewHeight();
-    
-    GLint getViewPositionX();
-    
-    GLint getViewPositionY();
-    
-    void setRunning(bool r);
-    
-    void setViewFullScreen();
-    
-    void setViewSize(GLint width, GLint height);
-    
-    void setViewPosition(GLint x, GLint y);
-    
 } // namespace bRenderer
 
 #endif

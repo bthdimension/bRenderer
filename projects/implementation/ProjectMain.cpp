@@ -9,10 +9,13 @@ void ProjectMain::init()
 	// set this instance of RenderProject to be used for function calls
 	setRenderProject(this);
 
-	
-
 	// let the renderer create an OpenGL context and the main window
 	initRenderer(1024, 768, false);
+    
+    // Test second view
+    View v;
+    v.initView(200, 200, false);
+    v.setPosition(300, 300);
 
 	// start main loop 
 	runRenderer();
@@ -71,6 +74,7 @@ void ProjectMain::initFunction()
 /* Draw your scene here */
 void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 {
+
 	if (((int)elapsedTime % 3) >= 1)
 	{
 		/* Test something after 3 seconds*/
@@ -83,7 +87,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	///// Perspective ////
-	vmml::mat4f projectionMatrix = createPerspective(90.0f, getAspectRatio(), -1.0f, 1280.0f);
+	vmml::mat4f projectionMatrix = createPerspective(90.0f, getView()->getAspectRatio(), -1.0f, 1280.0f);
 
 	//// Camera ////
 	cameraForward = 0;
@@ -215,7 +219,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 if(z==1.0)
                     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
                 
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65/getAspectRatio(), 0.6 + (0.08*z), (-z / 100.0 - 0.50)));
+				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / getView()->getAspectRatio(), 0.6 + (0.08*z), (-z / 100.0 - 0.50)));
                 
                 float rot = 0.0;
                 if(fmod(z, 2.0) == 0){
@@ -228,7 +232,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 
                 float ParticleScale = 2.45-(0.46*z);
                 
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / getAspectRatio(), ParticleScale, ParticleScale));
+				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / getView()->getAspectRatio(), ParticleScale, ParticleScale));
                 
                 vmml::vec3f eyePos(0, 0, 0.25);
                 vmml::vec3f eyeUp = vmml::vec3f::UP;
@@ -273,7 +277,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
             //for-loop if I decide that more than one flame would look better and the performance wouldn't suffer too much
             for (float z = 1.0; z < 2.0; z++) {
                 
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / getAspectRatio(), 0.65, (-z / 100.0 - 0.58)));
+				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / getView()->getAspectRatio(), 0.65, (-z / 100.0 - 0.58)));
                 
                 float rot;
                 rot = randomNumber(1.0, 1.1)*randomTime*(z+0.3)*M_PI_F;
@@ -282,7 +286,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 
                 float ParticleScale = 1.1-(0.5*z);
                 
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / getAspectRatio(), 4.0*ParticleScale, ParticleScale));
+				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / getView()->getAspectRatio(), 4.0*ParticleScale, ParticleScale));
                 
                 vmml::vec3f eyePos(0, 0, 0.25);
                 vmml::vec3f eyeUp = vmml::vec3f::UP;
@@ -328,7 +332,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 				translation = vmml::create_translation(vmml::vec3f(0.0, menuSliderPosY, -0.65));
 
 			float menuScale = 0.00132;
-			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(menuScale, getAspectRatio()*menuScale, menuScale));
+			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(menuScale, getView()->getAspectRatio()*menuScale, menuScale));
 
 			vmml::vec3f eyePos(0, 0, 0.25);
 			vmml::vec3f eyeUp = vmml::vec3f::UP;
@@ -361,7 +365,7 @@ void ProjectMain::terminateFunction()
 void ProjectMain::deviceRotated()
 {
     // set view to fullscreen after device rotation
-    setWindowFullscreen(true);
+	getView()->setFullscreen(true);
     log("Device rotated");
 }
 
@@ -388,6 +392,5 @@ void ProjectMain::appWillTerminate()
 
 /* Helper functions */
 float ProjectMain::randomNumber(float min, float max){
-    float range = max - min;
     return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
 }

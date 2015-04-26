@@ -1,7 +1,6 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "BView.h"
 
 @interface AppDelegate () {
 @private
@@ -13,13 +12,20 @@
 @implementation AppDelegate
 
 @synthesize window;
-@synthesize bView;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // create window
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor blackColor];
+    [self.window makeKeyAndVisible];
+    
+    // create view controller
     viewController = [[ViewController alloc] init];
+    
     [self.window setRootViewController:viewController];
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

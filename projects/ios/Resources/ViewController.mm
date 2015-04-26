@@ -1,10 +1,13 @@
 
 #import "ViewController.h"
+//#import "BView.h"
 #include "ProjectMain.h"
+
 
 @interface ViewController () {
 @private
     ProjectMain p;
+//    BView *bView;
 }
 
 @end
@@ -14,6 +17,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    CGRect frame = [[UIScreen mainScreen] applicationFrame];
+//    bView = [[BView alloc] initWithFrame:frame];
+//    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:bView];
     
     // initialize user application
     p.init();

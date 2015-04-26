@@ -10,107 +10,137 @@
     <Filter Include="Project\implementation">
       <UniqueIdentifier>{e1590151-8d67-4f96-829e-8c1e406388b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="bRenderer">
-      <UniqueIdentifier>{e8cf42b4-fac0-4d93-bfae-e7429679da68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\headers">
-      <UniqueIdentifier>{16d2bc48-8ab1-4923-8633-409e44b7d9dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\headers\Flamework">
-      <UniqueIdentifier>{e8e32f02-338c-41a1-bb2b-e8b6df92320b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\implementation">
-      <UniqueIdentifier>{7a4352d0-57ec-420c-b604-edd8383e2e7e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\os_specific">
-      <UniqueIdentifier>{06e3cb0f-ae95-4464-8e54-2a452e03a877}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\os_specific\desktop">
-      <UniqueIdentifier>{9573c752-0da8-4f3e-aa16-5ed95c3a5e65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\os_specific\ios">
-      <UniqueIdentifier>{226c6832-decf-41a8-9981-b59e049ad19f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\implementation\Flamework">
-      <UniqueIdentifier>{924f3972-fde8-47cc-9a51-f6afa368c1d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\obj">
-      <UniqueIdentifier>{1b92df65-8065-47c1-a350-76cdb26199c1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Project\data">
       <UniqueIdentifier>{ca0ad66b-bfed-4af4-8925-cb71e1960e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer">
+      <UniqueIdentifier>{76d25104-996d-4473-a31d-ed73139bffa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\headers">
+      <UniqueIdentifier>{5505337c-7f07-4433-a0b6-8ec99611e4ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\implementation">
+      <UniqueIdentifier>{a522dbba-bfb8-45b1-bdf2-4451a6f2dd43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\obj">
+      <UniqueIdentifier>{58782cf0-2266-417a-8d76-784eb6bb7e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\os_specific">
+      <UniqueIdentifier>{69d2663a-e959-4a05-8ca0-031915cdfc75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\os_specific\desktop">
+      <UniqueIdentifier>{9517212a-8505-48ac-8fed-280e15317f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\os_specific\ios">
+      <UniqueIdentifier>{2252bc99-a8e5-4443-8f62-c6f65d1fe6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\headers\Flamework">
+      <UniqueIdentifier>{e415e35e-6d73-468b-a69b-ef93da9d4d31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\implementation\Flamework">
+      <UniqueIdentifier>{45e66f69-980b-42bc-9bd7-c68a1d35c203}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Project</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp">
-      <Filter>bRenderer\implementation</Filter>
+    <ClCompile Include="..\implementation\ProjectMain.cpp">
+      <Filter>Project\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp">
-      <Filter>bRenderer\os_specific\ios</Filter>
+    <ClCompile Include="..\..\bRenderer\implementation\bRenderer.cpp">
+      <Filter>bRenderer\implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\bRenderer.cpp">
+    <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp">
-      <Filter>bRenderer\os_specific\desktop</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Model.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\obj\obj.cpp">
-      <Filter>bRenderer\obj</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp">
-      <Filter>bRenderer\obj</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp">
-      <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp">
-      <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Material.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp">
+    <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\obj\obj.cpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp">
+      <Filter>bRenderer\os_specific\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp">
+      <Filter>bRenderer\os_specific\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData.cpp">
-      <Filter>bRenderer\os_specific\desktop</Filter>
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\implementation\ProjectMain.cpp">
-      <Filter>Project\implementation</Filter>
+    <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp">
+      <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\headers\ProjectMain.h">
+      <Filter>Project\headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
       <Filter>bRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\TextureData.h">
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Camera.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Model.h">
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\obj\obj.hpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp">
+      <Filter>bRenderer\obj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\View.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Texture.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\TextureData.h">
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h">
@@ -119,13 +149,7 @@
     <ClInclude Include="..\..\bRenderer\headers\Shader.h">
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\OSdetect.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ModelData.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Model.h">
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\MaterialData.h">
@@ -133,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Material.h">
       <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Logger.h">
-      <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\IDrawable.h">
       <Filter>bRenderer\headers\Flamework</Filter>
@@ -146,53 +167,26 @@
     <ClInclude Include="..\..\bRenderer\headers\Geometry.h">
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h">
-      <Filter>bRenderer\os_specific\ios</Filter>
+    <ClInclude Include="..\..\bRenderer\headers\OSdetect.h">
+      <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\FileHandler.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\obj\obj.hpp">
-      <Filter>bRenderer\obj</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp">
-      <Filter>bRenderer\obj</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Camera.h">
+    <ClInclude Include="..\..\bRenderer\headers\Logger.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Renderer.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\RenderProject.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\ProjectMain.h">
-      <Filter>Project\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\View.h">
+    <ClInclude Include="..\..\bRenderer\headers\RenderProject.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </None>
-    <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </None>
-    <None Include="..\..\bRenderer\os_specific\ios\TextureData.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </None>
     <None Include="..\data\menu.frag">
       <Filter>Project\data</Filter>
     </None>
@@ -237,6 +231,18 @@
     </None>
     <None Include="..\data\cave_start.vert">
       <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

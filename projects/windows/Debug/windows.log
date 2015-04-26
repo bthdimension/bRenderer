@@ -1,32 +1,34 @@
-﻿Build started 25.04.2015 00:18:28.
+﻿Build started 26.04.2015 22:44:24.
      1>Project "I:\bRenderer\projects\windows\windows.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"I:\bRenderer\\externalLibraries\vmmlib-library" /I"I:\bRenderer\\externalLibraries\boost-library" /I"I:\bRenderer\\externalLibraries\glew-1.12.0\include" /II:\bRenderer\\externalLibraries\FreeImage3170Win32 /I"I:\bRenderer\\externalLibraries\glfw-3.1.bin.WIN32\include" /II:\bRenderer\\projects\headers /II:\bRenderer\\bRenderer /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\bRenderer\implementation\bRenderer.cpp ..\..\bRenderer\implementation\Camera.cpp ..\..\bRenderer\implementation\Geometry.cpp ..\..\bRenderer\implementation\Logger.cpp ..\..\bRenderer\implementation\Material.cpp ..\..\bRenderer\implementation\MatrixStack.cpp ..\..\bRenderer\implementation\Model.cpp ..\..\bRenderer\implementation\ModelData.cpp ..\..\bRenderer\implementation\Renderer.cpp ..\..\bRenderer\implementation\Shader.cpp ..\..\bRenderer\implementation\ShaderData.cpp ..\..\bRenderer\implementation\Texture.cpp ..\..\bRenderer\obj\obj.cpp ..\..\bRenderer\obj\obj_parser.cpp ..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp ..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp ..\..\bRenderer\os_specific\desktop\TextureData.cpp ..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp ..\implementation\ProjectMain.cpp main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"I:\bRenderer\\externalLibraries\vmmlib-library" /I"I:\bRenderer\\externalLibraries\boost-library" /I"I:\bRenderer\\externalLibraries\glew-1.12.0\include" /II:\bRenderer\\externalLibraries\FreeImage3170Win32 /I"I:\bRenderer\\externalLibraries\glfw-3.1.bin.WIN32\include" /II:\bRenderer\\projects\headers /II:\bRenderer\\bRenderer /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\bRenderer\implementation\bRenderer.cpp ..\..\bRenderer\implementation\Camera.cpp ..\..\bRenderer\implementation\Geometry.cpp ..\..\bRenderer\implementation\Logger.cpp ..\..\bRenderer\implementation\Material.cpp ..\..\bRenderer\implementation\MatrixStack.cpp ..\..\bRenderer\implementation\Model.cpp ..\..\bRenderer\implementation\ModelData.cpp ..\..\bRenderer\implementation\Shader.cpp ..\..\bRenderer\implementation\ShaderData.cpp ..\..\bRenderer\implementation\Texture.cpp ..\..\bRenderer\obj\obj.cpp ..\..\bRenderer\obj\obj_parser.cpp ..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp ..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp ..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp ..\..\bRenderer\os_specific\desktop\View_desktop.cpp ..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp ..\implementation\ProjectMain.cpp main.cpp
          main.cpp
          ProjectMain.cpp
-     1>i:\brenderer\projects\implementation\projectmain.cpp(77): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
      1>i:\brenderer\projects\implementation\projectmain.cpp(81): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(90): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(96): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(96): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(103): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(169): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(190): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(218): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(229): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(241): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(243): warning C4305: '=' : truncation from 'double' to 'float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(276): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(276): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(279): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(279): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(283): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(285): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
-     1>i:\brenderer\projects\implementation\projectmain.cpp(325): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(328): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>i:\brenderer\projects\implementation\projectmain.cpp(330): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(85): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(94): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(100): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(100): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(107): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(173): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(194): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(222): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(233): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(245): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(247): warning C4305: '=' : truncation from 'double' to 'float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(280): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(280): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(283): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(283): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(287): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(289): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>i:\brenderer\projects\implementation\projectmain.cpp(329): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(332): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>i:\brenderer\projects\implementation\projectmain.cpp(334): warning C4305: 'initializing' : truncation from 'double' to 'float'
          bRenderer_ios.cpp
-         TextureData.cpp
+         View_desktop.cpp
+         Unknown compiler version - please run the configure tests and report the results
+         TextureData_desktop.cpp
          FileHandler_desktop.cpp
          bRenderer_desktop.cpp
          Unknown compiler version - please run the configure tests and report the results
@@ -38,7 +40,6 @@
          ShaderData.cpp
          Shader.cpp
          Unknown compiler version - please run the configure tests and report the results
-         Renderer.cpp
          ModelData.cpp
          Unknown compiler version - please run the configure tests and report the results
      1>i:\brenderer\brenderer\implementation\modeldata.cpp(190): warning C4244: 'argument' : conversion from 'obj::float_type' to 'const float', possible loss of data
@@ -96,7 +97,8 @@
          Debug\obj_parser.obj
          Debug\bRenderer_desktop.obj
          Debug\FileHandler_desktop.obj
-         Debug\TextureData.obj
+         Debug\TextureData_desktop.obj
+         Debug\View_desktop.obj
          Debug\bRenderer_ios.obj
          Debug\ProjectMain.obj
          Debug\main.obj
@@ -105,4 +107,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:15.42
+Time Elapsed 00:00:16.10

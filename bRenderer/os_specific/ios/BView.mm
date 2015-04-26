@@ -5,58 +5,6 @@
 #include "bLinkToView.h"
 #include "../../bRenderer.h"
 
-/* Link to Renderer */
-namespace bRenderer
-{
-    /* Internal variables */
-    BView *view;
-    
-    /* External functions */
-    
-    GLint getViewWidth()
-    {
-        return [view getViewWidth];
-    }
-    
-    GLint getViewHeight()
-    {
-        return [view getViewHeight];
-    }
-    
-    GLint getViewPositionX()
-    {
-        return [view getViewPositionX];
-    }
-    
-    GLint getViewPositionY()
-    {
-        return [view getViewPositionY];
-    }
-    
-    void setRunning(bool r)
-    {
-        if(r)
-            [view runRenderer];
-        else
-            [view stopRenderer];
-    }
-    
-    void setViewFullScreen()
-    {
-        [view setFullscreen];
-    }
-
-    void setViewSize(GLint width, GLint height)
-    {
-        [view setViewWidth:width setViewHeight:height];
-    }
-    
-    void setViewPosition(GLint x, GLint y)
-    {
-        [view setViewPositionX:x setViewPositionY:y];
-    }
-    
-} // namespace bRenderer
 
 @interface BView (PrivateMethods)
 /* Private methods */
@@ -97,7 +45,7 @@ namespace bRenderer
         return nil;
     }
     
-    bRenderer::view = self;
+//    bRenderer::view = self;
     
     eaglLayer = (CAEAGLLayer *)self.layer;
     
@@ -114,7 +62,7 @@ namespace bRenderer
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     // quit if context creation failed
-    if (!context || ![EAGLContext setCurrentContext:context]) {
+    if (!context || ![self setContextCurrent]) {
         bRenderer::log("Could not create context!", bRenderer::LM_SYS);
         return nil;
     }
@@ -177,7 +125,7 @@ namespace bRenderer
 {
     // to access any OpenGL methods a valid and current context is needed
     if (context) {
-        [EAGLContext setCurrentContext:context];
+        [self setContextCurrent];
         
         if (defaultFramebuffer) {
             glDeleteFramebuffers(1, &defaultFramebuffer);
@@ -203,30 +151,30 @@ namespace bRenderer
     if(initialTime < 0)
         initialTime = (int)[displayLink timestamp];
     
-    bRenderer::passTime(([displayLink timestamp] - initialTime));
+//    bRenderer::passTime(([displayLink timestamp] - initialTime));
 
     if (context != nil)
     {
-		// only render if the renderer is supposed to be running
-		if(bRenderer::isRunning()){
+//		// only render if the renderer is supposed to be running
+//		if(bRenderer::isRunning()){
 			   
 			if (!defaultFramebuffer)
 				[self createFramebuffer];
         
 			glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
         
-			bRenderer::render();
+			bRenderer::draw();
         
             // set current context
-            [EAGLContext setCurrentContext:context];
+            [self setContextCurrent];
             
 			// display the color buffer to the screen
 			glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
 			[context presentRenderbuffer:GL_RENDERBUFFER];
-		}
-        else{
-            [self stopRenderer];
-        }
+//		}
+//        else{
+//            [self stopRenderer];
+//        }
     }
     else
         bRenderer::log("Context not set!", bRenderer::LM_SYS);
@@ -242,8 +190,6 @@ namespace bRenderer
         
         // add the display link to the run loop (will be called 60 times per second)
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        
-        bRenderer::passRunning(true);
     }
 }
 
@@ -253,15 +199,12 @@ namespace bRenderer
         // if the display link is present, it gets invalidated (loop stops)
         [displayLink invalidate];
         displayLink = nil;
-        
-        bRenderer::passRunning(false);
     }
 }
 
-- (void)terminateRenderer
+-(bool)isRunning
 {
-    [self stopRenderer];
-    bRenderer::terminateRenderer();
+    return displayLink != nil;
 }
 
 - (int) getViewWidth
@@ -284,6 +227,11 @@ namespace bRenderer
     return self.center.y - [self getViewHeight]*0.5;
 }
 
+-(double)getTime
+{
+    return ([displayLink timestamp] - initialTime);
+}
+
 
 /* Set view to fullscreen */
 - (void) setFullscreen
@@ -292,6 +240,8 @@ namespace bRenderer
     width = [[UIScreen mainScreen] bounds].size.width;
     height = [[UIScreen mainScreen] bounds].size.height;
     
+    [self setViewPositionX: 0 setViewPositionY: 0];
+    
     CGRect newFrame = self.frame;
     newFrame.size.width = width;
     newFrame.size.height = height;
@@ -299,9 +249,6 @@ namespace bRenderer
     
     // set viewport
     glViewport(0, 0, width , height);
-    
-    // pass width, height and fullscreen of the view to the renderer
-    bRenderer::passFullscreen(true);
 }
 
 /* Set width and height of the view */
@@ -316,9 +263,6 @@ namespace bRenderer
     
     // set viewport
     glViewport(0, 0, w , h);
-    
-    // pass width, height and fullscreen of the view to the renderer
-    bRenderer::passFullscreen(false);
 }
 
 /* Set x and y position of the view */
@@ -327,6 +271,10 @@ namespace bRenderer
     self.frame = CGRectMake(x, y, self.frame.size.width, self.frame.size.height);
 }
 
+-(bool)setContextCurrent
+{
+    return [EAGLContext setCurrentContext:context];
+}
 
 /* As soon as the view is resized or new subviews are added, this method is called,
  * apparently the framebuffers are invalid in this case so they are deleted and recreated 
