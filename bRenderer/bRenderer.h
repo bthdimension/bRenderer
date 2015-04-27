@@ -126,16 +126,11 @@ namespace bRenderer
 	 */
 	ShaderPtr loadShader(const std::string &shaderName);
 
-	/**	@brief Load a shader
+	/**	@brief Create a material
 	 *	@param[in] name Name of material
 	 *	@param[in] materialData
 	 */
 	MaterialPtr createMaterial(const std::string &name, const MaterialData &materialData);
-
-	/**	@brief Get a 3D model
-	 *	@param[in] name Name of the model
-	 */
-	ModelPtr    getModel(const std::string &name);
 
 	/**	@brief Get a 3D model
 	 *	@param[in] name Name of the model

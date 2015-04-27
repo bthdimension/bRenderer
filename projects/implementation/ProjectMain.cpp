@@ -13,9 +13,9 @@ void ProjectMain::init()
 	initRenderer(1024, 768, false);
     
     // Test second view
-    View v;
+    /*View v;
     v.initView(200, 200, false);
-    v.setPosition(300, 300);
+    v.setPosition(300, 300);*/
 
 	// start main loop 
 	runRenderer();
