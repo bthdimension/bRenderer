@@ -8,7 +8,7 @@ void ProjectMain::init()
 	bRenderer.setRenderProject(this);
 
 	// let the renderer create an OpenGL context and the main window
-	bRenderer.initRenderer(1024, 768, false);
+	bRenderer.initRenderer(1920, 1080, true);
 
     // Test second view
     //View v;
