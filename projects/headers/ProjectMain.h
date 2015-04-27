@@ -45,21 +45,8 @@ private:
 
 	/* Variables */
 	float randomTime;
-	float menuSliderPosX;
-	float menuSliderPosY;
-	float maxMenuScrollX;
-	float minMenuScrollX;
-	float maxMenuScrollY;
-	double timePastSinceMenuManipulated;
-	bool sliderYisReset;
-
 	float cameraForward;
 	float cameraRotation;
-	float forwardSpeed;
-	Camera camera;
-	Camera staticCamera;
-
-
 };
 
 #endif /* defined(PROJECT_MAIN_H) */

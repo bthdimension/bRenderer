@@ -1,10 +1,3 @@
-//
-//  MatrixStack.cpp
-//
-//  Created by Benjamin on 15/05/14.
-//
-//
-
 #include "../headers/MatrixStack.h"
 
 MatrixStack::MatrixStack(){

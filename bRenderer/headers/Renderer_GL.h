@@ -3,8 +3,6 @@
 
 #include "OSdetect.h"
 
-
-
 #ifdef OS_DESKTOP
 	/* OpenGL imports handled by GLEW */
     #include <GL/glew.h>

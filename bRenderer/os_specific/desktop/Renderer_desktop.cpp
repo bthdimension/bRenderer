@@ -57,6 +57,9 @@ void Renderer::draw()
 	_view.setContextCurrent();
 	double time = _view.getTime();
 
+	// clear
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// Render here
 	if (_loopFunction)
 		_loopFunction(time - _elapsedTime, time);

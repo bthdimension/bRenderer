@@ -49,6 +49,19 @@ bool Renderer::initRenderer()
     // call member function if set
     if (_renderProject)
         _renderProject->initFunction();
+
+	// OpenGL
+	// clear
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+
+	// for Alpha
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     _initialized = true;
     
@@ -127,70 +140,6 @@ MaterialPtr Renderer::createMaterial(const std::string &name, const MaterialData
 	return material;
 }
 
-ModelPtr Renderer::getModel(const std::string &name)
-{
-	return _models[name];
-}
-
-vmml::mat4f Renderer::createPerspective(float fov, float aspect, float near, float far)
-{
-	vmml::mat4f perspective = vmml::mat4f::IDENTITY;
-
-	for (int i = 0; i<3; i++) {
-		for (int j = 0; j<3; j++) {
-			perspective.at(i, j) = 0.0f;
-		}
-	}
-
-	float angle = (fov / 180.0f) * M_PI_F;
-	float f = 1.0f / tan(angle * 0.5f);
-
-	perspective.at(0, 0) = f / aspect;
-	perspective.at(1, 1) = f;
-	perspective.at(2, 2) = (far + near) / (near - far);
-	perspective.at(2, 3) = -1.0f;
-	perspective.at(3, 2) = (2.0f * far*near) / (near - far);
-
-
-	return perspective;
-}
-
-vmml::mat4f Renderer::lookAt(vmml::vec3f eye, vmml::vec3f target, vmml::vec3f up)
-{
-	vmml::vec3f zaxis = vmml::normalize(eye - target);
-	vmml::vec3f xaxis = vmml::normalize(vmml::cross<3>(up, zaxis));
-	vmml::vec3f yaxis = vmml::cross<3>(zaxis, xaxis);
-
-	vmml::mat4f view;
-	view.set_row(0, vmml::vec4f(xaxis.x(), xaxis.y(), xaxis.z(), -vmml::dot(xaxis, eye)));
-	view.set_row(1, vmml::vec4f(yaxis.x(), yaxis.y(), yaxis.z(), -vmml::dot(yaxis, eye)));
-	view.set_row(2, vmml::vec4f(zaxis.x(), zaxis.y(), zaxis.z(), -vmml::dot(zaxis, eye)));
-	view.set_row(3, vmml::vec4f(0, 0, 0, 1.0));
-
-	return view;
-}
-
-/* Private functions */
-
-std::string Renderer::getRawName(const std::string &fileName, std::string *ext)
-{
-	std::string rawName = fileName;
-	int indexSlash = rawName.find_last_of("/\\");
-
-	if (indexSlash != std::string::npos)
-	{
-		rawName = rawName.substr(indexSlash + 1);
-	}
-
-	int indexDot = rawName.find_last_of(".");
-	if (indexDot != std::string::npos)
-	{
-		if (ext) *ext = rawName.substr(indexDot + 1, std::string::npos);
-		return rawName.substr(0, indexDot);
-	}
-	return rawName;
-}
-
 ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData)
 {
 	ModelPtr &model = _models[name];
@@ -229,3 +178,86 @@ ShaderPtr Renderer::createShader(const std::string &name, const ShaderData &shad
 
 	return nullptr;
 }
+
+CameraPtr Renderer::createCamera(const std::string &name)
+{
+	CameraPtr &camera = _cameras[name];
+	if (camera) return camera;
+
+	camera = CameraPtr(new Camera());
+	return camera;
+}
+
+CameraPtr Renderer::createCamera(const std::string &name, vmml::vec3f position, vmml::vec3f orientation)
+{
+	CameraPtr &camera = _cameras[name];
+	if (camera) return camera;
+
+	camera = CameraPtr(new Camera(position, orientation));
+	return camera;
+}
+
+CameraPtr Renderer::createCamera(const std::string &name, vmml::vec3f position, vmml::vec3f orientation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+{
+	CameraPtr &camera = _cameras[name];
+	if (camera) return camera;
+
+	camera = CameraPtr(new Camera(position, orientation, fov, aspect, near, far));
+	return camera;
+}
+
+MatrixStackPtr Renderer::createMatrixStack(const std::string &name)
+{
+	MatrixStackPtr &matrixStack = _matrixStacks[name];
+	if (matrixStack) return matrixStack;
+
+	matrixStack = MatrixStackPtr(new MatrixStack());
+	return matrixStack;
+}
+
+ModelPtr Renderer::getModel(const std::string &name)
+{
+	return _models[name];
+}
+
+CameraPtr Renderer::getCamera(const std::string &name)
+{
+	return _cameras[name];
+}
+
+MatrixStackPtr Renderer::getMatrixStack(const std::string &name)
+{
+	return _matrixStacks[name];
+}
+
+vmml::mat4f Renderer::createPerspective(float fov, float aspect, float near, float far)
+{
+	return Camera::createPerspective(fov, aspect, near, far);
+}
+
+vmml::mat4f Renderer::lookAt(vmml::vec3f eye, vmml::vec3f target, vmml::vec3f up)
+{
+	return Camera::lookAt(eye, target, up);
+}
+
+/* Private functions */
+
+std::string Renderer::getRawName(const std::string &fileName, std::string *ext)
+{
+	std::string rawName = fileName;
+	int indexSlash = rawName.find_last_of("/\\");
+
+	if (indexSlash != std::string::npos)
+	{
+		rawName = rawName.substr(indexSlash + 1);
+	}
+
+	int indexDot = rawName.find_last_of(".");
+	if (indexDot != std::string::npos)
+	{
+		if (ext) *ext = rawName.substr(indexDot + 1, std::string::npos);
+		return rawName.substr(0, indexDot);
+	}
+	return rawName;
+}
+

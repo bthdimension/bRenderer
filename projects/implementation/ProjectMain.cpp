@@ -13,7 +13,6 @@ void ProjectMain::init()
     // Test second view
     //View v;
     //v.initView(200, 200, false);
-    //v.setPosition(300, 300);
 
 	// start main loop 
 	bRenderer.runRenderer();
@@ -31,41 +30,24 @@ void ProjectMain::initFunction()
 	bRenderer.loadModel("sparks.obj", false, true);
 	bRenderer.loadModel("menu.obj", false, true);
 
+	//MatrixStack for the cave
+	bRenderer.createMatrixStack("caveStartStack");
+
+	//MatrixStack for torch
+	bRenderer.createMatrixStack("torchStack");
+
 	// initialize variables
 	randomTime = 0.0f;
-	// menu
-	menuSliderPosX = 0.0f;
-	menuSliderPosY = 0.0f;
-	maxMenuScrollX = 0.04f;
-	minMenuScrollX = 0.005f;
-	maxMenuScrollY = -0.05f;
-	timePastSinceMenuManipulated = 0.0;
-	sliderYisReset = true;
 
 	// initialize free moving camera
-	forwardSpeed = 1.0f;
 	cameraForward = 0.0f;
 	cameraRotation = M_PI_F;
-	camera.moveCamera(cameraForward);
-	camera.rotateCamera(vmml::vec3f::UNIT_Y, cameraRotation);
+	bRenderer.createCamera("camera", vmml::vec3f(0, 0, 0), vmml::vec3f(vmml::create_rotation(-cameraRotation, vmml::vec3f::UNIT_Y)));
 
 	// initialize static camera
-	staticCamera.moveCamera(0.0f);
-	staticCamera.rotateCamera(vmml::vec3f::UNIT_Y, M_PI_F);
+	bRenderer.createCamera("static camera", vmml::vec3f(0, 0, 0), vmml::vec3f(vmml::create_rotation(-cameraRotation, vmml::vec3f::UNIT_Y)));
 
-	// OpenGL stuff
-	// clear
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-
-	// for Alpha
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	// get shading language version
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
@@ -73,25 +55,23 @@ void ProjectMain::initFunction()
 void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 {
 
-	if (((int)elapsedTime % 3) >= 1)
-	{
-		/* Test something after 3 seconds*/
-		glClearColor(0.0, 0.2, 0.0, 1.0);
-	}
-	else
-	{
-		glClearColor(0.2, 0.0, 0.0, 1.0);
-	}
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	///// Perspective ////
-	vmml::mat4f projectionMatrix = bRenderer.createPerspective(90.0f, bRenderer.getView()->getAspectRatio(), -1.0f, 1280.0f);
+	//if (((int)elapsedTime % 3) >= 1)
+	//{
+	//	/* Test something after 3 seconds*/
+	//
+	//}
 
 	//// Camera ////
-	cameraForward = 0;
+	cameraForward = 0.01;
 	cameraRotation += 0.001;
-	camera.moveCamera(cameraForward);
-	camera.rotateCamera(vmml::vec3f::UNIT_Y, cameraRotation);
+	bRenderer.getCamera("camera")->moveCamera(cameraForward);
+	bRenderer.getCamera("camera")->rotateCamera(vmml::vec3f::UNIT_Y, cameraRotation);
+
+	///// Perspective ////
+	// adjust aspect ratio
+	bRenderer.getCamera("camera")->setAspectRatio(bRenderer.getView()->getAspectRatio());
+	// get projection matrix
+	vmml::mat4f projectionMatrix = bRenderer.getCamera("camera")->getProjectionMatrix();
 
 	//// Camera Light (Torch) ////
 	if (deltaTime < 0.5){
@@ -115,23 +95,16 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		ShaderPtr shader = material->getShader();
 		if (shader)
 		{
+			// translate and scale using the matrix stack
+			bRenderer.getMatrixStack("caveStartStack")->pushTranslation(vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0)));
+			bRenderer.getMatrixStack("caveStartStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.25f)));
 
-			vmml::mat4f modelMatrix = vmml::mat4f::IDENTITY;
-			//            bool inverted = false;
-
-			//MatrixStack
-			MatrixStack CaveStartStack;
-			CaveStartStack.pushTranslation(vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0)));
-			CaveStartStack.pushScaling(vmml::create_scaling(vmml::vec3f(0.25f)));
-
-			//get Model Matrix from Stack
-			modelMatrix = CaveStartStack.getModelMatrix();
-
-
+			//get model matrix from stack
+			vmml::mat4f modelMatrix = bRenderer.getMatrixStack("caveStartStack")->getModelMatrix();
+			
 			//VIEW MATRIX
-			vmml::mat4f viewMatrix = camera.getViewMatrix();
-
-
+			vmml::mat4f viewMatrix = bRenderer.getCamera("camera")->getViewMatrix();
+			
 			shader->setUniform("ProjectionMatrix", projectionMatrix);
 			shader->setUniform("ViewMatrix", viewMatrix);
 			shader->setUniform("ModelMatrix", modelMatrix);
@@ -162,22 +135,17 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		ShaderPtr shader = material->getShader();
 		if (shader)
 		{
+			// translate and scale using the matrix stack
+			bRenderer.getMatrixStack("torchStack")->pushTranslation(vmml::create_translation(vmml::vec3f(0.5, -1.05, -0.87)));
+			bRenderer.getMatrixStack("torchStack")->pushScaling(vmml::create_scaling(vmml::vec3f(2.4f)));
 
-			vmml::mat4f modelMatrix = vmml::mat4f::IDENTITY;
-			vmml::mat4f normalMatrix = vmml::mat4f::IDENTITY;
-
-			//MatrixStack
-			MatrixStack TorchStack;
-			TorchStack.pushTranslation(vmml::create_translation(vmml::vec3f(0.5, -1.05, -0.87)));
-			TorchStack.pushScaling(vmml::create_scaling(vmml::vec3f(2.4f)));
-
-			//get Model Matrix from Stack
-			modelMatrix = TorchStack.getModelMatrix();
-			//get Normal Matrix from Stack
-			normalMatrix = TorchStack.getNormalMatrix();
+			//get model matrix from stack
+			vmml::mat4f modelMatrix = bRenderer.getMatrixStack("torchStack")->getModelMatrix();
+			//get normal matrix from stack
+			vmml::mat4f normalMatrix = bRenderer.getMatrixStack("torchStack")->getNormalMatrix();
 
 			//VIEW MATRIX
-			vmml::mat4f viewMatrix = staticCamera.getViewMatrix();
+			vmml::mat4f viewMatrix = bRenderer.getCamera("static camera")->getViewMatrix();
 
 
 			shader->setUniform("ProjectionMatrix", projectionMatrix);
@@ -321,13 +289,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		if (shader)
 		{
 
-			menuSliderPosX = 0;
-
-
-			vmml::mat4f translation = vmml::create_translation(vmml::vec3f(menuSliderPosX, menuSliderPosY, -0.65));
-			//snap down menu
-			if (menuSliderPosX >= -0.8)
-				translation = vmml::create_translation(vmml::vec3f(0.0, menuSliderPosY, -0.65));
+			vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0, 0, -0.65));
 
 			float menuScale = 0.00132;
 			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(menuScale, bRenderer.getView()->getAspectRatio()*menuScale, menuScale));

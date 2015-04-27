@@ -2,9 +2,6 @@
 #define B_VIEW_H
 
 #include "OSdetect.h"
-//#ifdef OS_IOS
-//#include "../os_specific/ios/BView.h"
-//#endif
 
 #include "headers/Renderer_GL.h"
 #include "headers/Logger.h"
@@ -14,7 +11,12 @@ class View
 public:
 	/* Functions */
 
+	/**	@brief Constructor
+	*/
 	View();
+	
+	/**	@brief Destructor
+	*/
 	~View();
 
 	/**	@brief Do all necessary initializations for the view to be ready to run
@@ -147,9 +149,6 @@ private:
     
 	/* Variables */
 
-    
-//#ifdef OS_IOS
-//	BView *view;
 #ifdef OS_DESKTOP
 	GLFWwindow *_window;
 	char *_windowTitle = "bRenderer";

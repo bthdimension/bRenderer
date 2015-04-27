@@ -43,6 +43,9 @@ void Renderer::terminateRenderer()
 
 void Renderer::draw()
 {
+	// clear
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     // render here
     if (_loopFunction)
         _loopFunction(_currentTime - _elapsedTime, _currentTime);

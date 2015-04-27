@@ -6,6 +6,8 @@
 #include "Renderer_GL.h"
 #include "Logger.h"
 #include "View.h"
+#include "Camera.h"
+#include "MatrixStack.h"
 
 /* Flamework includes*/
 #include "headers/Model.h"
@@ -23,10 +25,12 @@ class Renderer
 {
 public:
 	/* Typedefs */
-	typedef std::unordered_map< std::string, ShaderPtr >    Shaders;
-	typedef std::unordered_map< std::string, TexturePtr >   Textures;
-	typedef std::unordered_map< std::string, MaterialPtr >  Materials;
-	typedef std::unordered_map< std::string, ModelPtr >     Models;
+	typedef std::unordered_map< std::string, ShaderPtr >		Shaders;
+	typedef std::unordered_map< std::string, TexturePtr >		Textures;
+	typedef std::unordered_map< std::string, MaterialPtr >		Materials;
+	typedef std::unordered_map< std::string, ModelPtr >			Models;
+	typedef std::unordered_map< std::string, CameraPtr >		Cameras;
+	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStacks;
 	
 	/* Functions */
 
@@ -140,20 +144,76 @@ public:
 	TexturePtr loadTexture(const std::string &fileName);
 
 	/**	@brief Load a shader
-	*	@param[in] shaderName Name of shader
+	*	@param[in] shaderName Name of the shader
 	*/
 	ShaderPtr loadShader(const std::string &shaderName);
 
 	/**	@brief Create a material
-	*	@param[in] name Name of material
+	*	@param[in] name Name of the material
 	*	@param[in] materialData
 	*/
 	MaterialPtr createMaterial(const std::string &name, const MaterialData &materialData);
+
+	/**	@brief Create a model
+	*	@param[in] name The raw name of the model
+	*	@param[in] modelData
+	*/
+	ModelPtr createModel(const std::string &name, const ModelData &modelData);
+
+	/**	@brief Create a texture
+	*	@param[in] name The raw name of the texture
+	*	@param[in] textureData
+	*/
+	TexturePtr createTexture(const std::string &name, const TextureData &textureData);
+
+	/**	@brief Create a shader
+	*	@param[in] name The raw name of the shader
+	*	@param[in] shaderData
+	*/
+	ShaderPtr createShader(const std::string &name, const ShaderData &shaderData);
+
+	/**	@brief Create a camera
+	*	@param[in] name Name of the camera
+	*/
+	CameraPtr createCamera(const std::string &name);
+
+	/**	@brief Create a camera
+	*	@param[in] name Name of the camera
+	*	@param[in] position Position of the camera
+	*	@param[in] orientation Orientation of the camera in radians
+	*/
+	CameraPtr createCamera(const std::string &name, vmml::vec3f position, vmml::vec3f orientation);
+
+	/**	@brief Create a camera
+	*	@param[in] name Name of the camera
+	*	@param[in] position Position of the camera
+	*	@param[in] orientation Orientation of the camera in radians
+	*	@param[in] fov Field of view
+	*	@param[in] aspect Aspect ratio
+	*	@param[in] near Near clipping plane
+	*	@param[in] far Far clipping plane
+	*/
+	CameraPtr createCamera(const std::string &name, vmml::vec3f position, vmml::vec3f orientation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+
+	/**	@brief Create a matrix stack
+	*	@param[in] name Name of the matrix stack
+	*/
+	MatrixStackPtr createMatrixStack(const std::string &name);
 
 	/**	@brief Get a 3D model
 	*	@param[in] name Name of the model
 	*/
 	ModelPtr    getModel(const std::string &name);
+
+	/**	@brief Get a camera
+	*	@param[in] name Name of the camera
+	*/
+	CameraPtr    getCamera(const std::string &name);
+
+	/**	@brief Get a matrix stack
+	*	@param[in] name Name of the matrix stack
+	*/
+	MatrixStackPtr getMatrixStack(const std::string &name);
 
 	/**	@brief Create a 3D perspective
 	*	@param[in] fov Field of view
@@ -176,12 +236,15 @@ private:
 	/**	@brief Private constructor
 	 */
 	Renderer(){}
+
 	/**	@brief Private constructor to prevent instantiation via copy constructor
 	 */
 	Renderer(const Renderer&){}
+
 	/**	@brief Private operator overloading to prevent instantiation of the renderer
 	 */
 	Renderer & operator = (const Renderer &){}
+
 	/**	@brief Private destructor
 	 */
 	~Renderer(){}
@@ -191,24 +254,6 @@ private:
 	*	@param[in] ext The extension
 	*/
 	std::string getRawName(const std::string &fileName, std::string *ext = nullptr);
-
-	/**	@brief Create a model
-	*	@param[in] name The raw name of the model
-	*	@param[in] modelData
-	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData);
-
-	/**	@brief Create a texture
-	*	@param[in] name The raw name of the texture
-	*	@param[in] textureData
-	*/
-	TexturePtr createTexture(const std::string &name, const TextureData &textureData);
-
-	/**	@brief Create a shader
-	*	@param[in] name The raw name of the shader
-	*	@param[in] shaderData
-	*/
-	ShaderPtr createShader(const std::string &name, const ShaderData &shaderData);
 
 	/* Variables */
 
@@ -226,10 +271,12 @@ private:
 	void(*_loopFunction)(const double deltaTime, const double elapsedTime);
 	void(*_terminateFunction)();
 
-	Shaders     _shaders;
-	Textures    _textures;
-	Materials   _materials;
-	Models      _models;
+	Shaders			_shaders;
+	Textures		_textures;
+	Materials		_materials;
+	Models		    _models;
+	Cameras			_cameras;
+	MatrixStacks	_matrixStacks;
 
 	std::string _defaultMaterialName = "default";
 	
