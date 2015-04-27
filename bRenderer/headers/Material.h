@@ -14,6 +14,8 @@
 #include "Texture.h"
 #include "MaterialData.h"
 
+class Renderer;
+
 class Material
 {
 public:
@@ -21,7 +23,7 @@ public:
     typedef std::unordered_map<std::string, vmml::vec3f>    Vectors;
     typedef std::unordered_map<std::string, float>          Scalars;
     
-    void initialize(const MaterialData &materialData, ShaderPtr shader);
+	void initialize(Renderer *r, const MaterialData &materialData, ShaderPtr shader);
     
     void bind();
     

@@ -152,7 +152,7 @@ private:
 //	BView *view;
 #ifdef OS_DESKTOP
 	GLFWwindow *_window;
-	char *_windowTitle;
+	char *_windowTitle = "bRenderer";
 #endif
 
 	bool _initialized;

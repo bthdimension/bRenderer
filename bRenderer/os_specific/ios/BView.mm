@@ -2,7 +2,6 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "BView.h"
-#include "bLinkToView.h"
 #include "../../bRenderer.h"
 
 
@@ -44,8 +43,6 @@
     if (!self) {
         return nil;
     }
-    
-//    bRenderer::view = self;
     
     eaglLayer = (CAEAGLLayer *)self.layer;
     
@@ -151,30 +148,21 @@
     if(initialTime < 0)
         initialTime = (int)[displayLink timestamp];
     
-//    bRenderer::passTime(([displayLink timestamp] - initialTime));
-
     if (context != nil)
     {
-//		// only render if the renderer is supposed to be running
-//		if(bRenderer::isRunning()){
-			   
-			if (!defaultFramebuffer)
-				[self createFramebuffer];
+        if (!defaultFramebuffer)
+            [self createFramebuffer];
+    
+        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+    
+        Renderer::get().draw();
+    
+        // set current context
+        [self setContextCurrent];
         
-			glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-        
-			bRenderer::draw();
-        
-            // set current context
-            [self setContextCurrent];
-            
-			// display the color buffer to the screen
-			glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-			[context presentRenderbuffer:GL_RENDERBUFFER];
-//		}
-//        else{
-//            [self stopRenderer];
-//        }
+        // display the color buffer to the screen
+        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+        [context presentRenderbuffer:GL_RENDERBUFFER];
     }
     else
         bRenderer::log("Context not set!", bRenderer::LM_SYS);

@@ -7,8 +7,7 @@ static std::vector<BView *> _views;
 /* Constructor and destructor */
 View::View()
 {
-    _initialized = false;
-    _fullscreen = false;
+	
 }
 
 View::~View()

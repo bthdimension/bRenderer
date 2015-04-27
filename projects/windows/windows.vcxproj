@@ -71,7 +71,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\bRenderer\implementation\bRenderer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp" />
@@ -85,11 +84,11 @@
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
     <ClCompile Include="..\..\bRenderer\obj\obj.cpp" />
     <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp" />
-    <ClCompile Include="..\..\bRenderer\os_specific\desktop\bRenderer_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\Renderer_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp" />
-    <ClCompile Include="..\..\bRenderer\os_specific\ios\bRenderer_ios.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\ios\Renderer_ios.cpp" />
     <ClCompile Include="..\implementation\ProjectMain.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -117,7 +116,6 @@
     <ClInclude Include="..\..\bRenderer\headers\View.h" />
     <ClInclude Include="..\..\bRenderer\obj\obj.hpp" />
     <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp" />
-    <ClInclude Include="..\..\bRenderer\os_specific\ios\bLinkToView.h" />
     <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h" />
     <ClInclude Include="..\headers\ProjectMain.h" />
   </ItemGroup>

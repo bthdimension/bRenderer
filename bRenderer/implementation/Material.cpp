@@ -7,15 +7,15 @@
 //
 
 #include "../headers/Material.h"
-#include "bRenderer.h"
+#include "../headers/Renderer.h"
 
-void Material::initialize(const MaterialData &materialData, ShaderPtr shader)
+void Material::initialize(Renderer *r, const MaterialData &materialData, ShaderPtr shader)
 {
     for (auto i = materialData.textures.cbegin(); i != materialData.textures.cend(); ++i)
     {
         const std::string &texName = i->first;
         const std::string &texFileName = i->second;
-        TexturePtr texture = bRenderer::loadTexture(texFileName);
+        TexturePtr texture = r->loadTexture(texFileName);
         setTexture(texName, texture);
     }
     setVectors(materialData.vectors);

@@ -10,10 +10,10 @@
 #include "../headers/Model.h"
 #include "../headers/ModelData.h"
 #include "../headers/TextureData.h"
-#include "../bRenderer.h"
+#include "../headers/Renderer.h"
 
 
-Model::Model(const ModelData &modelData)
+Model::Model(Renderer *r, const ModelData &modelData)
 {
     ModelData::GroupMap data = modelData.getData();
 
@@ -21,7 +21,7 @@ Model::Model(const ModelData &modelData)
     {
         Geometry &g = _groups[i->first];
         GeometryDataPtr gData = i->second;
-		MaterialPtr material = bRenderer::createMaterial(gData->materialData.name, gData->materialData);
+		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData);
         g.initialize(gData);
         g.setMaterial(material);
     }

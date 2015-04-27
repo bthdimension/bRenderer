@@ -14,9 +14,7 @@ using boost::lexical_cast;
 /* Constructor and destructor */
 View::View()
 {
-	_windowTitle = "bRenderer";
-	_initialized = false;
-	_fullscreen = false;
+
 }
 
 View::~View()

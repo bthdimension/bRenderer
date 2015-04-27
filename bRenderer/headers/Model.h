@@ -20,13 +20,14 @@
 #include "Material.h"
 #include "Renderer_GL.h"
 
+class Renderer;
 class ModelData;
 
 class Model: public IDrawable
 {
 public:
     
-    explicit Model(const ModelData &modelData);
+	explicit Model(Renderer *r, const ModelData &modelData);
     ~Model();
     
     void draw(GLenum mode = GL_TRIANGLES);

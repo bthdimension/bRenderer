@@ -1,37 +1,35 @@
 #include "ProjectMain.h"
 
-using namespace std;
-using namespace bRenderer;
 
 /* Initialize the Project */
 void ProjectMain::init()
 {
 	// set this instance of RenderProject to be used for function calls
-	setRenderProject(this);
+	bRenderer.setRenderProject(this);
 
 	// let the renderer create an OpenGL context and the main window
-	initRenderer(1024, 768, false);
-    
+	bRenderer.initRenderer(1024, 768, false);
+
     // Test second view
-    /*View v;
-    v.initView(200, 200, false);
-    v.setPosition(300, 300);*/
+    //View v;
+    //v.initView(200, 200, false);
+    //v.setPosition(300, 300);
 
 	// start main loop 
-	runRenderer();
+	bRenderer.runRenderer();
 }
 
 /* This function is executed when initializing the renderer */
 void ProjectMain::initFunction()
 {
-	log("my initialize function was started");
+	bRenderer::log("my initialize function was started");
 
 	// load models
-	loadModel("cave_start.obj", true, true);
-	loadModel("torch.obj", false, true);
-    loadModel("flame.obj", false, true);
-    loadModel("sparks.obj", false, true);
-	loadModel("menu.obj", false, true);
+	bRenderer.loadModel("cave_start.obj", true, true);
+	bRenderer.loadModel("torch.obj", false, true);
+	bRenderer.loadModel("flame.obj", false, true);
+	bRenderer.loadModel("sparks.obj", false, true);
+	bRenderer.loadModel("menu.obj", false, true);
 
 	// initialize variables
 	randomTime = 0.0f;
@@ -68,7 +66,7 @@ void ProjectMain::initFunction()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 /* Draw your scene here */
@@ -87,7 +85,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	///// Perspective ////
-	vmml::mat4f projectionMatrix = createPerspective(90.0f, getView()->getAspectRatio(), -1.0f, 1280.0f);
+	vmml::mat4f projectionMatrix = bRenderer.createPerspective(90.0f, bRenderer.getView()->getAspectRatio(), -1.0f, 1280.0f);
 
 	//// Camera ////
 	cameraForward = 0;
@@ -109,7 +107,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 	//// Draw Models ////
 
 	/*** CAVE Start ***/
-	Model::GroupMap &groupsCaveStart = getModel("cave_start")->getGroups();
+	Model::GroupMap &groupsCaveStart = bRenderer.getModel("cave_start")->getGroups();
 	for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
 	{
 		Geometry &geometry = i->second;
@@ -150,13 +148,13 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		}
 		else
 		{
-			log("No shader available.", LM_WARNING);
+			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
 		}
 		geometry.draw();
 	}
 
 	/*** Torch ***/
-	Model::GroupMap &groupsTorch = getModel("torch")->getGroups();
+	Model::GroupMap &groupsTorch = bRenderer.getModel("torch")->getGroups();
 	for (auto i = groupsTorch.begin(); i != groupsTorch.end(); ++i)
 	{
 		Geometry &geometry = i->second;
@@ -198,14 +196,14 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		}
 		else
 		{
-			log("No shader available.", LM_WARNING);
+			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
 		}
 		geometry.draw();
 	}
     
     /*** Flame ***/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    Model::GroupMap &groupsParticle = getModel("flame")->getGroups();
+	Model::GroupMap &groupsParticle = bRenderer.getModel("flame")->getGroups();
     for (auto i = groupsParticle.begin(); i != groupsParticle.end(); ++i)
     {
         Geometry &geometry = i->second;
@@ -219,7 +217,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 if(z==1.0)
                     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
                 
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / getView()->getAspectRatio(), 0.6 + (0.08*z), (-z / 100.0 - 0.50)));
+				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / bRenderer.getView()->getAspectRatio(), 0.6 + (0.08*z), (-z / 100.0 - 0.50)));
                 
                 float rot = 0.0;
                 if(fmod(z, 2.0) == 0){
@@ -232,11 +230,11 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 
                 float ParticleScale = 2.45-(0.46*z);
                 
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / getView()->getAspectRatio(), ParticleScale, ParticleScale));
+				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer.getView()->getAspectRatio(), ParticleScale, ParticleScale));
                 
                 vmml::vec3f eyePos(0, 0, 0.25);
                 vmml::vec3f eyeUp = vmml::vec3f::UP;
-                vmml::mat4f viewMatrix = lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
+				vmml::mat4f viewMatrix = bRenderer.lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
                 
                 vmml::mat4f modelMatrix(translation * scaling * rotation);
 
@@ -259,14 +257,14 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
         }
         else
         {
-            log("No shader available.", LM_WARNING);
+			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
         }
 
     }
     
     
     /*** Sparks ***/
-    Model::GroupMap &groupsSparks = getModel("sparks")->getGroups();
+	Model::GroupMap &groupsSparks = bRenderer.getModel("sparks")->getGroups();
     for (auto i = groupsSparks.begin(); i != groupsSparks.end(); ++i)
     {
         Geometry &geometry = i->second;
@@ -277,7 +275,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
             //for-loop if I decide that more than one flame would look better and the performance wouldn't suffer too much
             for (float z = 1.0; z < 2.0; z++) {
                 
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / getView()->getAspectRatio(), 0.65, (-z / 100.0 - 0.58)));
+				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / bRenderer.getView()->getAspectRatio(), 0.65, (-z / 100.0 - 0.58)));
                 
                 float rot;
                 rot = randomNumber(1.0, 1.1)*randomTime*(z+0.3)*M_PI_F;
@@ -286,11 +284,11 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 
                 float ParticleScale = 1.1-(0.5*z);
                 
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / getView()->getAspectRatio(), 4.0*ParticleScale, ParticleScale));
+				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer.getView()->getAspectRatio(), 4.0*ParticleScale, ParticleScale));
                 
                 vmml::vec3f eyePos(0, 0, 0.25);
                 vmml::vec3f eyeUp = vmml::vec3f::UP;
-                vmml::mat4f viewMatrix = lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
+				vmml::mat4f viewMatrix = bRenderer.lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
                 
                 vmml::mat4f modelMatrix(translation * scaling * rotation);
                 
@@ -306,7 +304,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
         }
         else
         {
-            log("No shader available.", LM_WARNING);
+			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
         }
         
     }
@@ -314,7 +312,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	/*** MENU ***/
-	Model::GroupMap &groupsMenu = getModel("menu")->getGroups();
+	Model::GroupMap &groupsMenu = bRenderer.getModel("menu")->getGroups();
 	for (auto i = groupsMenu.begin(); i != groupsMenu.end(); ++i)
 	{
 		Geometry &geometry = i->second;
@@ -332,11 +330,11 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 				translation = vmml::create_translation(vmml::vec3f(0.0, menuSliderPosY, -0.65));
 
 			float menuScale = 0.00132;
-			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(menuScale, getView()->getAspectRatio()*menuScale, menuScale));
+			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(menuScale, bRenderer.getView()->getAspectRatio()*menuScale, menuScale));
 
 			vmml::vec3f eyePos(0, 0, 0.25);
 			vmml::vec3f eyeUp = vmml::vec3f::UP;
-			vmml::mat4f viewMatrix = lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
+			vmml::mat4f viewMatrix = bRenderer.lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
 
 			vmml::mat4f modelMatrix(translation * scaling);
 
@@ -347,7 +345,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		}
 		else
 		{
-			log("No shader available.", LM_WARNING);
+			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
 		}
 		geometry.draw();
 	}
@@ -357,7 +355,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 /* This function is executed when terminating the renderer */
 void ProjectMain::terminateFunction()
 {
-	log("I totally terminated this Renderer :-)");
+	bRenderer::log("I totally terminated this Renderer :-)");
 }
 
 
@@ -365,29 +363,29 @@ void ProjectMain::terminateFunction()
 void ProjectMain::deviceRotated()
 {
     // set view to fullscreen after device rotation
-	getView()->setFullscreen(true);
-    log("Device rotated");
+	bRenderer.getView()->setFullscreen(true);
+	bRenderer::log("Device rotated");
 }
 
 /* For iOS only: Handle app going into background */
 void ProjectMain::appWillResignActive()
 {
     // stop the renderer when the app isn't active
-    stopRenderer();
+	bRenderer.stopRenderer();
 }
 
 /* For iOS only: Handle app coming back from background */
 void ProjectMain::appDidBecomeActive()
 {
     // run the renderer as soon as the app is active
-    runRenderer();
+	bRenderer.runRenderer();
 }
 
 /* For iOS only: Handle app being terminated */
 void ProjectMain::appWillTerminate()
 {
     // terminate renderer before the app is closed
-    terminateRenderer();
+	bRenderer.terminateRenderer();
 }
 
 /* Helper functions */
