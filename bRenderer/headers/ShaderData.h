@@ -14,8 +14,8 @@
 class ShaderData
 {
 public:
-    explicit ShaderData(const std::string &shaderFile);
-    ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName);
+	explicit ShaderData(const std::string &shaderFile, std::string shaderVersionDesktop, std::string shaderVersionES);
+	ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName, std::string shaderVersionDesktop, std::string shaderVersionES);
     ShaderData();
     
     ShaderData &load(const std::string &shaderFile);
@@ -28,9 +28,13 @@ public:
 private:
     std::string _vertShaderSrc;
     std::string _fragShaderSrc;
+	std::string _shaderVersionDesktop;
+	std::string _shaderVersionES;
     bool        _valid;
     
     std::string loadSrc(const std::string &fileName);
+
+	const std::string SHADER_VERSION_MACRO = "$B_SHADER_VERSION";
 };
 
 #endif /* defined(B_SHADER_DATA_H) */

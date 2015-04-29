@@ -5,17 +5,30 @@
 void ProjectMain::init()
 {
 	// set this instance of RenderProject to be used for function calls
-	bRenderer.setRenderProject(this);
+	bRenderer().setRenderProject(this);
+
+	// set shader versions (optional)
+	bRenderer().setShaderVersionDesktop("#version 120");
+	bRenderer().setShaderVersionES("#version 100");
 
 	// let the renderer create an OpenGL context and the main window
-	bRenderer.initRenderer(1920, 1080, true);
+		
+	
+#ifdef OS_DESKTOP
+	// for testing purposes the renderer is initalized in windowed mode on desktop systems ... 
+	bRenderer().initRenderer(1920, 1080, false);
+#endif
+	//... and full screen on iOS
+#ifdef OS_IOS
+    bRenderer().initRenderer(true);
+#endif
 
     // Test second view
     //View v;
     //v.initView(200, 200, false);
 
 	// start main loop 
-	bRenderer.runRenderer();
+	bRenderer().runRenderer();
 }
 
 /* This function is executed when initializing the renderer */
@@ -24,17 +37,17 @@ void ProjectMain::initFunction()
 	bRenderer::log("my initialize function was started");
 
 	// load models
-	bRenderer.loadModel("cave_start.obj", true, true);
-	bRenderer.loadModel("torch.obj", false, true);
-	bRenderer.loadModel("flame.obj", false, true);
-	bRenderer.loadModel("sparks.obj", false, true);
-	bRenderer.loadModel("menu.obj", false, true);
+	bRenderer().loadModel("cave_start.obj", true, true);
+	bRenderer().loadModel("torch.obj", false, true);
+	bRenderer().loadModel("flame.obj", false, true);
+	bRenderer().loadModel("sparks.obj", false, true);
+	bRenderer().loadModel("bTitle.obj", false, true);
 
 	//MatrixStack for the cave
-	bRenderer.createMatrixStack("caveStartStack");
+	bRenderer().createMatrixStack("caveStartStack");
 
 	//MatrixStack for torch
-	bRenderer.createMatrixStack("torchStack");
+	bRenderer().createMatrixStack("torchStack");
 
 	// initialize variables
 	randomTime = 0.0f;
@@ -42,10 +55,10 @@ void ProjectMain::initFunction()
 	// initialize free moving camera
 	cameraForward = 0.0f;
 	cameraRotation = M_PI_F;
-	bRenderer.createCamera("camera", vmml::vec3f(0, 0, 0), vmml::vec3f(vmml::create_rotation(-cameraRotation, vmml::vec3f::UNIT_Y)));
+	bRenderer().createCamera("camera", vmml::vec3f(0, 0, 0), vmml::vec3f(vmml::create_rotation(-cameraRotation, vmml::vec3f::UNIT_Y)));
 
 	// initialize static camera
-	bRenderer.createCamera("static camera", vmml::vec3f(0, 0, 0), vmml::vec3f(vmml::create_rotation(-cameraRotation, vmml::vec3f::UNIT_Y)));
+	bRenderer().createCamera("static camera", vmml::vec3f(0, 0, 0), vmml::vec3f(vmml::create_rotation(-cameraRotation, vmml::vec3f::UNIT_Y)));
 
 	// get shading language version
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -64,14 +77,14 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 	//// Camera ////
 	cameraForward = 0.01;
 	cameraRotation += 0.001;
-	bRenderer.getCamera("camera")->moveCamera(cameraForward);
-	bRenderer.getCamera("camera")->rotateCamera(vmml::vec3f::UNIT_Y, cameraRotation);
+	bRenderer().getCamera("camera")->moveCamera(cameraForward);
+	bRenderer().getCamera("camera")->rotateCamera(vmml::vec3f::UNIT_Y, cameraRotation);
 
 	///// Perspective ////
 	// adjust aspect ratio
-	bRenderer.getCamera("camera")->setAspectRatio(bRenderer.getView()->getAspectRatio());
+	bRenderer().getCamera("camera")->setAspectRatio(bRenderer().getView()->getAspectRatio());
 	// get projection matrix
-	vmml::mat4f projectionMatrix = bRenderer.getCamera("camera")->getProjectionMatrix();
+	vmml::mat4f projectionMatrix = bRenderer().getCamera("camera")->getProjectionMatrix();
 
 	//// Camera Light (Torch) ////
 	if (deltaTime < 0.5){
@@ -86,8 +99,8 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 
 	//// Draw Models ////
 
-	/*** CAVE Start ***/
-	Model::GroupMap &groupsCaveStart = bRenderer.getModel("cave_start")->getGroups();
+	/*** Cave Start ***/
+	Model::GroupMap &groupsCaveStart = bRenderer().getModel("cave_start")->getGroups();
 	for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
 	{
 		Geometry &geometry = i->second;
@@ -96,14 +109,14 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		if (shader)
 		{
 			// translate and scale using the matrix stack
-			bRenderer.getMatrixStack("caveStartStack")->pushTranslation(vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0)));
-			bRenderer.getMatrixStack("caveStartStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.25f)));
+			bRenderer().getMatrixStack("caveStartStack")->pushTranslation(vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0)));
+			bRenderer().getMatrixStack("caveStartStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.25f)));
 
 			//get model matrix from stack
-			vmml::mat4f modelMatrix = bRenderer.getMatrixStack("caveStartStack")->getModelMatrix();
+			vmml::mat4f modelMatrix = bRenderer().getMatrixStack("caveStartStack")->getModelMatrix();
 			
 			//VIEW MATRIX
-			vmml::mat4f viewMatrix = bRenderer.getCamera("camera")->getViewMatrix();
+			vmml::mat4f viewMatrix = bRenderer().getCamera("camera")->getViewMatrix();
 			
 			shader->setUniform("ProjectionMatrix", projectionMatrix);
 			shader->setUniform("ViewMatrix", viewMatrix);
@@ -127,7 +140,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 	}
 
 	/*** Torch ***/
-	Model::GroupMap &groupsTorch = bRenderer.getModel("torch")->getGroups();
+	Model::GroupMap &groupsTorch = bRenderer().getModel("torch")->getGroups();
 	for (auto i = groupsTorch.begin(); i != groupsTorch.end(); ++i)
 	{
 		Geometry &geometry = i->second;
@@ -136,16 +149,14 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		if (shader)
 		{
 			// translate and scale using the matrix stack
-			bRenderer.getMatrixStack("torchStack")->pushTranslation(vmml::create_translation(vmml::vec3f(0.5, -1.05, -0.87)));
-			bRenderer.getMatrixStack("torchStack")->pushScaling(vmml::create_scaling(vmml::vec3f(2.4f)));
+			bRenderer().getMatrixStack("torchStack")->pushTranslation(vmml::create_translation(vmml::vec3f(0.5, -1.05, -0.87)));
+			bRenderer().getMatrixStack("torchStack")->pushScaling(vmml::create_scaling(vmml::vec3f(2.4f)));
 
 			//get model matrix from stack
-			vmml::mat4f modelMatrix = bRenderer.getMatrixStack("torchStack")->getModelMatrix();
-			//get normal matrix from stack
-			vmml::mat4f normalMatrix = bRenderer.getMatrixStack("torchStack")->getNormalMatrix();
+			vmml::mat4f modelMatrix = bRenderer().getMatrixStack("torchStack")->getModelMatrix();
 
 			//VIEW MATRIX
-			vmml::mat4f viewMatrix = bRenderer.getCamera("static camera")->getViewMatrix();
+			vmml::mat4f viewMatrix = bRenderer().getCamera("static camera")->getViewMatrix();
 
 
 			shader->setUniform("ProjectionMatrix", projectionMatrix);
@@ -171,7 +182,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
     
     /*** Flame ***/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	Model::GroupMap &groupsParticle = bRenderer.getModel("flame")->getGroups();
+	Model::GroupMap &groupsParticle = bRenderer().getModel("flame")->getGroups();
     for (auto i = groupsParticle.begin(); i != groupsParticle.end(); ++i)
     {
         Geometry &geometry = i->second;
@@ -185,7 +196,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 if(z==1.0)
                     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
                 
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / bRenderer.getView()->getAspectRatio(), 0.6 + (0.08*z), (-z / 100.0 - 0.50)));
+				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / bRenderer().getView()->getAspectRatio(), 0.6 + (0.08*z), (-z / 100.0 - 0.50)));
                 
                 float rot = 0.0;
                 if(fmod(z, 2.0) == 0){
@@ -198,11 +209,11 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 
                 float ParticleScale = 2.45-(0.46*z);
                 
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer.getView()->getAspectRatio(), ParticleScale, ParticleScale));
+				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
                 
                 vmml::vec3f eyePos(0, 0, 0.25);
                 vmml::vec3f eyeUp = vmml::vec3f::UP;
-				vmml::mat4f viewMatrix = bRenderer.lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
+				vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
                 
                 vmml::mat4f modelMatrix(translation * scaling * rotation);
 
@@ -232,7 +243,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
     
     
     /*** Sparks ***/
-	Model::GroupMap &groupsSparks = bRenderer.getModel("sparks")->getGroups();
+	Model::GroupMap &groupsSparks = bRenderer().getModel("sparks")->getGroups();
     for (auto i = groupsSparks.begin(); i != groupsSparks.end(); ++i)
     {
         Geometry &geometry = i->second;
@@ -243,7 +254,7 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
             //for-loop if I decide that more than one flame would look better and the performance wouldn't suffer too much
             for (float z = 1.0; z < 2.0; z++) {
                 
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / bRenderer.getView()->getAspectRatio(), 0.65, (-z / 100.0 - 0.58)));
+				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65 / bRenderer().getView()->getAspectRatio(), 0.65, (-z / 100.0 - 0.58)));
                 
                 float rot;
                 rot = randomNumber(1.0, 1.1)*randomTime*(z+0.3)*M_PI_F;
@@ -252,11 +263,11 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
                 
                 float ParticleScale = 1.1-(0.5*z);
                 
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer.getView()->getAspectRatio(), 4.0*ParticleScale, ParticleScale));
+				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0*ParticleScale, ParticleScale));
                 
                 vmml::vec3f eyePos(0, 0, 0.25);
                 vmml::vec3f eyeUp = vmml::vec3f::UP;
-				vmml::mat4f viewMatrix = bRenderer.lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
+				vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
                 
                 vmml::mat4f modelMatrix(translation * scaling * rotation);
                 
@@ -279,9 +290,9 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	/*** MENU ***/
-	Model::GroupMap &groupsMenu = bRenderer.getModel("menu")->getGroups();
-	for (auto i = groupsMenu.begin(); i != groupsMenu.end(); ++i)
+	/*** Title ***/
+	Model::GroupMap &groupsTitle = bRenderer().getModel("bTitle")->getGroups();
+	for (auto i = groupsTitle.begin(); i != groupsTitle.end(); ++i)
 	{
 		Geometry &geometry = i->second;
 		MaterialPtr material = geometry.getMaterial();
@@ -289,14 +300,14 @@ void ProjectMain::loopFunction(const double deltaTime, const double elapsedTime)
 		if (shader)
 		{
 
-			vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0, 0, -0.65));
+			vmml::mat4f translation = vmml::create_translation(vmml::vec3f(-0.4, 0, -0.65));
 
-			float menuScale = 0.00132;
-			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(menuScale, bRenderer.getView()->getAspectRatio()*menuScale, menuScale));
+			float titleScale = 0.4;
+			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
 
 			vmml::vec3f eyePos(0, 0, 0.25);
 			vmml::vec3f eyeUp = vmml::vec3f::UP;
-			vmml::mat4f viewMatrix = bRenderer.lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
+			vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
 
 			vmml::mat4f modelMatrix(translation * scaling);
 
@@ -325,7 +336,7 @@ void ProjectMain::terminateFunction()
 void ProjectMain::deviceRotated()
 {
     // set view to fullscreen after device rotation
-	bRenderer.getView()->setFullscreen(true);
+	bRenderer().getView()->setFullscreen(true);
 	bRenderer::log("Device rotated");
 }
 
@@ -333,21 +344,21 @@ void ProjectMain::deviceRotated()
 void ProjectMain::appWillResignActive()
 {
     // stop the renderer when the app isn't active
-	bRenderer.stopRenderer();
+	bRenderer().stopRenderer();
 }
 
 /* For iOS only: Handle app coming back from background */
 void ProjectMain::appDidBecomeActive()
 {
     // run the renderer as soon as the app is active
-	bRenderer.runRenderer();
+	bRenderer().runRenderer();
 }
 
 /* For iOS only: Handle app being terminated */
 void ProjectMain::appWillTerminate()
 {
     // terminate renderer before the app is closed
-	bRenderer.terminateRenderer();
+	bRenderer().terminateRenderer();
 }
 
 /* Helper functions */

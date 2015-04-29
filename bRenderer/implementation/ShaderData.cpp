@@ -10,16 +10,18 @@
 #include <fstream>
 #include <iostream>
 #include "../headers/ShaderData.h"
-#include "../bRenderer.h"
+#include "../headers/Logger.h"
+#include "../headers/FileHandler.h"
+#include "../headers/OSdetect.h"
 
-ShaderData::ShaderData(const std::string &shaderFile)
-:   _valid(true)
+ShaderData::ShaderData(const std::string &shaderFile, std::string shaderVersionDesktop, std::string shaderVersionES)
+	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES)
 {
     load(shaderFile);
 }
 
-ShaderData::ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName)
-:   _valid(false)
+ShaderData::ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName, std::string shaderVersionDesktop, std::string shaderVersionES)
+	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES)
 {
     load(vertShaderFileName, fragShaderFileName);
 }
@@ -37,7 +39,21 @@ ShaderData &ShaderData::load(const std::string &vertShaderFileName, const std::s
 {
     _vertShaderSrc = loadSrc(vertShaderFileName);
     _fragShaderSrc = loadSrc(fragShaderFileName);
-    
+
+	size_t i;
+	size_t s = SHADER_VERSION_MACRO.size();
+#ifdef OS_DESKTOP	
+	while ((i = _vertShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
+		_vertShaderSrc.replace(i, s, _shaderVersionDesktop);
+	while ((i = _fragShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
+        _fragShaderSrc.replace(i, s, _shaderVersionDesktop);
+#endif
+#ifdef OS_IOS
+	while ((i = _vertShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
+		_vertShaderSrc.replace(i, s, _shaderVersionES);
+	while ((i = _fragShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
+		_fragShaderSrc.replace(i, s, _shaderVersionES);
+#endif
     return *this;
 }
 

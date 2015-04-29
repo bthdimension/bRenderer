@@ -31,6 +31,19 @@
 		B52476021AEDC2460017F4BB /* TextureData_ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = B52475EB1AEDC2460017F4BB /* TextureData_ios.mm */; };
 		B52476031AEDC2460017F4BB /* View_ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = B52475EC1AEDC2460017F4BB /* View_ios.mm */; };
 		B5281CC21AE4AA5000E88612 /* ProjectMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5281CC11AE4AA5000E88612 /* ProjectMain.cpp */; };
+		B53031BE1AF036790025B2C7 /* cave_start.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53031B41AF036790025B2C7 /* cave_start.frag */; };
+		B53031BF1AF036790025B2C7 /* cave_start.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53031B51AF036790025B2C7 /* cave_start.vert */; };
+		B53031C01AF036790025B2C7 /* flame.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53031B61AF036790025B2C7 /* flame.frag */; };
+		B53031C11AF036790025B2C7 /* flame.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53031B71AF036790025B2C7 /* flame.vert */; };
+		B53031C41AF036790025B2C7 /* sparks.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53031BA1AF036790025B2C7 /* sparks.frag */; };
+		B53031C51AF036790025B2C7 /* sparks.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53031BB1AF036790025B2C7 /* sparks.vert */; };
+		B53031C61AF036790025B2C7 /* torch.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53031BC1AF036790025B2C7 /* torch.frag */; };
+		B53031C71AF036790025B2C7 /* torch.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53031BD1AF036790025B2C7 /* torch.vert */; };
+		B53031CD1AF03EAD0025B2C7 /* bTitle.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53031C81AF03EAD0025B2C7 /* bTitle.frag */; };
+		B53031CE1AF03EAD0025B2C7 /* bTitle.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B53031C91AF03EAD0025B2C7 /* bTitle.mtl */; };
+		B53031CF1AF03EAD0025B2C7 /* bTitle.obj in Resources */ = {isa = PBXBuildFile; fileRef = B53031CA1AF03EAD0025B2C7 /* bTitle.obj */; };
+		B53031D01AF03EAD0025B2C7 /* bTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = B53031CB1AF03EAD0025B2C7 /* bTitle.png */; };
+		B53031D11AF03EAD0025B2C7 /* bTitle.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53031CC1AF03EAD0025B2C7 /* bTitle.vert */; };
 		B53A39EE1AE84FFD0082F9E5 /* cave_start.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B53A39D21AE84FFD0082F9E5 /* cave_start.mtl */; };
 		B53A39EF1AE84FFD0082F9E5 /* cave_start.obj in Resources */ = {isa = PBXBuildFile; fileRef = B53A39D31AE84FFD0082F9E5 /* cave_start.obj */; };
 		B53A39F11AE84FFD0082F9E5 /* caveStart_d.png in Resources */ = {isa = PBXBuildFile; fileRef = B53A39D51AE84FFD0082F9E5 /* caveStart_d.png */; };
@@ -38,9 +51,6 @@
 		B53A39F41AE84FFD0082F9E5 /* flame.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B53A39D81AE84FFD0082F9E5 /* flame.mtl */; };
 		B53A39F51AE84FFD0082F9E5 /* flame.obj in Resources */ = {isa = PBXBuildFile; fileRef = B53A39D91AE84FFD0082F9E5 /* flame.obj */; };
 		B53A39F61AE84FFD0082F9E5 /* flame.png in Resources */ = {isa = PBXBuildFile; fileRef = B53A39DA1AE84FFD0082F9E5 /* flame.png */; };
-		B53A39F91AE84FFD0082F9E5 /* menu.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B53A39DD1AE84FFD0082F9E5 /* menu.mtl */; };
-		B53A39FA1AE84FFD0082F9E5 /* menu.obj in Resources */ = {isa = PBXBuildFile; fileRef = B53A39DE1AE84FFD0082F9E5 /* menu.obj */; };
-		B53A39FC1AE84FFD0082F9E5 /* menutex.png in Resources */ = {isa = PBXBuildFile; fileRef = B53A39E01AE84FFD0082F9E5 /* menutex.png */; };
 		B53A39FD1AE84FFD0082F9E5 /* particle.png in Resources */ = {isa = PBXBuildFile; fileRef = B53A39E11AE84FFD0082F9E5 /* particle.png */; };
 		B53A39FE1AE84FFD0082F9E5 /* particle_f.png in Resources */ = {isa = PBXBuildFile; fileRef = B53A39E21AE84FFD0082F9E5 /* particle_f.png */; };
 		B53A3A001AE84FFD0082F9E5 /* sparks.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B53A39E41AE84FFD0082F9E5 /* sparks.mtl */; };
@@ -49,16 +59,6 @@
 		B53A3A051AE84FFD0082F9E5 /* torch.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B53A39E91AE84FFD0082F9E5 /* torch.mtl */; };
 		B53A3A061AE84FFD0082F9E5 /* torch.obj in Resources */ = {isa = PBXBuildFile; fileRef = B53A39EA1AE84FFD0082F9E5 /* torch.obj */; };
 		B53A3A081AE84FFD0082F9E5 /* torchSurface_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = B53A39EC1AE84FFD0082F9E5 /* torchSurface_Color.png */; };
-		B53A3A131AE850230082F9E5 /* cave_start.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A091AE850230082F9E5 /* cave_start.frag */; };
-		B53A3A141AE850230082F9E5 /* cave_start.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A0A1AE850230082F9E5 /* cave_start.vert */; };
-		B53A3A151AE850230082F9E5 /* flame.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A0B1AE850230082F9E5 /* flame.frag */; };
-		B53A3A161AE850230082F9E5 /* flame.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A0C1AE850230082F9E5 /* flame.vert */; };
-		B53A3A171AE850230082F9E5 /* menu.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A0D1AE850230082F9E5 /* menu.frag */; };
-		B53A3A181AE850230082F9E5 /* menu.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A0E1AE850230082F9E5 /* menu.vert */; };
-		B53A3A191AE850230082F9E5 /* sparks.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A0F1AE850230082F9E5 /* sparks.frag */; };
-		B53A3A1A1AE850230082F9E5 /* sparks.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A101AE850230082F9E5 /* sparks.vert */; };
-		B53A3A1B1AE850230082F9E5 /* torch.frag in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A111AE850230082F9E5 /* torch.frag */; };
-		B53A3A1C1AE850230082F9E5 /* torch.vert in Resources */ = {isa = PBXBuildFile; fileRef = B53A3A121AE850230082F9E5 /* torch.vert */; };
 		B59A67951ACC8BA900E3EB9B /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B59A67941ACC8BA900E3EB9B /* OpenGLES.framework */; };
 		B59A67971ACC8BB200E3EB9B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B59A67961ACC8BB200E3EB9B /* Foundation.framework */; };
 		B59A67991ACC8BCC00E3EB9B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B59A67981ACC8BCC00E3EB9B /* UIKit.framework */; };
@@ -121,6 +121,19 @@
 		B52475EC1AEDC2460017F4BB /* View_ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = View_ios.mm; sourceTree = "<group>"; };
 		B5281CBF1AE4AA5000E88612 /* ProjectMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectMain.h; sourceTree = "<group>"; };
 		B5281CC11AE4AA5000E88612 /* ProjectMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectMain.cpp; sourceTree = "<group>"; };
+		B53031B41AF036790025B2C7 /* cave_start.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cave_start.frag; sourceTree = "<group>"; };
+		B53031B51AF036790025B2C7 /* cave_start.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cave_start.vert; sourceTree = "<group>"; };
+		B53031B61AF036790025B2C7 /* flame.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = flame.frag; sourceTree = "<group>"; };
+		B53031B71AF036790025B2C7 /* flame.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = flame.vert; sourceTree = "<group>"; };
+		B53031BA1AF036790025B2C7 /* sparks.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sparks.frag; sourceTree = "<group>"; };
+		B53031BB1AF036790025B2C7 /* sparks.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sparks.vert; sourceTree = "<group>"; };
+		B53031BC1AF036790025B2C7 /* torch.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = torch.frag; sourceTree = "<group>"; };
+		B53031BD1AF036790025B2C7 /* torch.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = torch.vert; sourceTree = "<group>"; };
+		B53031C81AF03EAD0025B2C7 /* bTitle.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = bTitle.frag; sourceTree = "<group>"; };
+		B53031C91AF03EAD0025B2C7 /* bTitle.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bTitle.mtl; sourceTree = "<group>"; };
+		B53031CA1AF03EAD0025B2C7 /* bTitle.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bTitle.obj; sourceTree = "<group>"; };
+		B53031CB1AF03EAD0025B2C7 /* bTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bTitle.png; sourceTree = "<group>"; };
+		B53031CC1AF03EAD0025B2C7 /* bTitle.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = bTitle.vert; sourceTree = "<group>"; };
 		B53A39D21AE84FFD0082F9E5 /* cave_start.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cave_start.mtl; sourceTree = "<group>"; };
 		B53A39D31AE84FFD0082F9E5 /* cave_start.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cave_start.obj; sourceTree = "<group>"; };
 		B53A39D51AE84FFD0082F9E5 /* caveStart_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = caveStart_d.png; sourceTree = "<group>"; };
@@ -128,9 +141,6 @@
 		B53A39D81AE84FFD0082F9E5 /* flame.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = flame.mtl; sourceTree = "<group>"; };
 		B53A39D91AE84FFD0082F9E5 /* flame.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = flame.obj; sourceTree = "<group>"; };
 		B53A39DA1AE84FFD0082F9E5 /* flame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flame.png; sourceTree = "<group>"; };
-		B53A39DD1AE84FFD0082F9E5 /* menu.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = menu.mtl; sourceTree = "<group>"; };
-		B53A39DE1AE84FFD0082F9E5 /* menu.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = menu.obj; sourceTree = "<group>"; };
-		B53A39E01AE84FFD0082F9E5 /* menutex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menutex.png; sourceTree = "<group>"; };
 		B53A39E11AE84FFD0082F9E5 /* particle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle.png; sourceTree = "<group>"; };
 		B53A39E21AE84FFD0082F9E5 /* particle_f.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle_f.png; sourceTree = "<group>"; };
 		B53A39E41AE84FFD0082F9E5 /* sparks.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sparks.mtl; sourceTree = "<group>"; };
@@ -139,16 +149,6 @@
 		B53A39E91AE84FFD0082F9E5 /* torch.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = torch.mtl; sourceTree = "<group>"; };
 		B53A39EA1AE84FFD0082F9E5 /* torch.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = torch.obj; sourceTree = "<group>"; };
 		B53A39EC1AE84FFD0082F9E5 /* torchSurface_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = torchSurface_Color.png; sourceTree = "<group>"; };
-		B53A3A091AE850230082F9E5 /* cave_start.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = cave_start.frag; path = projects/shaders_ios/cave_start.frag; sourceTree = SOURCE_ROOT; };
-		B53A3A0A1AE850230082F9E5 /* cave_start.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = cave_start.vert; path = projects/shaders_ios/cave_start.vert; sourceTree = SOURCE_ROOT; };
-		B53A3A0B1AE850230082F9E5 /* flame.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = flame.frag; path = projects/shaders_ios/flame.frag; sourceTree = SOURCE_ROOT; };
-		B53A3A0C1AE850230082F9E5 /* flame.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = flame.vert; path = projects/shaders_ios/flame.vert; sourceTree = SOURCE_ROOT; };
-		B53A3A0D1AE850230082F9E5 /* menu.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = menu.frag; path = projects/shaders_ios/menu.frag; sourceTree = SOURCE_ROOT; };
-		B53A3A0E1AE850230082F9E5 /* menu.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = menu.vert; path = projects/shaders_ios/menu.vert; sourceTree = SOURCE_ROOT; };
-		B53A3A0F1AE850230082F9E5 /* sparks.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = sparks.frag; path = projects/shaders_ios/sparks.frag; sourceTree = SOURCE_ROOT; };
-		B53A3A101AE850230082F9E5 /* sparks.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = sparks.vert; path = projects/shaders_ios/sparks.vert; sourceTree = SOURCE_ROOT; };
-		B53A3A111AE850230082F9E5 /* torch.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = torch.frag; path = projects/shaders_ios/torch.frag; sourceTree = SOURCE_ROOT; };
-		B53A3A121AE850230082F9E5 /* torch.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = torch.vert; path = projects/shaders_ios/torch.vert; sourceTree = SOURCE_ROOT; };
 		B59A67941ACC8BA900E3EB9B /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		B59A67961ACC8BB200E3EB9B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B59A67981ACC8BCC00E3EB9B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -324,16 +324,19 @@
 		B53A39D01AE84FFD0082F9E5 /* data */ = {
 			isa = PBXGroup;
 			children = (
-				B53A3A091AE850230082F9E5 /* cave_start.frag */,
-				B53A3A0A1AE850230082F9E5 /* cave_start.vert */,
-				B53A3A0B1AE850230082F9E5 /* flame.frag */,
-				B53A3A0C1AE850230082F9E5 /* flame.vert */,
-				B53A3A0D1AE850230082F9E5 /* menu.frag */,
-				B53A3A0E1AE850230082F9E5 /* menu.vert */,
-				B53A3A0F1AE850230082F9E5 /* sparks.frag */,
-				B53A3A101AE850230082F9E5 /* sparks.vert */,
-				B53A3A111AE850230082F9E5 /* torch.frag */,
-				B53A3A121AE850230082F9E5 /* torch.vert */,
+				B53031C81AF03EAD0025B2C7 /* bTitle.frag */,
+				B53031C91AF03EAD0025B2C7 /* bTitle.mtl */,
+				B53031CA1AF03EAD0025B2C7 /* bTitle.obj */,
+				B53031CB1AF03EAD0025B2C7 /* bTitle.png */,
+				B53031CC1AF03EAD0025B2C7 /* bTitle.vert */,
+				B53031B41AF036790025B2C7 /* cave_start.frag */,
+				B53031B51AF036790025B2C7 /* cave_start.vert */,
+				B53031B61AF036790025B2C7 /* flame.frag */,
+				B53031B71AF036790025B2C7 /* flame.vert */,
+				B53031BA1AF036790025B2C7 /* sparks.frag */,
+				B53031BB1AF036790025B2C7 /* sparks.vert */,
+				B53031BC1AF036790025B2C7 /* torch.frag */,
+				B53031BD1AF036790025B2C7 /* torch.vert */,
 				B53A39D21AE84FFD0082F9E5 /* cave_start.mtl */,
 				B53A39D31AE84FFD0082F9E5 /* cave_start.obj */,
 				B53A39D51AE84FFD0082F9E5 /* caveStart_d.png */,
@@ -341,9 +344,6 @@
 				B53A39D81AE84FFD0082F9E5 /* flame.mtl */,
 				B53A39D91AE84FFD0082F9E5 /* flame.obj */,
 				B53A39DA1AE84FFD0082F9E5 /* flame.png */,
-				B53A39DD1AE84FFD0082F9E5 /* menu.mtl */,
-				B53A39DE1AE84FFD0082F9E5 /* menu.obj */,
-				B53A39E01AE84FFD0082F9E5 /* menutex.png */,
 				B53A39E11AE84FFD0082F9E5 /* particle.png */,
 				B53A39E21AE84FFD0082F9E5 /* particle_f.png */,
 				B53A39E41AE84FFD0082F9E5 /* sparks.mtl */,
@@ -443,33 +443,33 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B53A39F91AE84FFD0082F9E5 /* menu.mtl in Resources */,
-				B53A3A1A1AE850230082F9E5 /* sparks.vert in Resources */,
 				B53A3A021AE84FFD0082F9E5 /* sparks.png in Resources */,
+				B53031C01AF036790025B2C7 /* flame.frag in Resources */,
+				B53031CE1AF03EAD0025B2C7 /* bTitle.mtl in Resources */,
+				B53031C41AF036790025B2C7 /* sparks.frag in Resources */,
 				B53A39F21AE84FFD0082F9E5 /* caveStart_n.png in Resources */,
-				B53A3A1C1AE850230082F9E5 /* torch.vert in Resources */,
 				B53A39EE1AE84FFD0082F9E5 /* cave_start.mtl in Resources */,
 				B53A3A001AE84FFD0082F9E5 /* sparks.mtl in Resources */,
 				B53A39FD1AE84FFD0082F9E5 /* particle.png in Resources */,
+				B53031BF1AF036790025B2C7 /* cave_start.vert in Resources */,
+				B53031C71AF036790025B2C7 /* torch.vert in Resources */,
 				B53A3A061AE84FFD0082F9E5 /* torch.obj in Resources */,
-				B53A39FA1AE84FFD0082F9E5 /* menu.obj in Resources */,
+				B53031CF1AF03EAD0025B2C7 /* bTitle.obj in Resources */,
 				B53A39F41AE84FFD0082F9E5 /* flame.mtl in Resources */,
-				B53A3A131AE850230082F9E5 /* cave_start.frag in Resources */,
 				B53A39FE1AE84FFD0082F9E5 /* particle_f.png in Resources */,
-				B53A3A181AE850230082F9E5 /* menu.vert in Resources */,
-				B53A3A171AE850230082F9E5 /* menu.frag in Resources */,
 				B53A3A081AE84FFD0082F9E5 /* torchSurface_Color.png in Resources */,
+				B53031CD1AF03EAD0025B2C7 /* bTitle.frag in Resources */,
 				B53A3A011AE84FFD0082F9E5 /* sparks.obj in Resources */,
 				B53A39F61AE84FFD0082F9E5 /* flame.png in Resources */,
 				B53A39F11AE84FFD0082F9E5 /* caveStart_d.png in Resources */,
-				B53A3A141AE850230082F9E5 /* cave_start.vert in Resources */,
 				B53A3A051AE84FFD0082F9E5 /* torch.mtl in Resources */,
-				B53A3A161AE850230082F9E5 /* flame.vert in Resources */,
+				B53031D01AF03EAD0025B2C7 /* bTitle.png in Resources */,
+				B53031BE1AF036790025B2C7 /* cave_start.frag in Resources */,
+				B53031C51AF036790025B2C7 /* sparks.vert in Resources */,
 				B53A39EF1AE84FFD0082F9E5 /* cave_start.obj in Resources */,
-				B53A3A151AE850230082F9E5 /* flame.frag in Resources */,
-				B53A3A1B1AE850230082F9E5 /* torch.frag in Resources */,
-				B53A3A191AE850230082F9E5 /* sparks.frag in Resources */,
-				B53A39FC1AE84FFD0082F9E5 /* menutex.png in Resources */,
+				B53031C11AF036790025B2C7 /* flame.vert in Resources */,
+				B53031C61AF036790025B2C7 /* torch.frag in Resources */,
+				B53031D11AF03EAD0025B2C7 /* bTitle.vert in Resources */,
 				B53A39F51AE84FFD0082F9E5 /* flame.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

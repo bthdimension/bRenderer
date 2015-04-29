@@ -1,4 +1,4 @@
-#version 120
+$B_SHADER_VERSION
 
 uniform lowp mat4 ViewMatrix;
 uniform lowp mat4 ModelMatrix;

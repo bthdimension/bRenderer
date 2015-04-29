@@ -181,15 +181,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\menu.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\menu.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\menu.vert">
-      <Filter>Project\data</Filter>
-    </None>
     <None Include="..\data\sparks.frag">
       <Filter>Project\data</Filter>
     </None>
@@ -238,11 +229,17 @@
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
+    <None Include="..\data\bTitle.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\bTitle.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\bTitle.mtl">
+      <Filter>Project\data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\data\menutex.png">
-      <Filter>Project\data</Filter>
-    </Image>
     <Image Include="..\data\particle.png">
       <Filter>Project\data</Filter>
     </Image>
@@ -262,6 +259,9 @@
       <Filter>Project\data</Filter>
     </Image>
     <Image Include="..\data\caveStart_n.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\bTitle.png">
       <Filter>Project\data</Filter>
     </Image>
   </ItemGroup>

@@ -92,6 +92,16 @@ public:
 	*/
 	void setTerminateFunction(void(*f)());
 
+	/**	@brief Set the shader version used on desktop systems
+	*	@param[in] shaderVersionDesktop The shader version used on desktop systems, e.g. "#version 120"
+	*/
+	void setShaderVersionDesktop(std::string shaderVersionDesktop);
+
+	/**	@brief Set the shader version used on mobile devices systems
+	*	@param[in] shaderVersionES The shader version used on mobile devices systems, e.g. "#version 100"
+	*/
+	void setShaderVersionES(std::string shaderVersionES);
+
 	/* Initialization method for iOS without full screen and window size options */
 
 	/**	@brief Do all necessary initializations for the renderer to be ready to run
@@ -277,6 +287,9 @@ private:
 	Models		    _models;
 	Cameras			_cameras;
 	MatrixStacks	_matrixStacks;
+
+	std::string _shaderVersionDesktop = "#version 120";
+	std::string _shaderVersionES = "#version 100";
 
 	std::string _defaultMaterialName = "default";
 	

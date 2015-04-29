@@ -25,7 +25,10 @@ public:
 	virtual void terminateFunction() = 0;
 
 protected:
-	Renderer& bRenderer = Renderer::get();
+    Renderer& bRenderer()
+    {
+        return Renderer::get();
+    }
 };
 
 #endif /* defined(B_RENDERER_PROJECT_H) */

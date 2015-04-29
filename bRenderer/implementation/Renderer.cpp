@@ -33,6 +33,16 @@ void Renderer::setTerminateFunction(void(*f)())
 	_terminateFunction = f;
 }
 
+void Renderer::setShaderVersionDesktop(std::string shaderVersionDesktop)
+{
+	_shaderVersionDesktop = shaderVersionDesktop;
+}
+
+void Renderer::setShaderVersionES(std::string shaderVersionES)
+{
+	_shaderVersionES = shaderVersionES;
+}
+
 bool Renderer::initRenderer()
 {
     if (_initialized)
@@ -119,7 +129,7 @@ ShaderPtr Renderer::loadShader(const std::string &shaderName)
 {
 	std::string name = getRawName(shaderName);
 
-	ShaderData shaderData(shaderName);
+	ShaderData shaderData(shaderName, _shaderVersionDesktop, _shaderVersionES);
 	ShaderPtr shader = createShader(name, shaderData);
 	if (shader) return shader;
 
