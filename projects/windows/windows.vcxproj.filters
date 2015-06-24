@@ -22,9 +22,6 @@
     <Filter Include="bRenderer\implementation">
       <UniqueIdentifier>{a522dbba-bfb8-45b1-bdf2-4451a6f2dd43}</UniqueIdentifier>
     </Filter>
-    <Filter Include="bRenderer\obj">
-      <UniqueIdentifier>{58782cf0-2266-417a-8d76-784eb6bb7e99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="bRenderer\os_specific">
       <UniqueIdentifier>{69d2663a-e959-4a05-8ca0-031915cdfc75}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     </Filter>
     <Filter Include="bRenderer\implementation\Flamework">
       <UniqueIdentifier>{45e66f69-980b-42bc-9bd7-c68a1d35c203}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\obj_parser">
+      <UniqueIdentifier>{58782cf0-2266-417a-8d76-784eb6bb7e99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,12 +65,6 @@
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Material.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp">
-      <Filter>bRenderer\obj</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\obj\obj.cpp">
-      <Filter>bRenderer\obj</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
@@ -99,8 +93,20 @@
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\Renderer_desktop.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Light.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\bRenderer\os_specific\ios\Renderer_ios.cpp">
       <Filter>bRenderer\os_specific\ios</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\obj_parser\obj_parser.cpp">
+      <Filter>bRenderer\obj_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp">
+      <Filter>bRenderer\obj_parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,9 +116,6 @@
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
       <Filter>bRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Camera.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
@@ -121,12 +124,6 @@
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h">
       <Filter>bRenderer\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\obj\obj.hpp">
-      <Filter>bRenderer\obj</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp">
-      <Filter>bRenderer\obj</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\View.h">
       <Filter>bRenderer\headers</Filter>
@@ -176,7 +173,25 @@
     <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\RenderProject.h">
+    <ClInclude Include="..\..\bRenderer\headers\Light.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Configuration.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\OBJLoader.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\obj_parser\obj.hpp">
+      <Filter>bRenderer\obj_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\obj_parser\obj_parser.hpp">
+      <Filter>bRenderer\obj_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -217,18 +232,6 @@
     <None Include="..\data\cave_start.vert">
       <Filter>Project\data</Filter>
     </None>
-    <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </None>
-    <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </None>
-    <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </None>
-    <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </None>
     <None Include="..\data\bTitle.vert">
       <Filter>Project\data</Filter>
     </None>
@@ -237,6 +240,27 @@
     </None>
     <None Include="..\data\bTitle.mtl">
       <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\default.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\default.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\crystal.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

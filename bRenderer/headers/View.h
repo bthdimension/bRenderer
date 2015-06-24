@@ -6,9 +6,29 @@
 #include "headers/Renderer_GL.h"
 #include "headers/Logger.h"
 
+#ifdef __OBJC__
+#import "../os_specific/ios/BView.h"
+#endif
+
+/** @brief An abstraction of the view the scene is drawn into
+*
+*	The view class represents a window on desktop systems or a UIView on iOS. 
+*	The view possesses an OpenGL context and allows for a scene to be displayed to the screen.
+*
+*	@author Benjamin Bürgisser
+*/
 class View
 {
 public:
+
+#ifdef OS_IOS
+	/* Typedefs */
+	typedef int GLFWwindow;
+#endif
+#ifndef __OBJC__
+    typedef int UIView;
+#endif
+
 	/* Functions */
 
 	/**	@brief Constructor
@@ -34,6 +54,10 @@ public:
 	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode
 	*/
 	bool initView(GLint width, GLint height, bool fullscreen = false);
+
+	/**	@brief Terminate the view
+	*/
+	void terminateView();
 
 	/**	@brief Returns true if the view has already been initialized
 	*/
@@ -61,6 +85,20 @@ public:
 	*/
 	void getSize(GLint* width, GLint* height);
 
+	/**	@brief Returns the width of the screen in pixels
+	*/
+	GLint getScreenWidth();
+
+	/**	@brief Returns the height of the screen in pixels
+	*/
+	GLint getScreenHeight();
+
+	/**	@brief Gets the size of the screen in pixels
+	*	@param[in] width The width of the screen
+	*	@param[in] height The height of the screen
+	*/
+	void getScreenSize(GLint* width, GLint* height);
+
 	/**	@brief Returns the aspect ratio of the view
 	*/
 	GLfloat getAspectRatio();
@@ -79,17 +117,22 @@ public:
 	*/
 	void getPosition(GLint* x, GLint* y);
 
-#ifdef OS_DESKTOP
-	/* Window settings exclusively for desktop operating systems */
-
 	/**	@brief Returns the GLFW window
 	*
 	*	This function returns the window created using GLFW.
 	*	This is useful if GLFW functionality is used within the application.
+    *   On iOS this function returns an integer set to 0.
 	*/
 	GLFWwindow* getWindow();
-
-#endif
+    
+    /**	@brief Returns the UIView on iOS (only usable in Objective C)
+     */
+    UIView* getUIView();
+    
+    /**	@brief Attaches the underlying UIView to a UIView of your choosing
+     *	@param[in] view The UIView to attach the view to
+     */
+    void attachToUIView(UIView* view);
 
 	/**	@brief Returns the elapsed Time
 	*/
@@ -138,21 +181,17 @@ public:
 private:
 	/* Functions */
     
-#ifdef OS_DESKTOP
-	/**	@brief Gets called whenever the window size is changed
+	/**	@brief Gets called whenever the window size is changed (desktop only)
 	*	@param[in] window The window that got changed
 	*	@param[in] width The width in pixels
 	*	@param[in] height The height in pixels
 	*/
 	static void windowSizeChanged(GLFWwindow* window, int width, int height);
-#endif
     
 	/* Variables */
 
-#ifdef OS_DESKTOP
 	GLFWwindow *_window;
-	char *_windowTitle = "bRenderer";
-#endif
+	std::string _windowTitle;
 
 	bool _initialized;
 	bool _fullscreen;

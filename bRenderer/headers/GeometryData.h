@@ -1,11 +1,3 @@
-//
-//  TextureData.h
-//  Framework
-//
-//  Created by David Steiner.
-//
-//
-
 #ifndef B_GEOMETRY_DATA_H
 #define B_GEOMETRY_DATA_H
 

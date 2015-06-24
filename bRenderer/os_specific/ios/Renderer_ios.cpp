@@ -3,7 +3,7 @@
 #ifdef OS_IOS
 
 #include "../../headers/Renderer.h"
-#include "../../headers/RenderProject.h"
+#include "../../headers/IRenderProject.h"
 
 /* Public functions */
 
@@ -34,27 +34,31 @@ void Renderer::terminateRenderer()
     if (_renderProject)
         _renderProject->terminateFunction();
     
-    _view.setRunning(false);
+	_view.terminateView();
+
+	reset();
     
     bRenderer::log("Renderer terminated", bRenderer::LM_SYS);
     
     //        exit(0);
 }
 
-void Renderer::draw()
+/* Private functions */
+
+void Renderer::draw(double currentTime)
 {
 	// clear
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render here
     if (_loopFunction)
-        _loopFunction(_currentTime - _elapsedTime, _currentTime);
+        _loopFunction(currentTime - _elapsedTime, currentTime);
     
     if (_renderProject)
-        _renderProject->loopFunction(_currentTime - _elapsedTime, _currentTime);
+        _renderProject->loopFunction(currentTime - _elapsedTime, currentTime);
     
     // adjust time
-    _elapsedTime = _currentTime;
+    _elapsedTime = currentTime;
 }
 
 #endif

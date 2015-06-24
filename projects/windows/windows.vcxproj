@@ -73,17 +73,19 @@
   <ItemGroup>
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Light.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Material.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Model.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
-    <ClCompile Include="..\..\bRenderer\obj\obj.cpp" />
-    <ClCompile Include="..\..\bRenderer\obj\obj_parser.cpp" />
+    <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp" />
+    <ClCompile Include="..\..\bRenderer\obj_parser\obj_parser.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\Renderer_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp" />
@@ -95,27 +97,30 @@
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
     <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Configuration.h" />
     <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
     <ClInclude Include="..\..\bRenderer\headers\Geometry.h" />
     <ClInclude Include="..\..\bRenderer\headers\GeometryData.h" />
     <ClInclude Include="..\..\bRenderer\headers\IDrawable.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Light.h" />
     <ClInclude Include="..\..\bRenderer\headers\Logger.h" />
     <ClInclude Include="..\..\bRenderer\headers\Material.h" />
     <ClInclude Include="..\..\bRenderer\headers\MaterialData.h" />
     <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h" />
     <ClInclude Include="..\..\bRenderer\headers\Model.h" />
     <ClInclude Include="..\..\bRenderer\headers\ModelData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\OBJLoader.h" />
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h" />
     <ClInclude Include="..\..\bRenderer\headers\Renderer.h" />
     <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
-    <ClInclude Include="..\..\bRenderer\headers\RenderProject.h" />
+    <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h" />
     <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\Texture.h" />
     <ClInclude Include="..\..\bRenderer\headers\TextureData.h" />
     <ClInclude Include="..\..\bRenderer\headers\View.h" />
-    <ClInclude Include="..\..\bRenderer\obj\obj.hpp" />
-    <ClInclude Include="..\..\bRenderer\obj\obj_parser.hpp" />
+    <ClInclude Include="..\..\bRenderer\obj_parser\obj.hpp" />
+    <ClInclude Include="..\..\bRenderer\obj_parser\obj_parser.hpp" />
     <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h" />
     <ClInclude Include="..\headers\ProjectMain.h" />
   </ItemGroup>
@@ -130,6 +135,9 @@
     <None Include="..\data\cave_start.frag" />
     <None Include="..\data\cave_start.mtl" />
     <None Include="..\data\cave_start.vert" />
+    <None Include="..\data\crystal.mtl" />
+    <None Include="..\data\default.frag" />
+    <None Include="..\data\default.vert" />
     <None Include="..\data\flame.frag" />
     <None Include="..\data\flame.mtl" />
     <None Include="..\data\flame.vert" />

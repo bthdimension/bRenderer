@@ -1,11 +1,3 @@
-//
-//  TextureData.m
-//  Framework
-//
-//  Created by David Steiner on 3/2/13.
-//
-//
-
 #include "../../headers/TextureData.h"
 
 TextureData::TextureData(const std::string &fileName)

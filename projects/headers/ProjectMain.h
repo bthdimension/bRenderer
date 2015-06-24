@@ -3,16 +3,29 @@
 
 #include "bRenderer.h"
 
-class ProjectMain : public RenderProject
+class ProjectMain : public IRenderProject
 {
 public:
 	/* Constructor and Destructor */
     ProjectMain(){}
     virtual ~ProjectMain(){bRenderer::log("ProjectMain delted");}
-    
+
     /* Initialize the Project */
     void init();
     
+	//// RenderProject functions ////
+
+	/* This function is executed when initializing the renderer */
+	void initFunction();
+
+	/* Draw your scene here */
+	void loopFunction(const double &deltaTime, const double &elapsedTime);
+
+	/* This function is executed when terminating the renderer */
+	void terminateFunction();
+
+	//// iOS specific ////
+
     /* For iOS only: Handle device rotation */
     void deviceRotated();
     
@@ -24,19 +37,6 @@ public:
     
     /* For iOS only: Handle app being terminated */
     void appWillTerminate();
-
-    //// RenderProject functions ////
-    
-	/* This function is executed when initializing the renderer */
-	void initFunction();
-	
-	/* Draw your scene here */
-	void loopFunction(const double deltaTime, const double elapsedTime);
-
-	/* This function is executed when terminating the renderer */
-	void terminateFunction();
-    
-    ////////////////////////////////
     
 private:
     
@@ -46,7 +46,8 @@ private:
 	/* Variables */
 	float randomTime;
 	float cameraForward;
-	float cameraRotation;
+	float cameraRotationX, cameraRotationY;
+	double mouseX, mouseY;
 };
 
 #endif /* defined(PROJECT_MAIN_H) */

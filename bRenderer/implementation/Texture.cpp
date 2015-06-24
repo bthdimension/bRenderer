@@ -1,11 +1,3 @@
-//
-//  Texture.cpp
-//  Framework
-//
-//  Created by Rahul Mukhi on 1/16/13.
-//  Reworked by David Steiner
-//
-
 #include "../headers/Texture.h"
 #include "../headers/TextureData.h"
 

@@ -1,11 +1,3 @@
-//
-//  Material.cpp
-//  Framework
-//
-//  Created by David Steiner on 4/28/14.
-//
-//
-
 #include "../headers/Material.h"
 #include "../headers/Renderer.h"
 

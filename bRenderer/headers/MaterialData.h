@@ -1,11 +1,3 @@
-//
-//  MaterialData.h
-//  Framework
-//
-//  Created by David Steiner on 4/28/14.
-//
-//
-
 #ifndef B_MATERIAL_DATA_H
 #define B_MATERIAL_DATA_H
 

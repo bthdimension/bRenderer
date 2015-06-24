@@ -5,25 +5,21 @@ MatrixStack::MatrixStack(){
 }
 
 MatrixStack::~MatrixStack(){
-    while(!modelMatrixStack.empty())
-        modelMatrixStack.pop();
-    while (!normalMatrixStack.empty()) {
-        normalMatrixStack.pop();
-    }
+	clearMatrixStack();
 }
 
-void MatrixStack::pushTranslation(vmml::mat4f transformationMatrix) {
-    modelMatrixStack.push(transformationMatrix);
+void MatrixStack::pushTranslation(const vmml::mat4f &transformationMatrix) {
+	modelMatrixStack.push_back(transformationMatrix);
     
     //for Normal Matrix: negate translation values
     vmml::mat4f transformationMatrixInv = vmml::mat4f::IDENTITY;
     for (int i=0; i<3; ++i) {
         transformationMatrixInv(i,3) = -transformationMatrix(i,3);
     }
-    normalMatrixStack.push(transformationMatrixInv);
+    normalMatrixStack.push_back(transformationMatrixInv);
 }
-void MatrixStack::pushScaling(vmml::mat4f transformationMatrix) {
-    modelMatrixStack.push(transformationMatrix);
+void MatrixStack::pushScaling(const vmml::mat4f &transformationMatrix) {
+	modelMatrixStack.push_back(transformationMatrix);
     
     //for Normal Matrix: 1/(scaling values)
     vmml::mat4f transformationMatrixInv = vmml::mat4f::IDENTITY;
@@ -32,22 +28,29 @@ void MatrixStack::pushScaling(vmml::mat4f transformationMatrix) {
             transformationMatrixInv.at(i,i) = (1/transformationMatrix(i,i));
         }
     }
-    normalMatrixStack.push(transformationMatrixInv);
+	normalMatrixStack.push_back(transformationMatrixInv);
     
 }
 
-void MatrixStack::pushRotation(vmml::mat4f transformationMatrix) {
-    modelMatrixStack.push(transformationMatrix);
+void MatrixStack::pushRotation(const vmml::mat4f &transformationMatrix) {
+	modelMatrixStack.push_back(transformationMatrix);
     
     //for Normal Matrix: transpose rotation values
     vmml::mat4f transformationMatrixInv = vmml::mat4f::IDENTITY;
     transformationMatrix.transpose_to(transformationMatrixInv);
-    normalMatrixStack.push(transformationMatrixInv);
+	normalMatrixStack.push_back(transformationMatrixInv);
 }
 
-void MatrixStack::popMatrixStack() {
-    modelMatrixStack.pop();
-    normalMatrixStack.pop();
+void MatrixStack::popMatrixStack() 
+{
+	modelMatrixStack.pop_back();
+	normalMatrixStack.pop_back();
+}
+
+void MatrixStack::clearMatrixStack()
+{
+	modelMatrixStack.clear();
+	normalMatrixStack.clear();
 }
 
 
@@ -55,38 +58,27 @@ vmml::mat4f MatrixStack::getModelMatrix() {
     vmml::mat4f transformationMatrix = vmml::mat4f::IDENTITY;
     
     //multiply all Transformations on the Stack to get the final Transformation Matrix
-    while ( ! modelMatrixStack.empty() )
+	for (std::vector<vmml::mat4f>::reverse_iterator it = modelMatrixStack.rbegin(); it != modelMatrixStack.rend(); ++it)
     {
-        transformationMatrix = transformationMatrix * modelMatrixStack.top();
-        modelMatrixStack.pop();
+		transformationMatrix = transformationMatrix * *it;
     }
-    
-    
+        
     return transformationMatrix;
 }
 
 vmml::mat4f MatrixStack::getNormalMatrix() {
-    vmml::mat4f transformationMatrix = vmml::mat4f::IDENTITY;
-    vmml::mat4f newNormalMatrix = vmml::mat4f::IDENTITY;
-    
-    //We need reverse order!
-    std::stack<vmml::mat4f> reverseStack;
-    
-    while ( ! normalMatrixStack.empty() )
-    {
-        reverseStack.push(normalMatrixStack.top());
-        normalMatrixStack.pop();
-    }
-    
-    
-    //multiply all Transformations on the reverseStack to get the final Transformation Matrix
-    while ( ! reverseStack.empty() )
-    {
-        transformationMatrix = transformationMatrix * reverseStack.top();
-        reverseStack.pop();
-    }
-    
-    //muss ich das hier nochmals transposen oder reicht es, die Rotationmatrix jeweils schon transposed zu haben?
-    transformationMatrix.transpose_to(newNormalMatrix);
-    return newNormalMatrix;
+	vmml::mat4f transformationMatrix = vmml::mat4f::IDENTITY;
+
+	//multiply all Transformations on the Stack to get the final Transformation Matrix
+	for (std::vector<vmml::mat4f>::iterator it = modelMatrixStack.begin(); it != modelMatrixStack.end(); ++it)
+	{
+		transformationMatrix = transformationMatrix * *it;
+	}
+
+	////Do we have to transpose again here?
+	//vmml::mat4f normalMatrix = vmml::mat4f::IDENTITY;
+	//transformationMatrix.transpose_to(normalMatrix);
+	//return normalMatrix;
+
+	return transformationMatrix;
 }

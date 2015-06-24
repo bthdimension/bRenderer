@@ -1,6 +1,5 @@
 
 #import "ViewController.h"
-//#import "BView.h"
 #include "ProjectMain.h"
 
 
@@ -18,12 +17,14 @@
 {
     [super viewDidLoad];
     
-//    CGRect frame = [[UIScreen mainScreen] applicationFrame];
-//    bView = [[BView alloc] initWithFrame:frame];
-//    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:bView];
-    
     // initialize user application
     p.init();
+    
+    //TEST adding BView to a UIView of our choosing
+//    UIView *newView = [[UIView alloc] initWithFrame:CGRectMake(100,100,600,600)];
+//    newView.backgroundColor=[UIColor blueColor];
+//    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:newView];
+//    Renderer::get().getView()->attachToUIView(newView);
 }
 
 -(BOOL) shouldAutorotate

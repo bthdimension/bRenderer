@@ -1,39 +1,55 @@
-//
-//  TextureData.h
-//  Framework
-//
-//  Created by David Steiner.
-//
-//
-
 #ifndef B_MODEL_DATA_H
 #define B_MODEL_DATA_H
 
-#include <memory>
-#include <string>
-#include <map>
-#include "Renderer_GL.h"
 #include "GeometryData.h"
 
-class ModelDataImpl;
+
+/** @brief The underlying data of a model
+*	@author David Steiner
+*/
+class OBJLoader;
 
 class ModelData
 {
-    friend ModelDataImpl;
+	friend OBJLoader;
     
 public:
+	/* Typedefs */
     typedef std::map< std::string, GeometryDataPtr >    GroupMap;
+
+	/* Functions */
     
+	/**	@brief Constructor
+	*	@param[in] fileName The name of the obj file
+	*	@param[in] flipT Flip T axis of texture
+	*	@param[in] flipZ Flip Z axis of the geometry
+	*/
     ModelData(const std::string &fileName, bool flipT = false, bool flipZ = false);
+
+	/**	@brief Constructor
+	*	@param[in] flipT Flip T axis of texture
+	*	@param[in] flipZ Flip Z axis of the geometry
+	*/
     ModelData(bool flipT = false, bool flipZ = false);
+
+	/**	@brief Destructor
+	*/
     ~ModelData();
     
+	/**	@brief Loads the model from a file
+	*	@param[in] fileName The name of the obj file
+	*/
     ModelData &load(const std::string &fileName);
     
+	/**	@brief Returns the geometry groups
+	*/
     GroupMap getData() const;
     
 private:
-    ModelDataImpl   *_impl;
+	
+	/* Variables */
+	
+	OBJLoader		*_objLoader;
     bool            _flipT;
     bool            _flipZ;
 };

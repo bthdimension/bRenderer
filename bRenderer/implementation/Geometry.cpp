@@ -1,13 +1,6 @@
-//
-//  Geometry.cpp
-//  Framework
-//
-//  Created by Rahul Mukhi on 1/16/13.
-//  Reworked by David Steiner
-//
-
 #include "../headers/Geometry.h"
 
+/* Public functions */
 
 void Geometry::initialize(GeometryDataPtr geometryData)
 {
@@ -15,6 +8,21 @@ void Geometry::initialize(GeometryDataPtr geometryData)
     copyIndexData(geometryData->vboIndices);
     initializeVertexBuffer();
 }
+
+void Geometry::draw(GLenum mode)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+
+	if (_material)
+		_material->bind();
+
+	glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+}
+
+/* Private functions */
 
 Geometry::VertexDataPtr Geometry::allocVertexData(size_t nVertices)
 {
@@ -34,15 +42,19 @@ Geometry::IndexDataPtr Geometry::allocIndexData(size_t nIndices)
 
 Geometry::VertexDataPtr Geometry::copyVertexData(const GeometryData::VboVertices &arg)
 {
-    allocVertexData(arg.size());
-    memcpy(_vertexData.get(), &arg[0], sizeof(Vertex) * _nVertices);
+	if (arg.size() > 0){
+		allocVertexData(arg.size());
+		memcpy(_vertexData.get(), &arg[0], sizeof(Vertex) * _nVertices);
+	}
     return _vertexData;
 }
 
 Geometry::IndexDataPtr Geometry::copyIndexData(const GeometryData::VboIndices &arg)
 {
-    allocIndexData(arg.size());
-    memcpy(_indexData.get(), &arg[0], sizeof(Index) * _nIndices);
+	if (arg.size() > 0){
+		allocIndexData(arg.size());
+		memcpy(_indexData.get(), &arg[0], sizeof(Index) * _nIndices);
+	}
     return _indexData;
 }
 
@@ -54,15 +66,3 @@ void Geometry::initializeVertexBuffer()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Geometry::draw(GLenum mode)
-{
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    
-    if (_material) 
-		_material->bind();
-    
-    glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-}

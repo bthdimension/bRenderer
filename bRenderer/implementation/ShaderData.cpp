@@ -1,11 +1,3 @@
-//
-//  ShaderData.cpp
-//  Framework
-//
-//  Created by David Steiner on 4/19/13.
-//
-//
-
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -13,15 +5,19 @@
 #include "../headers/Logger.h"
 #include "../headers/FileHandler.h"
 #include "../headers/OSdetect.h"
+#include "../headers/Configuration.h"
+#include <boost/lexical_cast.hpp>
 
-ShaderData::ShaderData(const std::string &shaderFile, std::string shaderVersionDesktop, std::string shaderVersionES)
-	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES)
+using boost::lexical_cast;
+
+ShaderData::ShaderData(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint shaderMaxLights)
+	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _shaderMaxLights(shaderMaxLights)
 {
-    load(shaderFile);
+	load(shaderFileName);
 }
 
-ShaderData::ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName, std::string shaderVersionDesktop, std::string shaderVersionES)
-	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES)
+ShaderData::ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint shaderMaxLights)
+	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _shaderMaxLights(shaderMaxLights)
 {
     load(vertShaderFileName, fragShaderFileName);
 }
@@ -30,9 +26,9 @@ ShaderData::ShaderData()
 :   _valid(false)
 {}
 
-ShaderData &ShaderData::load(const std::string &shaderFile)
+ShaderData &ShaderData::load(const std::string &shaderFileName)
 {
-    return load(shaderFile + ".vert", shaderFile + ".frag");
+	return load(shaderFileName + bRenderer::DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION, shaderFileName + bRenderer::DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION);
 }
 
 ShaderData &ShaderData::load(const std::string &vertShaderFileName, const std::string &fragShaderFileName)
@@ -40,26 +36,21 @@ ShaderData &ShaderData::load(const std::string &vertShaderFileName, const std::s
     _vertShaderSrc = loadSrc(vertShaderFileName);
     _fragShaderSrc = loadSrc(fragShaderFileName);
 
-	size_t i;
-	size_t s = SHADER_VERSION_MACRO.size();
+	
 #ifdef OS_DESKTOP	
-	while ((i = _vertShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
-		_vertShaderSrc.replace(i, s, _shaderVersionDesktop);
-	while ((i = _fragShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
-        _fragShaderSrc.replace(i, s, _shaderVersionDesktop);
+	replaceMacro(bRenderer::SHADER_VERSION_MACRO, _shaderVersionDesktop);
 #endif
 #ifdef OS_IOS
-	while ((i = _vertShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
-		_vertShaderSrc.replace(i, s, _shaderVersionES);
-	while ((i = _fragShaderSrc.find(SHADER_VERSION_MACRO)) != std::string::npos)
-		_fragShaderSrc.replace(i, s, _shaderVersionES);
+	replaceMacro(bRenderer::SHADER_VERSION_MACRO, _shaderVersionES);
 #endif
+	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO, lexical_cast< std::string >(_shaderMaxLights));
+
     return *this;
 }
 
 std::string ShaderData::loadSrc(const std::string &fileName)
 {
-	bRenderer::log("Trying to load shader file " + fileName, bRenderer::LM_SYS);
+    bRenderer::log("Trying to load shader file " + fileName, bRenderer::LM_SYS);
     
     _valid = false;
     
@@ -83,4 +74,14 @@ std::string ShaderData::loadSrc(const std::string &fileName)
     }
     
     return ret;
+}
+
+void ShaderData::replaceMacro(const std::string &macro, const std::string &value)
+{
+	size_t i;
+	size_t s = macro.size();
+	while ((i = _vertShaderSrc.find(macro)) != std::string::npos)
+		_vertShaderSrc.replace(i, s, value);
+	while ((i = _fragShaderSrc.find(macro)) != std::string::npos)
+		_fragShaderSrc.replace(i, s, value);
 }

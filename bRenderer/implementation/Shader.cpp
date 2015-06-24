@@ -1,11 +1,3 @@
-//
-//  Shader.cpp
-//  Framework
-//
-//  Created by Rahul Mukhi on 1/9/13.
-//  Reworked by David Steiner
-//
-
 #include <boost/lexical_cast.hpp>
 
 #include "../headers/Logger.h"
@@ -30,6 +22,8 @@ Shader::Shader(const ShaderData &shaderData)
     if (!compile(&fragShader, GL_FRAGMENT_SHADER, shaderData.getFragShaderSrc())) {
         bRenderer::log("Failed to compile fragment shader");
     }
+
+	_shaderMaxLights = shaderData.getMaxLights();
     
     // Attach vertex shader to program.
     glAttachShader(_programID, vertShader);

@@ -1,28 +1,36 @@
 #ifndef B_RENDERER_H
 #define B_RENDERER_H
 
-///* bRenderer includes */
+/* bRenderer includes */
 #include "OSdetect.h"
 #include "Renderer_GL.h"
 #include "Logger.h"
 #include "View.h"
 #include "Camera.h"
 #include "MatrixStack.h"
+#include "Light.h"
+#include "Configuration.h"
+//#include "../os_specific/ios/BViewLink.h"
 
 /* Flamework includes*/
 #include "headers/Model.h"
 #include "headers/Texture.h"
 #include "headers/ModelData.h"
+#include "headers/OBJLoader.h"
 #include "headers/TextureData.h"
 #include "headers/ShaderData.h"
 
 /* vmmlib includes */
 #include "vmmlib/addendum.hpp"
 
-class RenderProject;
+class IRenderProject;
 
+/** @brief The main class that is able to initialize and maintain everything that is necessary to render an image to the screen
+*	@author Benjamin Bürgisser
+*/
 class Renderer
 {
+    friend class BViewLink;
 public:
 	/* Typedefs */
 	typedef std::unordered_map< std::string, ShaderPtr >		Shaders;
@@ -31,7 +39,8 @@ public:
 	typedef std::unordered_map< std::string, ModelPtr >			Models;
 	typedef std::unordered_map< std::string, CameraPtr >		Cameras;
 	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStacks;
-	
+	typedef std::unordered_map< std::string, LightPtr >			Lights;
+
 	/* Functions */
 
 	/**	@brief Returns the single instance of the Renderer
@@ -64,7 +73,7 @@ public:
 	*
 	*	@param[in] p The project instance
 	*/
-	void setRenderProject(RenderProject *p);
+	void setRenderProject(IRenderProject *p);
 
 	/**	@brief Sets a static function that gets called when initializing the renderer
 	*
@@ -95,12 +104,22 @@ public:
 	/**	@brief Set the shader version used on desktop systems
 	*	@param[in] shaderVersionDesktop The shader version used on desktop systems, e.g. "#version 120"
 	*/
-	void setShaderVersionDesktop(std::string shaderVersionDesktop);
+	void setShaderVersionDesktop(const std::string &shaderVersionDesktop);
 
 	/**	@brief Set the shader version used on mobile devices systems
 	*	@param[in] shaderVersionES The shader version used on mobile devices systems, e.g. "#version 100"
 	*/
-	void setShaderVersionES(std::string shaderVersionES);
+	void setShaderVersionES(const std::string &shaderVersionES);
+
+	/**	@brief Set the maximum number of lights used on desktop systems
+	*	@param[in] shaderMaxLights The maximum light sources to be used
+	*/
+	void setMaxLights(GLuint shaderMaxLights);
+
+	/**	@brief Set an ambient color for the scene
+	*	@param[in] ambientColor Ambient color for the scene
+	*/
+	void setAmbientColor(const vmml::vec3f &ambientColor);
 
 	/* Initialization method for iOS without full screen and window size options */
 
@@ -133,42 +152,68 @@ public:
 	/**	@brief Terminate the renderer
 	*/
 	void terminateRenderer();
-    
-    /**	@brief Draw the scene
-     */
-    void draw();
+
+	/**	@brief Load a material
+	*	@param[in] fileName File name including extension
+	*	@param[in] materialName Name of the material
+	*	@param[in] shaderName Name of the shader
+	*/
+	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "");
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] flipZ Flip Z axis of the geometry
+	*	@param[in] shaderName The shader for the model (optional)
+	*
+	*	If no specific shader is specified the renderer will try to load shaders according to the material names. 
+	*	If no shaders named like the materials of the model exist the default shader will be used.
+	*
 	*/
-	////////////////////////////////////////////////////////////////////////////////////////
-	// TODO: give the option to load shaders and textures with different names than model //
-	////////////////////////////////////////////////////////////////////////////////////////
-	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ);
+	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, const std::string &shaderName = "");
+
+	/**	@brief Load a 3D model
+	*	@param[in] fileName File name including extension
+	*	@param[in] flipT Flip T axis of texture
+	*	@param[in] flipZ Flip Z axis of the geometry
+	*	@param[in] material Custom material for the model
+	*/
+	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material);
 
 	/**	@brief Load a texture
-	*	@param[in] fileName File name
+	*	@param[in] fileName File name including extension
 	*/
 	TexturePtr loadTexture(const std::string &fileName);
 
 	/**	@brief Load a shader
 	*	@param[in] shaderName Name of the shader
+	*
+	*	If no shaders with the chosen name exist or no name is passed to the function 
+	*	the default shader will be used.
+	*
 	*/
-	ShaderPtr loadShader(const std::string &shaderName);
+	ShaderPtr loadShader(std::string shaderName = "");
 
 	/**	@brief Create a material
 	*	@param[in] name Name of the material
 	*	@param[in] materialData
+	*	@param[in] shader
 	*/
-	MaterialPtr createMaterial(const std::string &name, const MaterialData &materialData);
+	MaterialPtr createMaterial(const std::string &name, const MaterialData &materialData, ShaderPtr shader);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
 	*	@param[in] modelData
+	*	@param[in] shader
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader = nullptr);
+
+	/**	@brief Create a model
+	*	@param[in] name The raw name of the model
+	*	@param[in] modelData
+	*	@param[in] material
+	*/
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, MaterialPtr material);
 
 	/**	@brief Create a texture
 	*	@param[in] name The raw name of the texture
@@ -190,40 +235,131 @@ public:
 	/**	@brief Create a camera
 	*	@param[in] name Name of the camera
 	*	@param[in] position Position of the camera
-	*	@param[in] orientation Orientation of the camera in radians
+	*	@param[in] rotation Rotation matrix of the camera
 	*/
-	CameraPtr createCamera(const std::string &name, vmml::vec3f position, vmml::vec3f orientation);
+	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::mat4f &rotation);
 
 	/**	@brief Create a camera
 	*	@param[in] name Name of the camera
-	*	@param[in] position Position of the camera
-	*	@param[in] orientation Orientation of the camera in radians
 	*	@param[in] fov Field of view
 	*	@param[in] aspect Aspect ratio
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	CameraPtr createCamera(const std::string &name, vmml::vec3f position, vmml::vec3f orientation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+	CameraPtr createCamera(const std::string &name, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+
+	/**	@brief Create a camera
+	*	@param[in] name Name of the camera
+	*	@param[in] position Position of the camera
+	*	@param[in] rotation Rotation matrix of the camera
+	*	@param[in] fov Field of view
+	*	@param[in] aspect Aspect ratio
+	*	@param[in] near Near clipping plane
+	*	@param[in] far Far clipping plane
+	*/
+	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::mat4f &rotation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
 
 	/**	@brief Create a matrix stack
 	*	@param[in] name Name of the matrix stack
 	*/
 	MatrixStackPtr createMatrixStack(const std::string &name);
 
+	/**	@brief Create a light
+	*	@param[in] name Name of the light
+	*/
+	LightPtr createLight(const std::string &name);
+
+	/**	@brief Create a light
+	*	@param[in] name Name of the light
+	*	@param[in] position Position of the light
+	*	@param[in] color Color of the light
+	*/
+	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color);
+
+	/**	@brief Create a light
+	*	@param[in] name Name of the light
+	*	@param[in] position Position of the light
+	*	@param[in] color Color of the light
+	*	@param[in] intensity Intensity of the light
+	*	@param[in] attenuation Attenuation of the light
+	*/
+	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation);
+
+	/**	@brief Draw specified model into the buffer
+	*
+	*	This function is used for the default shader. 
+	*	The projection, view and model matrices are read from the specified camera and matrix stack.
+	*	In this function all lights created within this renderer instance are used to illuminate the model.
+	*
+	*	@param[in] modelName Name of the model
+	*	@param[in] cameraName Name of the camera
+	*	@param[in] matrixStackName Name of the matrix stack
+	*/
+	void drawModel(const std::string &modelName, const std::string &cameraName, const std::string &matrixStackName);
+
+	/**	@brief Draw specified model into the buffer
+	*
+	*	This function is used for the default shader.
+	*	The projection, view and model matrices are read from the specified camera and matrix stack. 
+	*	In this function one specific light can be chosen to illuminate the model.
+	*
+	*	@param[in] modelName Name of the model
+	*	@param[in] cameraName Name of the camera
+	*	@param[in] matrixStackName Name of the matrix stack
+	*	@param[in] lightName Name of the light
+	*/
+	void drawModel(const std::string &modelName, const std::string &cameraName, const std::string &matrixStackName, const std::vector<std::string> &lightNames);
+
+	/**	@brief Get a shader
+	*	@param[in] name Name of the shader
+	*/
+	ShaderPtr getShader(const std::string &name);
+
+	/**	@brief Get a texture
+	*	@param[in] name Name of the texture
+	*/
+	TexturePtr getTexture(const std::string &name);
+
+	/**	@brief Get a material
+	*	@param[in] name Name of the material
+	*/
+	MaterialPtr getMaterial(const std::string &name);
+
 	/**	@brief Get a 3D model
 	*	@param[in] name Name of the model
 	*/
-	ModelPtr    getModel(const std::string &name);
+	ModelPtr getModel(const std::string &name);
 
 	/**	@brief Get a camera
 	*	@param[in] name Name of the camera
 	*/
-	CameraPtr    getCamera(const std::string &name);
+	CameraPtr getCamera(const std::string &name);
 
 	/**	@brief Get a matrix stack
 	*	@param[in] name Name of the matrix stack
 	*/
 	MatrixStackPtr getMatrixStack(const std::string &name);
+
+	/**	@brief Get a light
+	*	@param[in] name Name of the light
+	*/
+	LightPtr getLight(const std::string &name);
+
+	/**	@brief Get the shader version used on desktop systems
+	*/
+	std::string getShaderVersionDesktop();
+
+	/**	@brief Get the shader version used on mobile devices systems
+	*/
+	std::string getShaderVersionES();
+
+	/**	@brief Get the maximum number of lights used
+	*/
+	GLuint getMaxLights();
+
+	/**	@brief Get the ambient color of the scene
+	*/
+	vmml::vec3f getAmbientColor();
 
 	/**	@brief Create a 3D perspective
 	*	@param[in] fov Field of view
@@ -231,21 +367,21 @@ public:
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	vmml::mat4f createPerspective(float fov, float aspect, float near, float far);
+	vmml::mat4f createPerspective(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
 
 	/**	@brief Create a simple look at matrix
 	*	@param[in] eye Specifies the position of the eye point
 	*	@param[in] target Specifies the position of the reference point
 	*	@param[in] up Specifies the direction of the up vector
 	*/
-	vmml::mat4f lookAt(vmml::vec3f eye, vmml::vec3f target, vmml::vec3f up);
+	vmml::mat4f lookAt(const vmml::vec3f &eye, const vmml::vec3f &target, const vmml::vec3f &up);
 
 private:
 	/* Functions */
 
 	/**	@brief Private constructor
 	 */
-	Renderer(){}
+	Renderer();
 
 	/**	@brief Private constructor to prevent instantiation via copy constructor
 	 */
@@ -259,23 +395,30 @@ private:
 	 */
 	~Renderer(){}
 
+    /**	@brief Draw the scene
+     */
+    void draw(double currentTime);
+    
 	/**	@brief Get the name of a file from the filename
 	*	@param[in] fileName The filename
 	*	@param[in] ext The extension
 	*/
 	std::string getRawName(const std::string &fileName, std::string *ext = nullptr);
 
+	/**	@brief Reset all variables
+	*/
+	void reset();
+
 	/* Variables */
 
 	bool _initialized;
 	bool _running;
 
-	double _currentTime = 0;
-	double _elapsedTime = 0;
+	double _elapsedTime, _stopTime, _initialTime;
 
 	View _view;
 
-	RenderProject *_renderProject;
+	IRenderProject *_renderProject;
 	
 	void(*_initFunction)();
 	void(*_loopFunction)(const double deltaTime, const double elapsedTime);
@@ -287,13 +430,15 @@ private:
 	Models		    _models;
 	Cameras			_cameras;
 	MatrixStacks	_matrixStacks;
+	Lights			_lights;
 
-	std::string _shaderVersionDesktop = "#version 120";
-	std::string _shaderVersionES = "#version 100";
+	vmml::vec3f		_ambientColor;
 
-	std::string _defaultMaterialName = "default";
+	std::string		_shaderVersionDesktop;
+	std::string		_shaderVersionES;
+	GLuint			_shaderMaxLights;
+	std::string		_defaultShaderName;
 	
-
 };
 
 

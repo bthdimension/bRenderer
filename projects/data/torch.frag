@@ -8,7 +8,7 @@ uniform lowp mat4 ProjectionMatrix;
 
 //Light
 uniform lowp vec4 LightPos;
-uniform lowp vec4 LightColor;
+uniform lowp vec3 LightColor;
 uniform lowp float lightIntensity;
 uniform lowp float attenuation;
 uniform lowp float flickeringLight;
@@ -54,7 +54,7 @@ void main()
     intensityBasedOnDist = clamp(intensityBasedOnDist, 0.0, 1.0);
     
     //change light color based on distance (far = blue, near = yellow)
-    lowp vec4 LightColorBasedOnDist = LightColor;
+    lowp vec3 LightColorBasedOnDist = LightColor;
     LightColorBasedOnDist.x += intensityBasedOnDist*2.2;    //red
 //    LightColorBasedOnDist.y += intensityBasedOnDist*0.1;    //green
     LightColorBasedOnDist.z -= intensityBasedOnDist*1.5;    //blue
@@ -68,7 +68,7 @@ void main()
     lowp vec3 ambient  = Ka * Ia;
     
     //diffuse light
-    lowp vec3 diffuse  = Kd * intensityBasedOnDist *  Id * texture2D(DiffuseMap, texCoordVarying.st).xyz;
+    lowp vec3 diffuse  = LightColorBasedOnDist * Kd * intensityBasedOnDist *  Id * texture2D(DiffuseMap, texCoordVarying.st).xyz;
     diffuse = clamp(diffuse, 0.0, 1.0);
     
     // specular light based on specular map -> works without post processing
@@ -85,5 +85,5 @@ void main()
 //        specular = Ks * pow(max(dot(h,n), 0.0), specularityFromMap) * Is;
 //    }
     
-    gl_FragColor = LightColorBasedOnDist * vec4((ambient + diffuse + specular), 1.0);
+    gl_FragColor = vec4((ambient + diffuse + specular), 1.0);
 }

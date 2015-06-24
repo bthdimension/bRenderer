@@ -3,7 +3,18 @@
 
 #import "BView.h"
 #include "../../bRenderer.h"
+//#import "BViewLink.h"
 
+class BViewLink
+{
+public:
+    /* Functions */
+    
+    /**	@brief Draw the scene using the renderer of this instance
+     */
+    static void draw(Renderer *r, double currentTime)       { r->draw(currentTime); }
+    
+};
 
 @interface BView (PrivateMethods)
 /* Private methods */
@@ -11,11 +22,7 @@
 - (void)deleteFramebuffer;
 @end
 
-
 @implementation BView
-
-/* Generate getter and setter for the context */
-@synthesize context;
 
 /* Set layer class to CAEAGLLayer */
 + (Class)layerClass
@@ -55,8 +62,12 @@
                                      kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
                                      nil];
     
-    // create an OpenGL ES 2.0 context
-    context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    // create an OpenGL ES 3.0 context
+    context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+	// If Es 3.0 is not supported create an OpenGL ES 2.0 context
+	if (context == nil) {
+	  context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+	}
     
     // quit if context creation failed
     if (!context || ![self setContextCurrent]) {
@@ -74,6 +85,7 @@
     
     // initial time is not set at this point because the renderer hasn't fully started yet
     initialTime = -1.0;
+    wasStopped = false;
     
     // create buffers
     [self createFramebuffer];
@@ -147,7 +159,10 @@
     // handle time
     if(initialTime < 0)
         initialTime = (int)[displayLink timestamp];
-    
+    else if (wasStopped){
+        initialTime += [self getTime]-stopTime;
+        wasStopped = false;
+    }
     if (context != nil)
     {
         if (!defaultFramebuffer)
@@ -155,7 +170,7 @@
     
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
     
-        Renderer::get().draw();
+        BViewLink::draw(&Renderer::get(), [self getTime]);
     
         // set current context
         [self setContextCurrent];
@@ -183,6 +198,9 @@
 
 - (void)stopRenderer
 {
+    stopTime = [self getTime];
+    wasStopped = true;
+    
     if (displayLink != nil) {
         // if the display link is present, it gets invalidated (loop stops)
         [displayLink invalidate];
@@ -220,13 +238,17 @@
     return ([displayLink timestamp] - initialTime);
 }
 
-
 /* Set view to fullscreen */
 - (void) setFullscreen
 {
     // set width and height to fullscreen
-    width = [[UIScreen mainScreen] bounds].size.width;
-    height = [[UIScreen mainScreen] bounds].size.height;
+    width = self.superview.frame.size.width;
+    height = self.superview.frame.size.height;
+    
+    if(width == 0 || height == 0){
+            width = [[UIScreen mainScreen] bounds].size.width;
+            height = [[UIScreen mainScreen] bounds].size.height;
+    }
     
     [self setViewPositionX: 0 setViewPositionY: 0];
     

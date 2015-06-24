@@ -9,7 +9,7 @@
 	#include <GLFW/glfw3.h>
 #endif
 #ifdef OS_IOS
-	/* Import OpenGL ES 2.0 */
+	/* Import OpenGL ES 3.0 */
 	#include <OpenGLES/ES3/gl.h>
 	#include <OpenGLES/ES3/glext.h>
 #endif

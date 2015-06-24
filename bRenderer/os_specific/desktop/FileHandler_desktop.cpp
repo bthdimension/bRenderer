@@ -4,13 +4,14 @@
 
 #include "../../headers/FileHandler.h"
 #include "../../headers/Logger.h"
+#include "../../headers/Configuration.h"
 #include <sys/stat.h>
 
 namespace bRenderer
 {
 	/* Internal variables */
 	
-	std::string standardFilePath = "data/";
+	std::string standardFilePath = bRenderer::DEFAULT_FILE_PATH;
 
 	/* External functions */
 

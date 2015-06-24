@@ -5,8 +5,11 @@
 #include <iostream>
 #include "vmmlib/addendum.hpp"
 #include "vmmlib/vector.hpp"
-#include <stack>
 
+
+/** @brief This is a matrix stack to temporarily store transformations 
+*	@author Benjamin Bürgisser
+*/
 class MatrixStack
 {
 public:
@@ -24,27 +27,31 @@ public:
 	/**	@brief Push a translation matrix to the stack
 	*	@param[in] transformationMatrix Matrix that moves an object in space
 	*/
-    void pushTranslation(vmml::mat4f transformationMatrix);
+	void pushTranslation(const vmml::mat4f &transformationMatrix);
 
 	/**	@brief Push a scale matrix to the stack
 	*	@param[in] transformationMatrix Matrix that scales an object
 	*/
-    void pushScaling(vmml::mat4f transformationMatrix);
+	void pushScaling(const vmml::mat4f &transformationMatrix);
 
 	/**	@brief Push a rotation matrix to the stack
 	*	@param[in] transformationMatrix Matrix that rotates an object
 	*/
-    void pushRotation(vmml::mat4f transformationMatrix);
+	void pushRotation(const vmml::mat4f &transformationMatrix);
 
 	/**	@brief Delete last element on the stack
 	*/
     void popMatrixStack();
 
-	/**	@brief Returns the model matrix
+	/**	@brief Deletes all matrices in the stack
+	*/
+	void clearMatrixStack();
+
+	/**	@brief Returns the model matrix as the product of all pushed transformations
 	*/
     vmml::mat4f getModelMatrix();
 
-	/**	@brief Returns the normal matrix
+	/**	@brief Returns the normal matrix as the product of all pushed transformations
 	*/
     vmml::mat4f getNormalMatrix();
 
@@ -52,8 +59,8 @@ private:
 
 	/* Variables */
 
-    std::stack<vmml::mat4f> modelMatrixStack;
-    std::stack<vmml::mat4f> normalMatrixStack;
+    std::vector<vmml::mat4f> modelMatrixStack;
+	std::vector<vmml::mat4f> normalMatrixStack;
 };
 
 typedef std::shared_ptr<MatrixStack> MatrixStackPtr;

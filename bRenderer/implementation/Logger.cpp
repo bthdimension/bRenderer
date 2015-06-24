@@ -1,29 +1,23 @@
 #include "../headers/Logger.h"
+#include "../headers/Configuration.h"
 
 namespace bRenderer
 {
 	std::string getTag(LogMode mode)
 	{
-		std::string tag;
 		switch (mode)
 		{
 		case LM_INFO:
-			tag = "INFO";
-			break;
+			return bRenderer::LOG_MODE_INFO;
 		case LM_WARNING:
-			tag = "WARNING";
-			break;
+			return bRenderer::LOG_MODE_WARNING;
 		case LM_ERROR:
-			tag = "ERROR";
-			break;
+			return bRenderer::LOG_MODE_ERROR;
 		case LM_SYS:
-			tag = "SYSTEM";
-			break;
+			return bRenderer::LOG_MODE_SYSTEM;
 		default:
-			break;
+			return bRenderer::LOG_MODE_INFO;
 		}
-
-		return tag;
 	}
 
 	void log(const std::string &msg, LogMode mode)

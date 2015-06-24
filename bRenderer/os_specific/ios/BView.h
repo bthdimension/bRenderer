@@ -15,19 +15,20 @@
 	GLint height;
 
 	// the time when the app was started
-	double initialTime;
+	double initialTime, stopTime;
+    bool wasStopped;
 
 	GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
 
 	// the display link is used to create a render loop
 	CADisplayLink *displayLink;
 	CAEAGLLayer *eaglLayer;
+    
+    // OpenGL context
+    EAGLContext *context;
 }
 
 typedef BView* BViewRef;
-
-/* The OpenGL context with auto generated getter and setter */
-@property(nonatomic, retain) EAGLContext *context;
 
 /* Control the renderer from within Objective-C code using these functions */
 -(void)runRenderer;
@@ -45,6 +46,8 @@ typedef BView* BViewRef;
 -(void)setViewWidth:(GLint)w setViewHeight : (GLint)h;
 -(void)setViewPositionX:(GLint)x setViewPositionY : (GLint)y;
 -(bool)setContextCurrent;
+
+//-(void)setLink:(BViewLink)link;
 @end
 
 #endif /* defined(B_BVIEW_H) */

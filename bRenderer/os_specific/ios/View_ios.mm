@@ -31,7 +31,6 @@ bool View::initView()
     _views.push_back(view);
     _viewNo = _views.size()-1;
     
-    [_views.at(_viewNo) setFullscreen];
     _fullscreen = true;
     
     _initialized = true;
@@ -68,6 +67,17 @@ bool View::initView(GLint width, GLint height, bool fullscreen)
     return true;
 }
 
+void View::terminateView()
+{
+	setRunning(false);
+
+    [_views.at(_viewNo) removeFromSuperview];
+    _views.at(_viewNo) = nil;
+    _views.erase(_views.begin() + _viewNo);
+
+	_initialized = false;
+}
+
 bool View::isInitialized()
 {
     return _initialized;
@@ -99,6 +109,22 @@ void View::getSize(GLint* width, GLint* height)
     *height = getHeight();
 }
 
+GLint View::getScreenWidth()
+{
+	return [[UIScreen mainScreen] bounds].size.width;
+}
+
+GLint View::getScreenHeight()
+{
+	return [[UIScreen mainScreen] bounds].size.height;
+}
+
+void View::getScreenSize(GLint* width, GLint* height)
+{
+	*width = getScreenWidth();
+	*height = getScreenHeight();
+}
+
 GLfloat View::getAspectRatio()
 {
     return (GLfloat)getWidth() / (GLfloat)getHeight();
@@ -118,6 +144,25 @@ void View::getPosition(GLint* x, GLint* y)
 {
     *x = getPositionX();
     *y = getPositionY();
+}
+
+View::GLFWwindow* View::getWindow()
+{
+    return 0;
+}
+
+UIView* View::getUIView()
+{
+    return _views.at(_viewNo);
+}
+
+void View::attachToUIView(UIView* view)
+{
+    [_views.at(_viewNo) removeFromSuperview];
+    [view addSubview:_views.at(_viewNo)];
+    
+    if(_fullscreen)
+        [_views.at(_viewNo) setFullscreen];
 }
 
 double View::getTime()
@@ -175,4 +220,9 @@ void View::setContextCurrent()
 void View::swapBuffers()
 {
     bRenderer::log("Not yet supported on iOS", bRenderer::LM_WARNING);
+}
+
+static void windowSizeChanged(View::GLFWwindow* window, int width, int height)
+{
+    // Not implemented on iOS
 }

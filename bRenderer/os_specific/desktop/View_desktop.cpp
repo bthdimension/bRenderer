@@ -3,18 +3,15 @@
 #ifdef OS_DESKTOP
 
 #include "../../headers/View.h"
+#include "../../headers/Configuration.h"
 #include <boost/lexical_cast.hpp>
 using boost::lexical_cast;
 
 
-/* Defines */
-#define DEFAULT_WIDTH	640
-#define DEFAULT_HEIGHT	480
-
 /* Constructor and destructor */
 View::View()
 {
-
+	_windowTitle = bRenderer::DEFAULT_WINDOW_TITLE;
 }
 
 View::~View()
@@ -26,18 +23,15 @@ View::~View()
 
 bool View::initView()
 {
-	if (initView(_fullscreen))
-		return true;
-	else
-		return false;
+	return initView(_fullscreen);
 }
 
 bool View::initView(bool fullscreen)
 {
-	if (initView(DEFAULT_WIDTH, DEFAULT_HEIGHT, fullscreen))
-		return true;
+	if (fullscreen)
+		return initView(getScreenWidth(), getScreenHeight(), fullscreen);
 	else
-		return false;
+		return initView(bRenderer::DEFAULT_VIEW_WIDTH, bRenderer::DEFAULT_VIEW_HEIGHT, fullscreen);
 }
 
 bool View::initView(GLint width, GLint height, bool fullscreen)
@@ -52,7 +46,7 @@ bool View::initView(GLint width, GLint height, bool fullscreen)
 		return false;
 
 	// Create a windowed mode window and its OpenGL context 
-	_window = glfwCreateWindow(width, height, _windowTitle, fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+	_window = glfwCreateWindow(width, height, _windowTitle.c_str(), fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
 	_fullscreen = fullscreen;
 
 	if (!_window)
@@ -82,6 +76,12 @@ bool View::initView(GLint width, GLint height, bool fullscreen)
 	_initialized = true;
 
 	return true;
+}
+
+void View::terminateView()
+{
+	glfwTerminate();
+	_initialized = false;
 }
 
 bool View::isInitialized()
@@ -118,6 +118,24 @@ void View::getSize(GLint* width, GLint* height)
 	glfwGetWindowSize(_window, width, height);
 }
 
+GLint View::getScreenWidth()
+{
+	glfwInit();
+	return glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
+}
+
+GLint View::getScreenHeight()
+{
+	glfwInit();
+	return glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+}
+
+void View::getScreenSize(GLint* width, GLint* height)
+{
+	*width = getScreenWidth();
+	*height = getScreenHeight();
+}
+
 GLfloat View::getAspectRatio()
 {
 	int w, h;
@@ -149,6 +167,13 @@ GLFWwindow* View::getWindow()
 	return _window;
 }
 
+View::UIView* View::getUIView()
+{
+	return 0;
+}
+
+void View::attachToUIView(View::UIView* view){}
+
 double View::getTime()
 {
 	return glfwGetTime();
@@ -156,12 +181,40 @@ double View::getTime()
 
 void View::setRunning(bool running)
 {
-    bRenderer::log("Not supported on desktop systems", bRenderer::LM_WARNING);
+	glfwSetWindowShouldClose(_window, !running);
 }
 
 void View::setFullscreen(bool fullscreen)
 {
-	bRenderer::log("Not yet supported on desktop systems", bRenderer::LM_WARNING);
+	bRenderer::log("Setting fullscreen not yet supported on desktop systems", bRenderer::LM_WARNING);
+
+	//if (fullscreen != _fullscreen){
+	//	GLint w = getWidth();
+	//	GLint h = getHeight();
+
+	//	GLFWwindow *win = glfwCreateWindow(w, h, _windowTitle.c_str(), /*fullscreen ? glfwGetPrimaryMonitor() : */NULL, _window);
+	//	_fullscreen = fullscreen;
+	//	if (!win)		glfwTerminate();
+
+	//	//glfwDestroyWindow(_window);
+	//	_window = win;
+
+	//	setContextCurrent();
+	//	glfwSetWindowSizeCallback(_window, windowSizeChanged);
+
+	//	// OpenGL
+	//	// clear
+	//	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//	glEnable(GL_DEPTH_TEST);
+	//	glDepthFunc(GL_LEQUAL);
+	//	glCullFace(GL_BACK);
+	//	glEnable(GL_CULL_FACE);
+
+	//	// for Alpha
+	//	glEnable(GL_BLEND);
+	//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//}
 }
 
 

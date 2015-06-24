@@ -1,18 +1,18 @@
-//
-//  IDrawable.h
-//  Framework
-//
-//  Created by David Steiner on 3/19/13.
-//
-
 #ifndef B_I_DRAWABLE_H
 #define B_I_DRAWABLE_H
 
 #include "Renderer_GL.h"
 
+/** @brief Interface for drawable objects
+*	@author David Steiner
+*/
 class IDrawable
 {
 public:
+
+	/**	@brief Draws an object to the screen
+	*	@param[in] mode
+	*/
     virtual void draw(GLenum mode) = 0;
     
 };

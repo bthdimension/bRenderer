@@ -8,6 +8,9 @@
 #include "vmmlib/matrix.hpp"
 #include "vmmlib/addendum.hpp"
 
+/** @brief A camera that defines the view and projection matrix in a scene
+*	@author Benjamin Bürgisser
+*/
 class Camera
 {
 public:
@@ -28,38 +31,48 @@ public:
 
 	/**	@brief Constructor loading standard values for projection
 	*	@param[in] position Position of the camera
-	*	@param[in] orientation Orientation of the camera in radians
+	*	@param[in] rotation Rotation matrix of the camera
 	*/
-	Camera(vmml::vec3f position, vmml::vec3f orientation);
+	Camera(const vmml::vec3f &position, const vmml::mat4f &rotation);
 
 	/**	@brief Constructor
 	*	@param[in] position Position of the camera
-	*	@param[in] orientation Orientation of the camera in radians
+	*	@param[in] rotation Rotation matrix of the camera
 	*	@param[in] fov Field of view
 	*	@param[in] aspect Aspect ratio
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	Camera(vmml::vec3f position, vmml::vec3f orientation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+	Camera(const vmml::vec3f &position, const vmml::mat4f &rotation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
 
 	/**	@brief Destructor
 	*/
     ~Camera();
 
-	/**	@brief Moves the camera forward with a certain speed
+	/**	@brief Moves the camera forward with a certain speed (based on previous position)
 	*	@param[in] camSpeed The velocity of the movement
 	*/
     void moveCamera(GLfloat camSpeed);
 
-	/**	@brief Rotates the camera around a given axis
+	/**	@brief Rotates the camera around a given axis (based on previous orientation)
 	*	@param[in] axis The axis to rotate around
 	*	@param[in] rotation The rotation in radians
 	*/
-    void rotateCamera(const vmml::vec3f &axis, GLfloat rotation);
+	void rotateCamera(GLfloat rotation, const vmml::vec3f &axis);
 
 	/**	@brief Resets camera to position (0,0,0) and aligns it to z-axis
 	*/
     void resetCamera();
+
+	/**	@brief Sets the position of the camera
+	*	@param[in] position Position of the camera
+	*/
+	void setPosition(const vmml::vec3f &position);
+
+	/**	@brief Sets the rotation matrix of the camera
+	*	@param[in] rotation Rotation matrix of the camera
+	*/
+	void setRotation(const vmml::mat4f &rotation);
 
 	/**	@brief Sets field of view
 	*	@param[in] fov Field of view
@@ -89,6 +102,18 @@ public:
 	*/
 	vmml::mat4f getProjectionMatrix();
 
+	/**	@brief Returns the position of the camera
+	*/
+	vmml::vec3f getPosition();
+
+	/**	@brief Returns the rotation matrix of the camera
+	*/
+	vmml::mat4f getRotation();
+
+	/**	@brief Returns the orientation of the camera
+	*/
+	vmml::vec3f getOrientation();
+
 	/* Static Functions */
 
 	/**	@brief Create a simple look at matrix
@@ -96,7 +121,7 @@ public:
 	*	@param[in] target Specifies the position of the reference point
 	*	@param[in] up Specifies the direction of the up vector
 	*/
-	static vmml::mat4f lookAt(vmml::vec3f eye, vmml::vec3f target, vmml::vec3f up);
+	static vmml::mat4f lookAt(const vmml::vec3f &eye, const vmml::vec3f &target, const vmml::vec3f &up);
 
 	/**	@brief Create a 3D perspective
 	*	@param[in] fov Field of view
@@ -111,11 +136,9 @@ private:
 	/* Variables */
 
 	vmml::vec3f _position, _orientation;
+	vmml::mat4f _rotation;
 
-	GLfloat _fov = 90.0f; 
-	GLfloat _aspect = 4.0f / 3.0f;
-	GLfloat _near = -1.0f;
-	GLfloat _far = 1280.0f;
+	GLfloat _fov, _aspect, _near, _far;
 };
 
 typedef std::shared_ptr<Camera> CameraPtr;
