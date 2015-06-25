@@ -27,9 +27,16 @@ public:
 	/**	@brief Constructor
 	*	@param[in] r Instance of the renderer main class
 	*	@param[in] modelData
+	*	@param[in] shaderMaxLights The maximum light sources to be used
+	*/
+	explicit Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights);
+
+	/**	@brief Constructor
+	*	@param[in] r Instance of the renderer main class
+	*	@param[in] modelData
 	*	@param[in] shader
 	*/
-	explicit Model(Renderer *r, const ModelData &modelData, ShaderPtr shader = nullptr);
+	explicit Model(Renderer *r, const ModelData &modelData, ShaderPtr shader);
 
 	/**	@brief Constructor
 	*	@param[in] modelData

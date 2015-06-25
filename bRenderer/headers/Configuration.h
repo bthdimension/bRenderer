@@ -9,10 +9,6 @@ namespace bRenderer
 {
 	/* Renderer configuration */
 	const vmml::vec3f DEFAULT_AMBIENT_COLOR				= vmml::vec3f(0.0, 0.0, 0.0);
-	const std::string DEFAULT_SHADER_VERSION_DESKTOP	= "#version 120";
-	const std::string DEFAULT_SHADER_VERSION_ES			= "#version 100";
-	const GLuint DEFAULT_SHADER_MAX_LIGHTS				= 5;
-	const std::string DEFAULT_SHADER_NAME				= "default";
 
 	/* Logger */
 	const std::string LOG_MODE_INFO						= "INFO";
@@ -33,11 +29,29 @@ namespace bRenderer
 	const std::string SHADER_MAX_LIGHTS_MACRO = "$B_SHADER_MAX_LIGHTS";
 
 	/* Shader configuration */
-	const std::string DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION	= ".frag";
-	const std::string DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION		= ".vert";
-	const std::string DEFAULT_SHADER_DIFFUSE_MAP					= "DiffuseMap";
-	const std::string DEFAULT_SHADER_SPECULAR_MAP					= "SpecularMap";
-	const std::string DEFAULT_SHADER_NORMAL_MAP						= "NormalMap";
+	const std::string DEFAULT_SHADER_VERSION_DESKTOP = "#version 120";
+	const std::string DEFAULT_SHADER_VERSION_ES = "#version 100";
+	const GLuint DEFAULT_SHADER_MAX_LIGHTS = 3;
+	const std::string DEFAULT_SHADER_NAME = "default";
+	const std::string DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION = ".frag";
+	const std::string DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION = ".vert";
+
+	/* Shader uniforms */
+	const std::string DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP		= "DiffuseMap";
+	const std::string DEFAULT_SHADER_UNIFORM_SPECULAR_MAP		= "SpecularMap";
+	const std::string DEFAULT_SHADER_UNIFORM_NORMAL_MAP			= "NormalMap";
+	const std::string DEFAULT_SHADER_UNIFORM_NORMAL_MATRIX		= "NormalMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_MODEL_MATRIX		= "ModelMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_VIEW_MATRIX		= "ViewMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX	= "ProjectionMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS	= "numLights";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_POSITION		= "lightPosition_";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_COLOR		= "lightColor_";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY	= "lightIntensity_";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION	= "lightAttenuation_";
+	const std::string DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR		= "ambientColor";
+	
+	/* Shader attributes */
 	const std::string DEFAULT_SHADER_ATTRIBUTE_POSITION				= "Position";
 	const std::string DEFAULT_SHADER_ATTRIBUTE_NORMAL				= "Normal";
 	const std::string DEFAULT_SHADER_ATTRIBUTE_TANGENT				= "Tangent";

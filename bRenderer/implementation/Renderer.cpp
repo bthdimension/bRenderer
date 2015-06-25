@@ -52,12 +52,6 @@ void Renderer::setShaderVersionES(const std::string &shaderVersionES)
 	_shaderVersionES = shaderVersionES;
 }
 
-void Renderer::setMaxLights(GLuint shaderMaxLights)
-{
-	_shaderMaxLights = shaderMaxLights;
-}
-
-
 void Renderer::setAmbientColor(const vmml::vec3f &ambientColor)
 {
 	_ambientColor = ambientColor;
@@ -122,7 +116,7 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen)
     return initRenderer();
 }
 
-MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName)
+MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights)
 {
 	// log activity
 	bRenderer::log("loading Material: " + materialName, bRenderer::LM_SYS);
@@ -134,10 +128,10 @@ MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::strin
 		obj::obj_parser::triangulate_faces |
 		obj::obj_parser::translate_negative_indices);
 
-    return createMaterial(materialName, objLoader.loadMaterial(fileName, materialName), loadShader(shaderName.empty() ? materialName : shaderName));
+	return createMaterial(materialName, objLoader.loadMaterial(fileName, materialName), loadShader(shaderName.empty() ? materialName : shaderName, shaderMaxLights));
 }
 
-ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, const std::string &shaderName)
+ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, const std::string &shaderName, GLuint shaderMaxLights)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -151,8 +145,25 @@ ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ
 	// create model
 	ModelData modelData(fileName, flipT, flipZ);
 	if (shaderName.empty())
-		return createModel(name, modelData);
-	return createModel(name, modelData, loadShader(shaderName));
+		return createModel(name, modelData, shaderMaxLights);
+	return createModel(name, modelData, loadShader(shaderName, shaderMaxLights));
+}
+
+ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader)
+{
+	// log activity
+	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
+
+	// get file name
+	std::string name = getRawName(fileName);
+
+	if (getModel(name))
+		return _models[name];
+
+	// create model
+	ModelData modelData(fileName, flipT, flipZ);
+
+	return createModel(name, modelData, shader);
 }
 
 ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material)
@@ -184,21 +195,18 @@ TexturePtr Renderer::loadTexture(const std::string &fileName)
 	return createTexture(name, textureData);
 }
 
-ShaderPtr Renderer::loadShader(std::string shaderName)
+ShaderPtr Renderer::loadShader(std::string shaderName, GLuint shaderMaxLights)
 {
-	if (shaderName.empty())
-		shaderName = _defaultShaderName;
-
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderData shaderData(shaderName, _shaderVersionDesktop, _shaderVersionES, _shaderMaxLights);
+	ShaderData shaderData(shaderName, _shaderVersionDesktop, _shaderVersionES, shaderMaxLights);
 	ShaderPtr shader = createShader(name, shaderData);
 	if (shader) return shader;
 
-	shader = loadShader(_defaultShaderName);
+	shader = loadShader(_defaultShaderName, shaderMaxLights);
 	if (shader) return shader;
 
 	bRenderer::log("Couldn't load shader '" + name + "'.", bRenderer::LM_INFO);
@@ -213,6 +221,15 @@ MaterialPtr Renderer::createMaterial(const std::string &name, const MaterialData
 	material = MaterialPtr(new Material);
 	material->initialize(this, materialData, shader);
 	return material;
+}
+
+ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, GLuint shaderMaxLights)
+{
+	if (getModel(name)) return getModel(name);
+	ModelPtr &model = _models[name];
+
+	model = ModelPtr(new Model(this, modelData, shaderMaxLights));
+	return model;
 }
 
 ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader)
@@ -353,9 +370,9 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 		ShaderPtr shader = material->getShader();
 		if (shader)
 		{
-			shader->setUniform("ProjectionMatrix", getCamera(cameraName)->getProjectionMatrix());
-			shader->setUniform("ViewMatrix", getCamera(cameraName)->getViewMatrix());
-			shader->setUniform("ModelMatrix", getMatrixStack(matrixStackName)->getModelMatrix());
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, getCamera(cameraName)->getProjectionMatrix());
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_VIEW_MATRIX, getCamera(cameraName)->getViewMatrix());
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_MATRIX, getMatrixStack(matrixStackName)->getModelMatrix());
 
 			// Light
 			GLfloat numLights = lightNames.size();
@@ -363,16 +380,16 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 			if (numLights > maxLights)
 				numLights = maxLights;
 
-			shader->setUniform("numLights", numLights);
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS, numLights);
 			for (int i = 0; i < numLights; i++){
 				std::string pos = lexical_cast< std::string >(i);
-				shader->setUniform("lightPosition_" + pos, getLight(lightNames[i])->getPosition());
-				shader->setUniform("lightColor_" + pos, getLight(lightNames[i])->getColor());
-				shader->setUniform("lightIntensity_" + pos, getLight(lightNames[i])->getIntensity());
-				shader->setUniform("lightAttenuation_" + pos, getLight(lightNames[i])->getAttenuation());
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION + pos, getLight(lightNames[i])->getPosition());
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + pos, getLight(lightNames[i])->getColor());
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY + pos, getLight(lightNames[i])->getIntensity());
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION + pos, getLight(lightNames[i])->getAttenuation());
 			}
 			// Amient
-			shader->setUniform("ambientColor", getAmbientColor());
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR, getAmbientColor());
 		}
 		else
 		{
@@ -441,12 +458,6 @@ std::string Renderer::getShaderVersionES()
 	return _shaderVersionES;
 }
 
-GLuint Renderer::getMaxLights()
-{
-	return _shaderMaxLights;
-}
-
-
 vmml::vec3f Renderer::getAmbientColor()
 {
 	return _ambientColor;
@@ -491,7 +502,6 @@ void Renderer::reset()
 	_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR;
 	_shaderVersionDesktop = bRenderer::DEFAULT_SHADER_VERSION_DESKTOP;
 	_shaderVersionES = bRenderer::DEFAULT_SHADER_VERSION_ES;
-	_shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS;
 	_defaultShaderName = bRenderer::DEFAULT_SHADER_NAME;
 
 	_shaders.clear();

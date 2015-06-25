@@ -1,10 +1,10 @@
-#ifndef B_RENDERER_PROJECT_H
-#define B_RENDERER_PROJECT_H
+#ifndef B_I_RENDERER_PROJECT_H
+#define B_I_RENDERER_PROJECT_H
 
 /* bRenderer includes */
 #include "../bRenderer.h"
 
-/** @brief This class needs to be inherited if the renderer should be used in an object oriented manner
+/** @brief This interface needs to be implemented if the renderer should be used in an object oriented manner
 *	@author Benjamin Bürgisser
 */
 class IRenderProject
@@ -33,4 +33,4 @@ protected:
     }
 };
 
-#endif /* defined(B_RENDERER_PROJECT_H) */
+#endif /* defined(B_I_RENDERER_PROJECT_H) */

@@ -75,10 +75,7 @@ vmml::mat4f MatrixStack::getNormalMatrix() {
 		transformationMatrix = transformationMatrix * *it;
 	}
 
-	////Do we have to transpose again here?
-	//vmml::mat4f normalMatrix = vmml::mat4f::IDENTITY;
-	//transformationMatrix.transpose_to(normalMatrix);
-	//return normalMatrix;
-
-	return transformationMatrix;
+	vmml::mat4f normalMatrix = vmml::mat4f::IDENTITY;
+	transformationMatrix.transpose_to(normalMatrix);
+	return normalMatrix;
 }

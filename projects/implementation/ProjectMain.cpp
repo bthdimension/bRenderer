@@ -11,7 +11,6 @@ void ProjectMain::init()
 	// set shader versions (optional)
 	bRenderer().setShaderVersionDesktop("#version 120");
 	bRenderer().setShaderVersionES("#version 100");
-	bRenderer().setMaxLights(4);
 
 	int w, h;
 	bRenderer().getView()->getScreenSize(&w, &h);
@@ -43,14 +42,14 @@ void ProjectMain::initFunction()
 {
 	bRenderer::log("my initialize function was started");
 
-	// TEST: load material
-	MaterialPtr caveMtl = bRenderer().loadMaterial("cave_start.mtl", "cave_start", "default");
-
+	// TEST: load material and shader before loading the model
+	MaterialPtr caveMtl = bRenderer().loadMaterial("cave_start.mtl", "cave_start", "default", 4);
+	ShaderPtr flameShader = bRenderer().loadShader("flame");
 	// load models
 	bRenderer().loadModel("cave_start.obj", true, true, caveMtl);
-	bRenderer().loadModel("crystal.obj", false, true, "default");
-	bRenderer().loadModel("torch.obj", false, true);
-	bRenderer().loadModel("flame.obj", false, true);
+	bRenderer().loadModel("crystal.obj", false, true);
+	bRenderer().loadModel("torch.obj", false, true, "torch");
+	bRenderer().loadModel("flame.obj", false, true, flameShader);
 	bRenderer().loadModel("sparks.obj", false, true);
 	bRenderer().loadModel("bTitle.obj", false, true);
 
@@ -171,45 +170,6 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	//bRenderer().drawModel("cave_start", "camera", "caveStartStack");
 	// draw without static torch light
 	bRenderer().drawModel("cave_start", "camera", "caveStartStack", std::vector<std::string>({ "mainLight", "torchLight", "secondLight", "thirdLight" }));
-
-	//Model::GroupMap &groupsCaveStart = bRenderer().getModel("cave_start")->getGroups();
-	//for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
-	//{
-	//	Geometry &geometry = i->second;
-	//	MaterialPtr material = geometry.getMaterial();
-	//	ShaderPtr shader = material->getShader();
-	//	if (shader)
-	//	{
-	//		// translate and scale using the matrix stack
-	//		bRenderer().getMatrixStack("caveStartStack")->pushTranslation(vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0)));
-	//		bRenderer().getMatrixStack("caveStartStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.25f)));
-
-	//		//get model matrix from stack
-	//		vmml::mat4f modelMatrix = bRenderer().getMatrixStack("caveStartStack")->getModelMatrix();
-	//		
-	//		//VIEW MATRIX
-	//		vmml::mat4f viewMatrix = bRenderer().getCamera("camera")->getViewMatrix();
-	//		
-	//		shader->setUniform("ProjectionMatrix", projectionMatrix);
-	//		shader->setUniform("ViewMatrix", viewMatrix);
-	//		shader->setUniform("ModelMatrix", modelMatrix);
-
-	//		//LIGHT
-	//		shader->setUniform("LightPos", bRenderer().getLight("mainLight")->getPosition());
-	//		shader->setUniform("LightColor", bRenderer().getLight("mainLight")->getColor());
-	//		shader->setUniform("lightIntensity", bRenderer().getLight("mainLight")->getIntensity());
-	//		shader->setUniform("attenuation", bRenderer().getLight("mainLight")->getAttenuation());
-	//		shader->setUniform("flickeringLight", flickeringLight);
-
-	//		shader->setUniform("Id", vmml::vec3f::ONE);
-	//		shader->setUniform("Ia", vmml::vec3f::ONE);
-	//	}
-	//	else
-	//	{
-	//		bRenderer::log("No shader available.", bRenderer::LM_WARNING);
-	//	}
-	//	geometry.draw();
-	//}
 	bRenderer().getMatrixStack("caveStartStack")->clearMatrixStack();
 
 	/*** Crystal (blue) ***/

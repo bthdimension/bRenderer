@@ -111,11 +111,6 @@ public:
 	*/
 	void setShaderVersionES(const std::string &shaderVersionES);
 
-	/**	@brief Set the maximum number of lights used on desktop systems
-	*	@param[in] shaderMaxLights The maximum light sources to be used
-	*/
-	void setMaxLights(GLuint shaderMaxLights);
-
 	/**	@brief Set an ambient color for the scene
 	*	@param[in] ambientColor Ambient color for the scene
 	*/
@@ -157,20 +152,30 @@ public:
 	*	@param[in] fileName File name including extension
 	*	@param[in] materialName Name of the material
 	*	@param[in] shaderName Name of the shader
+	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
 	*/
-	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "");
+	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] flipZ Flip Z axis of the geometry
 	*	@param[in] shaderName The shader for the model (optional)
+	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
 	*
 	*	If no specific shader is specified the renderer will try to load shaders according to the material names. 
 	*	If no shaders named like the materials of the model exist the default shader will be used.
 	*
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, const std::string &shaderName = "");
+	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+
+	/**	@brief Load a 3D model
+	*	@param[in] fileName File name including extension
+	*	@param[in] flipT Flip T axis of texture
+	*	@param[in] flipZ Flip Z axis of the geometry
+	*	@param[in] shader Custom shader for the model
+	*/
+	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
@@ -187,12 +192,13 @@ public:
 
 	/**	@brief Load a shader
 	*	@param[in] shaderName Name of the shader
+	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
 	*
 	*	If no shaders with the chosen name exist or no name is passed to the function 
 	*	the default shader will be used.
 	*
 	*/
-	ShaderPtr loadShader(std::string shaderName = "");
+	ShaderPtr loadShader(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
 
 	/**	@brief Create a material
 	*	@param[in] name Name of the material
@@ -204,9 +210,16 @@ public:
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
 	*	@param[in] modelData
+	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
+	*/
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+
+	/**	@brief Create a model
+	*	@param[in] name The raw name of the model
+	*	@param[in] modelData
 	*	@param[in] shader
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader = nullptr);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
@@ -353,10 +366,6 @@ public:
 	*/
 	std::string getShaderVersionES();
 
-	/**	@brief Get the maximum number of lights used
-	*/
-	GLuint getMaxLights();
-
 	/**	@brief Get the ambient color of the scene
 	*/
 	vmml::vec3f getAmbientColor();
@@ -436,7 +445,6 @@ private:
 
 	std::string		_shaderVersionDesktop;
 	std::string		_shaderVersionES;
-	GLuint			_shaderMaxLights;
 	std::string		_defaultShaderName;
 	
 };

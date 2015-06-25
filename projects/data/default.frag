@@ -1,6 +1,6 @@
 $B_SHADER_VERSION
 #ifdef GL_ES
-precision highp float;
+precision mediump float;
 #endif
 
 //Light

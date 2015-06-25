@@ -3,6 +3,19 @@
 #include "../headers/TextureData.h"
 #include "../headers/Renderer.h"
 
+Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights)
+{
+	ModelData::GroupMap data = modelData.getData();
+
+	for (auto i = data.begin(); i != data.end(); ++i)
+	{
+		Geometry &g = _groups[i->first];
+		GeometryDataPtr gData = i->second;
+		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData, r->loadShader(gData->materialData.name, shaderMaxLights));
+		g.initialize(gData);
+		g.setMaterial(material);
+	}
+}
 
 Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader)
 {
@@ -12,7 +25,7 @@ Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader)
     {
         Geometry &g = _groups[i->first];
         GeometryDataPtr gData = i->second;
-		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData, shader == nullptr ? r->loadShader(gData->materialData.name) : shader);
+		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData, shader);
         g.initialize(gData);
         g.setMaterial(material);
     }

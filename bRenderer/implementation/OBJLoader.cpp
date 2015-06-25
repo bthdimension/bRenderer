@@ -434,17 +434,17 @@ void OBJLoader::loadObjMtl(const std::string &fileName, const std::string &mater
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_MAP)
 			{
-				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_DIFFUSE_MAP];
+				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP];
 				ss >> mat >> std::ws;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_MAP)
 			{
-				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_SPECULAR_MAP];
+				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP];
 				ss >> mat >> std::ws;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_NORMAL_MAP)
 			{
-				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_NORMAL_MAP];
+				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP];
 				ss >> mat >> std::ws;
 			}
 		}
