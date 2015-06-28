@@ -42,16 +42,20 @@ void ProjectMain::initFunction()
 {
 	bRenderer::log("my initialize function was started");
 
+	////TEST: CUSTOM SHADER
+	ShaderPtr customShader = bRenderer().loadShader("customShader", 5, true, true, false, true, true, false);
+
 	// TEST: load material and shader before loading the model
-	MaterialPtr caveMtl = bRenderer().loadMaterial("cave_start.mtl", "cave_start", "default", 4);
-	ShaderPtr flameShader = bRenderer().loadShader("flame");
+	//MaterialPtr caveMtl = bRenderer().loadMaterial("cave_start.mtl", "cave_start", customShader);
+	ShaderPtr flameShader = bRenderer().loadShaderFile("flame");
+
 	// load models
-	bRenderer().loadModel("cave_start.obj", true, true, caveMtl);
-	bRenderer().loadModel("crystal.obj", false, true);
-	bRenderer().loadModel("torch.obj", false, true, "torch");
-	bRenderer().loadModel("flame.obj", false, true, flameShader);
-	bRenderer().loadModel("sparks.obj", false, true);
-	bRenderer().loadModel("bTitle.obj", false, true);
+	bRenderer().loadModel("cave_start.obj", true, true, false, 5);		// create custom shader with a maximum of 5 lights 
+	bRenderer().loadModel("crystal.obj", false, true, customShader);	// the custom shader created above is used
+	bRenderer().loadModel("torch.obj", false, true, true, 0);			// automatically loads shader files "torch.vert" and "torch.frag", we specify 0 lights since the shader has its own definition of light, that differs from the one used in bRenderer
+	bRenderer().loadModel("flame.obj", false, true, flameShader);		// the flame shader created above is used
+	bRenderer().loadModel("sparks.obj", false, true, true, 0);			// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
+	bRenderer().loadModel("bTitle.obj", false, true, false, 0);			// create custom shader with 0 lights -> will always be fully lit
 
 	//MatrixStack for the cave
 	bRenderer().createMatrixStack("caveStartStack");
@@ -65,9 +69,8 @@ void ProjectMain::initFunction()
 
 	// initialize free moving camera
 	cameraForward = 0.0f;
-	cameraRotationX = M_PI_F;
-	cameraRotationY = 0.0f;
-	bRenderer().createCamera("camera", vmml::vec3f(33.0, 0.0, 13.0), vmml::create_rotation(cameraRotationX, vmml::vec3f::UNIT_Y));
+	cameraSideward = 0.0f;
+	bRenderer().createCamera("camera", vmml::vec3f(33.0, 0.0, 13.0), vmml::create_rotation(M_PI_F, vmml::vec3f::UNIT_Y));
 
 	// initialize static camera
 	bRenderer().createCamera("static camera");
@@ -97,7 +100,7 @@ void ProjectMain::initFunction()
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
 //	bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 	if (((int)elapsedTime % 3) >= 1)
 	{
 		/* Test something after 3 seconds*/
@@ -120,9 +123,15 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
 		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			cameraForward = -1.0;
 		else			cameraForward = -0.5;
-	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_F) == GLFW_PRESS)					bRenderer().getView()->setFullscreen(!bRenderer().getView()->isFullscreen());
 	else
 		cameraForward = 0.0;
+
+	if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
+		bRenderer().getCamera("camera")->moveCameraSideward(0.5);
+	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
+		bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
+	else
+		cameraSideward = 0.0;
 
 #endif
 	/* On iOS automatic movement (for now) */
@@ -135,11 +144,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 //    double deltaCameraY = 0.0;
 //    cameraForward = 0.0;
 #endif
-	cameraRotationX += deltaCameraX / 1000;
-	cameraRotationY += deltaCameraY / 1000;
 
 	////// Camera ////
-	bRenderer().getCamera("camera")->moveCamera(cameraForward);
+	bRenderer().getCamera("camera")->moveCameraForward(cameraForward);
+	
 	bRenderer().getCamera("camera")->rotateCamera(deltaCameraY / 1000, vmml::vec3f::UNIT_Z);
 	bRenderer().getCamera("camera")->rotateCamera(deltaCameraX / 1000, vmml::vec3f::UNIT_Y);
 
@@ -158,7 +166,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	float flickeringLightPosZ = bRenderer().getCamera("camera")->getPosition().z();
 	flickeringLightPosX += 2.5*sin(flickeringLightPosY * 4.0 + 3.0*flickeringLight);
 	flickeringLightPosY += 2.5*sin(flickeringLightPosX * 4.0  + 3.0*flickeringLight);
-	bRenderer().getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) + bRenderer().getCamera("camera")->getOrientation()*20.0);
+	bRenderer().getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) + bRenderer().getCamera("camera")->getForward()*20.0);
 
 	//// Draw Models ////
 

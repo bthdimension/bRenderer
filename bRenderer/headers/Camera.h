@@ -52,7 +52,12 @@ public:
 	/**	@brief Moves the camera forward with a certain speed (based on previous position)
 	*	@param[in] camSpeed The velocity of the movement
 	*/
-    void moveCamera(GLfloat camSpeed);
+    void moveCameraForward(GLfloat camSpeed);
+
+	/**	@brief Moves the camera to the right with a certain speed (based on previous position)
+	*	@param[in] camSpeed The velocity of the movement
+	*/
+	void moveCameraSideward(GLfloat camSpeed);
 
 	/**	@brief Rotates the camera around a given axis (based on previous orientation)
 	*	@param[in] axis The axis to rotate around
@@ -60,7 +65,7 @@ public:
 	*/
 	void rotateCamera(GLfloat rotation, const vmml::vec3f &axis);
 
-	/**	@brief Resets camera to position (0,0,0) and aligns it to z-axis
+	/**	@brief Resets camera to the default position orientation
 	*/
     void resetCamera();
 
@@ -112,7 +117,15 @@ public:
 
 	/**	@brief Returns the orientation of the camera
 	*/
-	vmml::vec3f getOrientation();
+	vmml::vec3f getForward();
+
+	/**	@brief Returns the right vector of the camera
+	*/
+	vmml::vec3f getRight();
+
+	/**	@brief Returns the up vector of the camera
+	*/
+	vmml::vec3f getUp();
 
 	/* Static Functions */
 
@@ -135,7 +148,7 @@ private:
 
 	/* Variables */
 
-	vmml::vec3f _position, _orientation;
+	vmml::vec3f _position;
 	vmml::mat4f _rotation;
 
 	GLfloat _fov, _aspect, _near, _far;

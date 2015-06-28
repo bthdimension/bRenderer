@@ -1,82 +1,80 @@
 #ifndef B_SHADER_DATA_H
 #define B_SHADER_DATA_H
 
-#include <string>
-#include "Renderer_GL.h"
+#include "IShaderData.h"
 
-/** @brief The underlying data of a shader
-*	@author David Steiner
+/** @brief The underlying shader data is generated 
+*	@author Benjamin Bürgisser
 */
-class ShaderData
+class ShaderData : public IShaderData
 {
 public:
 
 	/* Functions */
 
 	/**	@brief Constructor
-	*	@param[in] shaderFileName The filename of both the vertex and fragment shader (without filename extension!)
-	*	@param[in] shaderVersionDesktop The shader version to be used for desktop systems
-	*	@param[in] shaderVersionES The shader version to be used for embedded systems (iOS)
-	*	@param[in] shaderMaxLights The maximum light sources to be used 
 	*/
-	explicit ShaderData(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint shaderMaxLights);
+	ShaderData();
 
 	/**	@brief Constructor
-	*	@param[in] vertShaderFileName The filename of the vertex shader (including filename extension!)
-	*	@param[in] fragShaderFileName The filename of the fragment shader (including filename extension!)
-	*	@param[in] shaderVersionDesktop The shader version to be used for desktop systems
-	*	@param[in] shaderVersionES The shader version to be used for embedded systems (iOS)
-	*	@param[in] shaderMaxLights The maximum light sources to be used
+	*	@param[in] maxLights The maximum light sources to be used
+	*	@param[in] ambientColor 
+	*	@param[in] diffuseColor
+	*	@param[in] specularColor 
+	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring (optional)
+	*	@param[in] normalMap Set true if a texture should be used to define the normals (optional)
+	*	@param[in] specularMap Set true if a texture should be used to define specularity (optional)
 	*/
-	ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint shaderMaxLights);
+	ShaderData(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap = false, bool normalMap = false, bool specularMap = false);
 
 	/**	@brief Constructor
+	*	@param[in] maxLights The maximum light sources to be used
+	*	@param[in] ambientColor
+	*	@param[in] diffuseColor
+	*	@param[in] specularColor
+	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring (optional)
+	*	@param[in] normalMap Set true if a texture should be used to define the normals (optional)
+	*	@param[in] specularMap Set true if a texture should be used to define specularity (optional)
 	*/
-    ShaderData();
-    
-	/**	@brief Loads shader from file
-	*	@param[in] shaderFileName The filename of both the vertex and fragment shader (without filename extension!)
-	*/
-	ShaderData &load(const std::string &shaderFileName);
+	ShaderData &create(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap = false, bool normalMap = false, bool specularMap = false);
 
-	/**	@brief Loads shader from file
-	*	@param[in] vertShaderFileName The filename of the vertex shader (including filename extension!)
-	*	@param[in] fragShaderFileName The filename of the fragment shader (including filename extension!)
-	*/
-    ShaderData &load(const std::string &vertShaderFileName, const std::string &fragShaderFileName);
-    
 	/**	@brief Gets the source code of the vertex shader as a string
 	*/
-    std::string getVertShaderSrc()  const   { return _vertShaderSrc; }
+	std::string getVertShaderSrc()  const   { return _vertShaderSrc; }
 
 	/**	@brief Gets the source code of the fragment shader as a string
 	*/
-    std::string getFragShaderSrc()  const   { return _fragShaderSrc; }
+	std::string getFragShaderSrc()  const   { return _fragShaderSrc; }
 
-	/**	@brief Get the maximum number of lights 
+	/**	@brief Get the maximum number of lights
 	*/
-	GLuint getMaxLights() const { return _shaderMaxLights; }
+	GLuint getMaxLights() const { return _maxLights; }
 
 	/**	@brief Returns true if the shader is valid
 	*/
-    bool        isValid()           const   { return _valid;         }
+	bool        isValid()           const   { return _valid; }
 
 private:
 
 	/* Functions */
 
-	std::string loadSrc(const std::string &fileName);
-
-	void replaceMacro(const std::string &macro, const std::string &value);
-
+	void initializeSourceCommonVariables();
+	void createVertShader();
+	void createFragShader();
+	
 	/* Variables */
 
-    std::string _vertShaderSrc;
-    std::string _fragShaderSrc;
-	std::string _shaderVersionDesktop;
-	std::string _shaderVersionES;
-	GLuint		_shaderMaxLights;
-    bool        _valid;
+	std::string _vertShaderSrc;
+	std::string _fragShaderSrc;
+	bool        _valid;
+
+	GLuint		_maxLights;
+	bool		_ambientColor;
+	bool		_diffuseColor;
+	bool		_specularColor;
+	bool		_diffuseMap;
+	bool		_normalMap;
+	bool		_specularMap;
 
 };
 

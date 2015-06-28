@@ -2,13 +2,13 @@
 
 #include "../headers/Logger.h"
 #include "../headers/GeometryData.h"
-#include "../headers/ShaderData.h"
+#include "../headers/IShaderData.h"
 #include "../headers/Shader.h"
 
 using boost::lexical_cast;
 
 
-Shader::Shader(const ShaderData &shaderData)
+Shader::Shader(const IShaderData &shaderData)
 {
     GLuint vertShader, fragShader;
     

@@ -1,87 +1,147 @@
-#include <string>
-#include <fstream>
-#include <iostream>
 #include "../headers/ShaderData.h"
 #include "../headers/Logger.h"
-#include "../headers/FileHandler.h"
 #include "../headers/OSdetect.h"
 #include "../headers/Configuration.h"
-#include <boost/lexical_cast.hpp>
-
-using boost::lexical_cast;
-
-ShaderData::ShaderData(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint shaderMaxLights)
-	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _shaderMaxLights(shaderMaxLights)
-{
-	load(shaderFileName);
-}
-
-ShaderData::ShaderData(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint shaderMaxLights)
-	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _shaderMaxLights(shaderMaxLights)
-{
-    load(vertShaderFileName, fragShaderFileName);
-}
+#include "../headers/ShaderSource.h"
 
 ShaderData::ShaderData()
-:   _valid(false)
+	: _valid(false)
 {}
 
-ShaderData &ShaderData::load(const std::string &shaderFileName)
+ShaderData::ShaderData(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap)
 {
-	return load(shaderFileName + bRenderer::DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION, shaderFileName + bRenderer::DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION);
+	create(maxLights, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap);
 }
 
-ShaderData &ShaderData::load(const std::string &vertShaderFileName, const std::string &fragShaderFileName)
+ShaderData &ShaderData::create(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap)
 {
-    _vertShaderSrc = loadSrc(vertShaderFileName);
-    _fragShaderSrc = loadSrc(fragShaderFileName);
+	_maxLights = maxLights;
+
+	_ambientColor = ambientColor;
+	_diffuseColor = diffuseColor;
+	_specularColor = specularColor;
+
+	_diffuseMap = diffuseMap;
+	_normalMap = normalMap;
+	_specularMap = specularMap;
 
 	
+	initializeSourceCommonVariables();
+	createVertShader();
+	createFragShader();
+
+	bRenderer::log("/////////////////  Generated shader code: \n");
+	bRenderer::log(_vertShaderSrc);
+	bRenderer::log(_fragShaderSrc);
+	bRenderer::log("\n ///////////////// END \n");
+
+	_valid = true;
+	return *this;
+}
+
+void ShaderData::initializeSourceCommonVariables()
+{
+	std::string common = "";
+
 #ifdef OS_DESKTOP	
-	replaceMacro(bRenderer::SHADER_VERSION_MACRO, _shaderVersionDesktop);
+	common = bRenderer::SHADER_SOURCE_HEAD_DESKTOP;
 #endif
 #ifdef OS_IOS
-	replaceMacro(bRenderer::SHADER_VERSION_MACRO, _shaderVersionES);
-#endif
-	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO, lexical_cast< std::string >(_shaderMaxLights));
+	common = bRenderer::SHADER_SOURCE_HEAD_ES;
+#endif	
+	// lights
+	common += bRenderer::SHADER_SOURCE_NUM_LIGHTS;
+	for (int i = 0; i < _maxLights; i++)
+		common += bRenderer::shader_source_light_properties(i, _normalMap);
+	// varyings
+	common += bRenderer::SHADER_SOURCE_VARYINGS;
 
-    return *this;
+	_vertShaderSrc = common;
+	_fragShaderSrc = common;
 }
 
-std::string ShaderData::loadSrc(const std::string &fileName)
+void ShaderData::createVertShader()
 {
-    bRenderer::log("Trying to load shader file " + fileName, bRenderer::LM_SYS);
-    
-    _valid = false;
-    
-    if (!bRenderer::fileExists(fileName))
-    {
-		bRenderer::log("Shader file doesn't exist: " + fileName, bRenderer::LM_ERROR);
-        return std::string();
-    }
-    
-	std::ifstream file(bRenderer::getFilePath(fileName), std::ifstream::in);
-    
-    std::string ret;
-    std::string line;
-    while (std::getline(file, line))
-    {
-        if (line.length() > 0)
-        {
-            _valid = true;
-        }
-        ret += line + "\n";
-    }
-    
-    return ret;
+	// matrices
+	_vertShaderSrc += bRenderer::SHADER_SOURCE_MATRICES;
+	// attributes
+	_vertShaderSrc += bRenderer::SHADER_SOURCE_ATTRIBUTES;
+	
+	if (_normalMap){
+		// main function begin
+		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_BEGIN_TBN;
+		// main function lights
+		for (int i = 0; i < _maxLights; i++)
+			_vertShaderSrc += bRenderer::shader_source_function_tangentSurface2light_tbn(i);
+	}
+	else
+	{
+		// main function begin
+		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_BEGIN;
+	}
+	// main function end 
+	_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END;
 }
 
-void ShaderData::replaceMacro(const std::string &macro, const std::string &value)
+void ShaderData::createFragShader()
 {
-	size_t i;
-	size_t s = macro.size();
-	while ((i = _vertShaderSrc.find(macro)) != std::string::npos)
-		_vertShaderSrc.replace(i, s, value);
-	while ((i = _fragShaderSrc.find(macro)) != std::string::npos)
-		_fragShaderSrc.replace(i, s, value);
+	// colors 
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_COLORS;
+	// textures
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_TEXTURES;
+
+	// main function begin
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_BEGIN;
+
+	if (_ambientColor)
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_AMBIENT;
+
+	if (_normalMap)
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_NORMAL_MAP;
+	else
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL;
+
+	if (_diffuseColor)
+	{
+		// initialize
+		if (_maxLights > 0)
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE;
+		else
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS;
+		// lighting
+		for (int i = 0; i < _maxLights; i++)
+			_fragShaderSrc += bRenderer::shader_source_function_lighting(i, _normalMap);
+
+		if (_diffuseMap)
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_FINALIZE_DIFFUSE_MAP;
+		else
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_FINALIZE_DIFFUSE;
+	}
+
+	if (_specularColor)
+	{
+		////////////////////////
+		//
+		//	TODO
+		//
+		///////////////////////
+	}
+
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART1;
+
+	if (_ambientColor && (_diffuseColor || _specularColor))
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_AMBIENT + "+";
+	else if (_ambientColor)
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_AMBIENT;
+
+	if (_diffuseColor && _specularColor)
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_DIFFUSE + "+";
+	else if (_diffuseColor)
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_DIFFUSE;
+
+	if (_specularColor)
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_SPECULAR;
+
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART2;
+
 }

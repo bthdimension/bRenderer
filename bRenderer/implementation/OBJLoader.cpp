@@ -285,7 +285,7 @@ void OBJLoader::material_name_callback(const std::string& material_name)
 
 void OBJLoader::comment_callback(const std::string& comment)
 {
-	bRenderer::log(comment);
+	//bRenderer::log(comment);
 }
 
 bool OBJLoader::load(std::istream& istream)
@@ -358,6 +358,16 @@ bool OBJLoader::load(std::istream& istream)
 				bitangent.z = cBitangent.z();
 			}
 		}
+	}
+
+	// delete empty groups
+	auto i = _groups.begin();
+	while (i != _groups.end())
+	{
+		if (i->second->vboIndices.size() == 0 || i->second->vboVertices.size() == 0)
+			_groups.erase(i++);
+		else
+			++i;
 	}
 
 	return ret;

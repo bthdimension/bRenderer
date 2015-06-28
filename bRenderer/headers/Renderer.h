@@ -18,7 +18,7 @@
 #include "headers/ModelData.h"
 #include "headers/OBJLoader.h"
 #include "headers/TextureData.h"
-#include "headers/ShaderData.h"
+#include "headers/IShaderData.h"
 
 /* vmmlib includes */
 #include "vmmlib/addendum.hpp"
@@ -156,18 +156,24 @@ public:
 	*/
 	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
 
+	/**	@brief Load a material
+	*	@param[in] fileName File name including extension
+	*	@param[in] materialName Name of the material
+	*	@param[in] shader Custom shader for the model
+	*/
+	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader);
+
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] flipZ Flip Z axis of the geometry
-	*	@param[in] shaderName The shader for the model (optional)
+	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
 	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
 	*
-	*	If no specific shader is specified the renderer will try to load shaders according to the material names. 
-	*	If no shaders named like the materials of the model exist the default shader will be used.
+	*	This function will automatically create one shader for every material of the model
 	*
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
@@ -198,7 +204,19 @@ public:
 	*	the default shader will be used.
 	*
 	*/
-	ShaderPtr loadShader(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+
+	/**	@brief Load a shader
+	*	@param[in] shaderName Name of the shader
+	*	@param[in] shaderMaxLights The maximum light sources to be used
+	*	@param[in] ambientColor
+	*	@param[in] diffuseColor
+	*	@param[in] specularColor
+	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring (optional)
+	*	@param[in] normalMap Set true if a texture should be used to define the normals (optional)
+	*	@param[in] specularMap Set true if a texture should be used to define specularity (optional)
+	*/
+	ShaderPtr loadShader(std::string shaderName, GLuint shaderMaxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap = false, bool normalMap = false, bool specularMap = false);
 
 	/**	@brief Create a material
 	*	@param[in] name Name of the material
@@ -207,12 +225,21 @@ public:
 	*/
 	MaterialPtr createMaterial(const std::string &name, const MaterialData &materialData, ShaderPtr shader);
 
+	/**	@brief Create a material and a shader fitting its needs
+	*	@param[in] name Name of the material and the shader
+	*	@param[in] materialData
+	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
+	*	@param[in] shaderMaxLights
+	*/
+	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
 	*	@param[in] modelData
+	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
 	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
@@ -238,7 +265,7 @@ public:
 	*	@param[in] name The raw name of the shader
 	*	@param[in] shaderData
 	*/
-	ShaderPtr createShader(const std::string &name, const ShaderData &shaderData);
+	ShaderPtr createShader(const std::string &name, const IShaderData &shaderData);
 
 	/**	@brief Create a camera
 	*	@param[in] name Name of the camera

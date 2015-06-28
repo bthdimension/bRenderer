@@ -28,8 +28,9 @@ public:
 	*	@param[in] r Instance of the renderer main class
 	*	@param[in] modelData
 	*	@param[in] shaderMaxLights The maximum light sources to be used
+	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
 	*/
-	explicit Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights);
+	explicit Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool shaderFromFile);
 
 	/**	@brief Constructor
 	*	@param[in] r Instance of the renderer main class

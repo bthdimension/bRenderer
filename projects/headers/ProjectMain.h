@@ -45,8 +45,7 @@ private:
 
 	/* Variables */
 	float randomTime;
-	float cameraForward;
-	float cameraRotationX, cameraRotationY;
+	float cameraForward, cameraSideward;
 	double mouseX, mouseY;
 };
 

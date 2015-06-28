@@ -75,9 +75,6 @@
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
@@ -108,6 +105,12 @@
     <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp">
       <Filter>bRenderer\obj_parser</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp">
+      <Filter>bRenderer\implementation\Flamework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\ProjectMain.h">
@@ -132,9 +135,6 @@
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\TextureData.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\ShaderData.h">
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Shader.h">
@@ -192,6 +192,18 @@
       <Filter>bRenderer\obj_parser</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\IShaderData.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h">
+      <Filter>bRenderer\headers\Flamework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ShaderData.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ShaderSource.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>

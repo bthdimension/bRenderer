@@ -9,7 +9,7 @@
 #include "Texture.h"
 
 
-class ShaderData;
+class IShaderData;
 
 /** @brief Shader 
 *	@author Rahul Mukhi, David Steiner
@@ -93,7 +93,7 @@ public:
 	/**	@brief Constructor
 	*	@param[in] shaderData
 	*/
-    Shader(const ShaderData &shaderData);
+    Shader(const IShaderData &shaderData);
 
 	/**	@brief Destructor
 	*/

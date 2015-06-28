@@ -25,7 +25,7 @@ attribute vec3 Bitangent;
 attribute vec4 TexCoord;
 
 varying vec4 texCoordVarying;
-
+varying vec3 normalVarying;
 varying vec4 posWorldSpace;       // pos in View Space
 
 varying vec3 tangentSurface2light_0;
@@ -70,5 +70,6 @@ void main()
     }
     
     texCoordVarying = TexCoord;
+	normalVarying = Normal;
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * Position;
 }

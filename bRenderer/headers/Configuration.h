@@ -25,16 +25,16 @@ namespace bRenderer
 	const std::string DEFAULT_FILE_PATH					= "data/";
 
 	/* Shader macros*/
-	const std::string SHADER_VERSION_MACRO = "$B_SHADER_VERSION";
-	const std::string SHADER_MAX_LIGHTS_MACRO = "$B_SHADER_MAX_LIGHTS";
+	const std::string SHADER_VERSION_MACRO				= "$B_SHADER_VERSION";
+	const std::string SHADER_MAX_LIGHTS_MACRO			= "$B_SHADER_MAX_LIGHTS";
 
 	/* Shader configuration */
-	const std::string DEFAULT_SHADER_VERSION_DESKTOP = "#version 120";
-	const std::string DEFAULT_SHADER_VERSION_ES = "#version 100";
-	const GLuint DEFAULT_SHADER_MAX_LIGHTS = 3;
-	const std::string DEFAULT_SHADER_NAME = "default";
-	const std::string DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION = ".frag";
-	const std::string DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION = ".vert";
+	const std::string DEFAULT_SHADER_VERSION_DESKTOP				= "#version 120";
+	const std::string DEFAULT_SHADER_VERSION_ES						= "#version 100";
+	const GLuint DEFAULT_SHADER_MAX_LIGHTS							= 3;
+	const std::string DEFAULT_SHADER_NAME							= "default";
+	const std::string DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION	= ".frag";
+	const std::string DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION		= ".vert";
 
 	/* Shader uniforms */
 	const std::string DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP		= "DiffuseMap";

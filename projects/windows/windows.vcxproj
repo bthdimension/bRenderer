@@ -83,6 +83,7 @@
     <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
     <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp" />
     <ClCompile Include="..\..\bRenderer\obj_parser\obj_parser.cpp" />
@@ -102,6 +103,7 @@
     <ClInclude Include="..\..\bRenderer\headers\Geometry.h" />
     <ClInclude Include="..\..\bRenderer\headers\GeometryData.h" />
     <ClInclude Include="..\..\bRenderer\headers\IDrawable.h" />
+    <ClInclude Include="..\..\bRenderer\headers\IShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\Light.h" />
     <ClInclude Include="..\..\bRenderer\headers\Logger.h" />
     <ClInclude Include="..\..\bRenderer\headers\Material.h" />
@@ -116,6 +118,8 @@
     <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h" />
     <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h" />
+    <ClInclude Include="..\..\bRenderer\headers\ShaderSource.h" />
     <ClInclude Include="..\..\bRenderer\headers\Texture.h" />
     <ClInclude Include="..\..\bRenderer\headers\TextureData.h" />
     <ClInclude Include="..\..\bRenderer\headers\View.h" />

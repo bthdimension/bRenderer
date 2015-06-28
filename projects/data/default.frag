@@ -32,12 +32,12 @@ uniform vec3 Ka;
 uniform vec3 Kd;
 uniform vec3 Ks;
 
-uniform sampler2D NormalMap;
 uniform sampler2D DiffuseMap;
+uniform sampler2D NormalMap;
 uniform sampler2D SpecularMap;
 
 varying vec4 texCoordVarying;
-
+varying vec3 normalVarying;
 varying vec4 posWorldSpace;       // pos in View Space
 
 varying vec3 tangentSurface2light_0;
@@ -48,7 +48,7 @@ varying vec3 tangentSurface2light_3;
 void main()
 {
     //normal based on normal map
-    vec3 normalNormalMap = normalize(texture2D(NormalMap, texCoordVarying.st).xyz *2.0 - 1.0);
+    vec3 surfaceNormal = normalize(texture2D(NormalMap, texCoordVarying.st).xyz *2.0 - 1.0);
 
 	//ambient light
     vec3 ambient  = clamp(ambientColor + Ka, 0.0, 1.0);
@@ -63,7 +63,7 @@ void main()
     if(numLights >= 1.0)
     {
         //light intensity based on angle between normal and light vector
-        intensity = max(dot(normalNormalMap,tangentSurface2light_0), 0.0) ;
+        intensity = max(dot(surfaceNormal,tangentSurface2light_0), 0.0) ;
         
         if(intensity > 0.0)
         {
@@ -82,7 +82,7 @@ void main()
     if(numLights >= 2.0)
 	{
         //light intensity based on angle between normal and light vector
-        intensity = max(dot(normalNormalMap,tangentSurface2light_1), 0.0) ;
+        intensity = max(dot(surfaceNormal,tangentSurface2light_1), 0.0) ;
         
         if(intensity > 0.0)
         {
@@ -101,7 +101,7 @@ void main()
     if(numLights >= 3.0)
     {
         //light intensity based on angle between normal and light vector
-        intensity = max(dot(normalNormalMap,tangentSurface2light_2), 0.0) ;
+        intensity = max(dot(surfaceNormal,tangentSurface2light_2), 0.0) ;
         
         if(intensity > 0.0)
         {
@@ -120,7 +120,7 @@ void main()
     if(numLights >= 4.0)
     {
         //light intensity based on angle between normal and light vector
-        intensity = max(dot(normalNormalMap,tangentSurface2light_3), 0.0) ;
+        intensity = max(dot(surfaceNormal,tangentSurface2light_3), 0.0) ;
         
         if(intensity > 0.0)
         {

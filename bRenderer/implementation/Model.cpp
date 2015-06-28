@@ -3,7 +3,7 @@
 #include "../headers/TextureData.h"
 #include "../headers/Renderer.h"
 
-Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights)
+Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool shaderFromFile)
 {
 	ModelData::GroupMap data = modelData.getData();
 
@@ -11,7 +11,8 @@ Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights)
 	{
 		Geometry &g = _groups[i->first];
 		GeometryDataPtr gData = i->second;
-		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData, r->loadShader(gData->materialData.name, shaderMaxLights));
+
+		MaterialPtr material = r->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights);
 		g.initialize(gData);
 		g.setMaterial(material);
 	}
