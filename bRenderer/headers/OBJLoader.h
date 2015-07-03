@@ -74,7 +74,7 @@ public:
 	*	@param[in] fileName File name including extension
 	*	@param[in] materialName Name of the material
 	*/
-	MaterialData loadMaterial(const std::string &fileName, const std::string &materialName);
+	static MaterialData loadMaterial(const std::string &fileName, const std::string &materialName);
 
 	/**	@brief Creates the face normals
 	*/
@@ -140,9 +140,10 @@ private:
 
 	/**	@brief Loads an obj material
 	*	@param[in] fileName File name including extension
+	*	@param[out] materials The materials map the new material data is stored in
 	*	@param[in] materialName Name of the material
 	*/
-	void loadObjMtl(const std::string &fileName, const std::string &materialName = "");
+	static void loadObjMtl(const std::string &fileName, Materials &materials, const std::string &materialName = "");
 
 	/* Variables */
 

@@ -18,8 +18,8 @@ void ProjectMain::init()
     
 	// let the renderer create an OpenGL context and the main window
 #ifdef OS_DESKTOP
-	//bRenderer().initRenderer(1920, 1080, false);
-	bRenderer().initRenderer(w, h, true);
+	bRenderer().initRenderer(1920, 1080, false);
+	//bRenderer().initRenderer(w, h, true);
 #endif
 #ifdef OS_IOS
     bRenderer().initRenderer(true);
@@ -44,8 +44,9 @@ void ProjectMain::initFunction()
 	bRenderer::log("my initialize function was started");
 
 	// TEST: load material and shader before loading the model
-	ShaderPtr flameShader = bRenderer().loadShaderFile("flame");
 	ShaderPtr customShader = bRenderer().loadShader("customShader", 4, true, true, true, true, true, true);
+	ShaderPtr flameShader = bRenderer().loadShaderFile("flame");
+	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);
 
 	PropertiesPtr torchProperties = bRenderer().createProperties("torch");
 
@@ -56,7 +57,7 @@ void ProjectMain::initFunction()
 	bRenderer().loadModel("torch.obj", false, true, true, 1, torchProperties);			
 																		// automatically loads shader files "torch.vert" and "torch.frag", 
 																		// since we want to pass additional properties to the shader we created a Properties object
-	bRenderer().loadModel("flame.obj", false, true, flameShader);		// the flame shader created above is used
+	bRenderer().loadModel("flame.obj", false, true, flameMaterial);		// the flame material created above is used
 	bRenderer().loadModel("sparks.obj", false, true, true, 0);			// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
 	bRenderer().loadModel("bTitle.obj", false, true, false, 0);			// create custom shader with 0 lights -> will always be fully lit
 

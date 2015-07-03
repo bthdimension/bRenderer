@@ -271,7 +271,7 @@ void OBJLoader::object_name_callback(const std::string& object_name)
 void OBJLoader::material_library_callback(const std::string& filename)
 {
 	bRenderer::log("mtllib " + filename);
-	loadObjMtl(filename);
+	loadObjMtl(filename, _materials);
 }
 
 void OBJLoader::material_name_callback(const std::string& material_name)
@@ -375,12 +375,13 @@ bool OBJLoader::load(std::istream& istream)
 
 MaterialData OBJLoader::loadMaterial(const std::string &fileName, const std::string &materialName)
 {
-	loadObjMtl(fileName, materialName);
+	Materials materials;
+	loadObjMtl(fileName, materials, materialName);
 
-	return _materials[materialName];
+	return materials[materialName];
 }
 
-void OBJLoader::loadObjMtl(const std::string &fileName, const std::string &materialName)
+void OBJLoader::loadObjMtl(const std::string &fileName, Materials &materials, const std::string &materialName)
 {
 	std::string file = bRenderer::getFilePath(fileName);
 	std::ifstream inFile(file.c_str(), std::ifstream::in);
@@ -404,57 +405,57 @@ void OBJLoader::loadObjMtl(const std::string &fileName, const std::string &mater
 			{
 				vmml::vec3f kA;
 				ss >> kA[0] >> std::ws >> kA[1] >> std::ws >> kA[2] >> std::ws;
-				_materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR] = kA;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR] = kA;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR)
 			{
 				vmml::vec3f kD;
 				ss >> kD[0] >> std::ws >> kD[1] >> std::ws >> kD[2] >> std::ws;
-				_materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR] = kD;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR] = kD;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR)
 			{
 				vmml::vec3f kS;
 				ss >> kS[0] >> std::ws >> kS[1] >> std::ws >> kS[2] >> std::ws;
-				_materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR] = kS;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR] = kS;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER)
 			{
 				vmml::vec3f tF;
 				ss >> tF[0] >> std::ws >> tF[1] >> std::ws >> tF[2] >> std::ws;
-				_materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER] = tF;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER] = tF;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT)
 			{
 				float nS;
 				ss >> nS >> std::ws;
-				_materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT] = nS;
+				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT] = nS;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_OPTICAL_DENSITY)
 			{
 				float nI;
 				ss >> nI >> std::ws;
-				_materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_OPTICAL_DENSITY] = nI;
+				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_OPTICAL_DENSITY] = nI;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_ILLUMINATION_MODEL)
 			{
 				float illum;
 				ss >> illum >> std::ws;
-				_materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_ILLUMINATION_MODEL] = illum;
+				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_ILLUMINATION_MODEL] = illum;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_MAP)
 			{
-				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP];
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP];
 				ss >> mat >> std::ws;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_MAP)
 			{
-				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP];
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP];
 				ss >> mat >> std::ws;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_NORMAL_MAP)
 			{
-				auto &mat = _materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP];
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP];
 				ss >> mat >> std::ws;
 			}
 		}

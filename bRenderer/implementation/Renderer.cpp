@@ -126,11 +126,7 @@ MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::strin
 	if (getModel(materialName))
 		return _materials[materialName];
 
-	OBJLoader objLoader(obj::obj_parser::parse_blank_lines_as_comment |
-		obj::obj_parser::triangulate_faces |
-		obj::obj_parser::translate_negative_indices);
-
-	return createMaterial(materialName, objLoader.loadMaterial(fileName, materialName), loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights));
+	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights));
 }
 
 MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader)
@@ -141,11 +137,7 @@ MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::strin
 	if (getModel(materialName))
 		return _materials[materialName];
 
-	OBJLoader objLoader(obj::obj_parser::parse_blank_lines_as_comment |
-		obj::obj_parser::triangulate_faces |
-		obj::obj_parser::translate_negative_indices);
-
-	return createMaterial(materialName, objLoader.loadMaterial(fileName, materialName), shader);
+	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), shader);
 }
 
 ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, PropertiesPtr properties)
