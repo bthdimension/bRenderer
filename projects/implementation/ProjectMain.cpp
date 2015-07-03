@@ -96,7 +96,7 @@ void ProjectMain::initFunction()
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
 	//	bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 	if (((int)elapsedTime % 3) >= 1)
 	{
 		/* Test something after 3 seconds*/
