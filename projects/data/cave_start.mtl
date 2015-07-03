@@ -11,8 +11,8 @@
 newmtl cave_start
 Ka 0.000000 0.000000 0.050000
 Kd 1.000000 1.000000 1.000000
-#Ks 1.000000 1.000000 1.000000
-#illum 1
+Ks 1.000000 1.000000 1.000000
+Ns 100.000000
 map_Kd caveStart_d.png
 map_Bump caveStart_n.png
 #map_Ks caveStart_s.png

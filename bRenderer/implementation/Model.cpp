@@ -3,9 +3,10 @@
 #include "../headers/TextureData.h"
 #include "../headers/Renderer.h"
 
-Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool shaderFromFile)
+Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool shaderFromFile, PropertiesPtr properties)
 {
 	ModelData::GroupMap data = modelData.getData();
+	_properties = properties;
 
 	for (auto i = data.begin(); i != data.end(); ++i)
 	{
@@ -15,13 +16,14 @@ Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bo
 		MaterialPtr material = r->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights);
 		g.initialize(gData);
 		g.setMaterial(material);
+		g.setProperties(properties);
 	}
 }
 
-Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader)
+Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
 {
     ModelData::GroupMap data = modelData.getData();
-
+	_properties = properties;
     for (auto i = data.begin(); i != data.end(); ++i)
     {
         Geometry &g = _groups[i->first];
@@ -29,19 +31,22 @@ Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader)
 		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData, shader);
         g.initialize(gData);
         g.setMaterial(material);
+		g.setProperties(properties);
     }
 }
 
-Model::Model(const ModelData &modelData, MaterialPtr material)
+Model::Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr properties)
 {
 	ModelData::GroupMap data = modelData.getData();
-
+	_material = material;
+	_properties = properties;
 	for (auto i = data.begin(); i != data.end(); ++i)
 	{
 		Geometry &g = _groups[i->first];
 		GeometryDataPtr gData = i->second;
 		g.initialize(gData);
 		g.setMaterial(material);
+		g.setProperties(properties);
 	}
 }
 

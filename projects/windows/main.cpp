@@ -215,15 +215,8 @@ int main(void)
 
 	project.init();
 
-	cout << "type 'q' to quit" << endl;
-	while (true)
-	{
-		cin >> input;
-		if (input == 'q')
-		{
-			return 0;
-		}
-	}
+	cout << "press ENTER to quit" << endl;
+	std::cin.ignore();
 
 	return 0;
 }

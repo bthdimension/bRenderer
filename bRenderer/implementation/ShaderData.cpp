@@ -51,10 +51,13 @@ void ShaderData::initializeSourceCommonVariables()
 #endif	
 	// lights
 	common += bRenderer::SHADER_SOURCE_NUM_LIGHTS;
-	for (int i = 0; i < _maxLights; i++)
-		common += bRenderer::shader_source_light_properties(i, _normalMap);
+	common += bRenderer::shader_source_light_properties(_maxLights, _normalMap);
 	// varyings
 	common += bRenderer::SHADER_SOURCE_VARYINGS;
+	if (!_normalMap && _diffuseColor)
+		common += bRenderer::SHADER_SOURCE_VARYINGS_NORMAL;
+	if (_normalMap && _specularColor)
+		common += bRenderer::SHADER_SOURCE_VARYINGS_CAMERA_TANGENT;
 
 	_vertShaderSrc = common;
 	_fragShaderSrc = common;
@@ -67,39 +70,37 @@ void ShaderData::createVertShader()
 	// attributes
 	_vertShaderSrc += bRenderer::SHADER_SOURCE_ATTRIBUTES;
 	
+	// main function begin
+	_vertShaderSrc += bRenderer::shader_source_function_vertex_main_begin(_normalMap);
 	if (_normalMap){
-		// main function begin
-		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_BEGIN_TBN;
-		// main function lights
-		for (int i = 0; i < _maxLights; i++)
-			_vertShaderSrc += bRenderer::shader_source_function_tangentSurface2light_tbn(i);
+		// main function tbn
+		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_TBN;
+		// camera tangent space
+		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_TANGENT_SPACE;
 	}
-	else
-	{
-		// main function begin
-		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_BEGIN;
-	}
+	// main function lights
+	_vertShaderSrc += bRenderer::shader_source_function_lightVector(_maxLights, _normalMap);
+
 	// main function end 
 	_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END;
 }
 
 void ShaderData::createFragShader()
 {
-	// colors 
-	_fragShaderSrc += bRenderer::SHADER_SOURCE_COLORS;
 	// textures
 	_fragShaderSrc += bRenderer::SHADER_SOURCE_TEXTURES;
+	// colors 
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_COLORS;	
 
 	// main function begin
 	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_BEGIN;
 
 	if (_ambientColor)
 		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_AMBIENT;
-
 	if (_normalMap)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_NORMAL_MAP;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_TANGENT_SPACE;
 	else
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_VIEW_SPACE;
 
 	if (_diffuseColor)
 	{
@@ -108,24 +109,35 @@ void ShaderData::createFragShader()
 			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE;
 		else
 			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS;
+		
+		if (_specularColor)
+		{
+			if (_maxLights > 0){
+				if (_normalMap)
+					_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_TANGENT_SPACE;
+				else
+					_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_VIEW_SPACE;
+			}
+			else
+				_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_NO_LIGHTS;
+		}
 		// lighting
-		for (int i = 0; i < _maxLights; i++)
-			_fragShaderSrc += bRenderer::shader_source_function_lighting(i, _normalMap);
+		_fragShaderSrc += bRenderer::shader_source_function_lighting(_maxLights, _normalMap, _specularColor);
 
 		if (_diffuseMap)
 			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_FINALIZE_DIFFUSE_MAP;
 		else
 			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_FINALIZE_DIFFUSE;
+
+		if (_specularColor){
+			if (_specularMap)
+				_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_FINALIZE_SPECULAR_MAP;
+			else
+				_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_FINALIZE_SPECULAR;
+		}
 	}
 
-	if (_specularColor)
-	{
-		////////////////////////
-		//
-		//	TODO
-		//
-		///////////////////////
-	}
+	
 
 	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART1;
 
@@ -135,12 +147,9 @@ void ShaderData::createFragShader()
 		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_AMBIENT;
 
 	if (_diffuseColor && _specularColor)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_DIFFUSE + "+";
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_DIFFUSE + "+" + bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_SPECULAR;
 	else if (_diffuseColor)
 		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_DIFFUSE;
-
-	if (_specularColor)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_SPECULAR;
 
 	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART2;
 

@@ -51,26 +51,26 @@ public:
         return nil;
     }
     
-    eaglLayer = (CAEAGLLayer *)self.layer;
+    _eaglLayer = (CAEAGLLayer *)self.layer;
     
     // set the surface to not be transparent
-    eaglLayer.opaque = TRUE;
+    _eaglLayer.opaque = TRUE;
     
     // configure the properties of the canvas
-    eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+    _eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking,
                                      kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
                                      nil];
     
     // create an OpenGL ES 3.0 context
-    context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
 	// If Es 3.0 is not supported create an OpenGL ES 2.0 context
-	if (context == nil) {
-	  context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+	if (_context == nil) {
+	  _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 	}
     
     // quit if context creation failed
-    if (!context || ![self setContextCurrent]) {
+    if (!_context || ![self setContextCurrent]) {
         bRenderer::log("Could not create context!", bRenderer::LM_SYS);
         return nil;
     }
@@ -79,13 +79,13 @@ public:
     [self setFullscreen];
     
     // default values for our OpenGL buffers
-    defaultFramebuffer = 0;
-    colorRenderbuffer = 0;
-    depthRenderbuffer = 0;
+    _defaultFramebuffer = 0;
+    _colorRenderbuffer = 0;
+    _depthRenderbuffer = 0;
     
     // initial time is not set at this point because the renderer hasn't fully started yet
-    initialTime = -1.0;
-    wasStopped = false;
+    _initialTime = -1.0;
+    _wasStopped = false;
     
     // create buffers
     [self createFramebuffer];
@@ -97,32 +97,32 @@ public:
 - (void)createFramebuffer
 {
     // make sure the default framebuffer hasn't been declared yet
-    assert(defaultFramebuffer == 0);
+    assert(_defaultFramebuffer == 0);
     
     // create default framebuffer object and bind it
-    glGenFramebuffers(1, &defaultFramebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+    glGenFramebuffers(1, &_defaultFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
     
     // create color render buffer
-    glGenRenderbuffers(1, &colorRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+    glGenRenderbuffers(1, &_colorRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
     
     // get the storage from iOS so it can be displayed in the view
-    [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
     // get the frame's width and height
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
     
     // attach the color buffer to the framebuffer
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderbuffer);
     
     // create a depth renderbuffer
-    glGenRenderbuffers(1, &depthRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+    glGenRenderbuffers(1, &_depthRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
     // create the storage for the buffer, optimized for depth values, same size as the colorRenderbuffer
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _width, _height);
     // attach the depth buffer to the framebuffer
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderbuffer);
 
     // check that the configuration of the framebuffer is valid
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -133,22 +133,22 @@ public:
 - (void)deleteFramebuffer
 {
     // to access any OpenGL methods a valid and current context is needed
-    if (context) {
+    if (_context) {
         [self setContextCurrent];
         
-        if (defaultFramebuffer) {
-            glDeleteFramebuffers(1, &defaultFramebuffer);
-            defaultFramebuffer = 0;
+        if (_defaultFramebuffer) {
+            glDeleteFramebuffers(1, &_defaultFramebuffer);
+            _defaultFramebuffer = 0;
         }
 
-        if (colorRenderbuffer) {
-            glDeleteRenderbuffers(1, &colorRenderbuffer);
-            colorRenderbuffer = 0;
+        if (_colorRenderbuffer) {
+            glDeleteRenderbuffers(1, &_colorRenderbuffer);
+            _colorRenderbuffer = 0;
         }
         
-        if (depthRenderbuffer) {
-            glDeleteRenderbuffers(1, &depthRenderbuffer);
-            depthRenderbuffer = 0;
+        if (_depthRenderbuffer) {
+            glDeleteRenderbuffers(1, &_depthRenderbuffer);
+            _depthRenderbuffer = 0;
         }
     }
 }
@@ -156,28 +156,31 @@ public:
 /* This methdod is called every time the view is redrawn (ideally 60 times a secod)*/
 - (void)render
 {
-    // handle time
-    if(initialTime < 0)
-        initialTime = (int)[displayLink timestamp];
-    else if (wasStopped){
-        initialTime += [self getTime]-stopTime;
-        wasStopped = false;
-    }
-    if (context != nil)
+    if (_context != nil)
     {
-        if (!defaultFramebuffer)
+        // handle time
+        if(_initialTime < 0)
+            _initialTime = (int)CACurrentMediaTime();
+        else if (_wasStopped){
+            _initialTime += [self getTime]-_stopTime;
+            _wasStopped = false;
+        }
+        
+        if (!_defaultFramebuffer)
             [self createFramebuffer];
     
-        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-    
+        glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+        
         BViewLink::draw(&Renderer::get(), [self getTime]);
     
         // set current context
         [self setContextCurrent];
         
         // display the color buffer to the screen
-        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-        [context presentRenderbuffer:GL_RENDERBUFFER];
+        glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+        [_context presentRenderbuffer:GL_RENDERBUFFER];
+        
+        _stopTime = [self getTime];
     }
     else
         bRenderer::log("Context not set!", bRenderer::LM_SYS);
@@ -186,31 +189,30 @@ public:
 - (void)runRenderer
 {
     // check whether the loop is already running
-    if(displayLink == nil)
+    if(_displayLink == nil)
     {
         // specify render method
-        displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render)];
+        _displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render)];
         
         // add the display link to the run loop (will be called 60 times per second)
-        [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     }
 }
 
 - (void)stopRenderer
 {
-    stopTime = [self getTime];
-    wasStopped = true;
+    _wasStopped = true;
     
-    if (displayLink != nil) {
+    if (_displayLink != nil) {
         // if the display link is present, it gets invalidated (loop stops)
-        [displayLink invalidate];
-        displayLink = nil;
+        [_displayLink invalidate];
+        _displayLink = nil;
     }
 }
 
 -(bool)isRunning
 {
-    return displayLink != nil;
+    return _displayLink != nil;
 }
 
 - (int) getViewWidth
@@ -235,37 +237,37 @@ public:
 
 -(double)getTime
 {
-    return ([displayLink timestamp] - initialTime);
+    return (CACurrentMediaTime() - _initialTime);
 }
 
 /* Set view to fullscreen */
 - (void) setFullscreen
 {
     // set width and height to fullscreen
-    width = self.superview.frame.size.width;
-    height = self.superview.frame.size.height;
+    _width = self.superview.frame.size.width;
+    _height = self.superview.frame.size.height;
     
-    if(width == 0 || height == 0){
-            width = [[UIScreen mainScreen] bounds].size.width;
-            height = [[UIScreen mainScreen] bounds].size.height;
+    if(_width == 0 || _height == 0){
+            _width = [[UIScreen mainScreen] bounds].size.width;
+            _height = [[UIScreen mainScreen] bounds].size.height;
     }
     
     [self setViewPositionX: 0 setViewPositionY: 0];
     
     CGRect newFrame = self.frame;
-    newFrame.size.width = width;
-    newFrame.size.height = height;
+    newFrame.size.width = _width;
+    newFrame.size.height = _height;
     [self setFrame:newFrame];
     
     // set viewport
-    glViewport(0, 0, width , height);
+    glViewport(0, 0, _width , _height);
 }
 
 /* Set width and height of the view */
 - (void) setViewWidth:(GLint)w setViewHeight:(GLint)h
 {
-    width = w;
-    height = h;
+    _width = w;
+    _height = h;
     CGRect newFrame = self.frame;
     newFrame.size.width = w;
     newFrame.size.height = h;
@@ -283,7 +285,7 @@ public:
 
 -(bool)setContextCurrent
 {
-    return [EAGLContext setCurrentContext:context];
+    return [EAGLContext setCurrentContext:_context];
 }
 
 /* As soon as the view is resized or new subviews are added, this method is called,

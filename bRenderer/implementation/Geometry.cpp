@@ -16,6 +16,9 @@ void Geometry::draw(GLenum mode)
 	if (_material)
 		_material->bind();
 
+	if (_properties)
+		_properties->passToShader(_material->getShader());
+
 	glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

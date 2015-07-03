@@ -11,5 +11,4 @@
 newmtl torch
 Ka 0.000000 0.000000 0.030000
 Kd 1.000000 1.000000 1.000000
-#illum 1
 map_Kd torchSurface_Color.png

@@ -29,21 +29,24 @@ public:
 	*	@param[in] modelData
 	*	@param[in] shaderMaxLights The maximum light sources to be used
 	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool shaderFromFile);
+	explicit Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool shaderFromFile, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] r Instance of the renderer main class
 	*	@param[in] modelData
 	*	@param[in] shader
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Model(Renderer *r, const ModelData &modelData, ShaderPtr shader);
+	explicit Model(Renderer *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] modelData
 	*	@param[in] material 
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Model(const ModelData &modelData, MaterialPtr material);
+	explicit Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Destructor
 	*/
@@ -76,6 +79,23 @@ public:
             i->second.setMaterial(_material);
         }
     }
+
+	/**	@brief Returns the properties of the model
+	*/
+	PropertiesPtr getProperties()   { return _properties; }
+
+	/**	@brief Sets the properties of the model
+	*	@param[in] arg The properties for the model
+	*/
+	void setProperties(PropertiesPtr arg)
+	{
+		_properties = arg;
+
+		for (auto i = _groups.begin(); i != _groups.end(); ++i)
+		{
+			i->second.setProperties(_properties);
+		}
+	}
     
 	/**	@brief Returns the groups of geometry of the model
 	*/
@@ -87,6 +107,7 @@ private:
 
     GroupMap        _groups;
     MaterialPtr     _material;
+	PropertiesPtr	_properties;
 };
 
 typedef std::shared_ptr<Model> ModelPtr;

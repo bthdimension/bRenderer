@@ -37,19 +37,19 @@ namespace bRenderer
 	const std::string DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION		= ".vert";
 
 	/* Shader uniforms */
-	const std::string DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP		= "DiffuseMap";
-	const std::string DEFAULT_SHADER_UNIFORM_SPECULAR_MAP		= "SpecularMap";
-	const std::string DEFAULT_SHADER_UNIFORM_NORMAL_MAP			= "NormalMap";
-	const std::string DEFAULT_SHADER_UNIFORM_NORMAL_MATRIX		= "NormalMatrix";
-	const std::string DEFAULT_SHADER_UNIFORM_MODEL_MATRIX		= "ModelMatrix";
-	const std::string DEFAULT_SHADER_UNIFORM_VIEW_MATRIX		= "ViewMatrix";
-	const std::string DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX	= "ProjectionMatrix";
-	const std::string DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS	= "numLights";
-	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_POSITION		= "lightPosition_";
-	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_COLOR		= "lightColor_";
-	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY	= "lightIntensity_";
-	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION	= "lightAttenuation_";
-	const std::string DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR		= "ambientColor";
+	const std::string DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP					= "DiffuseMap";
+	const std::string DEFAULT_SHADER_UNIFORM_SPECULAR_MAP					= "SpecularMap";
+	const std::string DEFAULT_SHADER_UNIFORM_NORMAL_MAP						= "NormalMap";
+	const std::string DEFAULT_SHADER_UNIFORM_NORMAL_MATRIX					= "NormalMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_MODEL_MATRIX					= "ModelMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_VIEW_MATRIX					= "ViewMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX				= "ProjectionMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS				= "numLights";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE		= "lightPositionViewSpace_";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_COLOR					= "lightColor_";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY				= "lightIntensity_";
+	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION				= "lightAttenuation_";
+	const std::string DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR					= "ambientColor";
 	
 	/* Shader attributes */
 	const std::string DEFAULT_SHADER_ATTRIBUTE_POSITION				= "Position";

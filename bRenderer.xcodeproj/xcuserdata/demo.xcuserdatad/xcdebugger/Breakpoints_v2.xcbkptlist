@@ -6,32 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "bRenderer/implementation/ShaderData.cpp"
-            timestampString = "456367536.314986"
+            filePath = "projects/implementation/ProjectMain.cpp"
+            timestampString = "457565599.970541"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "ShaderData::load(const std::string &amp;vertShaderFileName, const std::string &amp;fragShaderFileName)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "bRenderer/os_specific/ios/BView.mm"
-            timestampString = "456515397.213001"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
-            landmarkName = "-stopRenderer"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "ProjectMain::initFunction()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

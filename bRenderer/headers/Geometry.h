@@ -8,12 +8,14 @@
 #include "GeometryData.h"
 #include "Material.h"
 #include "Texture.h"
+#include "Properties.h"
 #include "Renderer_GL.h"
+#include "IDrawable.h"
 
 /** @brief The geometry that can be rendered to the screen
 *	@author Rahul Mukhi, David Steiner
 */
-class Geometry
+class Geometry : public IDrawable
 {
 public:
 	/* Typedefs */
@@ -59,6 +61,15 @@ public:
 	*/
     void            setMaterial(MaterialPtr arg)        { _material     = arg;  }
 
+	/**	@brief Returns a pointer to the properties of the geometry
+	*/
+	PropertiesPtr     getProperties()                       { return _properties; }
+
+	/**	@brief Sets the properties of the geometry
+	*	@param[in] arg The properties for the geometry
+	*/
+	void            setProperties(PropertiesPtr arg)        { _properties = arg; }
+
 private:
 
 	/* Functions */
@@ -94,6 +105,7 @@ private:
     IndexDataPtr    _indexData;
     
     MaterialPtr _material;
+	PropertiesPtr _properties;
 };
 
 typedef std::shared_ptr<Geometry> GeometryPtr;

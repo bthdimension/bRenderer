@@ -42,27 +42,23 @@ void ProjectMain::initFunction()
 {
 	bRenderer::log("my initialize function was started");
 
-	////TEST: CUSTOM SHADER
-	ShaderPtr customShader = bRenderer().loadShader("customShader", 5, true, true, false, true, true, false);
-
 	// TEST: load material and shader before loading the model
 	//MaterialPtr caveMtl = bRenderer().loadMaterial("cave_start.mtl", "cave_start", customShader);
 	ShaderPtr flameShader = bRenderer().loadShaderFile("flame");
+	ShaderPtr customShader = bRenderer().loadShader("customShader", 4, true, true, true, true, true, true);
+
+	PropertiesPtr torchProperties = bRenderer().createProperties("torch");
 
 	// load models
-	bRenderer().loadModel("cave_start.obj", true, true, false, 5);		// create custom shader with a maximum of 5 lights 
+	bRenderer().loadModel("cave_start.obj", true, true, false, 4);		// create custom shader with a maximum of 5 lights 
+	bRenderer().loadModel("sphere.obj", true, true, false, 4);			// create custom shader with a maximum of 5 lights 
 	bRenderer().loadModel("crystal.obj", false, true, customShader);	// the custom shader created above is used
-	bRenderer().loadModel("torch.obj", false, true, true, 0);			// automatically loads shader files "torch.vert" and "torch.frag", we specify 0 lights since the shader has its own definition of light, that differs from the one used in bRenderer
+	bRenderer().loadModel("torch.obj", false, true, true, 1, torchProperties);			
+																		// automatically loads shader files "torch.vert" and "torch.frag", 
+																		// since we want to pass additional properties to the shader we created a Properties object
 	bRenderer().loadModel("flame.obj", false, true, flameShader);		// the flame shader created above is used
 	bRenderer().loadModel("sparks.obj", false, true, true, 0);			// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
 	bRenderer().loadModel("bTitle.obj", false, true, false, 0);			// create custom shader with 0 lights -> will always be fully lit
-
-	//MatrixStack for the cave
-	bRenderer().createMatrixStack("caveStartStack");
-	//MatrixStack for torch
-	bRenderer().createMatrixStack("torchStack");
-	//MatrixStack for crystal
-	bRenderer().createMatrixStack("crystalStack");	
 
 	// initialize variables
 	randomTime = 0.0f;
@@ -79,7 +75,7 @@ void ProjectMain::initFunction()
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	// create lights
-	bRenderer().createLight("mainLight", vmml::vec3f(80.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 0.5f, 1.0f), 100.0f, 0.3f);
+	bRenderer().createLight("firstLight", vmml::vec3f(80.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 0.5f, 1.0f), 100.0f, 0.3f);
 	bRenderer().createLight("secondLight", vmml::vec3f(150.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 1.0f, 0.0f), 100.0f, 0.5f);
 	bRenderer().createLight("thirdLight", vmml::vec3f(210.0f, 0.0f, 0.0f), vmml::vec3f(0.8f, 0.0f, 0.0f), 100.0f, 0.5f);
 	bRenderer().createLight("torchLight", bRenderer().getCamera("camera")->getPosition(), vmml::vec3f(1.0f, 0.4f, -0.5f), 1200.0f, 0.7f);
@@ -99,7 +95,7 @@ void ProjectMain::initFunction()
 /* Draw your scene here */
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-//	bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
+	//	bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
 	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 	if (((int)elapsedTime % 3) >= 1)
 	{
@@ -118,7 +114,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	mouseY = ypos;
 
 	if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			cameraForward = 1.0;		
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			cameraForward = 1.0;
 		else			cameraForward = 0.5;
 	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
 		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			cameraForward = -1.0;
@@ -145,13 +141,13 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 //    cameraForward = 0.0;
 #endif
 
-	////// Camera ////
+	//// Camera ////
 	bRenderer().getCamera("camera")->moveCameraForward(cameraForward);
 	
 	bRenderer().getCamera("camera")->rotateCamera(deltaCameraY / 1000, vmml::vec3f::UNIT_Z);
 	bRenderer().getCamera("camera")->rotateCamera(deltaCameraX / 1000, vmml::vec3f::UNIT_Y);
 
-	///// Perspective ////
+	//// Perspective ////
 	// adjust aspect ratio
 	bRenderer().getCamera("camera")->setAspectRatio(bRenderer().getView()->getAspectRatio());
 	bRenderer().getCamera("static camera")->setAspectRatio(bRenderer().getView()->getAspectRatio());
@@ -171,96 +167,55 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	//// Draw Models ////
 
 	/*** Cave Start ***/
-	// translate and scale using the matrix stack
-	bRenderer().getMatrixStack("caveStartStack")->pushTranslation(vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0)));
-	bRenderer().getMatrixStack("caveStartStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.3f)));
-	// draw cave using standard shader
-	//bRenderer().drawModel("cave_start", "camera", "caveStartStack");
+	// translate and scale 
+	vmml::mat4f modelMatrix = vmml::create_scaling(vmml::vec3f(0.3f)) * vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0));
 	// draw without static torch light
-	bRenderer().drawModel("cave_start", "camera", "caveStartStack", std::vector<std::string>({ "mainLight", "torchLight", "secondLight", "thirdLight" }));
-	bRenderer().getMatrixStack("caveStartStack")->clearMatrixStack();
+	bRenderer().drawModel("cave_start", "camera", modelMatrix, std::vector<std::string>({ "firstLight", "torchLight", "secondLight", "thirdLight" }));
+
+	/*** Sphere ***/
+	// translate and scale
+	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(1480.0, 50.0, 300.0));
+	// draw without static torch light
+	bRenderer().drawModel("sphere", "camera", modelMatrix, std::vector<std::string>({ "firstLight", "torchLight", "secondLight", "thirdLight" }));
 
 	/*** Crystal (blue) ***/
-	// translate and scale using the matrix stack
-	bRenderer().getMatrixStack("crystalStack")->pushTranslation(vmml::create_translation(vmml::vec3f(780.0, -170.0, 55.0)));
-	bRenderer().getMatrixStack("crystalStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.1f)));
+	// translate and scale
+	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(780.0, -170.0, 55.0));
 	// draw without static torch light
 	bRenderer().setAmbientColor(vmml::vec3f(0.2, 0.2, 0.8));
-	bRenderer().drawModel("crystal", "camera", "crystalStack", std::vector<std::string>({ "mainLight", "torchLight", "secondLight", "thirdLight" }));
-	bRenderer().getMatrixStack("crystalStack")->clearMatrixStack();
+	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "firstLight", "torchLight", "secondLight", "thirdLight" }));
 	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
 
 	/*** Crystal (green) ***/
-	// translate and scale using the matrix stack
-	bRenderer().getMatrixStack("crystalStack")->pushTranslation(vmml::create_translation(vmml::vec3f(1480.0, -170.0, 70.0)));
-	bRenderer().getMatrixStack("crystalStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.1f)));
+	// translate and scale 
+	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(1480.0, -170.0, 70.0));
 	// draw without static torch light
 	bRenderer().setAmbientColor(vmml::vec3f(0.1, 0.45, 0.1));
-	bRenderer().drawModel("crystal", "camera", "crystalStack", std::vector<std::string>({ "mainLight", "torchLight", "secondLight", "thirdLight" }));
-	bRenderer().getMatrixStack("crystalStack")->clearMatrixStack();
+	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "firstLight", "torchLight", "secondLight", "thirdLight" }));
 	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
 
 	/*** Crystal (red) ***/
-	// translate and scale using the matrix stack
-	bRenderer().getMatrixStack("crystalStack")->pushTranslation(vmml::create_translation(vmml::vec3f(2180.0, -170.0, 40.0)));
-	bRenderer().getMatrixStack("crystalStack")->pushScaling(vmml::create_scaling(vmml::vec3f(0.1f)));
+	// translate and scale 
+	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(2180.0, -170.0, 40.0));
 	// draw without static torch light
 	bRenderer().setAmbientColor(vmml::vec3f(0.6, 0.1, 0.1));
-	bRenderer().drawModel("crystal", "camera", "crystalStack", std::vector<std::string>({ "mainLight", "torchLight", "secondLight", "thirdLight" }));
-	bRenderer().getMatrixStack("crystalStack")->clearMatrixStack();
+	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "firstLight", "torchLight", "secondLight", "thirdLight" }));
 	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
 
-	/*** Torch ***/
-	//// translate and scale using the matrix stack
-	//bRenderer().getMatrixStack("torchStack")->pushScaling(vmml::create_scaling(vmml::vec3f(1.3f)));	
-	//bRenderer().getMatrixStack("torchStack")->pushTranslation(vmml::create_translation(vmml::vec3f(-1.04, -1.2, 0.8)));
-	////bRenderer().getMatrixStack("torchStack")->pushRotation(vmml::create_rotation(cameraRotationY, vmml::vec3f::UNIT_Z));
-	////bRenderer().getMatrixStack("torchStack")->pushRotation(vmml::create_rotation(cameraRotationX, vmml::vec3f::UNIT_Y));		
-	//bRenderer().getMatrixStack("torchStack")->pushRotation(bRenderer().getCamera("camera")->getRotation());
-	//bRenderer().getMatrixStack("torchStack")->pushTranslation(vmml::create_translation(bRenderer().getCamera("camera")->getPosition()));
+	///*** Torch dynamic: doesn't work because camera not fixed yet***/
+	//// translate and scale 	
+	//modelMatrix = vmml::create_translation(bRenderer().getCamera("camera")->getPosition()) * bRenderer().getCamera("camera")->getRotation();
+	//modelMatrix *= vmml::create_translation(vmml::vec3f(-1.04, -1.2, 0.8)) * vmml::create_scaling(vmml::vec3f(1.3f));
 	//// draw torch using standard shader
-	//bRenderer().drawModel("torch", "camera", "torchStack");
+	//bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "firstLight", "torchLight", "secondLight", "thirdLight" }));
 
-	Model::GroupMap &groupsTorch = bRenderer().getModel("torch")->getGroups();
-	for (auto i = groupsTorch.begin(); i != groupsTorch.end(); ++i)
-	{
-		Geometry &geometry = i->second;
-		MaterialPtr material = geometry.getMaterial();
-		ShaderPtr shader = material->getShader();
-		if (shader)
-		{
-			// translate and scale using the matrix stack
-			bRenderer().getMatrixStack("torchStack")->pushScaling(vmml::create_scaling(vmml::vec3f(1.3f)));
-			bRenderer().getMatrixStack("torchStack")->pushTranslation(vmml::create_translation(vmml::vec3f(-1.04, -1.2, 0.84)));
-
-			//get model matrix from stack
-			vmml::mat4f modelMatrix = bRenderer().getMatrixStack("torchStack")->getModelMatrix();
-
-			//VIEW MATRIX
-			vmml::mat4f viewMatrix = bRenderer().getCamera("static camera")->getViewMatrix();
-
-
-			shader->setUniform("ProjectionMatrix", bRenderer().getCamera("static camera")->getProjectionMatrix());
-			shader->setUniform("ViewMatrix", viewMatrix);
-			shader->setUniform("ModelMatrix", modelMatrix);
-
-			//LIGHT
-			shader->setUniform("LightPos", bRenderer().getLight("staticTorchLight")->getPosition());
-			shader->setUniform("LightColor", bRenderer().getLight("staticTorchLight")->getColor());
-			shader->setUniform("lightIntensity", bRenderer().getLight("staticTorchLight")->getIntensity());
-			shader->setUniform("attenuation", bRenderer().getLight("staticTorchLight")->getAttenuation());
-			shader->setUniform("flickeringLight", flickeringLight*8.0);
-
-			shader->setUniform("Id", vmml::vec3f::ONE);
-			shader->setUniform("Ia", vmml::vec3f::ONE);
-		}
-		else
-		{
-			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
-		}
-		geometry.draw();
-	}
-	bRenderer().getMatrixStack("torchStack")->clearMatrixStack();
+	/*** Torch static ***/
+	// translate and scale 
+	modelMatrix = vmml::create_translation(vmml::vec3f(-1.04, -1.2, 0.84)) * vmml::create_scaling(vmml::vec3f(1.3f));
+	// set additional property
+	bRenderer().getProperties("torch")->setScalar("flickeringLight", flickeringLight*8.0);
+	// draw using static camera and static light
+	bRenderer().drawModel("torch", "static camera", modelMatrix, std::vector<std::string>({ "staticTorchLight" }));
     
     /*** Flame ***/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);

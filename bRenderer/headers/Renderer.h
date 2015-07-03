@@ -10,7 +10,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Configuration.h"
-//#include "../os_specific/ios/BViewLink.h"
+#include "Properties.h"
 
 /* Flamework includes*/
 #include "headers/Model.h"
@@ -36,6 +36,7 @@ public:
 	typedef std::unordered_map< std::string, ShaderPtr >		Shaders;
 	typedef std::unordered_map< std::string, TexturePtr >		Textures;
 	typedef std::unordered_map< std::string, MaterialPtr >		Materials;
+	typedef std::unordered_map< std::string, PropertiesPtr >	PropertiesMap;
 	typedef std::unordered_map< std::string, ModelPtr >			Models;
 	typedef std::unordered_map< std::string, CameraPtr >		Cameras;
 	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStacks;
@@ -165,31 +166,34 @@ public:
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
-	*	@param[in] flipT Flip T axis of texture
-	*	@param[in] flipZ Flip Z axis of the geometry
-	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
+	*	@param[in] flipT Flip T axis of texture (optional)
+	*	@param[in] flipZ Flip Z axis of the geometry (optional)
+	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded (optional)
 	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*
 	*	This function will automatically create one shader for every material of the model
 	*
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, PropertiesPtr properties = nullptr);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] flipZ Flip Z axis of the geometry
 	*	@param[in] shader Custom shader for the model
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader);
+	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] flipZ Flip Z axis of the geometry
 	*	@param[in] material Custom material for the model
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material);
+	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Load a texture
 	*	@param[in] fileName File name including extension
@@ -233,27 +237,35 @@ public:
 	*/
 	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
 
+	/**	@brief Create properties
+	*	@param[in] name Name of the properties
+	*/
+	PropertiesPtr createProperties(const std::string &name);
+
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
 	*	@param[in] modelData
 	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
 	*	@param[in] shaderMaxLights The maximum light sources to be used (optional)
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
 	*	@param[in] modelData
 	*	@param[in] shader
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
 	*	@param[in] modelData
 	*	@param[in] material
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, MaterialPtr material);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, MaterialPtr material, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Create a texture
 	*	@param[in] name The raw name of the texture
@@ -335,7 +347,7 @@ public:
 	*	@param[in] cameraName Name of the camera
 	*	@param[in] matrixStackName Name of the matrix stack
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const std::string &matrixStackName);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix);
 
 	/**	@brief Draw specified model into the buffer
 	*
@@ -348,7 +360,7 @@ public:
 	*	@param[in] matrixStackName Name of the matrix stack
 	*	@param[in] lightName Name of the light
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const std::string &matrixStackName, const std::vector<std::string> &lightNames);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, const std::vector<std::string> &lightNames);
 
 	/**	@brief Get a shader
 	*	@param[in] name Name of the shader
@@ -364,6 +376,11 @@ public:
 	*	@param[in] name Name of the material
 	*/
 	MaterialPtr getMaterial(const std::string &name);
+
+	/**	@brief Get properties
+	*	@param[in] name Name of the properties
+	*/
+	PropertiesPtr getProperties(const std::string &name);
 
 	/**	@brief Get a 3D model
 	*	@param[in] name Name of the model
@@ -463,6 +480,7 @@ private:
 	Shaders			_shaders;
 	Textures		_textures;
 	Materials		_materials;
+	PropertiesMap	_properties;
 	Models		    _models;
 	Cameras			_cameras;
 	MatrixStacks	_matrixStacks;

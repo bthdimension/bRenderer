@@ -68,14 +68,6 @@ bool Renderer::initRenderer()
     if (!_view.initView())
         return false;
     
-    // call static function if set
-    if (_initFunction)
-        _initFunction();
-    
-    // call member function if set
-    if (_renderProject)
-        _renderProject->initFunction();
-
 	// OpenGL
 	// clear
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -88,8 +80,16 @@ bool Renderer::initRenderer()
 	// for Alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // call static function if set
+    if (_initFunction)
+        _initFunction();
     
-    _initialized = true;
+    // call member function if set
+    if (_renderProject)
+        _renderProject->initFunction();
+
+	_initialized = true;
     
     return true;
 }
@@ -148,7 +148,7 @@ MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::strin
 	return createMaterial(materialName, objLoader.loadMaterial(fileName, materialName), shader);
 }
 
-ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights)
+ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -161,10 +161,10 @@ ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ
 
 	// create model
 	ModelData modelData(fileName, flipT, flipZ);
-	return createModel(name, modelData, shaderFromFile, shaderMaxLights);
+	return createModel(name, modelData, shaderFromFile, shaderMaxLights, properties);
 }
 
-ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader)
+ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -178,10 +178,10 @@ ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ
 	// create model
 	ModelData modelData(fileName, flipT, flipZ);
 
-	return createModel(name, modelData, shader);
+	return createModel(name, modelData, shader, properties);
 }
 
-ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material)
+ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -194,7 +194,7 @@ ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ
 
 	// create model
 	ModelData modelData(fileName, flipT, flipZ);
-	return createModel(name, modelData, material);
+	return createModel(name, modelData, material, properties);
 }
 
 TexturePtr Renderer::loadTexture(const std::string &fileName)
@@ -261,7 +261,7 @@ MaterialPtr Renderer::createMaterialShaderCombination(const std::string &name, c
 		// create shader fitting the needs of the material
 		bool ambientColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR) > 0;
 		bool diffuseColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR) > 0;
-		bool specularColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR) > 0;
+		bool specularColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR) > 0 && materialData.scalars.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT) > 0;
 		bool diffuseMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP) > 0;
 		bool normalMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP) > 0;
 		bool specularMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP) > 0;
@@ -272,30 +272,39 @@ MaterialPtr Renderer::createMaterialShaderCombination(const std::string &name, c
 	return material;
 }
 
-ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights)
+PropertiesPtr Renderer::createProperties(const std::string &name)
+{
+	if (getProperties(name)) return getProperties(name);
+	PropertiesPtr &properties = _properties[name];
+
+	properties = PropertiesPtr(new Properties);
+	return properties;
+}
+
+ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
 
-	model = ModelPtr(new Model(this, modelData, shaderMaxLights, shaderFromFile));
+	model = ModelPtr(new Model(this, modelData, shaderMaxLights, shaderFromFile, properties));
 	return model;
 }
 
-ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader)
+ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
 
-	model = ModelPtr(new Model(this, modelData, shader));
+	model = ModelPtr(new Model(this, modelData, shader, properties));
 	return model;
 }
 
-ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, MaterialPtr material)
+ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, MaterialPtr material, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
 
-	model = ModelPtr(new Model(modelData, material));
+	model = ModelPtr(new Model(modelData, material, properties));
 	return model;
 }
 
@@ -401,27 +410,27 @@ LightPtr Renderer::createLight(const std::string &name, const vmml::vec3f &posit
 	return light;
 }
 
-void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const std::string &matrixStackName)
+void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix)
 {
 	std::vector<std::string> lightNames;
 	for (auto i = _lights.begin(); i != _lights.end(); ++i)
 		lightNames.push_back(i->first);
-	drawModel(modelName, cameraName, matrixStackName, lightNames);
+	drawModel(modelName, cameraName, modelMatrix, lightNames);
 }
 
-void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const std::string &matrixStackName, const std::vector<std::string> &lightNames)
+void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix, const std::vector<std::string> &lightNames)
 {
 	Model::GroupMap &groupsCaveStart = getModel(modelName)->getGroups();
 	for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
 	{
 		Geometry &geometry = i->second;
-		MaterialPtr material = geometry.getMaterial();
-		ShaderPtr shader = material->getShader();
+		ShaderPtr shader = geometry.getMaterial()->getShader();
 		if (shader)
 		{
+			vmml::mat4f viewMatrix = getCamera(cameraName)->getViewMatrix();
 			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, getCamera(cameraName)->getProjectionMatrix());
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_VIEW_MATRIX, getCamera(cameraName)->getViewMatrix());
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_MATRIX, getMatrixStack(matrixStackName)->getModelMatrix());
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_VIEW_MATRIX, viewMatrix);
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_MATRIX, modelMatrix);
 
 			// Light
 			GLfloat numLights = lightNames.size();
@@ -432,7 +441,7 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS, numLights);
 			for (int i = 0; i < numLights; i++){
 				std::string pos = lexical_cast< std::string >(i);
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION + pos, getLight(lightNames[i])->getPosition());
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE + pos, (viewMatrix*getLight(lightNames[i])->getPosition()));
 				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + pos, getLight(lightNames[i])->getColor());
 				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY + pos, getLight(lightNames[i])->getIntensity());
 				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION + pos, getLight(lightNames[i])->getAttenuation());
@@ -466,6 +475,13 @@ MaterialPtr Renderer::getMaterial(const std::string &name)
 {
 	if (_materials.count(name) > 0)
 		return _materials[name];
+	return nullptr;
+}
+
+PropertiesPtr Renderer::getProperties(const std::string &name)
+{
+	if (_properties.count(name) > 0)
+		return _properties[name];
 	return nullptr;
 }
 

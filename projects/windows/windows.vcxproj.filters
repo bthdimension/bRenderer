@@ -206,62 +206,11 @@
     <ClInclude Include="..\..\bRenderer\headers\ShaderSource.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Properties.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\sparks.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\sparks.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\sparks.vert">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\torch.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\torch.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\torch.vert">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\flame.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\flame.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\flame.vert">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\cave_start.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\cave_start.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\cave_start.vert">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\bTitle.vert">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\bTitle.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\bTitle.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\default.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\default.vert">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\crystal.mtl">
-      <Filter>Project\data</Filter>
-    </None>
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
@@ -274,21 +223,57 @@
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
+    <None Include="..\data\bTitle.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\cave_start.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\crystal.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\default.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\default.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\flame.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\flame.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\flame.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\sparks.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\sparks.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\sparks.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\sphere.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\torch.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\torch.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\torch.vert">
+      <Filter>Project\data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\data\particle.png">
-      <Filter>Project\data</Filter>
-    </Image>
-    <Image Include="..\data\particle_f.png">
-      <Filter>Project\data</Filter>
-    </Image>
-    <Image Include="..\data\sparks.png">
-      <Filter>Project\data</Filter>
-    </Image>
     <Image Include="..\data\torchSurface_Color.png">
       <Filter>Project\data</Filter>
     </Image>
-    <Image Include="..\data\flame.png">
+    <Image Include="..\data\bTitle.png">
       <Filter>Project\data</Filter>
     </Image>
     <Image Include="..\data\caveStart_d.png">
@@ -297,7 +282,25 @@
     <Image Include="..\data\caveStart_n.png">
       <Filter>Project\data</Filter>
     </Image>
-    <Image Include="..\data\bTitle.png">
+    <Image Include="..\data\crystal_d.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\crystal_n.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\crystal_s.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\flame.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\particle.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\particle_f.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\sparks.png">
       <Filter>Project\data</Filter>
     </Image>
   </ItemGroup>

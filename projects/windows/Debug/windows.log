@@ -1,0 +1,60 @@
+﻿Build started 03.07.2015 03:42:10.
+     1>Project "C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\projects\windows\windows.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\vmmlib-library" /I"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\boost-library" /I"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\glew-1.12.0\include" /IC:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\FreeImage3170Win32 /I"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\glfw-3.1.bin.WIN32\include" /IC:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\projects\headers /IC:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\bRenderer /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\implementation\ProjectMain.cpp
+         ProjectMain.cpp
+         Unknown compiler version - please run the configure tests and report the results
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(147): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(148): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(157): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(157): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(159): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(163): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(164): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(185): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(193): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(201): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(214): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(216): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(235): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(246): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(256): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(258): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(287): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(287): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(290): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(290): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(294): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(295): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(327): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\b\onedrive\uzh\bachelorarbeit\brenderer\projects\implementation\projectmain.cpp(329): warning C4305: 'initializing' : truncation from 'double' to 'float'
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\Debug\bRenderer.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\glew-1.12.0\lib\Release\Win32" /LIBPATH:C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\FreeImage3170Win32 /LIBPATH:"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\\externalLibraries\glfw-3.1.bin.WIN32\lib-vc2013" opengl32.lib glew32.lib glfw3dll.lib FreeImage.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\Debug\bRenderer.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\Debug\bRenderer.lib" /MACHINE:X86 Debug\Camera.obj
+         Debug\Geometry.obj
+         Debug\Light.obj
+         Debug\Logger.obj
+         Debug\Material.obj
+         Debug\MatrixStack.obj
+         Debug\Model.obj
+         Debug\ModelData.obj
+         Debug\OBJLoader.obj
+         Debug\Renderer.obj
+         Debug\Shader.obj
+         Debug\ShaderData.obj
+         Debug\ShaderDataFile.obj
+         Debug\Texture.obj
+         Debug\obj.obj
+         Debug\obj_parser.obj
+         Debug\FileHandler_desktop.obj
+         Debug\Renderer_desktop.obj
+         Debug\TextureData_desktop.obj
+         Debug\View_desktop.obj
+         Debug\Renderer_ios.obj
+         Debug\ProjectMain.obj
+         Debug\main.obj
+         windows.vcxproj -> C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\Debug\bRenderer.exe
+     1>Done Building Project "C:\Users\B\OneDrive\UZH\Bachelorarbeit\bRenderer\projects\windows\windows.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.88

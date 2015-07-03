@@ -11,21 +11,21 @@
 @interface BView : UIView
 {
 	@private
-    GLint width;
-	GLint height;
+    GLint _width;
+	GLint _height;
 
 	// the time when the app was started
-	double initialTime, stopTime;
-    bool wasStopped;
+	double _initialTime, _stopTime;
+    bool _wasStopped;
 
-	GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
+	GLuint _defaultFramebuffer, _colorRenderbuffer, _depthRenderbuffer;
 
 	// the display link is used to create a render loop
-	CADisplayLink *displayLink;
-	CAEAGLLayer *eaglLayer;
+	CADisplayLink *_displayLink;
+	CAEAGLLayer *_eaglLayer;
     
     // OpenGL context
-    EAGLContext *context;
+    EAGLContext *_context;
 }
 
 typedef BView* BViewRef;

@@ -80,8 +80,8 @@ public:
 	GLint getHeight();
 
 	/**	@brief Gets the size of the view in pixels
-	*	@param[in] width The width of the view
-	*	@param[in] height The height of the view
+	*	@param[out] width The width of the view
+	*	@param[out] height The height of the view
 	*/
 	void getSize(GLint* width, GLint* height);
 
@@ -94,8 +94,8 @@ public:
 	GLint getScreenHeight();
 
 	/**	@brief Gets the size of the screen in pixels
-	*	@param[in] width The width of the screen
-	*	@param[in] height The height of the screen
+	*	@param[out] width The width of the screen
+	*	@param[out] height The height of the screen
 	*/
 	void getScreenSize(GLint* width, GLint* height);
 
@@ -112,8 +112,8 @@ public:
 	GLint getPositionY();
 
 	/**	@brief Gets the position of the upper left corner of the view
-	*	@param[in] x The x position of the upper left corner of the view
-	*	@param[in] y The y position of the upper left corner of the view
+	*	@param[out] x The x position of the upper left corner of the view
+	*	@param[out] y The y position of the upper left corner of the view
 	*/
 	void getPosition(GLint* x, GLint* y);
 

@@ -113,6 +113,7 @@
     <ClInclude Include="..\..\bRenderer\headers\ModelData.h" />
     <ClInclude Include="..\..\bRenderer\headers\OBJLoader.h" />
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Properties.h" />
     <ClInclude Include="..\..\bRenderer\headers\Renderer.h" />
     <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
     <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h" />
@@ -133,12 +134,8 @@
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
-    <None Include="..\data\bTitle.frag" />
     <None Include="..\data\bTitle.mtl" />
-    <None Include="..\data\bTitle.vert" />
-    <None Include="..\data\cave_start.frag" />
     <None Include="..\data\cave_start.mtl" />
-    <None Include="..\data\cave_start.vert" />
     <None Include="..\data\crystal.mtl" />
     <None Include="..\data\default.frag" />
     <None Include="..\data\default.vert" />
@@ -148,6 +145,7 @@
     <None Include="..\data\sparks.frag" />
     <None Include="..\data\sparks.mtl" />
     <None Include="..\data\sparks.vert" />
+    <None Include="..\data\sphere.mtl" />
     <None Include="..\data\torch.frag" />
     <None Include="..\data\torch.mtl" />
     <None Include="..\data\torch.vert" />
@@ -156,6 +154,9 @@
     <Image Include="..\data\bTitle.png" />
     <Image Include="..\data\caveStart_d.png" />
     <Image Include="..\data\caveStart_n.png" />
+    <Image Include="..\data\crystal_d.png" />
+    <Image Include="..\data\crystal_n.png" />
+    <Image Include="..\data\crystal_s.png" />
     <Image Include="..\data\flame.png" />
     <Image Include="..\data\particle.png" />
     <Image Include="..\data\particle_f.png" />
