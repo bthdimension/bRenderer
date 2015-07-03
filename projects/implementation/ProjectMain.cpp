@@ -18,7 +18,8 @@ void ProjectMain::init()
     
 	// let the renderer create an OpenGL context and the main window
 #ifdef OS_DESKTOP
-	bRenderer().initRenderer(1920, 1080, false);
+	//bRenderer().initRenderer(1920, 1080, false);
+	bRenderer().initRenderer(w, h, true);
 #endif
 #ifdef OS_IOS
     bRenderer().initRenderer(true);
@@ -43,7 +44,6 @@ void ProjectMain::initFunction()
 	bRenderer::log("my initialize function was started");
 
 	// TEST: load material and shader before loading the model
-	//MaterialPtr caveMtl = bRenderer().loadMaterial("cave_start.mtl", "cave_start", customShader);
 	ShaderPtr flameShader = bRenderer().loadShaderFile("flame");
 	ShaderPtr customShader = bRenderer().loadShader("customShader", 4, true, true, true, true, true, true);
 
@@ -96,7 +96,7 @@ void ProjectMain::initFunction()
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
 	//	bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+//	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 	if (((int)elapsedTime % 3) >= 1)
 	{
 		/* Test something after 3 seconds*/
@@ -135,10 +135,6 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	double deltaCameraX = -0.1 / deltaTime;
 	double deltaCameraY = 0.0;
 	cameraForward = 0.001 / deltaTime;
-    
-//    double deltaCameraX = 0.0;
-//    double deltaCameraY = 0.0;
-//    cameraForward = 0.0;
 #endif
 
 	//// Camera ////
@@ -257,9 +253,9 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
                 float transparency = 1.0;
                 if(z==0.0)transparency = 0.8;
                 
-                shader->setUniform("ProjectionMatrix", vmml::mat4f::IDENTITY);
-                shader->setUniform("ViewMatrix", viewMatrix);
-                shader->setUniform("ModelMatrix", modelMatrix);
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, vmml::mat4f::IDENTITY);
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_VIEW_MATRIX, viewMatrix);
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_MATRIX, modelMatrix);
                 shader->setUniform("offset", uniform_offset);
                 shader->setUniform("transparency", transparency);
                 
@@ -300,9 +296,8 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
                 
                 vmml::mat4f modelMatrix(translation * scaling * rotation);
                                 
-                shader->setUniform("ProjectionMatrix", vmml::mat4f::IDENTITY);
-                shader->setUniform("ViewMatrix", viewMatrix);
-                shader->setUniform("ModelMatrix", modelMatrix);
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, vmml::mat4f::IDENTITY);
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX, viewMatrix*modelMatrix);
                 
                 geometry.draw();
             }  
@@ -335,9 +330,8 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 
 			vmml::mat4f modelMatrix(translation * scaling);
 
-			shader->setUniform("ProjectionMatrix", vmml::mat4f::IDENTITY);
-			shader->setUniform("ViewMatrix", viewMatrix);
-			shader->setUniform("ModelMatrix", modelMatrix);
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, vmml::mat4f::IDENTITY);
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX, viewMatrix*modelMatrix);
 		}
 		else
 		{

@@ -3,9 +3,7 @@ $B_SHADER_VERSION
 precision mediump float;
 #endif
 
-uniform mat4 ViewMatrix;
-uniform mat4 ModelMatrix;
-uniform mat4 NormalMatrix;
+uniform mat4 ModelViewMatrix;
 uniform mat4 ProjectionMatrix;
 
 //Light
@@ -37,8 +35,8 @@ void main()
 		//based on intensity
 		flickeringLightIntensity = lightIntensity_0;    
     
-		posViewSpace = ViewMatrix * ModelMatrix * Position;
-		normalVarying = normalize(mat3(ViewMatrix) * mat3(NormalMatrix) * Normal);
+		posViewSpace = ModelViewMatrix * Position;
+		normalVarying = normalize(mat3(ModelViewMatrix) * Normal);
         
 		texCoordVarying = TexCoord;
 	}

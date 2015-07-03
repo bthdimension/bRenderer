@@ -232,12 +232,6 @@
     <None Include="..\data\crystal.mtl">
       <Filter>Project\data</Filter>
     </None>
-    <None Include="..\data\default.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\default.vert">
-      <Filter>Project\data</Filter>
-    </None>
     <None Include="..\data\flame.frag">
       <Filter>Project\data</Filter>
     </None>

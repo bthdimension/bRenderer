@@ -32,7 +32,6 @@ namespace bRenderer
 	const std::string DEFAULT_SHADER_VERSION_DESKTOP				= "#version 120";
 	const std::string DEFAULT_SHADER_VERSION_ES						= "#version 100";
 	const GLuint DEFAULT_SHADER_MAX_LIGHTS							= 3;
-	const std::string DEFAULT_SHADER_NAME							= "default";
 	const std::string DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION	= ".frag";
 	const std::string DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION		= ".vert";
 
@@ -43,6 +42,7 @@ namespace bRenderer
 	const std::string DEFAULT_SHADER_UNIFORM_NORMAL_MATRIX					= "NormalMatrix";
 	const std::string DEFAULT_SHADER_UNIFORM_MODEL_MATRIX					= "ModelMatrix";
 	const std::string DEFAULT_SHADER_UNIFORM_VIEW_MATRIX					= "ViewMatrix";
+	const std::string DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX				= "ModelViewMatrix";
 	const std::string DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX				= "ProjectionMatrix";
 	const std::string DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS				= "numLights";
 	const std::string DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE		= "lightPositionViewSpace_";

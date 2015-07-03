@@ -490,8 +490,7 @@ private:
 
 	std::string		_shaderVersionDesktop;
 	std::string		_shaderVersionES;
-	std::string		_defaultShaderName;
-	
+
 };
 
 

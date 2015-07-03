@@ -221,9 +221,6 @@ ShaderPtr Renderer::loadShaderFile(std::string shaderName, GLuint shaderMaxLight
 	ShaderPtr shader = createShader(name, shaderData);
 	if (shader) return shader;
 
-	shader = loadShaderFile(_defaultShaderName, shaderMaxLights);
-	if (shader) return shader;
-
 	bRenderer::log("Couldn't load shader '" + name + "'.", bRenderer::LM_INFO);
 	return nullptr;
 }
@@ -428,9 +425,9 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 		if (shader)
 		{
 			vmml::mat4f viewMatrix = getCamera(cameraName)->getViewMatrix();
+
 			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, getCamera(cameraName)->getProjectionMatrix());
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_VIEW_MATRIX, viewMatrix);
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_MATRIX, modelMatrix);
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX, viewMatrix*modelMatrix);
 
 			// Light
 			GLfloat numLights = lightNames.size();
@@ -567,7 +564,6 @@ void Renderer::reset()
 	_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR;
 	_shaderVersionDesktop = bRenderer::DEFAULT_SHADER_VERSION_DESKTOP;
 	_shaderVersionES = bRenderer::DEFAULT_SHADER_VERSION_ES;
-	_defaultShaderName = bRenderer::DEFAULT_SHADER_NAME;
 
 	_shaders.clear();
 	_textures.clear();

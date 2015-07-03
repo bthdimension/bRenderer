@@ -19,8 +19,6 @@
 		B52532811B45AF80001EC166 /* crystal_d.png in Resources */ = {isa = PBXBuildFile; fileRef = B52532601B45AF80001EC166 /* crystal_d.png */; };
 		B52532821B45AF80001EC166 /* crystal_n.png in Resources */ = {isa = PBXBuildFile; fileRef = B52532611B45AF80001EC166 /* crystal_n.png */; };
 		B52532831B45AF80001EC166 /* crystal_s.png in Resources */ = {isa = PBXBuildFile; fileRef = B52532621B45AF80001EC166 /* crystal_s.png */; };
-		B52532841B45AF80001EC166 /* default.frag in Resources */ = {isa = PBXBuildFile; fileRef = B52532631B45AF80001EC166 /* default.frag */; };
-		B52532851B45AF80001EC166 /* default.vert in Resources */ = {isa = PBXBuildFile; fileRef = B52532641B45AF80001EC166 /* default.vert */; };
 		B52532861B45AF80001EC166 /* flame.frag in Resources */ = {isa = PBXBuildFile; fileRef = B52532651B45AF80001EC166 /* flame.frag */; };
 		B52532871B45AF80001EC166 /* flame.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B52532661B45AF80001EC166 /* flame.mtl */; };
 		B52532881B45AF80001EC166 /* flame.obj in Resources */ = {isa = PBXBuildFile; fileRef = B52532671B45AF80001EC166 /* flame.obj */; };
@@ -92,8 +90,6 @@
 		B52532601B45AF80001EC166 /* crystal_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crystal_d.png; sourceTree = "<group>"; };
 		B52532611B45AF80001EC166 /* crystal_n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crystal_n.png; sourceTree = "<group>"; };
 		B52532621B45AF80001EC166 /* crystal_s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crystal_s.png; sourceTree = "<group>"; };
-		B52532631B45AF80001EC166 /* default.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = default.frag; sourceTree = "<group>"; };
-		B52532641B45AF80001EC166 /* default.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = default.vert; sourceTree = "<group>"; };
 		B52532651B45AF80001EC166 /* flame.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = flame.frag; sourceTree = "<group>"; };
 		B52532661B45AF80001EC166 /* flame.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = flame.mtl; sourceTree = "<group>"; };
 		B52532671B45AF80001EC166 /* flame.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = flame.obj; sourceTree = "<group>"; };
@@ -240,8 +236,6 @@
 				B52532601B45AF80001EC166 /* crystal_d.png */,
 				B52532611B45AF80001EC166 /* crystal_n.png */,
 				B52532621B45AF80001EC166 /* crystal_s.png */,
-				B52532631B45AF80001EC166 /* default.frag */,
-				B52532641B45AF80001EC166 /* default.vert */,
 				B52532651B45AF80001EC166 /* flame.frag */,
 				B52532661B45AF80001EC166 /* flame.mtl */,
 				B52532671B45AF80001EC166 /* flame.obj */,
@@ -493,7 +487,6 @@
 				B525327D1B45AF80001EC166 /* caveStart_d.png in Resources */,
 				B525327B1B45AF80001EC166 /* cave_start.mtl in Resources */,
 				B52532981B45AF80001EC166 /* torchSurface_Color.png in Resources */,
-				B52532851B45AF80001EC166 /* default.vert in Resources */,
 				B525327E1B45AF80001EC166 /* caveStart_n.png in Resources */,
 				B52532871B45AF80001EC166 /* flame.mtl in Resources */,
 				B525327C1B45AF80001EC166 /* cave_start.obj in Resources */,
@@ -502,7 +495,6 @@
 				B52532931B45AF80001EC166 /* sphere.obj in Resources */,
 				B52532821B45AF80001EC166 /* crystal_n.png in Resources */,
 				B5B066CA1B37650F0060F2B4 /* Project-Info.plist in Resources */,
-				B52532841B45AF80001EC166 /* default.frag in Resources */,
 				B525328E1B45AF80001EC166 /* sparks.mtl in Resources */,
 				B52532951B45AF80001EC166 /* torch.mtl in Resources */,
 				B525328A1B45AF80001EC166 /* flame.vert in Resources */,

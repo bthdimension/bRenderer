@@ -137,8 +137,6 @@
     <None Include="..\data\bTitle.mtl" />
     <None Include="..\data\cave_start.mtl" />
     <None Include="..\data\crystal.mtl" />
-    <None Include="..\data\default.frag" />
-    <None Include="..\data\default.vert" />
     <None Include="..\data\flame.frag" />
     <None Include="..\data\flame.mtl" />
     <None Include="..\data\flame.vert" />
