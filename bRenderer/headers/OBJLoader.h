@@ -17,7 +17,7 @@ class OBJLoader
 {
 public:
 	/* Typedefs */
-	typedef std::map< std::string, MaterialData >   Materials;
+	typedef std::map< std::string, MaterialData >   MaterialMap;
 
 	/* Structs */
 	struct FaceData
@@ -143,13 +143,13 @@ private:
 	*	@param[out] materials The materials map the new material data is stored in
 	*	@param[in] materialName Name of the material
 	*/
-	static void loadObjMtl(const std::string &fileName, Materials &materials, const std::string &materialName = "");
+	static void loadObjMtl(const std::string &fileName, MaterialMap &materials, const std::string &materialName = "");
 
 	/* Variables */
 
 	obj::obj_parser::flags_type _flags;
 	ModelData                   *_data;
-	Materials                   _materials;
+	MaterialMap                  _materials;
 	std::string                 _groupName;
 	ModelData::GroupMap         _groups;
 	GeometryDataPtr             _group;

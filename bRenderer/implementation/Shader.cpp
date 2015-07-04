@@ -7,7 +7,6 @@
 
 using boost::lexical_cast;
 
-
 Shader::Shader(const IShaderData &shaderData)
 {
     GLuint vertShader, fragShader;

@@ -31,8 +31,8 @@ public:
 
 	/* Typedefs */
 
-    typedef std::unordered_map< std::string, GLint >    Locations;
-    typedef std::unordered_map< std::string, Attrib >   Attribs;
+    typedef std::unordered_map< std::string, GLint >    LocationMap;
+    typedef std::unordered_map< std::string, Attrib >   AttribMap;
     
 	/* Functions */
 
@@ -161,8 +161,8 @@ private:
     GLint   _cTexUnit;
     GLint   _maxTexUnits;
     
-    Locations   _uniformLocations;
-    Attribs     _attribs;
+	LocationMap   _uniformLocations;
+	AttribMap     _attribs;
 
 	GLuint		_shaderMaxLights;
 };

@@ -33,14 +33,14 @@ class Renderer
     friend class BViewLink;
 public:
 	/* Typedefs */
-	typedef std::unordered_map< std::string, ShaderPtr >		Shaders;
-	typedef std::unordered_map< std::string, TexturePtr >		Textures;
-	typedef std::unordered_map< std::string, MaterialPtr >		Materials;
+	typedef std::unordered_map< std::string, ShaderPtr >		ShaderMap;
+	typedef std::unordered_map< std::string, TexturePtr >		TextureMap;
+	typedef std::unordered_map< std::string, MaterialPtr >		MaterialMap;
 	typedef std::unordered_map< std::string, PropertiesPtr >	PropertiesMap;
-	typedef std::unordered_map< std::string, ModelPtr >			Models;
-	typedef std::unordered_map< std::string, CameraPtr >		Cameras;
-	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStacks;
-	typedef std::unordered_map< std::string, LightPtr >			Lights;
+	typedef std::unordered_map< std::string, ModelPtr >			ModelMap;
+	typedef std::unordered_map< std::string, CameraPtr >		CameraMap;
+	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStackMap;
+	typedef std::unordered_map< std::string, LightPtr >			LightMap;
 
 	/* Functions */
 
@@ -477,14 +477,14 @@ private:
 	void(*_loopFunction)(const double deltaTime, const double elapsedTime);
 	void(*_terminateFunction)();
 
-	Shaders			_shaders;
-	Textures		_textures;
-	Materials		_materials;
+	ShaderMap		_shaders;
+	TextureMap		_textures;
+	MaterialMap		_materials;
 	PropertiesMap	_properties;
-	Models		    _models;
-	Cameras			_cameras;
-	MatrixStacks	_matrixStacks;
-	Lights			_lights;
+	ModelMap	    _models;
+	CameraMap		_cameras;
+	MatrixStackMap	_matrixStacks;
+	LightMap		_lights;
 
 	vmml::vec3f		_ambientColor;
 

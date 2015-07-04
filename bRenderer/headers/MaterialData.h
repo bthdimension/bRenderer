@@ -5,13 +5,13 @@
 
 struct MaterialData
 {
-    typedef std::unordered_map<std::string, std::string>    Textures;
-    typedef std::unordered_map<std::string, vmml::vec3f>    Vectors;
-    typedef std::unordered_map<std::string, float>          Scalars;
+    typedef std::unordered_map<std::string, std::string>    TextureMap;
+	typedef std::unordered_map<std::string, vmml::vec3f>    Vector3Map;
+	typedef std::unordered_map<std::string, float>          ScalarMap;
     
-    Textures    textures;
-    Vectors     vectors;
-    Scalars     scalars;
+	TextureMap	textures;
+	Vector3Map	vectors;
+	ScalarMap	scalars;
     
     std::string name;
 };

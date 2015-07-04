@@ -375,13 +375,13 @@ bool OBJLoader::load(std::istream& istream)
 
 MaterialData OBJLoader::loadMaterial(const std::string &fileName, const std::string &materialName)
 {
-	Materials materials;
+	MaterialMap materials;
 	loadObjMtl(fileName, materials, materialName);
 
 	return materials[materialName];
 }
 
-void OBJLoader::loadObjMtl(const std::string &fileName, Materials &materials, const std::string &materialName)
+void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, const std::string &materialName)
 {
 	std::string file = bRenderer::getFilePath(fileName);
 	std::ifstream inFile(file.c_str(), std::ifstream::in);

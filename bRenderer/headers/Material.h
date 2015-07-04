@@ -16,9 +16,9 @@ class Material
 {
 public:
 	/* Typedefs */
-    typedef std::unordered_map<std::string, TexturePtr>     Textures;
-    typedef std::unordered_map<std::string, vmml::vec3f>    Vectors;
-    typedef std::unordered_map<std::string, float>          Scalars;
+	typedef std::unordered_map<std::string, TexturePtr>     TextureMap;
+	typedef std::unordered_map<std::string, vmml::vec3f>    Vector3Map;
+	typedef std::unordered_map<std::string, float>          ScalarMap;
 
 	/* Functions */
     
@@ -35,7 +35,7 @@ public:
     
 	/**	@brief Returns the textures associated with the material
 	*/
-    const Textures  &getTextures()                      { return _textures;         }
+	const TextureMap  &getTextures()                      { return _textures; }
 
 	/**	@brief Returns a texture associated with the material
 	*	@param[in] name Name of the texture
@@ -44,7 +44,7 @@ public:
     
 	/**	@brief Returns the vectors associated with the material
 	*/
-    const Vectors   &getVectors()                       { return _vectors;          }
+	const Vector3Map   &getVectors()                       { return _vectors; }
 
 	/**	@brief Returns a vector associated with the material
 	*	@param[in] name Name of the vector
@@ -53,7 +53,7 @@ public:
     
 	/**	@brief Returns the scalars associated with the material
 	*/
-    const Scalars   &getScalars()                       { return _scalars;          }
+	const ScalarMap   &getScalars()                       { return _scalars; }
 
 	/**	@brief Returns a scalar associated with the material
 	*	@param[in] name Name of the scalar
@@ -63,7 +63,7 @@ public:
 	/**	@brief Sets all textures for the material
 	*	@param[in] arg Textures for the material
 	*/
-    void            setTextures(const Textures &arg)                            { _textures = arg;          }
+	void            setTextures(const TextureMap &arg)                            { _textures = arg; }
 
 	/**	@brief Sets a texture for the material
 	*	@param[in] name Name of the texture
@@ -74,7 +74,7 @@ public:
 	/**	@brief Sets all vectors for the material
 	*	@param[in] arg Vectors for the material
 	*/
-    void            setVectors(const Vectors& arg)                              { _vectors = arg;           }
+	void            setVectors(const Vector3Map& arg)                              { _vectors = arg; }
 
 	/**	@brief Sets a vector for the material
 	*	@param[in] name Name of the vector
@@ -85,7 +85,7 @@ public:
 	/**	@brief Sets all scalars for the material
 	*	@param[in] arg Scalar for the material
 	*/
-    void            setScalars(const Scalars &arg)                              { _scalars = arg;           }
+	void            setScalars(const ScalarMap &arg)                              { _scalars = arg; }
 
 	/**	@brief Sets a scalar for the material
 	*	@param[in] name Name of the scalar
@@ -115,9 +115,9 @@ private:
 	
 	/* Variables */
 
-    Textures    _textures;
-    Vectors     _vectors;
-    Scalars     _scalars;
+	TextureMap	_textures;
+	Vector3Map	_vectors;
+	ScalarMap	_scalars;
 
     ShaderPtr   _shader;
     
