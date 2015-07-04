@@ -31,19 +31,19 @@ public:
 
 	/**	@brief Constructor loading standard values for projection
 	*	@param[in] position Position of the camera
-	*	@param[in] rotation Rotation matrix of the camera
+	*	@param[in] rotation Rotation axes of the camera
 	*/
-	Camera(const vmml::vec3f &position, const vmml::mat4f &rotation);
+	Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes);
 
 	/**	@brief Constructor
 	*	@param[in] position Position of the camera
-	*	@param[in] rotation Rotation matrix of the camera
+	*	@param[in] rotation Rotation axes of the camera
 	*	@param[in] fov Field of view
 	*	@param[in] aspect Aspect ratio
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	Camera(const vmml::vec3f &position, const vmml::mat4f &rotation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+	Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
 
 	/**	@brief Destructor
 	*/
@@ -59,11 +59,17 @@ public:
 	*/
 	void moveCameraSideward(GLfloat camSpeed);
 
-	/**	@brief Rotates the camera around a given axis (based on previous orientation)
-	*	@param[in] axis The axis to rotate around
-	*	@param[in] rotation The rotation in radians
+	/**	@brief Moves the camera upwards with a certain speed (based on previous position)
+	*	@param[in] camSpeed The velocity of the movement
 	*/
-	void rotateCamera(GLfloat rotation, const vmml::vec3f &axis);
+	void moveCameraUpward(GLfloat camSpeed);
+
+	/**	@brief Rotates the camera based on previous orientation
+	*	@param[in] rotationX The rotation around the x axis in radians
+	*	@param[in] rotationY The rotation around the y axis in radians
+	*	@param[in] rotationZ The rotation around the z axis in radians
+	*/
+	void rotateCamera(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ);
 
 	/**	@brief Resets camera to the default position orientation
 	*/
@@ -75,9 +81,9 @@ public:
 	void setPosition(const vmml::vec3f &position);
 
 	/**	@brief Sets the rotation matrix of the camera
-	*	@param[in] rotation Rotation matrix of the camera
+	*	@param[in] rotation Rotation axes of the camera
 	*/
-	void setRotation(const vmml::mat4f &rotation);
+	void setRotation(const vmml::vec3f &rotationAxes);
 
 	/**	@brief Sets field of view
 	*	@param[in] fov Field of view
@@ -149,7 +155,7 @@ private:
 	/* Variables */
 
 	vmml::vec3f _position;
-	vmml::mat4f _rotation;
+	vmml::vec3f _rotationAxes;
 
 	GLfloat _fov, _aspect, _near, _far;
 };

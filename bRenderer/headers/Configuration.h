@@ -8,7 +8,7 @@
 namespace bRenderer
 {
 	/* Renderer configuration */
-	const vmml::vec3f DEFAULT_AMBIENT_COLOR									= vmml::vec3f(0.0, 0.0, 0.0);
+	const vmml::vec3f DEFAULT_AMBIENT_COLOR									= vmml::vec3f(0.0f, 0.0f, 0.0f);
 
 	/* Logger */
 	const std::string LOG_MODE_INFO											= "INFO";
@@ -77,7 +77,7 @@ namespace bRenderer
 	const GLfloat DEFAULT_NEAR_CLIPPING_PLANE								= -1.0f;
 	const GLfloat DEFAULT_FAR_CLIPPING_PLANE								= 1.0f;
 	const vmml::vec3f DEFAULT_CAMERA_POSITION								= vmml::vec3f(0.0f, 0.0f, 0.0f);
-	const vmml::mat4f DEFAULT_CAMERA_ROTATION								= vmml::create_rotation(0.0f, vmml::vec3f::UNIT_Y);
+	const vmml::vec3f DEFAULT_CAMERA_ROTATION_AXES							= vmml::vec3f(0.0f, 0.0f, 0.0f);
 
 	/* Light configuration */
 	const vmml::vec4f DEFAULT_LIGHT_POSITION								= vmml::vec4f(0.0f, 0.0f, 0.0f, 1.0f);

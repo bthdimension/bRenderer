@@ -5,21 +5,21 @@
 /* Constructor and Destructor */
 
 Camera::Camera()
-	: Camera(bRenderer::DEFAULT_CAMERA_POSITION, bRenderer::DEFAULT_CAMERA_ROTATION, bRenderer::DEFAULT_FIELD_OF_VIEW, bRenderer::DEFAULT_ASPECT_RATIO, bRenderer::DEFAULT_NEAR_CLIPPING_PLANE, bRenderer::DEFAULT_FAR_CLIPPING_PLANE)
+	: Camera(bRenderer::DEFAULT_CAMERA_POSITION, bRenderer::DEFAULT_CAMERA_ROTATION_AXES, bRenderer::DEFAULT_FIELD_OF_VIEW, bRenderer::DEFAULT_ASPECT_RATIO, bRenderer::DEFAULT_NEAR_CLIPPING_PLANE, bRenderer::DEFAULT_FAR_CLIPPING_PLANE)
 {}
 
 Camera::Camera(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
-	: Camera(bRenderer::DEFAULT_CAMERA_POSITION, bRenderer::DEFAULT_CAMERA_ROTATION, fov, aspect, near, far)
+	: Camera(bRenderer::DEFAULT_CAMERA_POSITION, bRenderer::DEFAULT_CAMERA_ROTATION_AXES, fov, aspect, near, far)
 {}
 
-Camera::Camera(const vmml::vec3f &position, const vmml::mat4f &rotation)
-	: Camera(position, rotation, bRenderer::DEFAULT_FIELD_OF_VIEW, bRenderer::DEFAULT_ASPECT_RATIO, bRenderer::DEFAULT_NEAR_CLIPPING_PLANE, bRenderer::DEFAULT_FAR_CLIPPING_PLANE)
+Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes)
+	: Camera(position, rotationAxes, bRenderer::DEFAULT_FIELD_OF_VIEW, bRenderer::DEFAULT_ASPECT_RATIO, bRenderer::DEFAULT_NEAR_CLIPPING_PLANE, bRenderer::DEFAULT_FAR_CLIPPING_PLANE)
 {}
 
-Camera::Camera(const vmml::vec3f &position, const vmml::mat4f &rotation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 {
 	_position = position;
-	_rotation = rotation;
+	_rotationAxes = rotationAxes;
 	_fov = fov;
 	_aspect = aspect;
 	_near = near;
@@ -43,15 +43,22 @@ void Camera::moveCameraSideward(GLfloat camSpeed)
 	_position -= camSpeed * getRight();
 }
 
-void Camera::rotateCamera(GLfloat rotation, const vmml::vec3f &axis)
+void Camera::moveCameraUpward(GLfloat camSpeed)
 {
-	_rotation *= vmml::create_rotation(rotation, axis);
+	_position -= camSpeed * getUp();
+}
+
+void Camera::rotateCamera(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ)
+{
+	_rotationAxes[0] -= rotationX;
+	_rotationAxes[1] -= rotationY;
+	_rotationAxes[2] -= rotationZ;
 }
 
 void Camera::resetCamera()
 {
 	_position = bRenderer::DEFAULT_CAMERA_POSITION;
-	_rotation = bRenderer::DEFAULT_CAMERA_ROTATION;
+	_rotationAxes = bRenderer::DEFAULT_CAMERA_ROTATION_AXES;
 }
 
 
@@ -60,9 +67,9 @@ void Camera::setPosition(const vmml::vec3f &position)
 	_position = position;
 }
 
-void Camera::setRotation(const vmml::mat4f &rotation)
+void Camera::setRotation(const vmml::vec3f &rotationAxes)
 {
-	_rotation = rotation;
+	_rotationAxes = rotationAxes;
 }
 
 void Camera::setFieldOfView(GLfloat fov)
@@ -86,7 +93,7 @@ void Camera::setFarClippingPlane(GLfloat far)
 }
 
 vmml::mat4f Camera::getViewMatrix(){
-	return lookAt(_position, _position + getForward(), getUp());
+	return getRotation() * vmml::create_translation(getPosition());
 }
 
 vmml::mat4f Camera::getProjectionMatrix()
@@ -101,22 +108,25 @@ vmml::vec3f Camera::getPosition()
 
 vmml::mat4f Camera::getRotation()
 {
-	return _rotation;
+	return  vmml::create_rotation(_rotationAxes[2], vmml::vec3f::UNIT_Z) * vmml::create_rotation(_rotationAxes[0], vmml::vec3f::UNIT_X) * vmml::create_rotation(_rotationAxes[1], vmml::vec3f::UNIT_Y);
 }
 
 vmml::vec3f Camera::getForward()
 {
-	return vmml::vec3f(getRotation());
+	vmml::mat4f r = getRotation();
+	return vmml::vec3f(r.at(2,0), r.at(2,1), r.at(2,2));
 }
 
 vmml::vec3f Camera::getRight()
 {
-	return vmml::normalize(getForward().cross(vmml::vec3f::UP));
+	vmml::mat4f r = getRotation();
+	return vmml::vec3f(r.at(0, 0), r.at(0, 1), r.at(0, 2));
 }
 
 vmml::vec3f Camera::getUp()
 {
-	return vmml::vec3f::UP;
+	vmml::mat4f r = getRotation();
+	return vmml::vec3f(r.at(1, 0), r.at(1, 1), r.at(1, 2));
 }
 
 /* Static Functions */

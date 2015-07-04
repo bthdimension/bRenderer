@@ -336,12 +336,12 @@ CameraPtr Renderer::createCamera(const std::string &name)
 	return camera;
 }
 
-CameraPtr Renderer::createCamera(const std::string &name, const vmml::vec3f &position, const vmml::mat4f &rotation)
+CameraPtr Renderer::createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
 
-	camera = CameraPtr(new Camera(position, rotation));
+	camera = CameraPtr(new Camera(position, rotationAxes));
 	return camera;
 }
 
@@ -354,12 +354,12 @@ CameraPtr Renderer::createCamera(const std::string &name, GLfloat fov, GLfloat a
 	return camera;
 }
 
-CameraPtr Renderer::createCamera(const std::string &name, const vmml::vec3f &position, const vmml::mat4f &rotation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+CameraPtr Renderer::createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
 
-	camera = CameraPtr(new Camera(position, rotation, fov, aspect, near, far));
+	camera = CameraPtr(new Camera(position, rotationAxes, fov, aspect, near, far));
 	return camera;
 }
 

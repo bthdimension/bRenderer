@@ -287,9 +287,9 @@ public:
 	/**	@brief Create a camera
 	*	@param[in] name Name of the camera
 	*	@param[in] position Position of the camera
-	*	@param[in] rotation Rotation matrix of the camera
+	*	@param[in] rotation Rotation axes of the camera
 	*/
-	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::mat4f &rotation);
+	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes);
 
 	/**	@brief Create a camera
 	*	@param[in] name Name of the camera
@@ -303,13 +303,13 @@ public:
 	/**	@brief Create a camera
 	*	@param[in] name Name of the camera
 	*	@param[in] position Position of the camera
-	*	@param[in] rotation Rotation matrix of the camera
+	*	@param[in] rotation Rotation axes of the camera
 	*	@param[in] fov Field of view
 	*	@param[in] aspect Aspect ratio
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::mat4f &rotation, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
 
 	/**	@brief Create a matrix stack
 	*	@param[in] name Name of the matrix stack

@@ -464,7 +464,7 @@ void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, 
 
 void OBJLoader::createFaceNormals()
 {
-	for (int i = 0; i < _faces.size(); ++i)
+	for (GLuint i = 0; i < _faces.size(); ++i)
 	{
 		// obtain reference to face
 		FaceData &face = _faces[i];
