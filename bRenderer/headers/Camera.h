@@ -31,13 +31,13 @@ public:
 
 	/**	@brief Constructor loading standard values for projection
 	*	@param[in] position Position of the camera
-	*	@param[in] rotation Rotation axes of the camera
+	*	@param[in] rotationAxes Rotation axes of the camera
 	*/
 	Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes);
 
 	/**	@brief Constructor
 	*	@param[in] position Position of the camera
-	*	@param[in] rotation Rotation axes of the camera
+	*	@param[in] rotationAxes Rotation axes of the camera
 	*	@param[in] fov Field of view
 	*	@param[in] aspect Aspect ratio
 	*	@param[in] near Near clipping plane
@@ -81,7 +81,7 @@ public:
 	void setPosition(const vmml::vec3f &position);
 
 	/**	@brief Sets the rotation matrix of the camera
-	*	@param[in] rotation Rotation axes of the camera
+	*	@param[in] rotationAxes Rotation axes of the camera
 	*/
 	void setRotation(const vmml::vec3f &rotationAxes);
 
