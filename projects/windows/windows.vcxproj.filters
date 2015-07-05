@@ -282,12 +282,6 @@
     <Image Include="..\data\flame.png">
       <Filter>Project\data</Filter>
     </Image>
-    <Image Include="..\data\particle.png">
-      <Filter>Project\data</Filter>
-    </Image>
-    <Image Include="..\data\particle_f.png">
-      <Filter>Project\data</Filter>
-    </Image>
     <Image Include="..\data\sparks.png">
       <Filter>Project\data</Filter>
     </Image>

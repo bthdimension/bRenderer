@@ -154,8 +154,6 @@
     <Image Include="..\data\crystal_n.png" />
     <Image Include="..\data\crystal_s.png" />
     <Image Include="..\data\flame.png" />
-    <Image Include="..\data\particle.png" />
-    <Image Include="..\data\particle_f.png" />
     <Image Include="..\data\sparks.png" />
     <Image Include="..\data\torchSurface_Color.png" />
   </ItemGroup>

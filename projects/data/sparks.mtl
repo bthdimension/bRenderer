@@ -1,17 +1,2 @@
-#  ==========================================================================
-#  Wavefront Material file
-#  Exported by Red-i Productions' "Riptide Pro"
-#  (a commercial plugin for Cinema 4D PC & Mac, R9.6 or later)
-#  
-#  Red-i Productions
-#  http://skinprops.com
-#  
-#  ==========================================================================
-
 newmtl sparks
-#Ns 10.0
-#Ka 1.000000 1.000000 1.000000
-#Kd 1.000000 1.000000 1.000000
-#illum 1
 map_Kd sparks.png
-#map_d particle.png
