@@ -44,9 +44,10 @@ private:
 	float randomNumber(float min, float max);
 
 	/* Variables */
-	float randomTime;
-	float cameraForward, cameraSideward;
-	double mouseX, mouseY;
+	float _randomTime;
+	float _cameraForward;
+	double _mouseX, _mouseY;
+	bool _running; int _lastStateSpaceKey;
 };
 
 #endif /* defined(PROJECT_MAIN_H) */

@@ -16,22 +16,20 @@ public:
 	*	@param[in] shaderFileName The filename of both the vertex and fragment shader (without filename extension!)
 	*	@param[in] shaderVersionDesktop The shader version to be used for desktop systems
 	*	@param[in] shaderVersionES The shader version to be used for embedded systems (iOS)
-	*	@param[in] maxLights The maximum light sources to be used 
+	*	@param[in] maxLights The maximum number of light sources to be used 
+	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	explicit ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights);
+	explicit ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights);
 
 	/**	@brief Constructor
 	*	@param[in] vertShaderFileName The filename of the vertex shader (including filename extension!)
 	*	@param[in] fragShaderFileName The filename of the fragment shader (including filename extension!)
 	*	@param[in] shaderVersionDesktop The shader version to be used for desktop systems
 	*	@param[in] shaderVersionES The shader version to be used for embedded systems (iOS)
-	*	@param[in] maxLights The maximum light sources to be used
+	*	@param[in] maxLights The maximum number of light sources to be used 
+	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights);
-
-	/**	@brief Constructor
-	*/
-	ShaderDataFile();
+	ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights);
     
 	/**	@brief Loads shader from file
 	*	@param[in] shaderFileName The filename of both the vertex and fragment shader (without filename extension!)
@@ -56,6 +54,10 @@ public:
 	*/
 	GLuint getMaxLights() const { return _maxLights; }
 
+	/**	@brief Returns true if the number of lights is variable in the shader
+	*/
+	bool hasVariableNumberOfLights() const { return _variableNumberOfLights; }
+
 	/**	@brief Returns true if the shader is valid
 	*/
     bool        isValid()           const   { return _valid;         }
@@ -75,6 +77,7 @@ private:
 	std::string _shaderVersionDesktop;
 	std::string _shaderVersionES;
 	GLuint		_maxLights;
+	bool		_variableNumberOfLights;
     bool        _valid;
 
 };

@@ -25,6 +25,10 @@ public:
 	*/
 	virtual GLuint getMaxLights() const = 0;
 
+	/**	@brief Returns true if the number of lights is variable in the shader
+	*/
+	virtual bool hasVariableNumberOfLights() const = 0;
+
 	/**	@brief Returns true if the shader is valid
 	*/
 	virtual bool        isValid() const = 0;

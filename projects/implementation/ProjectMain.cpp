@@ -38,29 +38,27 @@ void ProjectMain::initFunction()
 	bRenderer::log("my initialize function was started");
 
 	// TEST: load material and shader before loading the model
-	ShaderPtr customShader = bRenderer().loadShader("customShader", 4, true, true, true, true, true, true);
-	ShaderPtr flameShader = bRenderer().loadShaderFile("flame");
-	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);
+	ShaderPtr customShader = bRenderer().loadShader("customShader", 4, true, true, true, true, true, true);		// create custom shader with a maximum of 4 lights
+	ShaderPtr flameShader = bRenderer().loadShaderFile("flame", 0, false);										// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);					// load material from file using the shader created above
 
-	PropertiesPtr torchProperties = bRenderer().createProperties("torch");
+	PropertiesPtr properties = bRenderer().createProperties("properties");	// TODO: add additional properties to a model
 
 	// load models
-	bRenderer().loadModel("cave_start.obj", true, true, false, 4);		// create custom shader with a maximum of 5 lights 
-	bRenderer().loadModel("sphere.obj", true, true, false, 4);			// create custom shader with a maximum of 5 lights 
-	bRenderer().loadModel("crystal.obj", false, true, customShader);	// the custom shader created above is used
-	bRenderer().loadModel("torch.obj", false, true, true, 1, torchProperties);			
-																		// automatically loads shader files "torch.vert" and "torch.frag", 
-																		// since we want to pass additional properties to the shader we created a Properties object
-	bRenderer().loadModel("flame.obj", false, true, flameMaterial);		// the flame material created above is used
-	bRenderer().loadModel("sparks.obj", false, true, true, 0);			// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
-	bRenderer().loadModel("bTitle.obj", false, true, false, 0);			// create custom shader with 0 lights -> will always be fully lit
+	bRenderer().loadModel("cave_start.obj", true, true, false, 4);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().loadModel("sphere.obj", true, true, false, 4);				// create custom shader with a maximum of 4 lights 
+	bRenderer().loadModel("crystal.obj", false, true, customShader);		// the custom shader created above is used
+	bRenderer().loadModel("torch.obj", false, true, false, 4);				// create custom shader with a maximum of 4 lights 
+	bRenderer().loadModel("flame.obj", false, true, flameMaterial);			// the flame material created above is used
+	bRenderer().loadModel("sparks.obj", false, true, true, 0, false);		// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
+	bRenderer().loadModel("bTitle.obj", false, true, false, 0, false);		// create custom shader with 0 lights -> the title will always be fully lit
 
 	// initialize variables
-	randomTime = 0.0f;
+	_randomTime = 0.0f;
+	_running = true; _lastStateSpaceKey = -1;
 
 	// initialize free moving camera
-	cameraForward = 0.0f;
-	cameraSideward = 0.0f;
+	_cameraForward = 0.0f;
 	bRenderer().createCamera("camera", vmml::vec3f(-33.0, 0.0, -13.0), vmml::vec3f(0.0, -M_PI_F/2, 0.0));
 
 	// get shading language version
@@ -78,7 +76,7 @@ void ProjectMain::initFunction()
 	/* Windows only: Mouse Movement */
 #ifdef OS_DESKTOP
 	glfwSetInputMode(bRenderer().getView()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwGetCursorPos(bRenderer().getView()->getWindow(), &mouseX, &mouseY);
+	glfwGetCursorPos(bRenderer().getView()->getWindow(), &_mouseX, &_mouseY);
 #endif
 }
 
@@ -86,70 +84,80 @@ void ProjectMain::initFunction()
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
 	//	bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-//	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 
 	//// Movement ////
-	/* Windows only: Mouse and Keyboard Movement */	
+	
+		/* Windows only: Mouse and Keyboard Movement */
 #ifdef OS_DESKTOP
+	int currentStateSpaceKey = glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_SPACE);
+	if (currentStateSpaceKey != _lastStateSpaceKey)
+	{
+		_lastStateSpaceKey = currentStateSpaceKey;
+		if (currentStateSpaceKey == GLFW_PRESS)
+			_running = !_running;
+	}
+
 	double xpos, ypos;
 	glfwGetCursorPos(bRenderer().getView()->getWindow(), &xpos, &ypos);
-	double deltaCameraY = xpos - mouseX;
-	mouseX = xpos;
-	double deltaCameraX = ypos - mouseY;
-	mouseY = ypos;
+	double deltaCameraY = xpos - _mouseX;
+	_mouseX = xpos;
+	double deltaCameraX = ypos - _mouseY;
+	_mouseY = ypos;
+	
+	if (_running){
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
+			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = 1.0;
+			else			_cameraForward = 0.5;
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
+			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = -1.0;
+			else			_cameraForward = -0.5;
+		else
+			_cameraForward = 0.0;
 
-	if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			cameraForward = 1.0;
-		else			cameraForward = 0.5;
-	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			cameraForward = -1.0;
-		else			cameraForward = -0.5;
-	else
-		cameraForward = 0.0;
-
-	if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
-		bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
-	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
-		bRenderer().getCamera("camera")->moveCameraSideward(0.5);
-	if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
-		bRenderer().getCamera("camera")->moveCameraUpward(0.5);
-	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
-		bRenderer().getCamera("camera")->moveCameraUpward(-0.5);
-	if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-		bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
-	else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-		bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
-	else
-		cameraSideward = 0.0;
-
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraSideward(0.5);
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraUpward(0.5);
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraUpward(-0.5);
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
+	}
 #endif
-	/* On iOS automatic movement (for now) */
+		/* On iOS automatic movement (for now) */
 #ifdef OS_IOS
 	double deltaCameraY = -0.1 / deltaTime;
 	double deltaCameraX = 0.0;
-	cameraForward = 0.001 / deltaTime;
+	_cameraForward = 0.001 / deltaTime;
 #endif
 
 	//// Camera ////
-	bRenderer().getCamera("camera")->moveCameraForward(cameraForward);
-	
-	bRenderer().getCamera("camera")->rotateCamera(deltaCameraX / 1000, deltaCameraY / 1000, 0.0f);
-
+	if (_running){
+		bRenderer().getCamera("camera")->moveCameraForward(_cameraForward);
+		bRenderer().getCamera("camera")->rotateCamera(deltaCameraX / 1000, deltaCameraY / 1000, 0.0f);
+	}
 	//// Perspective ////
 	// adjust aspect ratio
 	bRenderer().getCamera("camera")->setAspectRatio(bRenderer().getView()->getAspectRatio());
 
 	//// Torch Light ////
-	if (deltaTime < 0.5f){
-		randomTime += deltaTime + randomNumber(0.0f, 0.12f);
+	if (_running){
+		if (deltaTime < 0.5f){
+			_randomTime += deltaTime + randomNumber(0.0f, 0.12f);
+		}
+		float flickeringLight = 1.0f + (_randomTime)* 2.0f * M_PI_F*(0.032f);
+		float flickeringLightPosX = -bRenderer().getCamera("camera")->getPosition().x();
+		float flickeringLightPosY = -bRenderer().getCamera("camera")->getPosition().y();
+		float flickeringLightPosZ = -bRenderer().getCamera("camera")->getPosition().z();
+		flickeringLightPosX += 2.5f*sin(flickeringLightPosY * 4.0f + 3.0f*flickeringLight);
+		flickeringLightPosY += 2.5f*sin(flickeringLightPosX * 4.0f + 3.0f*flickeringLight);
+		bRenderer().getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getCamera("camera")->getForward()*10.0f);
 	}
-	float flickeringLight = 1.0f + (randomTime)* 2.0f * M_PI_F*(0.032f);
-	float flickeringLightPosX = -bRenderer().getCamera("camera")->getPosition().x();
-	float flickeringLightPosY = -bRenderer().getCamera("camera")->getPosition().y();
-	float flickeringLightPosZ = -bRenderer().getCamera("camera")->getPosition().z();
-	flickeringLightPosX += 2.5f*sin(flickeringLightPosY * 4.0f + 3.0f*flickeringLight);
-	flickeringLightPosY += 2.5f*sin(flickeringLightPosX * 4.0f + 3.0f*flickeringLight);
-	bRenderer().getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getCamera("camera")->getForward()*10.0f);
 
 	//// Draw Models ////
 
@@ -235,7 +243,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
                 vmml::mat4f modelMatrix(translation * scaling * rotation);
 
                 //wave effect
-                float uniform_offset = (randomTime+0.3f*z)*2*M_PI_F*(0.75f+0.5f*z);
+				float uniform_offset = (_randomTime + 0.3f*z) * 2 * M_PI_F*(0.75f + 0.5f*z);
                 float transparency = 1.0f;
                 if(z==0.0f)transparency = 0.8f;
                 
@@ -268,8 +276,9 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			{                
 				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.65f, (-z / 100.0f - 0.58f)));
                 
-                float rot;
-                rot = randomNumber(1.0f, 1.1f)*randomTime*(z+0.3f)*M_PI_F;
+                float rot = 1.0f;
+				if (_running)
+					rot = randomNumber(1.0f, 1.1f)*_randomTime*(z + 0.3f)*M_PI_F;
                 
                 vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
                 

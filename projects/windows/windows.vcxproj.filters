@@ -253,13 +253,7 @@
     <None Include="..\data\sphere.mtl">
       <Filter>Project\data</Filter>
     </None>
-    <None Include="..\data\torch.frag">
-      <Filter>Project\data</Filter>
-    </None>
     <None Include="..\data\torch.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\torch.vert">
       <Filter>Project\data</Filter>
     </None>
   </ItemGroup>

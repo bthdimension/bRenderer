@@ -144,9 +144,7 @@
     <None Include="..\data\sparks.mtl" />
     <None Include="..\data\sparks.vert" />
     <None Include="..\data\sphere.mtl" />
-    <None Include="..\data\torch.frag" />
     <None Include="..\data\torch.mtl" />
-    <None Include="..\data\torch.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\data\bTitle.png" />

@@ -101,20 +101,23 @@ namespace bRenderer
 	const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_TANGENT_SPACE =
 		+"surfaceToCameraTangentSpace = TBN*( - posVaryingViewSpace.xyz )" + SHADER_SOURCE_LINE_ENDING;
 	// Lighting
-	static std::string shader_source_function_lightVector(GLuint maxLights, bool normalMap)
+	static std::string shader_source_function_lightVector(GLuint maxLights, bool normalMap, bool variableNumberOfLights)
 	{
 		std::string lighting = "";
 		for (GLuint light_number = 0; light_number < maxLights; light_number++){
 			std::string num = lexical_cast<std::string>(light_number);
 			std::string numPP = lexical_cast<std::string>(light_number + 1);
-			lighting += "if(numLights >= " + numPP + ".0){" + SHADER_SOURCE_LINE_BREAK;
+			if (variableNumberOfLights)
+				lighting += "if(" + DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS + " >= " + numPP + ".0){" + SHADER_SOURCE_LINE_BREAK;
 			if (normalMap) 
 				lighting += "lightVectorTangentSpace_" + num + " = TBN*(" + DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE + num + ".xyz - posVaryingViewSpace.xyz)" + SHADER_SOURCE_LINE_ENDING;
 			else
 				lighting += "lightVectorViewSpace_" + num + " = " + DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE + num + ".xyz - posVaryingViewSpace.xyz" + SHADER_SOURCE_LINE_ENDING;
 		}
-		for (GLuint light_number = 0; light_number < maxLights; light_number++)
-			lighting += "} ";
+		if (variableNumberOfLights){
+			for (GLuint light_number = 0; light_number < maxLights; light_number++)
+				lighting += "} ";
+		}
 		return lighting;
 	}	
 	// End
@@ -148,24 +151,26 @@ namespace bRenderer
 	// Initialize specular lighting
 	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_VIEW_SPACE =
 		"float specularity = 0.0" + SHADER_SOURCE_LINE_ENDING
+		+ "float specularCoefficient = 0.0" + SHADER_SOURCE_LINE_ENDING
 		+ "vec3 surfaceToCamera = normalize(-posVaryingViewSpace.xyz)" + SHADER_SOURCE_LINE_ENDING;
 
 	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_TANGENT_SPACE =
 		"float specularity = 0.0" + SHADER_SOURCE_LINE_ENDING
+		+ "float specularCoefficient = 0.0" + SHADER_SOURCE_LINE_ENDING
 		+ "vec3 surfaceToCamera = normalize(surfaceToCameraTangentSpace)" + SHADER_SOURCE_LINE_ENDING;
 
 	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_NO_LIGHTS =
 		"float specularity = 0.0" + SHADER_SOURCE_LINE_ENDING;
 
 	// Lighting
-	static std::string shader_source_function_lighting(GLuint maxLights, bool normalMap, bool specularColor)
+	static std::string shader_source_function_lighting(GLuint maxLights, bool normalMap, bool specularColor, bool variableNumberOfLights)
 	{
 		std::string lighting = "";
 		for (GLuint light_number = 0; light_number < maxLights; light_number++){
 			std::string num = lexical_cast<std::string>(light_number);
 			std::string numPP = lexical_cast<std::string>(light_number + 1);
-			lighting += "if(numLights >= " + numPP + ".0){" + SHADER_SOURCE_LINE_BREAK;
-			
+			if (variableNumberOfLights)
+				lighting += "if(" + DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS + " >= " + numPP + ".0){" + SHADER_SOURCE_LINE_BREAK;
 			if (normalMap)
 				lighting += "intensity = max(dot(surfaceNormal, normalize(lightVectorTangentSpace_" + num + ")), 0.0)" + SHADER_SOURCE_LINE_ENDING;
 			else
@@ -179,15 +184,17 @@ namespace bRenderer
 				+ "diffuse += vec4(" + DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + num + " * intensity * intensityBasedOnDist, 0.0);	}" + SHADER_SOURCE_LINE_BREAK;
 			if (specularColor) {
 				if (normalMap)
-					lighting += "float specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorTangentSpace_" + num + "), surfaceNormal))), ";
+					lighting += "specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorTangentSpace_" + num + "), surfaceNormal))), ";
 				else
-					lighting += "float specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorViewSpace_" + num + "), surfaceNormal))), ";
+					lighting += "specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorViewSpace_" + num + "), surfaceNormal))), ";
 				lighting += WAVEFRONT_MATERIAL_SPECULAR_EXPONENT + ")" + SHADER_SOURCE_LINE_ENDING;
 				lighting += "specularity += specularCoefficient * intensity * intensityBasedOnDist" + SHADER_SOURCE_LINE_ENDING;
 			}
 		}
-		for (GLuint light_number = 0; light_number < maxLights; light_number++)
-			lighting += "} ";
+		if (variableNumberOfLights){
+			for (GLuint light_number = 0; light_number < maxLights; light_number++)
+				lighting += "} ";
+		}
 		return lighting;
 	}
 

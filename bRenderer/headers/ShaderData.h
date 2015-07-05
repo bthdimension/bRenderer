@@ -17,26 +17,28 @@ public:
 	ShaderData();
 
 	/**	@brief Constructor
-	*	@param[in] maxLights The maximum light sources to be used
+	*	@param[in] maxLights The maximum number of light sources to be used 
 	*	@param[in] ambientColor 
 	*	@param[in] diffuseColor
 	*	@param[in] specularColor 
-	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring (optional)
-	*	@param[in] normalMap Set true if a texture should be used to define the normals (optional)
-	*	@param[in] specularMap Set true if a texture should be used to define specularity (optional)
+	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring
+	*	@param[in] normalMap Set true if a texture should be used to define the normals
+	*	@param[in] specularMap Set true if a texture should be used to define specularity
+	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	ShaderData(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap = false, bool normalMap = false, bool specularMap = false);
+	ShaderData(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights);
 
 	/**	@brief Constructor
-	*	@param[in] maxLights The maximum light sources to be used
+	*	@param[in] maxLights The maximum number of light sources to be used 
 	*	@param[in] ambientColor
 	*	@param[in] diffuseColor
 	*	@param[in] specularColor
-	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring (optional)
-	*	@param[in] normalMap Set true if a texture should be used to define the normals (optional)
-	*	@param[in] specularMap Set true if a texture should be used to define specularity (optional)
+	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring
+	*	@param[in] normalMap Set true if a texture should be used to define the normals
+	*	@param[in] specularMap Set true if a texture should be used to define specularity
+	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	ShaderData &create(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap = false, bool normalMap = false, bool specularMap = false);
+	ShaderData &create(GLuint maxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights);
 
 	/**	@brief Gets the source code of the vertex shader as a string
 	*/
@@ -49,6 +51,10 @@ public:
 	/**	@brief Get the maximum number of lights
 	*/
 	GLuint getMaxLights() const { return _maxLights; }
+
+	/**	@brief Returns true if the number of lights is variable in the shader
+	*/
+	bool hasVariableNumberOfLights() const { return _variableNumberOfLights; }
 
 	/**	@brief Returns true if the shader is valid
 	*/
@@ -69,6 +75,7 @@ private:
 	bool        _valid;
 
 	GLuint		_maxLights;
+	bool		_variableNumberOfLights;
 	bool		_ambientColor;
 	bool		_diffuseColor;
 	bool		_specularColor;

@@ -130,6 +130,10 @@ public:
 	/**	@brief Get the maximum number of lights used 
 	*/
 	GLuint getMaxLights() { return _shaderMaxLights; }
+
+	/**	@brief Returns true if the number of lights is variable in the shader
+	*/
+	bool hasVariableNumberOfLights() { return _variableNumberOfLights; }
     
     template< typename T >
 	/**	@brief Sets multiple uniforms
@@ -165,6 +169,7 @@ private:
 	AttribMap     _attribs;
 
 	GLuint		_shaderMaxLights;
+	bool		_variableNumberOfLights;
 };
 
 typedef std::shared_ptr< Shader > ShaderPtr;

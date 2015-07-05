@@ -33,10 +33,8 @@
 		B52532911B45AF80001EC166 /* sparks.vert in Resources */ = {isa = PBXBuildFile; fileRef = B52532701B45AF80001EC166 /* sparks.vert */; };
 		B52532921B45AF80001EC166 /* sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B52532711B45AF80001EC166 /* sphere.mtl */; };
 		B52532931B45AF80001EC166 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = B52532721B45AF80001EC166 /* sphere.obj */; };
-		B52532941B45AF80001EC166 /* torch.frag in Resources */ = {isa = PBXBuildFile; fileRef = B52532731B45AF80001EC166 /* torch.frag */; };
 		B52532951B45AF80001EC166 /* torch.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B52532741B45AF80001EC166 /* torch.mtl */; };
 		B52532961B45AF80001EC166 /* torch.obj in Resources */ = {isa = PBXBuildFile; fileRef = B52532751B45AF80001EC166 /* torch.obj */; };
-		B52532971B45AF80001EC166 /* torch.vert in Resources */ = {isa = PBXBuildFile; fileRef = B52532761B45AF80001EC166 /* torch.vert */; };
 		B52532981B45AF80001EC166 /* torchSurface_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = B52532771B45AF80001EC166 /* torchSurface_Color.png */; };
 		B52532D91B45AF8F001EC166 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B52532B81B45AF8F001EC166 /* Camera.cpp */; };
 		B52532DA1B45AF8F001EC166 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B52532B91B45AF8F001EC166 /* Geometry.cpp */; };
@@ -104,10 +102,8 @@
 		B52532701B45AF80001EC166 /* sparks.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sparks.vert; sourceTree = "<group>"; };
 		B52532711B45AF80001EC166 /* sphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.mtl; sourceTree = "<group>"; };
 		B52532721B45AF80001EC166 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
-		B52532731B45AF80001EC166 /* torch.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = torch.frag; sourceTree = "<group>"; };
 		B52532741B45AF80001EC166 /* torch.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = torch.mtl; sourceTree = "<group>"; };
 		B52532751B45AF80001EC166 /* torch.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = torch.obj; sourceTree = "<group>"; };
-		B52532761B45AF80001EC166 /* torch.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = torch.vert; sourceTree = "<group>"; };
 		B52532771B45AF80001EC166 /* torchSurface_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = torchSurface_Color.png; sourceTree = "<group>"; };
 		B525329A1B45AF8F001EC166 /* bRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bRenderer.h; sourceTree = "<group>"; };
 		B525329C1B45AF8F001EC166 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
@@ -250,10 +246,8 @@
 				B52532701B45AF80001EC166 /* sparks.vert */,
 				B52532711B45AF80001EC166 /* sphere.mtl */,
 				B52532721B45AF80001EC166 /* sphere.obj */,
-				B52532731B45AF80001EC166 /* torch.frag */,
 				B52532741B45AF80001EC166 /* torch.mtl */,
 				B52532751B45AF80001EC166 /* torch.obj */,
-				B52532761B45AF80001EC166 /* torch.vert */,
 				B52532771B45AF80001EC166 /* torchSurface_Color.png */,
 			);
 			path = data;
@@ -482,7 +476,6 @@
 				B525327A1B45AF80001EC166 /* bTitle.png in Resources */,
 				B52532811B45AF80001EC166 /* crystal_d.png in Resources */,
 				B52532901B45AF80001EC166 /* sparks.png in Resources */,
-				B52532941B45AF80001EC166 /* torch.frag in Resources */,
 				B52532881B45AF80001EC166 /* flame.obj in Resources */,
 				B525327D1B45AF80001EC166 /* caveStart_d.png in Resources */,
 				B525327B1B45AF80001EC166 /* cave_start.mtl in Resources */,
@@ -502,7 +495,6 @@
 				B52532831B45AF80001EC166 /* crystal_s.png in Resources */,
 				B52532861B45AF80001EC166 /* flame.frag in Resources */,
 				B52532801B45AF80001EC166 /* crystal.obj in Resources */,
-				B52532971B45AF80001EC166 /* torch.vert in Resources */,
 				B525327F1B45AF80001EC166 /* crystal.mtl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -118,7 +118,7 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen)
     return initRenderer();
 }
 
-MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights)
+MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights)
 {
 	// log activity
 	bRenderer::log("loading Material: " + materialName, bRenderer::LM_SYS);
@@ -126,7 +126,7 @@ MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::strin
 	if (getModel(materialName))
 		return _materials[materialName];
 
-	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights));
+	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights, variableNumberOfLights));
 }
 
 MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader)
@@ -140,7 +140,7 @@ MaterialPtr Renderer::loadMaterial(const std::string &fileName, const std::strin
 	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), shader);
 }
 
-ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, PropertiesPtr properties)
+ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -153,7 +153,7 @@ ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ
 
 	// create model
 	ModelData modelData(fileName, flipT, flipZ);
-	return createModel(name, modelData, shaderFromFile, shaderMaxLights, properties);
+	return createModel(name, modelData, shaderFromFile, shaderMaxLights, variableNumberOfLights, properties);
 }
 
 ModelPtr Renderer::loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr properties)
@@ -202,14 +202,14 @@ TexturePtr Renderer::loadTexture(const std::string &fileName)
 	return createTexture(name, textureData);
 }
 
-ShaderPtr Renderer::loadShaderFile(std::string shaderName, GLuint shaderMaxLights)
+ShaderPtr Renderer::loadShaderFile(std::string shaderName, GLuint shaderMaxLights, bool variableNumberOfLights)
 {
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderDataFile shaderData(shaderName, _shaderVersionDesktop, _shaderVersionES, shaderMaxLights);
+	ShaderDataFile shaderData(shaderName, _shaderVersionDesktop, _shaderVersionES, shaderMaxLights, variableNumberOfLights);
 	ShaderPtr shader = createShader(name, shaderData);
 	if (shader) return shader;
 
@@ -217,14 +217,14 @@ ShaderPtr Renderer::loadShaderFile(std::string shaderName, GLuint shaderMaxLight
 	return nullptr;
 }
 
-ShaderPtr Renderer::loadShader(std::string shaderName, GLuint shaderMaxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap)
+ShaderPtr Renderer::loadShader(std::string shaderName, GLuint shaderMaxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights)
 {
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderData shaderData(shaderMaxLights, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap);
+	ShaderData shaderData(shaderMaxLights, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, variableNumberOfLights);
 	return createShader(name, shaderData);
 }
 
@@ -238,14 +238,14 @@ MaterialPtr Renderer::createMaterial(const std::string &name, const MaterialData
 	return material;
 }
 
-MaterialPtr Renderer::createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights)
+MaterialPtr Renderer::createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights)
 {
 	if (getMaterial(name)) return getMaterial(name);
 	MaterialPtr &material = _materials[name];
 	ShaderPtr shader;
 	
 	if (shaderFromFile)
-		shader = loadShaderFile(name, shaderMaxLights);
+		shader = loadShaderFile(name, shaderMaxLights, variableNumberOfLights);
 	else{
 		// create shader fitting the needs of the material
 		bool ambientColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR) > 0;
@@ -254,7 +254,7 @@ MaterialPtr Renderer::createMaterialShaderCombination(const std::string &name, c
 		bool diffuseMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP) > 0;
 		bool normalMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP) > 0;
 		bool specularMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP) > 0;
-		shader = loadShader(name, shaderMaxLights, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap);
+		shader = loadShader(name, shaderMaxLights, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, variableNumberOfLights);
 	}
 	material = MaterialPtr(new Material);
 	material->initialize(this, materialData, shader);
@@ -270,12 +270,12 @@ PropertiesPtr Renderer::createProperties(const std::string &name)
 	return properties;
 }
 
-ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights, PropertiesPtr properties)
+ModelPtr Renderer::createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
 
-	model = ModelPtr(new Model(this, modelData, shaderMaxLights, shaderFromFile, properties));
+	model = ModelPtr(new Model(this, modelData, shaderMaxLights, variableNumberOfLights, shaderFromFile, properties));
 	return model;
 }
 
@@ -423,11 +423,13 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 
 			// Light
 			GLfloat numLights = lightNames.size();
+			bool variableNumberOfLights = shader->hasVariableNumberOfLights();
 			GLuint maxLights = shader->getMaxLights();
 			if (numLights > maxLights)
 				numLights = maxLights;
 
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS, numLights);
+			if (variableNumberOfLights)
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS, numLights);
 			for (int i = 0; i < numLights; i++){
 				std::string pos = lexical_cast< std::string >(i);
 				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE + pos, (viewMatrix*getLight(lightNames[i])->getPosition()));
