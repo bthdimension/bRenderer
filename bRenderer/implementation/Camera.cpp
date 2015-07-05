@@ -96,6 +96,12 @@ vmml::mat4f Camera::getViewMatrix(){
 	return getRotation() * vmml::create_translation(getPosition());
 }
 
+vmml::mat4f Camera::getInverseViewMatrix(){
+	vmml::mat4f rotInv = vmml::mat4f::IDENTITY;
+	getRotation().transpose_to(rotInv);
+	return vmml::create_translation(-getPosition()) * rotInv;
+}
+
 vmml::mat4f Camera::getProjectionMatrix()
 {
 	return createPerspective(_fov, _aspect, _near, _far);

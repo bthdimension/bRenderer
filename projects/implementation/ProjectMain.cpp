@@ -200,9 +200,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	///*** Torch ***/
 	// translate and scale 	
 		// Position the torch relative to the camera
-		vmml::mat4f rotInv = vmml::mat4f::IDENTITY;
-		bRenderer().getCamera("camera")->getRotation().transpose_to(rotInv);
-		modelMatrix = vmml::create_translation(-bRenderer().getCamera("camera")->getPosition()) * rotInv; 
+		modelMatrix = bRenderer().getCamera("camera")->getInverseViewMatrix();
 	modelMatrix *= vmml::create_translation(vmml::vec3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::vec3f(1.2f)) * vmml::create_rotation(1.64f, vmml::vec3f::UNIT_Y);
 	// draw torch using standard shader
 	bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));

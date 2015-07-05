@@ -109,6 +109,12 @@ public:
 	*/
     vmml::mat4f getViewMatrix();
 
+	/**	@brief Returns the inverse of the view matrix of the camera
+	*
+	*	The inverse view matrix may be useful to keep an object at the cameras position 
+	*/
+	vmml::mat4f getInverseViewMatrix();
+
 	/**	@brief Returns the view projection of the camera
 	*/
 	vmml::mat4f getProjectionMatrix();
