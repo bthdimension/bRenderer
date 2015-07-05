@@ -42,16 +42,16 @@ void ProjectMain::initFunction()
 	ShaderPtr flameShader = bRenderer().loadShaderFile("flame", 0, false);										// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
 	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);					// load material from file using the shader created above
 
-	PropertiesPtr properties = bRenderer().createProperties("properties");	// TODO: add additional properties to a model
+	PropertiesPtr flameProperties = bRenderer().createProperties("flameProperties");	// TODO: add additional properties to a model
 
 	// load models
-	bRenderer().loadModel("cave_start.obj", true, true, false, 4);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().loadModel("sphere.obj", true, true, false, 4);				// create custom shader with a maximum of 4 lights 
-	bRenderer().loadModel("crystal.obj", false, true, customShader);		// the custom shader created above is used
-	bRenderer().loadModel("torch.obj", false, true, false, 4);				// create custom shader with a maximum of 4 lights 
-	bRenderer().loadModel("flame.obj", false, true, flameMaterial);			// the flame material created above is used
-	bRenderer().loadModel("sparks.obj", false, true, true, 0, false);		// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
-	bRenderer().loadModel("bTitle.obj", false, true, false, 0, false);		// create custom shader with 0 lights -> the title will always be fully lit
+	bRenderer().loadModel("cave_start.obj", true, true, false, 4);						// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().loadModel("sphere.obj", true, true, false, 4);							// create custom shader with a maximum of 4 lights 
+	bRenderer().loadModel("crystal.obj", false, true, customShader);					// the custom shader created above is used
+	bRenderer().loadModel("torch.obj", false, true, false, 4);							// create custom shader with a maximum of 4 lights 
+	bRenderer().loadModel("flame.obj", false, true, flameMaterial, flameProperties);	// the flame material created above is used, to pass additional properties a Properties object is used
+	bRenderer().loadModel("sparks.obj", false, true, true, 0, false);					// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
+	bRenderer().loadModel("bTitle.obj", false, true, false, 0, false);					// create custom shader with 0 lights -> the title will always be fully lit
 
 	// initialize variables
 	_randomTime = 0.0f;
@@ -202,136 +202,80 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		// Position the torch relative to the camera
 		modelMatrix = bRenderer().getCamera("camera")->getInverseViewMatrix();
 	modelMatrix *= vmml::create_translation(vmml::vec3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::vec3f(1.2f)) * vmml::create_rotation(1.64f, vmml::vec3f::UNIT_Y);
-	// draw torch using standard shader
+	// draw
 	bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
     
     /*** Flame ***/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	Model::GroupMap &groupsParticle = bRenderer().getModel("flame")->getGroups();
-    for (auto i = groupsParticle.begin(); i != groupsParticle.end(); ++i)
-    {
-        Geometry &geometry = i->second;
-        MaterialPtr material = geometry.getMaterial();
-        ShaderPtr shader = material->getShader();
-        if (shader)
-        {
-            for (float z = 0.0f; z < 3.0f; z++) {
-                
-                if(z==1.0f)
-                    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-                
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.6f + (0.08f*z), (-z / 100.0f - 0.50f)));
-                
-                float rot = 0.0f;
-                if(fmod(z, 2.0f) == 0.0f){
-                    rot = 0.0f;
-                }else{
-                    rot = M_PI_F;
-                }
-                
-                vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
-                
-                float ParticleScale = 2.45f-(0.46f*z);                
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
-                
-                vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-                vmml::vec3f eyeUp = vmml::vec3f::UP;
-				vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
-                
-                vmml::mat4f modelMatrix(translation * scaling * rotation);
-
-                //wave effect
-				float uniform_offset = (_randomTime + 0.3f*z) * 2 * M_PI_F*(0.75f + 0.5f*z);
-                float transparency = 1.0f;
-                if(z==0.0f)transparency = 0.8f;
-                
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, vmml::mat4f::IDENTITY);
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_VIEW_MATRIX, viewMatrix);
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_MATRIX, modelMatrix);
-                shader->setUniform("offset", uniform_offset);
-                shader->setUniform("transparency", transparency);
-                
-                geometry.draw();
-            }
-        }
-        else
-        {
-			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
-        }
-    }
-    
+	for (float z = 0.0f; z < 3.0f; z++) 
+	{
+		if (z == 1.0f)
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		// translate
+		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.6f + (0.08f*z), (-z / 100.0f - 0.50f)));
+		// rotate
+		float rot = 0.0f;
+		if (fmod(z, 2.0f) == 0.0f)
+			rot = 0.0f;
+		else
+			rot = M_PI_F;
+		vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
+		// scale
+		float ParticleScale = 2.45f - (0.46f*z);
+		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
+		// model matrix
+		modelMatrix = translation * scaling * rotation;
+		// view matrix
+		vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
+		vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
+		// wave effect
+		float offset = (_randomTime + 0.3f*z) * 2 * M_PI_F*(0.75f + 0.5f*z);
+		float transparency = 1.0f;
+		if (z == 0.0f)transparency = 0.8f;
+		// pass additional properties to the shader
+		bRenderer().getProperties("flameProperties")->setScalar("offset", offset);
+		bRenderer().getProperties("flameProperties")->setScalar("transparency", transparency);
+		// draw
+		bRenderer().drawModel("flame", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
+	}    
     
     /*** Sparks ***/
-	Model::GroupMap &groupsSparks = bRenderer().getModel("sparks")->getGroups();
-    for (auto i = groupsSparks.begin(); i != groupsSparks.end(); ++i)
-    {
-        Geometry &geometry = i->second;
-        MaterialPtr material = geometry.getMaterial();
-        ShaderPtr shader = material->getShader();
-        if (shader)
-        {
-            for (float z = 1.0f; z < 2.0f; z++) 
-			{                
-				vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.65f, (-z / 100.0f - 0.58f)));
-                
-                float rot = 1.0f;
-				if (_running)
-					rot = randomNumber(1.0f, 1.1f)*_randomTime*(z + 0.3f)*M_PI_F;
-                
-                vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
-                
-                float ParticleScale = 1.1f-(0.5f*z);                
-				vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0f*ParticleScale, ParticleScale));
-                
-                vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-                vmml::vec3f eyeUp = vmml::vec3f::UP;
-				vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
-                
-                vmml::mat4f modelMatrix(translation * scaling * rotation);
-                                
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, vmml::mat4f::IDENTITY);
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX, viewMatrix*modelMatrix);
-                
-                geometry.draw();
-            }  
-        }
-        else
-        {
-			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
-        } 
-    }
+	for (float z = 1.0f; z < 2.0f; z++)
+	{
+		// translate
+		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.65f, (-z / 100.0f - 0.58f)));
+		// rotate
+		float rot = 1.0f;
+		if (_running)
+			rot = randomNumber(1.0f, 1.1f)*_randomTime*(z + 0.3f)*M_PI_F;
+		vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
+		// scale
+		float ParticleScale = 1.1f - (0.5f*z);
+		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0f*ParticleScale, ParticleScale));
+		// model matrix
+		modelMatrix = translation * scaling * rotation;
+		// view matrix
+		vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
+		vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
+
+		// draw
+		bRenderer().drawModel("sparks", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
+	}
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	/*** Title ***/
-	Model::GroupMap &groupsTitle = bRenderer().getModel("bTitle")->getGroups();
-	for (auto i = groupsTitle.begin(); i != groupsTitle.end(); ++i)
-	{
-		Geometry &geometry = i->second;
-		MaterialPtr material = geometry.getMaterial();
-		ShaderPtr shader = material->getShader();
-		if (shader)
-		{
-			vmml::mat4f translation = vmml::create_translation(vmml::vec3f(-0.4f, 0.0f, -0.65f));
-
-			float titleScale = 0.4f;
-			vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
-
-			vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-			vmml::vec3f eyeUp = vmml::vec3f::UP;
-			vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
-
-			vmml::mat4f modelMatrix(translation * scaling);
-
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, vmml::mat4f::IDENTITY);
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX, viewMatrix*modelMatrix);
-		}
-		else
-		{
-			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
-		}
-		geometry.draw();
-	}
+	// translate and scale 
+	float titleScale = 0.4f;
+	vmml::mat4f translation = vmml::create_translation(vmml::vec3f(-0.4f, 0.0f, -0.65f));	
+	vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+	modelMatrix = translation * scaling;
+	// create view matrix
+	vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
+	vmml::vec3f eyeUp = vmml::vec3f::UP;
+	vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
+	// draw
+	bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
 
 }
 

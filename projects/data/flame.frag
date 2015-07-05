@@ -3,6 +3,8 @@ $B_SHADER_VERSION
 precision mediump float;
 #endif
 
+uniform vec3 ambientColor;
+
 uniform sampler2D DiffuseMap;
 
 uniform float offset;
@@ -20,5 +22,5 @@ void main()
     vec4 transparencyVec = vec4(1.0,1.0,1.0,transparency);
     vec4 lightColor = vec4(1.0, 0.6, 1.0, 1.0);
     
-    gl_FragColor = lightColor * texture2D(DiffuseMap, texcoord)*transparencyVec;
+    gl_FragColor = vec4(ambientColor, 0.0) + lightColor * texture2D(DiffuseMap, texcoord)*transparencyVec;
 }

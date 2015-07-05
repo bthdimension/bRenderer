@@ -409,6 +409,11 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 
 void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix, const std::vector<std::string> &lightNames)
 {
+	drawModel(modelName, modelMatrix, getCamera(cameraName)->getViewMatrix(), getCamera(cameraName)->getProjectionMatrix(), lightNames);
+}
+
+void Renderer::drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames)
+{
 	Model::GroupMap &groupsCaveStart = getModel(modelName)->getGroups();
 	for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
 	{
@@ -416,9 +421,7 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 		ShaderPtr shader = geometry.getMaterial()->getShader();
 		if (shader)
 		{
-			vmml::mat4f viewMatrix = getCamera(cameraName)->getViewMatrix();
-
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, getCamera(cameraName)->getProjectionMatrix());
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, projectionMatrix);
 			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX, viewMatrix*modelMatrix);
 
 			// Light

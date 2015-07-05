@@ -344,29 +344,28 @@ public:
 	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation);
 
 	/**	@brief Draw specified model into the buffer
-	*
-	*	This function is used for the default shader. 
-	*	The projection, view and model matrices are read from the specified camera and matrix stack.
-	*	In this function all lights created within this renderer instance are used to illuminate the model.
-	*
 	*	@param[in] modelName Name of the model
 	*	@param[in] cameraName Name of the camera
-	*	@param[in] matrixStackName Name of the matrix stack
+	*	@param[in] modelMatrix 
 	*/
 	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix);
 
-	/**	@brief Draw specified model into the buffer
-	*
-	*	This function is used for the default shader.
-	*	The projection, view and model matrices are read from the specified camera and matrix stack. 
-	*	In this function one specific light can be chosen to illuminate the model.
-	*
+	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] modelName Name of the model
 	*	@param[in] cameraName Name of the camera
-	*	@param[in] matrixStackName Name of the matrix stack
-	*	@param[in] lightName Name of the light
+	*	@param[in] modelMatrix 
+	*	@param[in] lightNames Names of the light in a vector
 	*/
 	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, const std::vector<std::string> &lightNames);
+
+	/**	@brief Draw specified model into the current framebuffer
+	*	@param[in] modelName Name of the model
+	*	@param[in] modelMatrix
+	*	@param[in] viewMatrix
+	*	@param[in] projectionMatrix
+	*	@param[in] lightNames Names of the light in a vector
+	*/
+	void drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames);
 
 	/**	@brief Get a shader
 	*	@param[in] name Name of the shader
