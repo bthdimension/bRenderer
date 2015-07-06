@@ -11,14 +11,14 @@
 #include "Light.h"
 #include "Configuration.h"
 #include "Properties.h"
+#include "Framebuffer.h"
 
-/* Flamework includes*/
-#include "headers/Model.h"
-#include "headers/Texture.h"
-#include "headers/ModelData.h"
-#include "headers/OBJLoader.h"
-#include "headers/TextureData.h"
-#include "headers/IShaderData.h"
+#include "Model.h"
+#include "Texture.h"
+#include "ModelData.h"
+#include "OBJLoader.h"
+#include "TextureData.h"
+#include "IShaderData.h"
 
 /* vmmlib includes */
 #include "vmmlib/addendum.hpp"
@@ -41,6 +41,7 @@ public:
 	typedef std::unordered_map< std::string, CameraPtr >		CameraMap;
 	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStackMap;
 	typedef std::unordered_map< std::string, LightPtr >			LightMap;
+	typedef std::unordered_map< std::string, FramebufferPtr >	FramebufferMap;
 
 	/* Functions */
 
@@ -279,6 +280,15 @@ public:
 	*/
 	TexturePtr createTexture(const std::string &name, const TextureData &textureData);
 
+	/**	@brief Create a texture
+	*	@param[in] name The raw name of the texture
+	*	@param[in] width
+	*	@param[in] height
+	*	@param[in] format
+	*	@param[in] imageData
+	*/
+	TexturePtr createTexture(const std::string &name, GLsizei width, GLsizei height, GLenum format = GL_RGBA, ImageDataPtr imageData = nullptr);
+
 	/**	@brief Create a shader
 	*	@param[in] name The raw name of the shader
 	*	@param[in] shaderData
@@ -343,20 +353,27 @@ public:
 	*/
 	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation);
 
+	/**	@brief Create a framebuffer
+	*	@param[in] name Name of the framebuffer
+	*/
+	FramebufferPtr createFramebuffer(const std::string &name);
+
 	/**	@brief Draw specified model into the buffer
 	*	@param[in] modelName Name of the model
 	*	@param[in] cameraName Name of the camera
 	*	@param[in] modelMatrix 
+	*	@param[in] ambient Pass ambient color to the shader (optional)
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, bool ambient = true);
 
 	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] modelName Name of the model
 	*	@param[in] cameraName Name of the camera
 	*	@param[in] modelMatrix 
 	*	@param[in] lightNames Names of the light in a vector
+	*	@param[in] ambient Pass ambient color to the shader (optional)
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, const std::vector<std::string> &lightNames);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, const std::vector<std::string> &lightNames, bool ambient = true);
 
 	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] modelName Name of the model
@@ -364,8 +381,9 @@ public:
 	*	@param[in] viewMatrix
 	*	@param[in] projectionMatrix
 	*	@param[in] lightNames Names of the light in a vector
+	*	@param[in] ambient Pass ambient color to the shader (optional)
 	*/
-	void drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames);
+	void drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames, bool ambient = true);
 
 	/**	@brief Get a shader
 	*	@param[in] name Name of the shader
@@ -406,6 +424,11 @@ public:
 	*	@param[in] name Name of the light
 	*/
 	LightPtr getLight(const std::string &name);
+
+	/**	@brief Get a framebuffer
+	*	@param[in] name Name of the framebuffer
+	*/
+	FramebufferPtr getFramebuffer(const std::string &name);
 
 	/**	@brief Get the shader version used on desktop systems
 	*/
@@ -490,6 +513,7 @@ private:
 	CameraMap		_cameras;
 	MatrixStackMap	_matrixStacks;
 	LightMap		_lights;
+	FramebufferMap	_framebuffers;
 
 	vmml::vec3f		_ambientColor;
 

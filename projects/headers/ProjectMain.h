@@ -24,6 +24,9 @@ public:
 	/* This function is executed when terminating the renderer */
 	void terminateFunction();
 
+	//// Camera movement ////
+	void moveCamera(const double &deltaTime);
+
 	//// iOS specific ////
 
     /* For iOS only: Handle device rotation */

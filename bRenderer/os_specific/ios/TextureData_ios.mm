@@ -5,8 +5,6 @@ TextureData::TextureData(const std::string &fileName)
     load(fileName);
 }
 
-TextureData::TextureData() {}
-
 TextureData &TextureData::load(const std::string &fileName)
 {
     static const size_t COMPONENTS          = 4;

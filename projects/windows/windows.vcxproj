@@ -72,6 +72,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Light.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\TextureData.cpp" />
     <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp" />
     <ClCompile Include="..\..\bRenderer\obj_parser\obj_parser.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp" />
@@ -100,6 +102,7 @@
     <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
     <ClInclude Include="..\..\bRenderer\headers\Configuration.h" />
     <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Framebuffer.h" />
     <ClInclude Include="..\..\bRenderer\headers\Geometry.h" />
     <ClInclude Include="..\..\bRenderer\headers\GeometryData.h" />
     <ClInclude Include="..\..\bRenderer\headers\IDrawable.h" />
@@ -134,12 +137,15 @@
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
+    <None Include="..\data\blurShader.frag" />
+    <None Include="..\data\blurShader.vert" />
     <None Include="..\data\bTitle.mtl" />
     <None Include="..\data\cave_start.mtl" />
     <None Include="..\data\crystal.mtl" />
     <None Include="..\data\flame.frag" />
     <None Include="..\data\flame.mtl" />
     <None Include="..\data\flame.vert" />
+    <None Include="..\data\quad.mtl" />
     <None Include="..\data\sparks.frag" />
     <None Include="..\data\sparks.mtl" />
     <None Include="..\data\sparks.vert" />

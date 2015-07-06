@@ -22,6 +22,14 @@ public:
     explicit TextureData(const std::string &fileName);
 
 	/**	@brief Constructor
+	*	@param[in] width
+	*	@param[in] height
+	*	@param[in] format
+	*	@param[in] imageData
+	*/
+	explicit TextureData(GLsizei width, GLsizei height, GLenum format = GL_RGBA, ImageDataPtr imageData = nullptr);
+
+	/**	@brief Constructor
 	*/
     TextureData();
     
@@ -29,6 +37,14 @@ public:
 	*	@param[in] fileName The name of the texture file
 	*/
     TextureData &load(const std::string &fileName);
+
+	/**	@brief Creates a texture
+	*	@param[in] width
+	*	@param[in] height
+	*	@param[in] format
+	*	@param[in] imageData
+	*/
+	TextureData &create(GLsizei width, GLsizei height, GLenum format = GL_RGBA, ImageDataPtr imageData = nullptr);
     
 	/**	@brief Gets the width of the texture
 	*/

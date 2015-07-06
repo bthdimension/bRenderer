@@ -111,6 +111,12 @@
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\TextureData.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\ProjectMain.h">
@@ -209,6 +215,9 @@
     <ClInclude Include="..\..\bRenderer\headers\Properties.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Framebuffer.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
@@ -254,6 +263,15 @@
       <Filter>Project\data</Filter>
     </None>
     <None Include="..\data\torch.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\blurShader.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\blurShader.vert">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\quad.mtl">
       <Filter>Project\data</Filter>
     </None>
   </ItemGroup>

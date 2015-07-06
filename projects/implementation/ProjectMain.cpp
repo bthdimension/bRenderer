@@ -42,7 +42,7 @@ void ProjectMain::initFunction()
 	ShaderPtr flameShader = bRenderer().loadShaderFile("flame", 0, false);										// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
 	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);					// load material from file using the shader created above
 
-	PropertiesPtr flameProperties = bRenderer().createProperties("flameProperties");	// TODO: add additional properties to a model
+	PropertiesPtr flameProperties = bRenderer().createProperties("flameProperties");	// Add additional properties to a model
 
 	// load models
 	bRenderer().loadModel("cave_start.obj", true, true, false, 4);						// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
@@ -55,7 +55,7 @@ void ProjectMain::initFunction()
 
 	// initialize variables
 	_randomTime = 0.0f;
-	_running = true; _lastStateSpaceKey = -1;
+	_running = false; _lastStateSpaceKey = -1;
 
 	// initialize free moving camera
 	_cameraForward = 0.0f;
@@ -70,6 +70,13 @@ void ProjectMain::initFunction()
 	bRenderer().createLight("thirdLight", vmml::vec3f(210.0f, 0.0f, 0.0f), vmml::vec3f(0.8f, 0.0f, 0.0f), 100.0f, 0.5f);
 	bRenderer().createLight("torchLight", -bRenderer().getCamera("camera")->getPosition(), vmml::vec3f(1.0f, 0.4f, -0.5f), 1200.0f, 0.7f);
 
+	// postprocessing
+	bRenderer().createFramebuffer("fbo");
+	bRenderer().createTexture("fbo_texture1", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
+	bRenderer().createTexture("fbo_texture2", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
+	ShaderPtr blurShader = bRenderer().loadShaderFile("blurShader", 0, false);
+	bRenderer().loadModel("quad.obj", false, true, blurShader);
+
 	// set ambient color
 	bRenderer().setAmbientColor(vmml::vec3f(0.0f, 0.0f, 0.05f));
 
@@ -83,66 +90,19 @@ void ProjectMain::initFunction()
 /* Draw your scene here */
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-	//	bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
-
-	//// Movement ////
-	
-		/* Windows only: Mouse and Keyboard Movement */
-#ifdef OS_DESKTOP
-	int currentStateSpaceKey = glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_SPACE);
-	if (currentStateSpaceKey != _lastStateSpaceKey)
+	if ((int)elapsedTime >= 6 && (int)elapsedTime <= 7)
 	{
-		_lastStateSpaceKey = currentStateSpaceKey;
-		if (currentStateSpaceKey == GLFW_PRESS)
-			_running = !_running;
+		/* Start animating after 6 seconds */
+		if (!_running) _running = true;
 	}
 
-	double xpos, ypos;
-	glfwGetCursorPos(bRenderer().getView()->getWindow(), &xpos, &ypos);
-	double deltaCameraY = xpos - _mouseX;
-	_mouseX = xpos;
-	double deltaCameraX = ypos - _mouseY;
-	_mouseY = ypos;
-	
-	if (_running){
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
-			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = 1.0;
-			else			_cameraForward = 0.5;
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
-			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = -1.0;
-			else			_cameraForward = -0.5;
-		else
-			_cameraForward = 0.0;
+	//bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
+	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraSideward(0.5);
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraUpward(0.5);
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraUpward(-0.5);
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
-	}
-#endif
-		/* On iOS automatic movement (for now) */
-#ifdef OS_IOS
-	double deltaCameraY = -0.1 / deltaTime;
-	double deltaCameraX = 0.0;
-	_cameraForward = 0.001 / deltaTime;
-#endif
+	//// Camera Movement ////
+	moveCamera(deltaTime);
 
-	//// Camera ////
-	if (_running){
-		bRenderer().getCamera("camera")->moveCameraForward(_cameraForward);
-		bRenderer().getCamera("camera")->rotateCamera(deltaCameraX / 1000, deltaCameraY / 1000, 0.0f);
-	}
-	//// Perspective ////
-	// adjust aspect ratio
+	//// Adjust aspect ratio ////
 	bRenderer().getCamera("camera")->setAspectRatio(bRenderer().getView()->getAspectRatio());
 
 	//// Torch Light ////
@@ -160,6 +120,13 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	}
 
 	//// Draw Models ////
+
+	/// Begin postprocessing ///
+	GLint defaultFBO;
+	if (!_running){
+		defaultFBO = Framebuffer::getCurrentFramebuffer();
+		bRenderer().getFramebuffer("fbo")->bind(bRenderer().getTexture("fbo_texture1"), false);
+	}
 
 	/*** Cave Start ***/
 	// translate and scale 
@@ -207,6 +174,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
     
     /*** Flame ***/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	// view matrix
+	vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
+	vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
+	// create three flames
 	for (float z = 0.0f; z < 3.0f; z++) 
 	{
 		if (z == 1.0f)
@@ -225,9 +196,6 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
-		// view matrix
-		vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-		vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
 		// wave effect
 		float offset = (_randomTime + 0.3f*z) * 2 * M_PI_F*(0.75f + 0.5f*z);
 		float transparency = 1.0f;
@@ -254,9 +222,6 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0f*ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
-		// view matrix
-		vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-		vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
 
 		// draw
 		bRenderer().drawModel("sparks", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
@@ -264,25 +229,104 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	/*** Title ***/
-	// translate and scale 
-	float titleScale = 0.4f;
-	vmml::mat4f translation = vmml::create_translation(vmml::vec3f(-0.4f, 0.0f, -0.65f));	
-	vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
-	modelMatrix = translation * scaling;
-	// create view matrix
-	vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-	vmml::vec3f eyeUp = vmml::vec3f::UP;
-	vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, eyeUp);
-	// draw
-	bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
-
+	if (!_running){
+        
+    /// End postprocessing ///
+		
+        /*** Blur ***/
+		// translate
+		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.0f, 0.0f, -0.5));
+		// model matrix
+		modelMatrix = translation;
+		// blur vertically and horizontally
+		bool b = true;		int numberOfBlurSteps = 2;
+		for (int i = 0; i < numberOfBlurSteps; i++) {
+			if (i == numberOfBlurSteps - 1)
+				bRenderer().getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
+			else
+				bRenderer().getFramebuffer("fbo")->bind(bRenderer().getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);
+            
+			bRenderer().getMaterial("quad")->setTexture("fbo_texture", bRenderer().getTexture(b ? "fbo_texture1" : "fbo_texture2"));
+			bRenderer().getMaterial("quad")->setScalar("isVertical", (float)b);
+			// draw
+			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}), false);
+			b = !b;
+		}
+	
+        /*** Title ***/
+        // translate and scale 
+        float titleScale = 0.4f;
+        translation = vmml::create_translation(vmml::vec3f(-0.4f, 0.0f, -0.65f));	
+        vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        modelMatrix = translation * scaling;
+        // draw
+        bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
+    }
 }
 
 /* This function is executed when terminating the renderer */
 void ProjectMain::terminateFunction()
 {
 	bRenderer::log("I totally terminated this Renderer :-)");
+}
+
+
+/* Camera movement */
+void ProjectMain::moveCamera(const double &deltaTime)
+{
+	/* Windows only: Mouse and Keyboard Movement */
+#ifdef OS_DESKTOP
+	int currentStateSpaceKey = glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_SPACE);
+	if (currentStateSpaceKey != _lastStateSpaceKey)
+	{
+		_lastStateSpaceKey = currentStateSpaceKey;
+		if (currentStateSpaceKey == GLFW_PRESS)
+			_running = !_running;
+	}
+
+	double xpos, ypos;
+	glfwGetCursorPos(bRenderer().getView()->getWindow(), &xpos, &ypos);
+	double deltaCameraY = xpos - _mouseX;
+	_mouseX = xpos;
+	double deltaCameraX = ypos - _mouseY;
+	_mouseY = ypos;
+
+	if (_running){
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
+			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = 1.0;
+			else			_cameraForward = 0.5;
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
+			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = -1.0;
+			else			_cameraForward = -0.5;
+		else
+			_cameraForward = 0.0;
+
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraSideward(0.5);
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraUpward(0.5);
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->moveCameraUpward(-0.5);
+		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
+		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
+	}
+#endif
+	/* On iOS automatic movement (for now) */
+#ifdef OS_IOS
+	double deltaCameraY = -0.1 / deltaTime;
+	double deltaCameraX = 0.0;
+	_cameraForward = 0.001 / deltaTime;
+#endif
+
+	//// Camera ////
+	if (_running){
+		bRenderer().getCamera("camera")->moveCameraForward(_cameraForward);
+		bRenderer().getCamera("camera")->rotateCamera(deltaCameraX / 1000, deltaCameraY / 1000, 0.0f);
+	}
 }
 
 /* For iOS only: Handle device rotation */

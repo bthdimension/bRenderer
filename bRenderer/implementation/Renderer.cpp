@@ -307,6 +307,19 @@ TexturePtr Renderer::createTexture(const std::string &name, const TextureData &t
 	return texture;
 }
 
+TexturePtr Renderer::createTexture(const std::string &name, GLsizei width, GLsizei height, GLenum format, ImageDataPtr imageData)
+{
+	if (getTexture(name)) return getTexture(name);
+	TexturePtr &texture = _textures[name];
+
+	// create texture
+	TextureData textureData(width, height, format, imageData);
+
+	texture = TexturePtr(new Texture(textureData));
+
+	return texture;
+}
+
 ShaderPtr Renderer::createShader(const std::string &name, const IShaderData &shaderData)
 {
 	if (shaderData.isValid())
@@ -399,20 +412,28 @@ LightPtr Renderer::createLight(const std::string &name, const vmml::vec3f &posit
 	return light;
 }
 
-void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix)
+FramebufferPtr Renderer::createFramebuffer(const std::string &name)
+{
+	if (getFramebuffer(name)) return getFramebuffer(name);
+	FramebufferPtr &framebuffer = _framebuffers[name];
+	framebuffer = FramebufferPtr(new Framebuffer());
+	return framebuffer;
+}
+
+void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix, bool ambient)
 {
 	std::vector<std::string> lightNames;
 	for (auto i = _lights.begin(); i != _lights.end(); ++i)
 		lightNames.push_back(i->first);
-	drawModel(modelName, cameraName, modelMatrix, lightNames);
+	drawModel(modelName, cameraName, modelMatrix, lightNames, ambient);
 }
 
-void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix, const std::vector<std::string> &lightNames)
+void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix, const std::vector<std::string> &lightNames, bool ambient)
 {
-	drawModel(modelName, modelMatrix, getCamera(cameraName)->getViewMatrix(), getCamera(cameraName)->getProjectionMatrix(), lightNames);
+	drawModel(modelName, modelMatrix, getCamera(cameraName)->getViewMatrix(), getCamera(cameraName)->getProjectionMatrix(), lightNames, ambient);
 }
 
-void Renderer::drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames)
+void Renderer::drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames, bool ambient)
 {
 	Model::GroupMap &groupsCaveStart = getModel(modelName)->getGroups();
 	for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
@@ -441,7 +462,8 @@ void Renderer::drawModel(const std::string &modelName, const vmml::mat4f &modelM
 				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION + pos, getLight(lightNames[i])->getAttenuation());
 			}
 			// ambient
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR, getAmbientColor());
+			if (ambient)
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR, getAmbientColor());
 		}
 		else
 		{
@@ -504,6 +526,13 @@ LightPtr Renderer::getLight(const std::string &name)
 {
 	if (_lights.count(name) > 0)
 		return _lights[name];
+	return nullptr;
+}
+
+FramebufferPtr Renderer::getFramebuffer(const std::string &name)
+{
+	if (_framebuffers.count(name) > 0)
+		return _framebuffers[name];
 	return nullptr;
 }
 

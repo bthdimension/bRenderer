@@ -11,8 +11,6 @@ TextureData::TextureData(const std::string &fileName)
 	load(fileName);
 }
 
-TextureData::TextureData() {}
-
 TextureData &TextureData::load(const std::string &fileName)
 {
 	std::string fullFileName = bRenderer::getFilePath(fileName);
