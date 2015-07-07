@@ -2,6 +2,7 @@
 #define B_MATERIAL_DATA_H
 
 #include <unordered_map>
+#include "vmmlib/vector.hpp"
 
 struct MaterialData
 {

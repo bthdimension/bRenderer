@@ -18,8 +18,11 @@ public:
 	*	@param[in] shaderVersionES The shader version to be used for embedded systems (iOS)
 	*	@param[in] maxLights The maximum number of light sources to be used 
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting
+	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting
+	*	@param[in] specularLighting Set true if the shader supports specular lighting
 	*/
-	explicit ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights);
+	explicit ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting);
 
 	/**	@brief Constructor
 	*	@param[in] vertShaderFileName The filename of the vertex shader (including filename extension!)
@@ -28,8 +31,11 @@ public:
 	*	@param[in] shaderVersionES The shader version to be used for embedded systems (iOS)
 	*	@param[in] maxLights The maximum number of light sources to be used 
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting
+	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting
+	*	@param[in] specularLighting Set true if the shader supports specular lighting
 	*/
-	ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights);
+	ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting);
     
 	/**	@brief Loads shader from file
 	*	@param[in] shaderFileName The filename of both the vertex and fragment shader (without filename extension!)
@@ -56,7 +62,19 @@ public:
 
 	/**	@brief Returns true if the number of lights is variable in the shader
 	*/
-	bool hasVariableNumberOfLights() const { return _variableNumberOfLights; }
+	bool supportsVariableNumberOfLights() const { return _variableNumberOfLights; }
+
+	/**	@brief Returns true if the shader supports ambient lighting
+	*/
+	bool supportsAmbientLighting() const	{ return _ambientLighting; }
+
+	/**	@brief Returns true if the shader supports diffuse lighting
+	*/
+	bool supportsDiffuseLighting() const	{ return _diffuseLighting; }
+
+	/**	@brief Returns true if the shader supports specular lighting
+	*/
+	bool supportsSpecularLighting() const	{ return _specularLighting; }
 
 	/**	@brief Returns true if the shader is valid
 	*/
@@ -78,6 +96,9 @@ private:
 	std::string _shaderVersionES;
 	GLuint		_maxLights;
 	bool		_variableNumberOfLights;
+	bool		_ambientLighting;
+	bool		_diffuseLighting;
+	bool		_specularLighting;
     bool        _valid;
 
 };

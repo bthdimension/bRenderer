@@ -30,9 +30,10 @@ public:
 	*	@param[in] shaderMaxLights The maximum light sources to be used
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, PropertiesPtr	properties = nullptr);
+	explicit Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] r Instance of the renderer main class

@@ -20,7 +20,7 @@ Texture::Texture(const TextureData &data)
             glGenerateMipmap(GL_TEXTURE_2D);
         }
         else{
-            // Create empty texture (e.g. for binding to a framebuffer
+            // Create empty texture (e.g. for binding to a framebuffer)
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

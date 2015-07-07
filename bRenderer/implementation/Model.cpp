@@ -3,7 +3,7 @@
 #include "../headers/TextureData.h"
 #include "../headers/Renderer.h"
 
-Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, PropertiesPtr properties)
+Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties)
 {
 	ModelData::GroupMap data = modelData.getData();
 	_properties = properties;
@@ -13,7 +13,7 @@ Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bo
 		Geometry &g = _groups[i->first];
 		GeometryDataPtr gData = i->second;
 
-		MaterialPtr material = r->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights, variableNumberOfLights);
+		MaterialPtr material = r->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting);
 		g.initialize(gData);
 		g.setMaterial(material);
 		g.setProperties(properties);

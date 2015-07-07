@@ -23,7 +23,10 @@ Shader::Shader(const IShaderData &shaderData)
     }
 
 	_shaderMaxLights = shaderData.getMaxLights();
-	_variableNumberOfLights = shaderData.hasVariableNumberOfLights();
+	_variableNumberOfLights = shaderData.supportsVariableNumberOfLights();
+	_ambientLighting = shaderData.supportsAmbientLighting();
+	_diffuseLighting = shaderData.supportsDiffuseLighting();
+	_specularLighting = shaderData.supportsSpecularLighting();
     
     // Attach vertex shader to program.
     glAttachShader(_programID, vertShader);

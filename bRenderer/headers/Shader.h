@@ -133,7 +133,19 @@ public:
 
 	/**	@brief Returns true if the number of lights is variable in the shader
 	*/
-	bool hasVariableNumberOfLights() { return _variableNumberOfLights; }
+	bool supportsVariableNumberOfLights() const { return _variableNumberOfLights; }
+
+	/**	@brief Returns true if the shader supports ambient lighting
+	*/
+	bool supportsAmbientLighting() const	{ return _ambientLighting; }
+
+	/**	@brief Returns true if the shader supports diffuse lighting
+	*/
+	bool supportsDiffuseLighting() const	{ return _diffuseLighting; }
+
+	/**	@brief Returns true if the shader supports specular lighting
+	*/
+	bool supportsSpecularLighting() const	{ return _specularLighting; }
     
     template< typename T >
 	/**	@brief Sets multiple uniforms
@@ -170,6 +182,9 @@ private:
 
 	GLuint		_shaderMaxLights;
 	bool		_variableNumberOfLights;
+	bool		_ambientLighting;
+	bool		_diffuseLighting;
+	bool		_specularLighting;
 };
 
 typedef std::shared_ptr< Shader > ShaderPtr;

@@ -156,8 +156,11 @@ public:
 	*	@param[in] shaderName Name of the shader (optional)
 	*	@param[in] maxLights The maximum number of light sources to be used (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
+	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting (optional)
+	*	@param[in] specularLighting Set true if the shader supports specular lighting (optional)
 	*/
-	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true);
+	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
 
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
@@ -173,12 +176,13 @@ public:
 	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded (optional)
 	*	@param[in] maxLights The maximum number of light sources to be used (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*
 	*	This function will automatically create one shader for every material of the model
 	*
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, PropertiesPtr properties = nullptr);
+	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
@@ -207,25 +211,40 @@ public:
 	*	@param[in] shaderName Name of the shader
 	*	@param[in] maxLights The maximum number of light sources to be used  (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
+	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting (optional)
+	*	@param[in] specularLighting Set true if the shader supports specular lighting (optional)
 	*
 	*	If no shaders with the chosen name exist or no name is passed to the function 
 	*	the default shader will be used.
 	*
 	*/
-	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true);
+	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
 
-	/**	@brief Load a shader
+	/**	@brief Generate a shader
+	*	@param[in] shaderName Name of the shader
+	*	@param[in] shaderMaxLights The maximum number of light sources to be used
+	*	@param[in] ambientLighting Set true if the shader should support ambient lighting
+	*	@param[in] materialData All necessary information for the shader is read from the material data
+	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
+	*/
+	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights);
+
+	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
 	*	@param[in] maxLights The maximum number of light sources to be used 
-	*	@param[in] ambientColor
-	*	@param[in] diffuseColor
-	*	@param[in] specularColor
-	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring (optional)
-	*	@param[in] normalMap Set true if a texture should be used to define the normals (optional)
-	*	@param[in] specularMap Set true if a texture should be used to define specularity (optional)
-	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
+	*	@param[in] ambientLighting Set true if the shader should support ambient lighting
+	*	@param[in] diffuseLighting Set true if the shader should support diffuse lighting
+	*	@param[in] specularLighting Set true if the shader should support specular lighting
+	*	@param[in] ambientColor Set true if the material specifies an ambient color (usually Ka)
+	*	@param[in] diffuseColor Set true if the material specifies a diffuse color (usually Kd)
+	*	@param[in] specularColor Set true if the material specifies a specular color (usually Ks)
+	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring
+	*	@param[in] normalMap Set true if a texture should be used to define the normals
+	*	@param[in] specularMap Set true if a texture should be used to define specularity
+	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	ShaderPtr loadShader(std::string shaderName, GLuint shaderMaxLights, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap = false, bool normalMap = false, bool specularMap = false, bool variableNumberOfLights = true);
+	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights);
 
 	/**	@brief Create a material
 	*	@param[in] name Name of the material
@@ -240,8 +259,9 @@ public:
 	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
 	*	@param[in] shaderMaxLights (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*/
-	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true);
+	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true);
 
 	/**	@brief Create properties
 	*	@param[in] name Name of the properties
@@ -254,9 +274,10 @@ public:
 	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
 	*	@param[in] maxLights The maximum number of light sources to be used (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
+	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, PropertiesPtr properties = nullptr);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
@@ -362,18 +383,16 @@ public:
 	*	@param[in] modelName Name of the model
 	*	@param[in] cameraName Name of the camera
 	*	@param[in] modelMatrix 
-	*	@param[in] ambient Pass ambient color to the shader (optional)
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, bool ambient = true);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix);
 
 	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] modelName Name of the model
 	*	@param[in] cameraName Name of the camera
 	*	@param[in] modelMatrix 
 	*	@param[in] lightNames Names of the light in a vector
-	*	@param[in] ambient Pass ambient color to the shader (optional)
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, const std::vector<std::string> &lightNames, bool ambient = true);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, const std::vector<std::string> &lightNames);
 
 	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] modelName Name of the model
@@ -381,9 +400,8 @@ public:
 	*	@param[in] viewMatrix
 	*	@param[in] projectionMatrix
 	*	@param[in] lightNames Names of the light in a vector
-	*	@param[in] ambient Pass ambient color to the shader (optional)
 	*/
-	void drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames, bool ambient = true);
+	void drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames);
 
 	/**	@brief Get a shader
 	*	@param[in] name Name of the shader

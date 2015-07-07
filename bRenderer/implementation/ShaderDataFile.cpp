@@ -10,14 +10,14 @@
 
 using boost::lexical_cast;
 
-ShaderDataFile::ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights)
-	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights)
+ShaderDataFile::ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
+	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights), _ambientLighting(ambientLighting), _diffuseLighting(diffuseLighting), _specularLighting(specularLighting)
 {
 	load(shaderFileName);
 }
 
-ShaderDataFile::ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights)
-	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights)
+ShaderDataFile::ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
+	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights), _ambientLighting(ambientLighting), _diffuseLighting(diffuseLighting), _specularLighting(specularLighting)
 {
     load(vertShaderFileName, fragShaderFileName);
 }

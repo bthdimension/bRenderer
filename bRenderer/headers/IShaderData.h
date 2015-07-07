@@ -27,7 +27,19 @@ public:
 
 	/**	@brief Returns true if the number of lights is variable in the shader
 	*/
-	virtual bool hasVariableNumberOfLights() const = 0;
+	virtual bool supportsVariableNumberOfLights() const = 0;
+
+	/**	@brief Returns true if the shader supports ambient lighting
+	*/
+	virtual bool supportsAmbientLighting() const = 0;
+
+	/**	@brief Returns true if the shader supports diffuse lighting
+	*/
+	virtual bool supportsDiffuseLighting() const = 0;
+
+	/**	@brief Returns true if the shader supports specular lighting
+	*/
+	virtual bool supportsSpecularLighting() const = 0;
 
 	/**	@brief Returns true if the shader is valid
 	*/

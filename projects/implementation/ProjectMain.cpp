@@ -38,20 +38,20 @@ void ProjectMain::initFunction()
 	bRenderer::log("my initialize function was started");
 
 	// TEST: load material and shader before loading the model
-	ShaderPtr customShader = bRenderer().loadShader("customShader", 4, true, true, true, true, true, true);		// create custom shader with a maximum of 4 lights
-	ShaderPtr flameShader = bRenderer().loadShaderFile("flame", 0, false);										// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);					// load material from file using the shader created above
+	ShaderPtr customShader = bRenderer().generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false);		// create custom shader with a maximum of 2 lights
+	ShaderPtr flameShader = bRenderer().loadShaderFile("flame", 0, false, true, true, false);												// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);												// load material from file using the shader created above
 
 	PropertiesPtr flameProperties = bRenderer().createProperties("flameProperties");	// Add additional properties to a model
 
 	// load models
-	bRenderer().loadModel("cave_start.obj", true, true, false, 4);						// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().loadModel("sphere.obj", true, true, false, 4);							// create custom shader with a maximum of 4 lights 
+	bRenderer().loadModel("cave_start.obj", true, true, false, 4, true, true);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().loadModel("sphere.obj", true, true, false, 4, true, true);				// create custom shader with a maximum of 4 lights 
 	bRenderer().loadModel("crystal.obj", false, true, customShader);					// the custom shader created above is used
-	bRenderer().loadModel("torch.obj", false, true, false, 4);							// create custom shader with a maximum of 4 lights 
+	bRenderer().loadModel("torch.obj", false, true, false, 1, false, true);				// create custom shader with a maximum of 1 light
 	bRenderer().loadModel("flame.obj", false, true, flameMaterial, flameProperties);	// the flame material created above is used, to pass additional properties a Properties object is used
-	bRenderer().loadModel("sparks.obj", false, true, true, 0, false);					// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
-	bRenderer().loadModel("bTitle.obj", false, true, false, 0, false);					// create custom shader with 0 lights -> the title will always be fully lit
+	bRenderer().loadModel("sparks.obj", false, true, true, 0, false, true);				// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
+	bRenderer().loadModel("bTitle.obj", false, true, false, 0, false, false);			// create custom shader with 0 lights -> the title will always be fully lit
 
 	// initialize variables
 	_randomTime = 0.0f;
@@ -74,7 +74,7 @@ void ProjectMain::initFunction()
 	bRenderer().createFramebuffer("fbo");
 	bRenderer().createTexture("fbo_texture1", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
 	bRenderer().createTexture("fbo_texture2", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
-	ShaderPtr blurShader = bRenderer().loadShaderFile("blurShader", 0, false);
+	ShaderPtr blurShader = bRenderer().loadShaderFile("blurShader", 0, false, false, false, false);
 	bRenderer().loadModel("quad.obj", false, true, blurShader);
 
 	// set ambient color
@@ -97,7 +97,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	}
 
 	//bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+//	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 
 	//// Camera Movement ////
 	moveCamera(deltaTime);
@@ -145,7 +145,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(780.0, -170.0, 55.0));
 	// draw
 	bRenderer().setAmbientColor(vmml::vec3f(0.2f, 0.2f, 0.8f));
-	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
+	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight"}));
 	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
 
 	/*** Crystal (green) ***/
@@ -153,7 +153,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(1480.0f, -170.0f, 70.0f));
 	// draw
 	bRenderer().setAmbientColor(vmml::vec3f(0.1f, 0.45f, 0.1f));
-	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
+	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }));
 	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
 
 	/*** Crystal (red) ***/
@@ -161,7 +161,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(2180.0f, -170.0f, 40.0f));
 	// draw
 	bRenderer().setAmbientColor(vmml::vec3f(0.6f, 0.1f, 0.1f));
-	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
+	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }));
 	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
 
 	///*** Torch ***/
@@ -170,7 +170,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		modelMatrix = bRenderer().getCamera("camera")->getInverseViewMatrix();
 	modelMatrix *= vmml::create_translation(vmml::vec3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::vec3f(1.2f)) * vmml::create_rotation(1.64f, vmml::vec3f::UNIT_Y);
 	// draw
-	bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
+	bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight" }));
     
     /*** Flame ***/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -249,7 +249,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			bRenderer().getMaterial("quad")->setTexture("fbo_texture", bRenderer().getTexture(b ? "fbo_texture1" : "fbo_texture2"));
 			bRenderer().getMaterial("quad")->setScalar("isVertical", (float)b);
 			// draw
-			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}), false);
+			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
 			b = !b;
 		}
 	
