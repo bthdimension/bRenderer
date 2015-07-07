@@ -32,14 +32,10 @@ Texture::Texture(const TextureData &data)
 }
 
 Texture::Texture()
-{
-    
-}
+{}
 
 Texture::~Texture()
-{
-    
-}
+{}
 
 GLuint Texture::getTextureID()
 {

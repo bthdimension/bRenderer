@@ -10,17 +10,11 @@ Light::Light(const vmml::vec3f &position, const vmml::vec3f &color)
 {}
 
 Light::Light(const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation)
-{
-	_position = vmml::vec4f(position, 1.0);
-	_color = color;
-	_intensity = intensity;
-	_attenuation = attenuation;
-}
+	: _position(vmml::vec4f(position, 1.0)), _color(color), _intensity(intensity), _attenuation(attenuation)
+{}
 
 Light::~Light()
-{
-
-}
+{}
 
 void Light::setPosition(const vmml::vec3f &position)
 {

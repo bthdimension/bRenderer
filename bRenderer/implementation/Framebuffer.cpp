@@ -6,24 +6,19 @@ using boost::lexical_cast;
 /* Constructors */
 
 Framebuffer::Framebuffer()
+	: _preserveCurrentFramebuffer(false), _autoResize(true)
 {
 	GLint vp[4];
 	glGetIntegerv(GL_VIEWPORT, vp);
 	_width = vp[2];
 	_height = vp[3];
-	_preserveCurrentFramebuffer = false;
-	_autoResize = true;
 
 	create();
 }
 
 Framebuffer::Framebuffer(GLint width, GLint height)
-{
-	_width = width;
-	_height = height;
-	_preserveCurrentFramebuffer = false;
-	_autoResize = false;
-	
+	: _width(width), _height(height), _preserveCurrentFramebuffer(false), _autoResize(false)
+{	
 	create();
 }
 

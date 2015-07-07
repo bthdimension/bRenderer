@@ -17,19 +17,11 @@ Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes)
 {}
 
 Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
-{
-	_position = position;
-	_rotationAxes = rotationAxes;
-	_fov = fov;
-	_aspect = aspect;
-	_near = near;
-	_far = far;
-}
+	: _position(position), _rotationAxes(rotationAxes), _fov(fov), _aspect(aspect), _near(near), _far(far)
+{}
 
 Camera::~Camera()
-{
-    
-}
+{}
 
 /* Public Functions */
 

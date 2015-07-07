@@ -15,9 +15,7 @@ View::View()
 }
 
 View::~View()
-{
-		
-}
+{}
 
 /* Public functions */
 

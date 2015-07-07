@@ -4,9 +4,9 @@
 #include "../headers/Renderer.h"
 
 Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties)
+	: _properties(properties)
 {
 	ModelData::GroupMap data = modelData.getData();
-	_properties = properties;
 
 	for (auto i = data.begin(); i != data.end(); ++i)
 	{
@@ -21,9 +21,9 @@ Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bo
 }
 
 Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
+	: _properties(properties)
 {
     ModelData::GroupMap data = modelData.getData();
-	_properties = properties;
     for (auto i = data.begin(); i != data.end(); ++i)
     {
         Geometry &g = _groups[i->first];

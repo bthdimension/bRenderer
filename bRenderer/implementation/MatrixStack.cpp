@@ -1,14 +1,14 @@
 #include "../headers/MatrixStack.h"
 
-MatrixStack::MatrixStack(){
-    
-}
+MatrixStack::MatrixStack()
+{}
 
 MatrixStack::~MatrixStack(){
 	clearMatrixStack();
 }
 
-void MatrixStack::pushTranslation(const vmml::mat4f &transformationMatrix) {
+void MatrixStack::pushTranslation(const vmml::mat4f &transformationMatrix) 
+{
 	modelMatrixStack.push_back(transformationMatrix);
     
     //for Normal Matrix: negate translation values
@@ -18,7 +18,8 @@ void MatrixStack::pushTranslation(const vmml::mat4f &transformationMatrix) {
     }
     normalMatrixStack.push_back(transformationMatrixInv);
 }
-void MatrixStack::pushScaling(const vmml::mat4f &transformationMatrix) {
+void MatrixStack::pushScaling(const vmml::mat4f &transformationMatrix) 
+{
 	modelMatrixStack.push_back(transformationMatrix);
     
     //for Normal Matrix: 1/(scaling values)
@@ -32,7 +33,8 @@ void MatrixStack::pushScaling(const vmml::mat4f &transformationMatrix) {
     
 }
 
-void MatrixStack::pushRotation(const vmml::mat4f &transformationMatrix) {
+void MatrixStack::pushRotation(const vmml::mat4f &transformationMatrix) 
+{
 	modelMatrixStack.push_back(transformationMatrix);
     
     //for Normal Matrix: transpose rotation values
@@ -54,7 +56,8 @@ void MatrixStack::clearMatrixStack()
 }
 
 
-vmml::mat4f MatrixStack::getModelMatrix() {
+vmml::mat4f MatrixStack::getModelMatrix() 
+{
     vmml::mat4f transformationMatrix = vmml::mat4f::IDENTITY;
     
     //multiply all Transformations on the Stack to get the final Transformation Matrix
@@ -66,7 +69,8 @@ vmml::mat4f MatrixStack::getModelMatrix() {
     return transformationMatrix;
 }
 
-vmml::mat4f MatrixStack::getNormalMatrix() {
+vmml::mat4f MatrixStack::getNormalMatrix() 
+{
 	vmml::mat4f transformationMatrix = vmml::mat4f::IDENTITY;
 
 	//multiply all Transformations on the Stack to get the final Transformation Matrix
