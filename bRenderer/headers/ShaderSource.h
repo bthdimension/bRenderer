@@ -186,7 +186,7 @@ namespace bRenderer
 				+ "intensityBasedOnDist = " + DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY + num + " / (" + DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION + num + "*distanceToLight*distanceToLight)" + SHADER_SOURCE_LINE_ENDING
 				+ "intensityBasedOnDist = clamp(intensityBasedOnDist, 0.0, 1.0)" + SHADER_SOURCE_LINE_ENDING;
 			if (diffuseLighting)
-				lighting += "diffuse += vec4(" + DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + num + " * intensity * intensityBasedOnDist, 0.0)" + SHADER_SOURCE_LINE_ENDING;
+				lighting += "diffuse += vec4(" + DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + num + " * (intensity * intensityBasedOnDist), 0.0)" + SHADER_SOURCE_LINE_ENDING;
 			if (specularLighting) {
 				if (normalMap)
 					lighting += "specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorTangentSpace_" + num + "), surfaceNormal))), ";
@@ -197,7 +197,7 @@ namespace bRenderer
 					lighting += "specular += vec4( (" + DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + num + " + 9.0*" + WAVEFRONT_MATERIAL_SPECULAR_COLOR + ")/10.0";
 				else
 					lighting += "specular += vec4(" + DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + num;
-				lighting += " * specularCoefficient * intensity * intensityBasedOnDist, 0.0)" + SHADER_SOURCE_LINE_ENDING;
+				lighting += " * (specularCoefficient * intensity * intensityBasedOnDist), 0.0)" + SHADER_SOURCE_LINE_ENDING;
 			}
 			lighting += "}";
 		}
