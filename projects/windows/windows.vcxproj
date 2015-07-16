@@ -72,6 +72,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Configuration.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Light.cpp" />
@@ -85,11 +86,13 @@
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderSource.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\TextureData.cpp" />
     <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp" />
     <ClCompile Include="..\..\bRenderer\obj_parser\obj_parser.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\FileHandler_desktop.cpp" />
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\Input_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\Renderer_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp" />
@@ -106,6 +109,7 @@
     <ClInclude Include="..\..\bRenderer\headers\Geometry.h" />
     <ClInclude Include="..\..\bRenderer\headers\GeometryData.h" />
     <ClInclude Include="..\..\bRenderer\headers\IDrawable.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Input.h" />
     <ClInclude Include="..\..\bRenderer\headers\IShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\Light.h" />
     <ClInclude Include="..\..\bRenderer\headers\Logger.h" />
@@ -126,6 +130,7 @@
     <ClInclude Include="..\..\bRenderer\headers\ShaderSource.h" />
     <ClInclude Include="..\..\bRenderer\headers\Texture.h" />
     <ClInclude Include="..\..\bRenderer\headers\TextureData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Touch.h" />
     <ClInclude Include="..\..\bRenderer\headers\View.h" />
     <ClInclude Include="..\..\bRenderer\obj_parser\obj.hpp" />
     <ClInclude Include="..\..\bRenderer\obj_parser\obj_parser.hpp" />
@@ -135,6 +140,7 @@
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm" />
+    <None Include="..\..\bRenderer\os_specific\ios\Input_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
     <None Include="..\data\blurShader.frag" />

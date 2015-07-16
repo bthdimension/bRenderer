@@ -9,18 +9,18 @@
 
 bool Renderer::isRunning()
 {
-    return _view.isRunning();
+    return _view->isRunning();
 }
 
 void Renderer::runRenderer()
 {
-    _view.setRunning(true);
+    _view->setRunning(true);
     bRenderer::log("Renderer started", bRenderer::LM_SYS);
 }
 
 void Renderer::stopRenderer()
 {
-    _view.setRunning(false);
+    _view->setRunning(false);
     bRenderer::log("Renderer stopped", bRenderer::LM_SYS);
 }
 
@@ -34,7 +34,7 @@ void Renderer::terminateRenderer()
     if (_renderProject)
         _renderProject->terminateFunction();
     
-	_view.terminateView();
+	_view->terminateView();
 
 	reset();
     

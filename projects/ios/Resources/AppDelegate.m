@@ -18,7 +18,6 @@
     // create window
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
-    [self.window makeKeyAndVisible];
     
     // create view controller
     viewController = [[ViewController alloc] init];

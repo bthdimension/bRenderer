@@ -15,7 +15,7 @@ void ProjectMain::init()
 	int w, h;
 	bRenderer().getView()->getScreenSize(&w, &h);
 	bRenderer::log("Screen width: "+lexical_cast< std::string >(w)+", Screen height: "+lexical_cast< std::string >(h));
-    
+
 	// let the renderer create an OpenGL context and the main window
 #ifdef OS_DESKTOP
 	bRenderer().initRenderer(1920, 1080, false);
@@ -55,20 +55,19 @@ void ProjectMain::initFunction()
 
 	// initialize variables
 	_randomTime = 0.0f;
-	_running = false; _lastStateSpaceKey = -1;
+	_running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 
 	// initialize free moving camera
-	_cameraForward = 0.0f;
 	bRenderer().createCamera("camera", vmml::vec3f(-33.0, 0.0, -13.0), vmml::vec3f(0.0, -M_PI_F/2, 0.0));
 
 	// get shading language version
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	// create lights
-	bRenderer().createLight("firstLight", vmml::vec3f(80.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 0.5f, 1.0f), 100.0f, 0.3f);
-	bRenderer().createLight("secondLight", vmml::vec3f(150.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 1.0f, 0.0f), 100.0f, 0.5f);
-	bRenderer().createLight("thirdLight", vmml::vec3f(210.0f, 0.0f, 0.0f), vmml::vec3f(0.8f, 0.0f, 0.0f), 100.0f, 0.5f);
-	bRenderer().createLight("torchLight", -bRenderer().getCamera("camera")->getPosition(), vmml::vec3f(1.0f, 0.4f, -0.5f), 1200.0f, 0.7f);
+	bRenderer().createLight("firstLight", vmml::vec3f(80.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 0.5f, 1.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.3f);
+	bRenderer().createLight("secondLight", vmml::vec3f(150.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 1.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
+	bRenderer().createLight("thirdLight", vmml::vec3f(210.0f, 0.0f, 0.0f), vmml::vec3f(0.8f, 0.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
+	bRenderer().createLight("torchLight", -bRenderer().getCamera("camera")->getPosition(), vmml::vec3f(1.0f, 0.4f, -0.5f), vmml::vec3f(1.0f, 1.0f, 1.0f), 1200.0f, 0.7f);
 
 	// postprocessing
 	bRenderer().createFramebuffer("fbo");
@@ -79,25 +78,19 @@ void ProjectMain::initFunction()
 
 	// set ambient color
 	bRenderer().setAmbientColor(vmml::vec3f(0.0f, 0.0f, 0.05f));
-
-	/* Windows only: Mouse Movement */
-#ifdef OS_DESKTOP
-	glfwSetInputMode(bRenderer().getView()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwGetCursorPos(bRenderer().getView()->getWindow(), &_mouseX, &_mouseY);
-#endif
 }
 
 /* Draw your scene here */
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-	if ((int)elapsedTime >= 6 && (int)elapsedTime <= 7)
-	{
-		/* Start animating after 6 seconds */
-		if (!_running) _running = true;
-	}
+//	if ((int)elapsedTime >= 6 && (int)elapsedTime <= 7)
+//	{
+//		/* Start animating after 6 seconds */
+//		if (!_running){ _running = true; bRenderer().getInput()->setCursorEnabled(!_running); }
+//	}
 
 	//bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-//	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 
 	//// Camera Movement ////
 	moveCamera(deltaTime);
@@ -110,10 +103,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		if (deltaTime < 0.5f){
 			_randomTime += deltaTime + randomNumber(0.0f, 0.12f);
 		}
-		float flickeringLight = 1.0f + (_randomTime)* 2.0f * M_PI_F*(0.032f);
-		float flickeringLightPosX = -bRenderer().getCamera("camera")->getPosition().x();
-		float flickeringLightPosY = -bRenderer().getCamera("camera")->getPosition().y();
-		float flickeringLightPosZ = -bRenderer().getCamera("camera")->getPosition().z();
+		GLfloat flickeringLight = 1.0f + (_randomTime)* 2.0f * M_PI_F*(0.032f);
+		GLfloat flickeringLightPosX = -bRenderer().getCamera("camera")->getPosition().x();
+		GLfloat flickeringLightPosY = -bRenderer().getCamera("camera")->getPosition().y();
+		GLfloat flickeringLightPosZ = -bRenderer().getCamera("camera")->getPosition().z();
 		flickeringLightPosX += 2.5f*sin(flickeringLightPosY * 4.0f + 3.0f*flickeringLight);
 		flickeringLightPosY += 2.5f*sin(flickeringLightPosX * 4.0f + 3.0f*flickeringLight);
 		bRenderer().getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getCamera("camera")->getForward()*10.0f);
@@ -146,7 +139,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	// draw
 	bRenderer().setAmbientColor(vmml::vec3f(0.2f, 0.2f, 0.8f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight"}));
-	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
+	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (green) ***/
 	// translate and scale 
@@ -154,7 +147,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	// draw
 	bRenderer().setAmbientColor(vmml::vec3f(0.1f, 0.45f, 0.1f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }));
-	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
+	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (red) ***/
 	// translate and scale 
@@ -162,7 +155,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	// draw
 	bRenderer().setAmbientColor(vmml::vec3f(0.6f, 0.1f, 0.1f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }));
-	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR);
+	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	///*** Torch ***/
 	// translate and scale 	
@@ -178,27 +171,27 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
 	vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
 	// create three flames
-	for (float z = 0.0f; z < 3.0f; z++) 
+	for (GLfloat z = 0.0f; z < 3.0f; z++) 
 	{
 		if (z == 1.0f)
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		// translate
 		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.6f + (0.08f*z), (-z / 100.0f - 0.50f)));
 		// rotate
-		float rot = 0.0f;
+		GLfloat rot = 0.0f;
 		if (fmod(z, 2.0f) == 0.0f)
 			rot = 0.0f;
 		else
 			rot = M_PI_F;
 		vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
 		// scale
-		float ParticleScale = 2.45f - (0.46f*z);
+		GLfloat ParticleScale = 2.45f - (0.46f*z);
 		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
 		// wave effect
-		float offset = (_randomTime + 0.3f*z) * 2 * M_PI_F*(0.75f + 0.5f*z);
-		float transparency = 1.0f;
+		GLfloat offset = (_randomTime + 0.3f*z) * 2 * M_PI_F*(0.75f + 0.5f*z);
+		GLfloat transparency = 1.0f;
 		if (z == 0.0f)transparency = 0.8f;
 		// pass additional properties to the shader
 		bRenderer().getProperties("flameProperties")->setScalar("offset", offset);
@@ -208,17 +201,17 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	}    
     
     /*** Sparks ***/
-	for (float z = 1.0f; z < 2.0f; z++)
+	for (GLfloat z = 1.0f; z < 2.0f; z++)
 	{
 		// translate
 		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.65f, (-z / 100.0f - 0.58f)));
 		// rotate
-		float rot = 1.0f;
+		GLfloat rot = 1.0f;
 		if (_running)
 			rot = randomNumber(1.0f, 1.1f)*_randomTime*(z + 0.3f)*M_PI_F;
 		vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
 		// scale
-		float ParticleScale = 1.1f - (0.5f*z);
+		GLfloat ParticleScale = 1.1f - (0.5f*z);
 		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0f*ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
@@ -247,7 +240,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 				bRenderer().getFramebuffer("fbo")->bind(bRenderer().getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);
             
 			bRenderer().getMaterial("quad")->setTexture("fbo_texture", bRenderer().getTexture(b ? "fbo_texture1" : "fbo_texture2"));
-			bRenderer().getMaterial("quad")->setScalar("isVertical", (float)b);
+			bRenderer().getMaterial("quad")->setScalar("isVertical", (GLfloat)b);
 			// draw
 			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
 			b = !b;
@@ -255,7 +248,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	
         /*** Title ***/
         // translate and scale 
-        float titleScale = 0.4f;
+        GLfloat titleScale = 0.4f;
         translation = vmml::create_translation(vmml::vec3f(-0.4f, 0.0f, -0.65f));	
         vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
         modelMatrix = translation * scaling;
@@ -274,58 +267,94 @@ void ProjectMain::terminateFunction()
 /* Camera movement */
 void ProjectMain::moveCamera(const double &deltaTime)
 {
-	/* Windows only: Mouse and Keyboard Movement */
-#ifdef OS_DESKTOP
-	int currentStateSpaceKey = glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_SPACE);
-	if (currentStateSpaceKey != _lastStateSpaceKey)
-	{
-		_lastStateSpaceKey = currentStateSpaceKey;
-		if (currentStateSpaceKey == GLFW_PRESS)
-			_running = !_running;
-	}
-
-	double xpos, ypos;
-	glfwGetCursorPos(bRenderer().getView()->getWindow(), &xpos, &ypos);
-	double deltaCameraY = xpos - _mouseX;
-	_mouseX = xpos;
-	double deltaCameraX = ypos - _mouseY;
-	_mouseY = ypos;
-
-	if (_running){
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
-			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = 1.0;
-			else			_cameraForward = 0.5;
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
-			if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) 			_cameraForward = -1.0;
-			else			_cameraForward = -0.5;
-		else
-			_cameraForward = 0.0;
-
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraSideward(0.5);
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraUpward(0.5);
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->moveCameraUpward(-0.5);
-		if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
-		else if (glfwGetKey(bRenderer().getView()->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-			bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
-	}
-#endif
-	/* On iOS automatic movement (for now) */
-#ifdef OS_IOS
-	double deltaCameraY = -0.1 / deltaTime;
+	double deltaCameraY = 0.0;
 	double deltaCameraX = 0.0;
-	_cameraForward = 0.001 / deltaTime;
-#endif
+    double cameraForward = 0.0;
+
+	/* On iOS automatic movement (for now) */
+	if (bRenderer().getInput()->isTouchDevice()){
+        
+        // Pause using double tap
+        if (bRenderer().getInput()->doubleTapRecognized()){
+            _running = !_running;
+        }
+        
+        // Control using gyroscope
+//        deltaCameraY = bRenderer().getInput()->getGyroscopePitch() / 20;
+//		cameraForward = -bRenderer().getInput()->getGyroscopeRoll();
+        
+        if(_running){
+            // Control using touch
+            TouchMap touchMap = bRenderer().getInput()->getTouches();
+            int i = 0;
+            for(auto t = touchMap.begin(); t != touchMap.end(); ++t)
+            {
+                Touch touch = t->second;
+                // If touch is in left half of the view: move around
+                if(touch.startPositionX < bRenderer().getView()->getWidth()/2){
+                    cameraForward = -(touch.currentPositionY - touch.startPositionY)/100;
+                }
+                // If touch is in right half of the view: look around
+                else
+                {
+                    deltaCameraY = (touch.currentPositionX - touch.startPositionX)/5000;
+                    deltaCameraX = (touch.currentPositionY - touch.startPositionY)/5000;
+                }
+                if(++i > 2)
+                    break;
+            }
+        }
+        
+	}
+	/* Windows only: Mouse and Keyboard Movement */
+	else{
+		GLint currentStateSpaceKey = bRenderer().getInput()->getKeyState(bRenderer::KEY_SPACE);
+		if (currentStateSpaceKey != _lastStateSpaceKey)
+		{
+			_lastStateSpaceKey = currentStateSpaceKey;
+			if (currentStateSpaceKey == bRenderer::INPUT_PRESS){
+				_running = !_running;
+				bRenderer().getInput()->setCursorEnabled(!_running);
+			}
+		}
+
+		double xpos, ypos; bool hasCursor = false;
+		bRenderer().getInput()->getCursorPosition(&xpos, &ypos, &hasCursor);
+
+		deltaCameraY = (xpos - _mouseX)/1000;
+		_mouseX = xpos;
+		deltaCameraX = (ypos - _mouseY)/1000;
+		_mouseY = ypos;
+
+		if (_running){
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_W) == bRenderer::INPUT_PRESS)
+				if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT_SHIFT) == bRenderer::INPUT_PRESS) 			cameraForward = 1.0;
+				else			cameraForward = 0.5;
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_S) == bRenderer::INPUT_PRESS)
+				if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT_SHIFT) == bRenderer::INPUT_PRESS) 			cameraForward = -1.0;
+				else			cameraForward = -0.5;
+			else
+				cameraForward = 0.0;
+
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_A) == bRenderer::INPUT_PRESS)
+				bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_D) == bRenderer::INPUT_PRESS)
+				bRenderer().getCamera("camera")->moveCameraSideward(0.5);
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_UP) == bRenderer::INPUT_PRESS)
+				bRenderer().getCamera("camera")->moveCameraUpward(0.5);
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_DOWN) == bRenderer::INPUT_PRESS)
+				bRenderer().getCamera("camera")->moveCameraUpward(-0.5);
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT) == bRenderer::INPUT_PRESS)
+				bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_RIGHT) == bRenderer::INPUT_PRESS)
+				bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
+		}
+	}
 
 	//// Camera ////
 	if (_running){
-		bRenderer().getCamera("camera")->moveCameraForward(_cameraForward);
-		bRenderer().getCamera("camera")->rotateCamera(deltaCameraX / 1000, deltaCameraY / 1000, 0.0f);
+		bRenderer().getCamera("camera")->moveCameraForward(cameraForward);
+		bRenderer().getCamera("camera")->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 	}
 }
 
@@ -367,6 +396,6 @@ void ProjectMain::appWillTerminate()
 }
 
 /* Helper functions */
-float ProjectMain::randomNumber(float min, float max){
-    return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+GLfloat ProjectMain::randomNumber(GLfloat min, GLfloat max){
+	return min + static_cast <GLfloat> (rand()) / (static_cast <GLfloat> (RAND_MAX / (max - min)));
 }

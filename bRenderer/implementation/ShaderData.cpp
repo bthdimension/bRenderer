@@ -53,14 +53,14 @@ void ShaderData::readMaterialAttributes(GLuint maxLights, bool variableNumberOfL
 
 	_ambientLighting = ambientLighting;
 
-	_specularLighting = _maxLights > 0 && s.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT) > 0;
+	_specularLighting = _maxLights > 0 && s.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT()) > 0;
 
-	_ambientColor = v.count(bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR) > 0;
-	_diffuseColor = v.count(bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR) > 0;
-	_specularColor = _specularLighting && v.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR) > 0;
-	_diffuseMap = t.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP) > 0;
-	_normalMap = _maxLights > 0 && t.count(bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP) > 0;
-	_specularMap = _specularLighting && t.count(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP) > 0;
+	_ambientColor = v.count(bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR()) > 0;
+	_diffuseColor = v.count(bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR()) > 0;
+	_specularColor = _specularLighting && v.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR()) > 0;
+	_diffuseMap = t.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()) > 0;
+	_normalMap = _maxLights > 0 && t.count(bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP()) > 0;
+	_specularMap = _specularLighting && t.count(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP()) > 0;
 
 	_diffuseLighting = _diffuseMap || _diffuseColor;
 }
@@ -91,7 +91,7 @@ void ShaderData::initializeSourceCommonVariables()
 	// lights
 	if (_variableNumberOfLights)
 		common += bRenderer::SHADER_SOURCE_NUM_LIGHTS;
-	common += bRenderer::shader_source_light_properties(_maxLights, _normalMap);
+	common += bRenderer::shader_source_light_properties(_maxLights, _normalMap, _diffuseLighting, _specularLighting);
 	// varyings
 	common += bRenderer::SHADER_SOURCE_VARYINGS_POS;
 	if (_diffuseMap || _normalMap || _specularMap)
@@ -172,7 +172,7 @@ void ShaderData::createFragShader()
 			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_VIEW_SPACE;
 
 		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_LIGHTING;
-		_fragShaderSrc += bRenderer::shader_source_function_lighting(_maxLights, _specularColor, _normalMap, _diffuseLighting, _specularLighting, _variableNumberOfLights);
+		_fragShaderSrc += bRenderer::shader_source_function_lighting(_maxLights, _normalMap, _diffuseLighting, _specularLighting, _variableNumberOfLights);
 
 		if (_diffuseLighting)
 			_fragShaderSrc += bRenderer::shader_source_function_fragment_finalize_diffuse(_diffuseColor, _diffuseMap);

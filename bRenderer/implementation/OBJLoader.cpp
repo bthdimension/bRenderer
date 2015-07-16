@@ -72,34 +72,25 @@ void OBJLoader::genVertex(const IndexData &d)
 
 	if (NORMAL)
 	{
-		auto index = d.vertexIndex;
-
-		v.normal.x = _normals[index].x();
-		v.normal.y = _normals[index].y();
-		v.normal.z = _normals[index].z();
-
-		//        v.tangent.x = _tangents[index].x();
-		//        v.tangent.y = _tangents[index].y();
-		//        v.tangent.z = _tangents[index].z();
-		//        
-		//        v.bitangent.x = _bitangents[index].x();
-		//        v.bitangent.y = _bitangents[index].y();
-		//        v.bitangent.z = _bitangents[index].z();
+		v.normal.x = _normals[d.normalIndex].x();
+		v.normal.y = _normals[d.normalIndex].y();
+		v.normal.z = _normals[d.normalIndex].z();
+		_vertices[d.vertexIndex].normal = _normals[d.normalIndex];
 	}
 	else
 	{
 		v.normal.x = 0;
 		v.normal.y = 0;
 		v.normal.z = 0;
-
-		v.tangent.x = 0.0;
-		v.tangent.y = 0.0;
-		v.tangent.z = 0.0;
-
-		v.bitangent.x = 0.0;
-		v.bitangent.y = 0.0;
-		v.bitangent.z = 0.0;
+		_vertices[d.vertexIndex].normal = vmml::vec3f::ZERO;
 	}
+
+	v.tangent.x = 0.0;
+	v.tangent.y = 0.0;
+	v.tangent.z = 0.0;
+	v.bitangent.x = 0.0;
+	v.bitangent.y = 0.0;
+	v.bitangent.z = 0.0;
 
 	_group->vboVertices.push_back(v);
 	_group->vboIndices.push_back(_group->vboIndices.size());
@@ -170,9 +161,9 @@ void OBJLoader::triangular_face_geometric_vertices_vertex_normals_callback(const
 	_group->indices.push_back(d2);
 	_group->indices.push_back(d3);
 
-	genVertex< true, true, true >(d1);
-	genVertex< true, true, true >(d2);
-	genVertex< true, true, true >(d3);
+	genVertex< true, false, true >(d1);
+    genVertex< true, false, true >(d2);
+    genVertex< true, false, true >(d3);
 }
 
 void OBJLoader::triangular_face_geometric_vertices_texture_vertices_vertex_normals_callback(const obj::index_3_tuple_type& v1_vt1_vn1, const obj::index_3_tuple_type& v2_vt2_vn2, const obj::index_3_tuple_type& v3_vt3_vn3)
@@ -395,67 +386,67 @@ void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, 
 		std::stringstream ss(line);
 		ss >> key >> std::ws;
 
-		if (key == bRenderer::WAVEFRONT_MATERIAL_NEWMTL)
+		if (key == bRenderer::WAVEFRONT_MATERIAL_NEWMTL())
 		{
 			ss >> matName >> std::ws;
 		}
 		else if (materialName.empty() || matName == materialName)
 		{
-			if (key == bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR)
+			if (key == bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR())
 			{
 				vmml::vec3f kA;
 				ss >> kA[0] >> std::ws >> kA[1] >> std::ws >> kA[2] >> std::ws;
-				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR] = kA;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR()] = kA;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR())
 			{
 				vmml::vec3f kD;
 				ss >> kD[0] >> std::ws >> kD[1] >> std::ws >> kD[2] >> std::ws;
-				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR] = kD;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR()] = kD;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR())
 			{
 				vmml::vec3f kS;
 				ss >> kS[0] >> std::ws >> kS[1] >> std::ws >> kS[2] >> std::ws;
-				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR] = kS;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR()] = kS;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER())
 			{
 				vmml::vec3f tF;
 				ss >> tF[0] >> std::ws >> tF[1] >> std::ws >> tF[2] >> std::ws;
-				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER] = tF;
+				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER()] = tF;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT())
 			{
-				float nS;
+				GLfloat nS;
 				ss >> nS >> std::ws;
-				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT] = nS;
+				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT()] = nS;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_OPTICAL_DENSITY)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_OPTICAL_DENSITY())
 			{
-				float nI;
+				GLfloat nI;
 				ss >> nI >> std::ws;
-				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_OPTICAL_DENSITY] = nI;
+				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_OPTICAL_DENSITY()] = nI;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_ILLUMINATION_MODEL)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_ILLUMINATION_MODEL())
 			{
-				float illum;
+				GLfloat illum;
 				ss >> illum >> std::ws;
-				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_ILLUMINATION_MODEL] = illum;
+				materials[matName].scalars[bRenderer::WAVEFRONT_MATERIAL_ILLUMINATION_MODEL()] = illum;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_MAP)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_MAP())
 			{
-				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP];
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()];
 				ss >> mat >> std::ws;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_MAP)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_MAP())
 			{
-				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP];
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP()];
 				ss >> mat >> std::ws;
 			}
-			else if (key == bRenderer::WAVEFRONT_MATERIAL_NORMAL_MAP)
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_NORMAL_MAP())
 			{
-				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP];
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP()];
 				ss >> mat >> std::ws;
 			}
 		}
@@ -464,7 +455,7 @@ void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, 
 
 void OBJLoader::createFaceNormals()
 {
-	for (GLuint i = 0; i < _faces.size(); ++i)
+	for (int i = 0; i < _faces.size(); ++i)
 	{
 		// obtain reference to face
 		FaceData &face = _faces[i];
@@ -484,78 +475,85 @@ void OBJLoader::createFaceNormals()
 		const vmml::vec3f &p2 = _vertices[indexV2].position;
 		const vmml::vec3f &p3 = _vertices[indexV3].position;
 
-		// obtain each of this face's texture coordinates
-		const vmml::vec2f &pt1 = _texCoords[indexV1];
-		const vmml::vec2f &pt2 = _texCoords[indexV2];
-		const vmml::vec2f &pt3 = _texCoords[indexV3];
-
-		vmml::vec3f q1(p2 - p1);
-		vmml::vec3f q2(p3 - p1);
-
-		vmml::vec2f uv1(pt2 - pt1);
-		vmml::vec2f uv2(pt3 - pt1);
+		vmml::vec3f e = p2 - p1;
+		vmml::vec3f f = p3 - p1;
 
 		// calculate normal for this face
-		vmml::vec3f normal = (q1).cross(q2);
+		vmml::vec3f normal = e.cross(f);
 		//invert z Axis
 		normal.set(normal.x(), normal.y(), (-1.0f)*normal.z());
 
-		// set face normals to match vertex normal
+		// set face normal
 		face.normal = vmml::normalize(normal);
 
-		// set normal of vertices to face normal
-		_vertices[indexV1].normal = normal;
-		_vertices[indexV2].normal = normal;
-		_vertices[indexV3].normal = normal;
+		// if texture coordinates for this face exist
+		size_t nT = _texCoords.size();
+		if (nT > indexV1 && nT > indexV2 && nT > indexV3)
+		{
+			//// obtain each of this face's texture coordinates
+			//const vmml::vec2f &t1 = _texCoords[indexV1];
+			//const vmml::vec2f &t2 = _texCoords[indexV2];
+			//const vmml::vec2f &t3 = _texCoords[indexV3];
 
-		// TODO: calculate tangent and bitangent per face
-		GLfloat r = 1.0f / (uv1.x() * uv2.y() - uv1.y() * uv2.x());
+			//vmml::vec2f u = t2 - t1;
+			//vmml::vec2f v = t3 - t1;
+			//
+			//// method by opengl-tutorial.org
+			//GLfloat r = 1.0f / (u.x() * v.y() - u.y() * v.x());
+			//vmml::vec3f tangent = (e * v.y() - f * u.y())*r;
+			//vmml::vec3f bitangent = (f * u.x() - e * v.x())*r;
 
-		vmml::vec3f tangent = (q1 * uv2.y() - q2 * uv1.y()) * r;
+			//face.tangent = tangent;
+			//face.bitangent = bitangent;
 
-		//orthogonalize
-		face.tangent = vmml::normalize(tangent - (normal * vmml::dot(normal, tangent)));
-		face.bitangent.cross(face.normal, face.tangent);
-		face.bitangent = vmml::normalize(face.bitangent);
+			// method by "cplusplusguy"
+			vmml::vec3f v1(0.0, 0.0, 0.0);
+			v1.cross(face.normal, vmml::vec3f(0.0, 0.0, -1.0));
+			vmml::vec3f v2(0.0, 0.0, 0.0);
+			v2.cross(face.normal, vmml::vec3f(0.0, -1.0, 0.0));
+			if (v1.length() > v2.length()){
+				face.tangent = v1;
+			}
+			else{
+				face.tangent = v2;
+			}
+			face.bitangent.cross(face.normal, face.tangent);
+			face.bitangent = vmml::normalize(face.bitangent);
+			// method end
+		}
 	}
 }
 
 void OBJLoader::createVertexNormals()
 {
-	// for each vertex, recalculate normal based on adjacent faces
 	for (VertexData &vertex : _vertices)
 	{
-		vmml::vec3f temp = vmml::vec3f::ZERO;
-		vmml::vec3f tempTangent = vmml::vec3f::ZERO;
-		vmml::vec3f tempBitangent = vmml::vec3f::ZERO;
-
-		for (Index i : vertex.faces)
+		// only calculate vertex normal if not present
+		vmml::vec3f n = vmml::vec3f::ZERO;
+		if (vertex.normal.squared_length() < std::numeric_limits< float >::epsilon())
 		{
-			temp += _faces[i].normal;
-			tempTangent += _faces[i].tangent;
-			tempBitangent += _faces[i].bitangent;
+			vmml::vec3f normalSum = vmml::vec3f::ZERO;
+			for (Index &face : vertex.faces)
+			{
+				normalSum += _faces[face].normal;
+			}
+			n = vmml::normalize(normalSum);
 		}
-		vertex.normal = vmml::normalize(temp);
+		else
+		{
+			n = vmml::normalize(vertex.normal);
+		}
 
-		// This didn't really work
-		//        vertex.tangent = vmml::normalize(tempTangent);
-		//        vertex.bitangent = vmml::normalize(tempBitangent);
-		//        vertex.bitangent.cross(vertex.normal, vertex.tangent);
-		//        vertex.bitangent = vmml::normalize(vertex.bitangent);
+		vmml::vec3f tangentSum = vmml::vec3f::ZERO;
+		vmml::vec3f bitangentSum = vmml::vec3f::ZERO;
+		for (Index &face : vertex.faces)
+		{
+			tangentSum += _faces[face].tangent;
+			bitangentSum += _faces[face].bitangent;
+		}
 
-		//method from a tutorial by cplusplusguy
-		vmml::vec3f v1(0.0, 0.0, 0.0);
-		v1.cross(vertex.normal, vmml::vec3f(0.0, 0.0, -1.0));
-		vmml::vec3f v2(0.0, 0.0, 0.0);
-		v2.cross(vertex.normal, vmml::vec3f(0.0, -1.0, 0.0));
-		if (v1.length() > v2.length()){
-			vertex.tangent = v1;
-		}
-		else{
-			vertex.tangent = v2;
-		}
-		vertex.bitangent.cross(vertex.normal, vertex.tangent);
-		vertex.bitangent = vmml::normalize(vertex.bitangent);
-		//method end
+		vertex.normal = n;
+		vertex.tangent = vmml::normalize(tangentSum);
+		vertex.bitangent = vmml::normalize(bitangentSum);
 	}
 }

@@ -5,15 +5,15 @@
 /* Constructor and Destructor */
 
 Camera::Camera()
-	: Camera(bRenderer::DEFAULT_CAMERA_POSITION, bRenderer::DEFAULT_CAMERA_ROTATION_AXES, bRenderer::DEFAULT_FIELD_OF_VIEW, bRenderer::DEFAULT_ASPECT_RATIO, bRenderer::DEFAULT_NEAR_CLIPPING_PLANE, bRenderer::DEFAULT_FAR_CLIPPING_PLANE)
+	: Camera(bRenderer::DEFAULT_CAMERA_POSITION(), bRenderer::DEFAULT_CAMERA_ROTATION_AXES(), bRenderer::DEFAULT_FIELD_OF_VIEW(), bRenderer::DEFAULT_ASPECT_RATIO(), bRenderer::DEFAULT_NEAR_CLIPPING_PLANE(), bRenderer::DEFAULT_FAR_CLIPPING_PLANE())
 {}
 
 Camera::Camera(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
-	: Camera(bRenderer::DEFAULT_CAMERA_POSITION, bRenderer::DEFAULT_CAMERA_ROTATION_AXES, fov, aspect, near, far)
+	: Camera(bRenderer::DEFAULT_CAMERA_POSITION(), bRenderer::DEFAULT_CAMERA_ROTATION_AXES(), fov, aspect, near, far)
 {}
 
 Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes)
-	: Camera(position, rotationAxes, bRenderer::DEFAULT_FIELD_OF_VIEW, bRenderer::DEFAULT_ASPECT_RATIO, bRenderer::DEFAULT_NEAR_CLIPPING_PLANE, bRenderer::DEFAULT_FAR_CLIPPING_PLANE)
+	: Camera(position, rotationAxes, bRenderer::DEFAULT_FIELD_OF_VIEW(), bRenderer::DEFAULT_ASPECT_RATIO(), bRenderer::DEFAULT_NEAR_CLIPPING_PLANE(), bRenderer::DEFAULT_FAR_CLIPPING_PLANE())
 {}
 
 Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
@@ -49,8 +49,8 @@ void Camera::rotateCamera(GLfloat rotationX, GLfloat rotationY, GLfloat rotation
 
 void Camera::resetCamera()
 {
-	_position = bRenderer::DEFAULT_CAMERA_POSITION;
-	_rotationAxes = bRenderer::DEFAULT_CAMERA_ROTATION_AXES;
+	_position = bRenderer::DEFAULT_CAMERA_POSITION();
+	_rotationAxes = bRenderer::DEFAULT_CAMERA_ROTATION_AXES();
 }
 
 

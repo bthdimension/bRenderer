@@ -24,7 +24,7 @@ ShaderDataFile::ShaderDataFile(const std::string &vertShaderFileName, const std:
 
 ShaderDataFile &ShaderDataFile::load(const std::string &shaderFileName)
 {
-	return load(shaderFileName + bRenderer::DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION, shaderFileName + bRenderer::DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION);
+	return load(shaderFileName + bRenderer::DEFAULT_VERTEX_SHADER_FILENAME_EXTENSION(), shaderFileName + bRenderer::DEFAULT_FRAGMENT_SHADER_FILENAME_EXTENSION());
 }
 
 ShaderDataFile &ShaderDataFile::load(const std::string &vertShaderFileName, const std::string &fragShaderFileName)
@@ -34,12 +34,12 @@ ShaderDataFile &ShaderDataFile::load(const std::string &vertShaderFileName, cons
 
 	
 #ifdef OS_DESKTOP	
-	replaceMacro(bRenderer::SHADER_VERSION_MACRO, _shaderVersionDesktop);
+	replaceMacro(bRenderer::SHADER_VERSION_MACRO(), _shaderVersionDesktop);
 #endif
 #ifdef OS_IOS
-	replaceMacro(bRenderer::SHADER_VERSION_MACRO, _shaderVersionES);
+	replaceMacro(bRenderer::SHADER_VERSION_MACRO(), _shaderVersionES);
 #endif
-	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO, lexical_cast< std::string >(_maxLights));
+	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO(), lexical_cast< std::string >(_maxLights));
 
     return *this;
 }

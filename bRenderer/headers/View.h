@@ -2,7 +2,7 @@
 #define B_VIEW_H
 
 #include "OSdetect.h"
-
+#include <memory>
 #include "headers/Renderer_GL.h"
 #include "headers/Logger.h"
 
@@ -27,6 +27,7 @@ public:
 #endif
 #ifndef __OBJC__
     typedef int UIView;
+    typedef int BView;
 #endif
 
 	/* Functions */
@@ -127,7 +128,7 @@ public:
     
     /**	@brief Returns the UIView on iOS (only usable in Objective C)
      */
-    UIView* getUIView();
+    BView* getUIView();
     
     /**	@brief Attaches the underlying UIView to a UIView of your choosing
      *	@param[in] view The UIView to attach the view to
@@ -190,14 +191,16 @@ private:
     
 	/* Variables */
 
-	GLFWwindow *_window;
+	GLFWwindow  *_window;
+    BView       *_view;
 	std::string _windowTitle;
 
 	bool _initialized;
 	bool _fullscreen;
-    int _viewNo;
 
 };
+
+typedef std::shared_ptr< View >  ViewPtr;
 
 
 #endif /* defined(B_VIEW_H) */

@@ -18,7 +18,7 @@ public:
 	/* Typedefs */
 	typedef std::unordered_map<std::string, TexturePtr>     TextureMap;
 	typedef std::unordered_map<std::string, vmml::vec3f>    Vector3Map;
-	typedef std::unordered_map<std::string, float>          ScalarMap;
+	typedef std::unordered_map<std::string, GLfloat>          ScalarMap;
 
 	/* Functions */
     
@@ -58,7 +58,7 @@ public:
 	/**	@brief Returns a scalar associated with the material
 	*	@param[in] name Name of the scalar
 	*/
-    float           getScalar(const std::string &name)  { return _scalars[name];    }
+    GLfloat           getScalar(const std::string &name)  { return _scalars[name];    }
 
 	/**	@brief Sets all textures for the material
 	*	@param[in] arg Textures for the material
@@ -91,7 +91,7 @@ public:
 	*	@param[in] name Name of the scalar
 	*	@param[in] arg Scalar for the material
 	*/
-    void            setScalar(const std::string &name, float arg)               { _scalars[name] = arg;     }
+    void            setScalar(const std::string &name, GLfloat arg)               { _scalars[name] = arg;     }
     
 	/**	@brief Returns the shader of the material
 	*/

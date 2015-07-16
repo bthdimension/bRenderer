@@ -17,24 +17,24 @@ void Renderer::runRenderer()
 	_running = true;
 	bRenderer::log("Renderer started", bRenderer::LM_SYS);
 
-	_initialTime += (_view.getTime() - _initialTime) - _stopTime;
+	_initialTime += (_view->getTime() - _initialTime) - _stopTime;
 
 	// Loop until the user closes the window 
-	while (_running && _view.isRunning())
+	while (_running && _view->isRunning())
 	{
-		draw((_view.getTime() - _initialTime));
+		draw((_view->getTime() - _initialTime));
 
 		// Poll for and process events
 		glfwPollEvents();
 	}
 
-	if (!_view.isRunning())
+	if (!_view->isRunning())
 		terminateRenderer();
 }
 
 void Renderer::stopRenderer()
 {
-	_stopTime = (_view.getTime() - _initialTime);
+	_stopTime = (_view->getTime() - _initialTime);
 	_running = false;
 	bRenderer::log("Renderer stopped", bRenderer::LM_SYS);
 }
@@ -50,7 +50,7 @@ void Renderer::terminateRenderer()
 	if (_renderProject)
 		_renderProject->terminateFunction();
 
-	_view.terminateView();
+	_view->terminateView();
 
 	reset();
 
@@ -61,7 +61,7 @@ void Renderer::terminateRenderer()
 
 void Renderer::draw(double currentTime)
 {
-	_view.setContextCurrent();
+	_view->setContextCurrent();
 
 	// clear
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -77,7 +77,7 @@ void Renderer::draw(double currentTime)
 	_elapsedTime = currentTime;
 
 	// Swap front and back buffers 
-	_view.swapBuffers();
+	_view->swapBuffers();
 }
 
 #endif

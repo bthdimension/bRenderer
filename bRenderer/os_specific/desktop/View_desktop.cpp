@@ -11,11 +11,13 @@ using boost::lexical_cast;
 /* Constructor and destructor */
 View::View()
 {
-	_windowTitle = bRenderer::DEFAULT_WINDOW_TITLE;
+	_windowTitle = bRenderer::DEFAULT_WINDOW_TITLE();
 }
 
 View::~View()
-{}
+{
+
+}
 
 /* Public functions */
 
@@ -29,7 +31,7 @@ bool View::initView(bool fullscreen)
 	if (fullscreen)
 		return initView(getScreenWidth(), getScreenHeight(), fullscreen);
 	else
-		return initView(bRenderer::DEFAULT_VIEW_WIDTH, bRenderer::DEFAULT_VIEW_HEIGHT, fullscreen);
+		return initView(bRenderer::DEFAULT_VIEW_WIDTH(), bRenderer::DEFAULT_VIEW_HEIGHT(), fullscreen);
 }
 
 bool View::initView(GLint width, GLint height, bool fullscreen)
@@ -165,7 +167,7 @@ GLFWwindow* View::getWindow()
 	return _window;
 }
 
-View::UIView* View::getUIView()
+View::BView* View::getUIView()
 {
 	return 0;
 }

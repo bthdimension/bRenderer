@@ -38,9 +38,9 @@ public:
 		vmml::vec3f         tangent;
 		vmml::vec3f         bitangent;
 
-		float x()   { return position.x(); }
-		float y()   { return position.y(); }
-		float z()   { return position.z(); }
+		GLfloat x()   { return position.x(); }
+		GLfloat y()   { return position.y(); }
+		GLfloat z()   { return position.z(); }
 
 		VertexData(const vmml::vec3f &position)
 			: position(position)

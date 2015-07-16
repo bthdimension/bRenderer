@@ -4,6 +4,7 @@
 #import <UIKit/UIKit.h>
 
 #include "../../headers/Renderer_GL.h"
+#include "Touch.h"
 
 @class EAGLContext;
 
@@ -26,9 +27,15 @@
     
     // OpenGL context
     EAGLContext *_context;
+    
+    // Touch handling
+    bool _singleTapRecognized;
+    bool _doubleTapRecognized;
+    CGPoint _lastDoubleTapLocation;
+    CGPoint _lastSingleTapLocation;
+    TouchMap _touches;
+    
 }
-
-typedef BView* BViewRef;
 
 /* Control the renderer from within Objective-C code using these functions */
 -(void)runRenderer;
@@ -46,6 +53,12 @@ typedef BView* BViewRef;
 -(void)setViewWidth:(GLint)w setViewHeight : (GLint)h;
 -(void)setViewPositionX:(GLint)x setViewPositionY : (GLint)y;
 -(bool)setContextCurrent;
+
+-(TouchMap)getTouches;
+-(bool)singleTapRecognized;
+-(bool)doubleTapRecognized;
+-(Touch)getLastSingleTapLocation;
+-(Touch)getLastDoubleTapLocation;
 
 //-(void)setLink:(BViewLink)link;
 @end

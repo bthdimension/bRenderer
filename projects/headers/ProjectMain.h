@@ -44,13 +44,12 @@ public:
 private:
     
 	/* Helper Functions */
-	float randomNumber(float min, float max);
+	GLfloat randomNumber(GLfloat min, GLfloat max);
 
 	/* Variables */
-	float _randomTime;
-	float _cameraForward;
+	GLfloat _randomTime;
 	double _mouseX, _mouseY;
-	bool _running; int _lastStateSpaceKey;
+	bool _running; GLint _lastStateSpaceKey;
 };
 
 #endif /* defined(PROJECT_MAIN_H) */

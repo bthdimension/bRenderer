@@ -8,7 +8,7 @@ struct MaterialData
 {
     typedef std::unordered_map<std::string, std::string>    TextureMap;
 	typedef std::unordered_map<std::string, vmml::vec3f>    Vector3Map;
-	typedef std::unordered_map<std::string, float>          ScalarMap;
+	typedef std::unordered_map<std::string, GLfloat>          ScalarMap;
     
 	TextureMap	textures;
 	Vector3Map	vectors;

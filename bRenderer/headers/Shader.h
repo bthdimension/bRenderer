@@ -68,7 +68,7 @@ public:
 	*	@param[in] name Uniform name
 	*	@param[in] arg Floating-point number
 	*/
-    virtual void setUniform(const std::string &name, float arg);
+    virtual void setUniform(const std::string &name, GLfloat arg);
     
 	/**	@brief Pass a texture to the shader
 	*	@param[in] name Uniform name

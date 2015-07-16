@@ -14,9 +14,14 @@ Renderer::Renderer()
 
 /* Public functions */
 
-View *Renderer::getView()
+ViewPtr Renderer::getView()
 {
-	return &_view;
+	return _view;
+}
+
+InputPtr Renderer::getInput()
+{
+	return _input;
 }
 
 bool Renderer::isInitialized()
@@ -65,7 +70,8 @@ bool Renderer::initRenderer()
         return true;
     
     // initialize view
-    if (!_view.initView())
+    if(!_view)  _view = ViewPtr(new View);
+    if (!_view->initView())
         return false;
     
 	// OpenGL
@@ -80,6 +86,10 @@ bool Renderer::initRenderer()
 	// for Alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Input
+    if(!_input)  _input = InputPtr(new Input);
+    _input->setView(_view);
 
     // call static function if set
     if (_initFunction)
@@ -100,7 +110,8 @@ bool Renderer::initRenderer(bool fullscreen)
         return true;
     
     // initialize view
-    if (!_view.initView(fullscreen))
+    if(!_view)  _view = ViewPtr(new View);
+    if (!_view->initView(fullscreen))
         return false;
     
     return initRenderer();
@@ -112,7 +123,8 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen)
         return true;
     
     // initialize view
-    if (!_view.initView(width, height, fullscreen))
+    if(!_view)  _view = ViewPtr(new View);
+    if (!_view->initView(width, height, fullscreen))
         return false;
     
     return initRenderer();
@@ -256,10 +268,10 @@ MaterialPtr Renderer::createMaterialShaderCombination(const std::string &name, c
 	ShaderPtr shader;
 	
 	if (shaderFromFile){
-		bool diffuseColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR) > 0;
-		bool diffuseMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP) > 0;
+		bool diffuseColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR()) > 0;
+		bool diffuseMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()) > 0;
 		bool diffuseLighting = diffuseMap || diffuseColor;
-		bool specularLighting = shaderMaxLights > 0 && materialData.scalars.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT) > 0;
+		bool specularLighting = shaderMaxLights > 0 && materialData.scalars.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT()) > 0;
 		shader = loadShaderFile(name, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting);
 	}
 	else{
@@ -338,11 +350,11 @@ ShaderPtr Renderer::createShader(const std::string &name, const IShaderData &sha
 
 		bRenderer::log("Created shader '" + name + "'.", bRenderer::LM_INFO);
 		shader = ShaderPtr(new Shader(shaderData));
-		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_POSITION, 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, position));
-		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_NORMAL, 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, normal));
-		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_TANGENT, 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, tangent));
-		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_BITANGENT, 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, bitangent));
-		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_TEXCOORD, 2, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, texCoord));
+		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_POSITION(), 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, position));
+		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_NORMAL(), 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, normal));
+		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_TANGENT(), 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, tangent));
+		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_BITANGENT(), 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, bitangent));
+		shader->registerAttrib(bRenderer::DEFAULT_SHADER_ATTRIBUTE_TEXCOORD(), 2, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, texCoord));
 		return shader;
 	}
 
@@ -421,6 +433,15 @@ LightPtr Renderer::createLight(const std::string &name, const vmml::vec3f &posit
 	return light;
 }
 
+LightPtr Renderer::createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &diffuseColor, const vmml::vec3f &specularColor, GLfloat intensity, GLfloat attenuation)
+{
+	if (getLight(name)) return getLight(name);
+	LightPtr &light = _lights[name];
+
+	light = LightPtr(new Light(position, diffuseColor, specularColor, intensity, attenuation));
+	return light;
+}
+
 FramebufferPtr Renderer::createFramebuffer(const std::string &name)
 {
 	if (getFramebuffer(name)) return getFramebuffer(name);
@@ -451,8 +472,8 @@ void Renderer::drawModel(const std::string &modelName, const vmml::mat4f &modelM
 		ShaderPtr shader = geometry.getMaterial()->getShader();
 		if (shader)
 		{
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX, projectionMatrix);
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX, viewMatrix*modelMatrix);
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX(), projectionMatrix);
+			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX(), viewMatrix*modelMatrix);
 
 			// Lighting
 			if (shader->supportsDiffuseLighting() || shader->supportsSpecularLighting()){
@@ -463,18 +484,21 @@ void Renderer::drawModel(const std::string &modelName, const vmml::mat4f &modelM
 					numLights = maxLights;
 
 				if (variableNumberOfLights)
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS, numLights);
+					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
 				for (int i = 0; i < numLights; i++){
 					std::string pos = lexical_cast<std::string>(i);
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE + pos, (viewMatrix*getLight(lightNames[i])->getPosition()));
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_COLOR + pos, getLight(lightNames[i])->getColor());
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY + pos, getLight(lightNames[i])->getIntensity());
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION + pos, getLight(lightNames[i])->getAttenuation());
+					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*getLight(lightNames[i])->getPosition()));
+					if (shader->supportsDiffuseLighting())
+						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, getLight(lightNames[i])->getDiffuseColor());
+					if (shader->supportsSpecularLighting())
+						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, getLight(lightNames[i])->getSpecularColor());
+					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, getLight(lightNames[i])->getIntensity());
+					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, getLight(lightNames[i])->getAttenuation());
 				}
 			}
 			// ambient
 			if (shader->supportsAmbientLighting())
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR, getAmbientColor());
+				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), getAmbientColor());
 		}
 		else
 		{
@@ -598,9 +622,9 @@ void Renderer::reset()
 	_stopTime = 0;
 	_initialTime = 0;
 	_elapsedTime = 0;
-	_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR;
-	_shaderVersionDesktop = bRenderer::DEFAULT_SHADER_VERSION_DESKTOP;
-	_shaderVersionES = bRenderer::DEFAULT_SHADER_VERSION_ES;
+	_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR();
+	_shaderVersionDesktop = bRenderer::DEFAULT_SHADER_VERSION_DESKTOP();
+	_shaderVersionES = bRenderer::DEFAULT_SHADER_VERSION_ES();
 
 	_shaders.clear();
 	_textures.clear();

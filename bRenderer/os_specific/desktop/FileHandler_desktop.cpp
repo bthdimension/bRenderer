@@ -11,7 +11,7 @@ namespace bRenderer
 {
 	/* Internal variables */
 	
-	std::string standardFilePath = bRenderer::DEFAULT_FILE_PATH;
+	std::string standardFilePath = bRenderer::DEFAULT_FILE_PATH();
 
 	/* External functions */
 

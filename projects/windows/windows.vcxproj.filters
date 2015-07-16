@@ -117,6 +117,15 @@
     <ClCompile Include="..\..\bRenderer\implementation\TextureData.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\os_specific\desktop\Input_desktop.cpp">
+      <Filter>bRenderer\os_specific\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Configuration.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderSource.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\ProjectMain.h">
@@ -218,6 +227,12 @@
     <ClInclude Include="..\..\bRenderer\headers\Framebuffer.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Input.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Touch.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
@@ -273,6 +288,9 @@
     </None>
     <None Include="..\data\quad.mtl">
       <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\Input_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

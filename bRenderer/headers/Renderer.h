@@ -6,6 +6,7 @@
 #include "Renderer_GL.h"
 #include "Logger.h"
 #include "View.h"
+#include "Input.h"
 #include "Camera.h"
 #include "MatrixStack.h"
 #include "Light.h"
@@ -59,7 +60,11 @@ public:
 	*	on desktop systems a window is created and managed. On iOS a UIView is created instead.
 	*
 	*/
-	View *getView();
+	ViewPtr getView();
+
+	/**	@brief Returns a pointer to the input handler of the renderer
+	*/
+	InputPtr getInput();
 
 	/**	@brief Returns true if the renderer has already been initialized
 	*/
@@ -160,7 +165,7 @@ public:
 	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting (optional)
 	*	@param[in] specularLighting Set true if the shader supports specular lighting (optional)
 	*/
-	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
+	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
 
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
@@ -182,7 +187,7 @@ public:
 	*	This function will automatically create one shader for every material of the model
 	*
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
+	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
@@ -219,7 +224,7 @@ public:
 	*	the default shader will be used.
 	*
 	*/
-	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
+	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
@@ -261,7 +266,7 @@ public:
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*/
-	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true);
+	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true);
 
 	/**	@brief Create properties
 	*	@param[in] name Name of the properties
@@ -277,7 +282,7 @@ public:
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS, bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
@@ -361,18 +366,28 @@ public:
 	/**	@brief Create a light
 	*	@param[in] name Name of the light
 	*	@param[in] position Position of the light
-	*	@param[in] color Color of the light
+	*	@param[in] color Color of the light for both diffuse and specular lighting
 	*/
 	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color);
 
 	/**	@brief Create a light
 	*	@param[in] name Name of the light
 	*	@param[in] position Position of the light
-	*	@param[in] color Color of the light
+	*	@param[in] color Color of the light for both diffuse and specular lighting
 	*	@param[in] intensity Intensity of the light
 	*	@param[in] attenuation Attenuation of the light
 	*/
 	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation);
+
+	/**	@brief Create a light
+	*	@param[in] name Name of the light
+	*	@param[in] position Position of the light
+	*	@param[in] diffuseColor Color of the light for diffuse lighting
+	*	@param[in] specularColor Color of the light for specular lighting
+	*	@param[in] intensity Intensity of the light
+	*	@param[in] attenuation Attenuation of the light
+	*/
+	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &diffuseColor, const vmml::vec3f &specularColor, GLfloat intensity, GLfloat attenuation);
 
 	/**	@brief Create a framebuffer
 	*	@param[in] name Name of the framebuffer
@@ -515,7 +530,8 @@ private:
 
 	double _elapsedTime, _stopTime, _initialTime;
 
-	View _view;
+	ViewPtr _view;
+	InputPtr _input;
 
 	IRenderProject *_renderProject;
 	

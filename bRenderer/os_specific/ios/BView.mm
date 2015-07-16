@@ -87,6 +87,12 @@ public:
     _initialTime = -1.0;
     _wasStopped = false;
     
+    // handle touches and taps
+    _doubleTapRecognized = false;
+    _singleTapRecognized = false;
+    [self setUserInteractionEnabled:YES];
+    [self setMultipleTouchEnabled:YES];
+    
     // create buffers
     [self createFramebuffer];
 
@@ -294,6 +300,113 @@ public:
 - (void)layoutSubviews
 {
     [self deleteFramebuffer];
+}
+
+/* Receive touch events: Touch began */
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    // Reset all taps
+    _doubleTapRecognized = false;
+    _singleTapRecognized = false;
+    
+//    bRenderer::log("Touch began");
+    
+    for (UITouch *touch in touches) {
+        
+        // get touch position at the beginning of the gesture
+        CGPoint beginTouchPosition = [touch locationInView:self];
+        
+        // add touch
+        _touches[(int)touch] = {beginTouchPosition.x, beginTouchPosition.y, beginTouchPosition.x, beginTouchPosition.y, beginTouchPosition.x, beginTouchPosition.y};
+    }
+}
+/* Receive touch events: Touch moved */
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+//    bRenderer::log("Touch moved");
+    
+    for (UITouch *touch in touches) {
+        
+        // get current touch position
+        CGPoint currentTouchPosition = [touch locationInView:self];
+        
+        // update touch
+        _touches[(int)touch].lastPositionX = _touches[(int)touch].currentPositionX;
+        _touches[(int)touch].lastPositionY = _touches[(int)touch].currentPositionY;
+        _touches[(int)touch].currentPositionX = currentTouchPosition.x;
+        _touches[(int)touch].currentPositionY = currentTouchPosition.y;
+    }
+}
+/* Receive touch events: Touch ended */
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+//    bRenderer::log("Touch ended");
+    
+    for (UITouch *touch in touches) {
+        
+        // remove touch
+        _touches.erase((int)touch);
+        
+        if (touch.tapCount >= 2) {
+            // double Tap
+            _lastDoubleTapLocation = [touch locationInView:self];
+            _doubleTapRecognized = true;
+            bRenderer::log("Double Tap");
+        }
+        else {
+            // single Tap
+            _lastSingleTapLocation = [touch locationInView:self];
+            _singleTapRecognized = true;
+            bRenderer::log("Single Tap");
+        }
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesCancelled:touches withEvent:event];
+    bRenderer::log("Touch cancelled");
+    
+    for (UITouch *touch in touches) {
+        
+        // remove touch
+        _touches.erase((int)touch);
+    }
+    
+}
+
+- (TouchMap)getTouches
+{
+    return _touches;
+}
+
+- (bool)singleTapRecognized
+{
+    bool x = _singleTapRecognized;
+    // reset single tap
+    _singleTapRecognized = false;
+    return x;
+}
+
+- (bool)doubleTapRecognized
+{
+    bool x = _doubleTapRecognized;
+    // reset double tap
+    _doubleTapRecognized = false;
+    return x;
+}
+
+- (Touch)getLastSingleTapLocation
+{
+    return {_lastSingleTapLocation.x, _lastSingleTapLocation.y, _lastSingleTapLocation.x, _lastSingleTapLocation.y, _lastSingleTapLocation.x, _lastSingleTapLocation.y};
+}
+
+- (Touch)getLastDoubleTapLocation
+{
+    return {_lastDoubleTapLocation.x, _lastDoubleTapLocation.y, _lastDoubleTapLocation.x, _lastDoubleTapLocation.y, _lastSingleTapLocation.x, _lastSingleTapLocation.y};
 }
 
 - (void)dealloc

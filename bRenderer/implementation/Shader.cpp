@@ -111,7 +111,7 @@ void Shader::setUniform(const std::string &name, const vmml::mat3f &arg)
     }
 }
 
-void Shader::setUniform(const std::string &name, float arg)
+void Shader::setUniform(const std::string &name, GLfloat arg)
 {
     glUseProgram(_programID);
     

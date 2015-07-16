@@ -1,8 +1,5 @@
-#import "BView.h"
 #include "../../headers/View.h"
 #include <vector>
-
-static std::vector<BView *> _views;
 
 /* Constructor and destructor */
 View::View()
@@ -12,7 +9,7 @@ View::View()
 
 View::~View()
 {
-    
+    _view = nil;
 }
 
 /* Public functions */
@@ -25,11 +22,7 @@ bool View::initView()
     bRenderer::log("Initializing view", bRenderer::LM_SYS);
     
     CGRect frame = [[UIScreen mainScreen] applicationFrame];
-    BView * view = [[BView alloc] initWithFrame:frame];
-    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:view];
-    
-    _views.push_back(view);
-    _viewNo = _views.size()-1;
+    _view = [[BView alloc] initWithFrame:frame];
     
     _fullscreen = true;
     
@@ -60,7 +53,7 @@ bool View::initView(GLint width, GLint height, bool fullscreen)
         bRenderer::log("Can't set width and height when using fullscreen on iOS.", bRenderer::LM_WARNING);
     }
     else{
-        [_views.at(_viewNo) setViewWidth:width setViewHeight:height];
+        [_view setViewWidth:width setViewHeight:height];
         _fullscreen = false;
     }
     
@@ -71,9 +64,8 @@ void View::terminateView()
 {
 	setRunning(false);
 
-    [_views.at(_viewNo) removeFromSuperview];
-    _views.at(_viewNo) = nil;
-    _views.erase(_views.begin() + _viewNo);
+    [_view removeFromSuperview];
+    _view = nil;
 
 	_initialized = false;
 }
@@ -85,7 +77,7 @@ bool View::isInitialized()
 
 bool View::isRunning()
 {
-    return [_views.at(_viewNo) isRunning];
+    return [_view isRunning];
 }
 
 bool View::isFullscreen()
@@ -95,12 +87,12 @@ bool View::isFullscreen()
 
 GLint View::getWidth()
 {
-    return [_views.at(_viewNo) getViewWidth];
+    return [_view getViewWidth];
 }
 
 GLint View::getHeight()
 {
-    return [_views.at(_viewNo) getViewHeight];
+    return [_view getViewHeight];
 }
 
 void View::getSize(GLint* width, GLint* height)
@@ -132,12 +124,12 @@ GLfloat View::getAspectRatio()
 
 GLint View::getPositionX()
 {
-    return [_views.at(_viewNo) getViewPositionX];
+    return [_view getViewPositionX];
 }
 
 GLint View::getPositionY()
 {
-    return [_views.at(_viewNo) getViewPositionY];
+    return [_view getViewPositionY];
 }
 
 void View::getPosition(GLint* x, GLint* y)
@@ -151,37 +143,37 @@ View::GLFWwindow* View::getWindow()
     return 0;
 }
 
-UIView* View::getUIView()
+BView* View::getUIView()
 {
-    return _views.at(_viewNo);
+    return _view;
 }
 
 void View::attachToUIView(UIView* view)
 {
-    [_views.at(_viewNo) removeFromSuperview];
-    [view addSubview:_views.at(_viewNo)];
+    [_view removeFromSuperview];
+    [view addSubview:_view];
     
     if(_fullscreen)
-        [_views.at(_viewNo) setFullscreen];
+        [_view setFullscreen];
 }
 
 double View::getTime()
 {
-    return [_views.at(_viewNo) getTime];
+    return [_view getTime];
 }
 
 void View::setRunning(bool running)
 {
     if(running)
-        [_views.at(_viewNo) runRenderer];
+        [_view runRenderer];
     else
-        [_views.at(_viewNo) stopRenderer];
+        [_view stopRenderer];
 }
 
 void View::setFullscreen(bool fullscreen)
 {
     if(fullscreen){
-        [_views.at(_viewNo) setFullscreen];
+        [_view setFullscreen];
         _fullscreen = true;
     }
     else
@@ -191,30 +183,30 @@ void View::setFullscreen(bool fullscreen)
 
 void View::setWidth(GLint width)
 {
-    [_views.at(_viewNo) setViewWidth:width setViewHeight:getHeight()];
+    [_view setViewWidth:width setViewHeight:getHeight()];
     _fullscreen = false;
 }
 
 void View::setHeight(GLint height)
 {
-    [_views.at(_viewNo) setViewWidth:getWidth() setViewHeight:height];
+    [_view setViewWidth:getWidth() setViewHeight:height];
     _fullscreen = false;
 }
 
 void View::setSize(GLint width, GLint height)
 {
-    [_views.at(_viewNo) setViewWidth:width setViewHeight:height];
+    [_view setViewWidth:width setViewHeight:height];
     _fullscreen = false;
 }
 
 void View::setPosition(GLint x, GLint y)
 {
-    [_views.at(_viewNo) setViewPositionX:x setViewPositionY:y];
+    [_view setViewPositionX:x setViewPositionY:y];
 }
 
 void View::setContextCurrent()
 {
-	[_views.at(_viewNo) setContextCurrent];
+	[_view setContextCurrent];
 }
 
 void View::swapBuffers()

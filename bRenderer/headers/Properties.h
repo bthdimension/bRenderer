@@ -18,7 +18,7 @@ public:
 	typedef std::unordered_map<std::string, vmml::mat3f>    Matrix3x3Map;
 	typedef std::unordered_map<std::string, vmml::vec4f>    Vector4Map;
 	typedef std::unordered_map<std::string, vmml::vec3f>    Vector3Map;
-	typedef std::unordered_map<std::string, float>          ScalarMap;
+	typedef std::unordered_map<std::string, GLfloat>          ScalarMap;
 
 	/* Functions */
 
@@ -65,7 +65,7 @@ public:
 	/**	@brief Returns a scalar 
 	*	@param[in] name Name of the scalar
 	*/
-	float				getScalar(const std::string &name)								{ return _scalars[name]; }
+	GLfloat				getScalar(const std::string &name)								{ return _scalars[name]; }
 
 	/**	@brief Sets all 4x4 matrices
 	*	@param[in] arg 4x4 matrices
@@ -120,7 +120,7 @@ public:
 	*	@param[in] name Name of the scalar
 	*	@param[in] arg Scalar
 	*/
-	void				setScalar(const std::string &name, float arg)					{ _scalars[name] = arg; }
+	void				setScalar(const std::string &name, GLfloat arg)					{ _scalars[name] = arg; }
 
 	/**	@brief Pass properties to specified shader
 	*	@param[in] shader The shader the properties are passed to
