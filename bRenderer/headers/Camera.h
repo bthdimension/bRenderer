@@ -6,7 +6,7 @@
 #include "Renderer_GL.h"
 #include "vmmlib/vector.hpp"
 #include "vmmlib/matrix.hpp"
-#include "vmmlib/addendum.hpp"
+#include "vmmlib/util.hpp"
 
 /** @brief A camera that defines the view and projection matrix in a scene
 *	@author Benjamin Bürgisser

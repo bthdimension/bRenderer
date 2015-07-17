@@ -13,6 +13,6 @@
 #include "headers/Camera.h"
 
 /* vmmlib includes */
-#include "vmmlib/addendum.hpp"
+#include "vmmlib/util.hpp"
 
 #endif /* defined(B_BRENDERER_H) */

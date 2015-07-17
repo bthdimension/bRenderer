@@ -22,7 +22,7 @@
 #include "IShaderData.h"
 
 /* vmmlib includes */
-#include "vmmlib/addendum.hpp"
+#include "vmmlib/util.hpp"
 
 class IRenderProject;
 

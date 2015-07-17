@@ -3,7 +3,6 @@
 
 #include "GeometryData.h"
 
-
 /** @brief The underlying data of a model
 *	@author David Steiner
 */

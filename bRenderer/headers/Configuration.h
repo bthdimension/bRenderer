@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Renderer_GL.h"
-#include "vmmlib/addendum.hpp"
+#include "vmmlib/vector.hpp"
 
 namespace bRenderer
 {

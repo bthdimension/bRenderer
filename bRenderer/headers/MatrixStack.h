@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <iostream>
-#include "vmmlib/addendum.hpp"
+#include "vmmlib/util.hpp"
 #include "vmmlib/vector.hpp"
 
 
