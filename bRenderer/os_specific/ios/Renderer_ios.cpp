@@ -39,8 +39,6 @@ void Renderer::terminateRenderer()
 	reset();
     
     bRenderer::log("Renderer terminated", bRenderer::LM_SYS);
-    
-    //        exit(0);
 }
 
 /* Private functions */

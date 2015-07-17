@@ -3,38 +3,33 @@
 #ifdef OS_DESKTOP
 
 #include "../../headers/View.h"
-#include "../../headers/Configuration.h"
 #include <boost/lexical_cast.hpp>
 using boost::lexical_cast;
 
 
 /* Constructor and destructor */
 View::View()
-{
-	_windowTitle = bRenderer::DEFAULT_WINDOW_TITLE();
-}
+{}
 
 View::~View()
-{
-
-}
+{}
 
 /* Public functions */
 
-bool View::initView()
+bool View::initView(std::string windowTitle)
 {
-	return initView(_fullscreen);
+	return initView(_fullscreen, windowTitle);
 }
 
-bool View::initView(bool fullscreen)
+bool View::initView(bool fullscreen, std::string windowTitle)
 {
 	if (fullscreen)
-		return initView(getScreenWidth(), getScreenHeight(), fullscreen);
+		return initView(getScreenWidth(), getScreenHeight(), fullscreen, windowTitle);
 	else
-		return initView(bRenderer::DEFAULT_VIEW_WIDTH(), bRenderer::DEFAULT_VIEW_HEIGHT(), fullscreen);
+		return initView(bRenderer::DEFAULT_VIEW_WIDTH(), bRenderer::DEFAULT_VIEW_HEIGHT(), fullscreen, windowTitle);
 }
 
-bool View::initView(GLint width, GLint height, bool fullscreen)
+bool View::initView(GLint width, GLint height, bool fullscreen, std::string windowTitle)
 {
 	if (_initialized)
 		return true;
@@ -46,7 +41,7 @@ bool View::initView(GLint width, GLint height, bool fullscreen)
 		return false;
 
 	// Create a windowed mode window and its OpenGL context 
-	_window = glfwCreateWindow(width, height, _windowTitle.c_str(), fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+	_window = glfwCreateWindow(width, height, windowTitle.c_str(), fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
 	_fullscreen = fullscreen;
 
 	if (!_window)

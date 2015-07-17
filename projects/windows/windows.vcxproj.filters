@@ -126,6 +126,9 @@
     <ClCompile Include="..\..\bRenderer\implementation\ShaderSource.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\AssetManagement.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\ProjectMain.h">
@@ -231,6 +234,9 @@
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Touch.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\AssetManagement.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>

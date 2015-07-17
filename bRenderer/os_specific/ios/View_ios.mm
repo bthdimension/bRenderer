@@ -3,9 +3,7 @@
 
 /* Constructor and destructor */
 View::View()
-{
-	
-}
+{}
 
 View::~View()
 {
@@ -14,7 +12,7 @@ View::~View()
 
 /* Public functions */
 
-bool View::initView()
+bool View::initView(std::string windowTitle)
 {
     if (_initialized)
         return true;
@@ -31,7 +29,7 @@ bool View::initView()
     return true;
 }
 
-bool View::initView(bool fullscreen)
+bool View::initView(bool fullscreen, std::string windowTitle)
 {
     if (_initialized)
         return true;
@@ -39,15 +37,15 @@ bool View::initView(bool fullscreen)
     if (!fullscreen)
         bRenderer::log("Can't set fullscreen to flase without setting width and height on iOS.", bRenderer::LM_WARNING);
     
-    return initView();
+    return initView(windowTitle);
 }
 
-bool View::initView(GLint width, GLint height, bool fullscreen)
+bool View::initView(GLint width, GLint height, bool fullscreen, std::string windowTitle)
 {
     if (_initialized)
         return true;
     
-    initView();
+    initView(windowTitle);
    
     if (fullscreen){
         bRenderer::log("Can't set width and height when using fullscreen on iOS.", bRenderer::LM_WARNING);

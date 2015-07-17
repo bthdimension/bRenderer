@@ -71,6 +71,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\bRenderer\implementation\AssetManagement.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Configuration.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp" />
@@ -102,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
+    <ClInclude Include="..\..\bRenderer\headers\AssetManagement.h" />
     <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
     <ClInclude Include="..\..\bRenderer\headers\Configuration.h" />
     <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />

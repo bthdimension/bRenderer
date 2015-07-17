@@ -3,8 +3,9 @@
 
 #include "OSdetect.h"
 #include <memory>
-#include "headers/Renderer_GL.h"
-#include "headers/Logger.h"
+#include "Renderer_GL.h"
+#include "Logger.h"
+#include "Configuration.h"
 
 #ifdef __OBJC__
 #import "../os_specific/ios/BView.h"
@@ -41,20 +42,23 @@ public:
 	~View();
 
 	/**	@brief Do all necessary initializations for the view to be ready to run
+	*	@param[in] windowTitle The title for the window on desktop systems (optional)
 	*/
-	bool initView();
+	bool initView(std::string windowTitle = bRenderer::DEFAULT_WINDOW_TITLE());
 
 	/**	@brief Do all necessary initializations for the view to be ready to run
 	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode
+	*	@param[in] windowTitle The title for the window on desktop systems (optional)
 	*/
-	bool initView(bool fullscreen);
+	bool initView(bool fullscreen, std::string windowTitle = bRenderer::DEFAULT_WINDOW_TITLE());
 
 	/**	@brief Do all necessary initializations for the view to be ready to run
 	*	@param[in] width The width of the view in pixels
 	*	@param[in] height The height of the view in pixels
-	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode
+	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode (optional)
+	*	@param[in] windowTitle The title for the window on desktop systems (optional)
 	*/
-	bool initView(GLint width, GLint height, bool fullscreen = false);
+	bool initView(GLint width, GLint height, bool fullscreen = false, std::string windowTitle = bRenderer::DEFAULT_WINDOW_TITLE());
 
 	/**	@brief Terminate the view
 	*/
@@ -88,17 +92,17 @@ public:
 
 	/**	@brief Returns the width of the screen in pixels
 	*/
-	GLint getScreenWidth();
+	static GLint getScreenWidth();
 
 	/**	@brief Returns the height of the screen in pixels
 	*/
-	GLint getScreenHeight();
+	static GLint getScreenHeight();
 
 	/**	@brief Gets the size of the screen in pixels
 	*	@param[out] width The width of the screen
 	*	@param[out] height The height of the screen
 	*/
-	void getScreenSize(GLint* width, GLint* height);
+	static void getScreenSize(GLint* width, GLint* height);
 
 	/**	@brief Returns the aspect ratio of the view
 	*/
@@ -193,7 +197,6 @@ private:
 
 	GLFWwindow  *_window;
     BView       *_view;
-	std::string _windowTitle;
 
 	bool _initialized;
 	bool _fullscreen;

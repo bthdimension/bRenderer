@@ -8,25 +8,22 @@ void ProjectMain::init()
 	// set this instance of RenderProject to be used for function calls
 	bRenderer().setRenderProject(this);
 
-	// set shader versions (optional)
-	bRenderer().setShaderVersionDesktop("#version 120");
-	bRenderer().setShaderVersionES("#version 100");
-
 	int w, h;
-	bRenderer().getView()->getScreenSize(&w, &h);
+	View::getScreenSize(&w, &h);
 	bRenderer::log("Screen width: "+lexical_cast< std::string >(w)+", Screen height: "+lexical_cast< std::string >(h));
 
 	// let the renderer create an OpenGL context and the main window
 #ifdef OS_DESKTOP
-	bRenderer().initRenderer(1920, 1080, false);
+	bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");
 	//bRenderer().initRenderer(w, h, true);	// Fullscreen using full width and height of the screen
 #endif
 #ifdef OS_IOS
     bRenderer().initRenderer(true);
 #endif
-    // Test second view
-    //View v;
-    //v.initView(200, 200, false);
+
+	// set shader versions (optional)
+	bRenderer().getAssets()->setShaderVersionDesktop("#version 120");
+	bRenderer().getAssets()->setShaderVersionES("#version 100");
 
 	// start main loop 
 	bRenderer().runRenderer();
@@ -38,46 +35,46 @@ void ProjectMain::initFunction()
 	bRenderer::log("my initialize function was started");
 
 	// TEST: load material and shader before loading the model
-	ShaderPtr customShader = bRenderer().generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false);		// create custom shader with a maximum of 2 lights
-	ShaderPtr flameShader = bRenderer().loadShaderFile("flame", 0, false, true, true, false);												// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-	MaterialPtr flameMaterial = bRenderer().loadMaterial("flame.mtl", "flame", flameShader);												// load material from file using the shader created above
+	ShaderPtr customShader = bRenderer().getAssets()->generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false);		// create custom shader with a maximum of 2 lights
+	ShaderPtr flameShader = bRenderer().getAssets()->loadShaderFile("flame", 0, false, true, true, false);												// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+	MaterialPtr flameMaterial = bRenderer().getAssets()->loadMaterial("flame.mtl", "flame", flameShader);												// load material from file using the shader created above
 
-	PropertiesPtr flameProperties = bRenderer().createProperties("flameProperties");	// Add additional properties to a model
+	PropertiesPtr flameProperties = bRenderer().getAssets()->createProperties("flameProperties");	// Add additional properties to a model
 
 	// load models
-	bRenderer().loadModel("cave_start.obj", true, true, false, 4, true, true);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().loadModel("sphere.obj", true, true, false, 4, true, true);				// create custom shader with a maximum of 4 lights 
-	bRenderer().loadModel("crystal.obj", false, true, customShader);					// the custom shader created above is used
-	bRenderer().loadModel("torch.obj", false, true, false, 1, false, true);				// create custom shader with a maximum of 1 light
-	bRenderer().loadModel("flame.obj", false, true, flameMaterial, flameProperties);	// the flame material created above is used, to pass additional properties a Properties object is used
-	bRenderer().loadModel("sparks.obj", false, true, true, 0, false, true);				// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
-	bRenderer().loadModel("bTitle.obj", false, true, false, 0, false, false);			// create custom shader with 0 lights -> the title will always be fully lit
+	bRenderer().getAssets()->loadModel("cave_start.obj", true, true, false, 4, true, true);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getAssets()->loadModel("sphere.obj", true, true, false, 4, true, true);				// create custom shader with a maximum of 4 lights 
+	bRenderer().getAssets()->loadModel("crystal.obj", false, true, customShader);					// the custom shader created above is used
+	bRenderer().getAssets()->loadModel("torch.obj", false, true, false, 1, false, true);				// create custom shader with a maximum of 1 light
+	bRenderer().getAssets()->loadModel("flame.obj", false, true, flameMaterial, flameProperties);	// the flame material created above is used, to pass additional properties a Properties object is used
+	bRenderer().getAssets()->loadModel("sparks.obj", false, true, true, 0, false, true);				// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
+	bRenderer().getAssets()->loadModel("bTitle.obj", false, true, false, 0, false, false);			// create custom shader with 0 lights -> the title will always be fully lit
 
 	// initialize variables
 	_randomTime = 0.0f;
 	_running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 
 	// initialize free moving camera
-	bRenderer().createCamera("camera", vmml::vec3f(-33.0, 0.0, -13.0), vmml::vec3f(0.0, -M_PI_F/2, 0.0));
+	bRenderer().getAssets()->createCamera("camera", vmml::vec3f(-33.0, 0.0, -13.0), vmml::vec3f(0.0, -M_PI_F / 2, 0.0));
 
 	// get shading language version
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	// create lights
-	bRenderer().createLight("firstLight", vmml::vec3f(80.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 0.5f, 1.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.3f);
-	bRenderer().createLight("secondLight", vmml::vec3f(150.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 1.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
-	bRenderer().createLight("thirdLight", vmml::vec3f(210.0f, 0.0f, 0.0f), vmml::vec3f(0.8f, 0.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
-	bRenderer().createLight("torchLight", -bRenderer().getCamera("camera")->getPosition(), vmml::vec3f(1.0f, 0.4f, -0.5f), vmml::vec3f(1.0f, 1.0f, 1.0f), 1200.0f, 0.7f);
+	bRenderer().getAssets()->createLight("firstLight", vmml::vec3f(80.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 0.5f, 1.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.3f);
+	bRenderer().getAssets()->createLight("secondLight", vmml::vec3f(150.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 1.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
+	bRenderer().getAssets()->createLight("thirdLight", vmml::vec3f(210.0f, 0.0f, 0.0f), vmml::vec3f(0.8f, 0.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
+	bRenderer().getAssets()->createLight("torchLight", -bRenderer().getAssets()->getCamera("camera")->getPosition(), vmml::vec3f(1.0f, 0.4f, -0.5f), vmml::vec3f(1.0f, 1.0f, 1.0f), 1200.0f, 0.7f);
 
 	// postprocessing
-	bRenderer().createFramebuffer("fbo");
-	bRenderer().createTexture("fbo_texture1", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
-	bRenderer().createTexture("fbo_texture2", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
-	ShaderPtr blurShader = bRenderer().loadShaderFile("blurShader", 0, false, false, false, false);
-	bRenderer().loadModel("quad.obj", false, true, blurShader);
+	bRenderer().getAssets()->createFramebuffer("fbo");
+	bRenderer().getAssets()->createTexture("fbo_texture1", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
+	bRenderer().getAssets()->createTexture("fbo_texture2", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
+	ShaderPtr blurShader = bRenderer().getAssets()->loadShaderFile("blurShader", 0, false, false, false, false);
+	bRenderer().getAssets()->loadModel("quad.obj", false, true, blurShader);
 
 	// set ambient color
-	bRenderer().setAmbientColor(vmml::vec3f(0.0f, 0.0f, 0.05f));
+	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.0f, 0.0f, 0.05f));
 }
 
 /* Draw your scene here */
@@ -96,7 +93,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	moveCamera(deltaTime);
 
 	//// Adjust aspect ratio ////
-	bRenderer().getCamera("camera")->setAspectRatio(bRenderer().getView()->getAspectRatio());
+	bRenderer().getAssets()->getCamera("camera")->setAspectRatio(bRenderer().getView()->getAspectRatio());
 
 	//// Torch Light ////
 	if (_running){
@@ -104,12 +101,12 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			_randomTime += deltaTime + randomNumber(0.0f, 0.12f);
 		}
 		GLfloat flickeringLight = 1.0f + (_randomTime)* 2.0f * M_PI_F*(0.032f);
-		GLfloat flickeringLightPosX = -bRenderer().getCamera("camera")->getPosition().x();
-		GLfloat flickeringLightPosY = -bRenderer().getCamera("camera")->getPosition().y();
-		GLfloat flickeringLightPosZ = -bRenderer().getCamera("camera")->getPosition().z();
+		GLfloat flickeringLightPosX = -bRenderer().getAssets()->getCamera("camera")->getPosition().x();
+		GLfloat flickeringLightPosY = -bRenderer().getAssets()->getCamera("camera")->getPosition().y();
+		GLfloat flickeringLightPosZ = -bRenderer().getAssets()->getCamera("camera")->getPosition().z();
 		flickeringLightPosX += 2.5f*sin(flickeringLightPosY * 4.0f + 3.0f*flickeringLight);
 		flickeringLightPosY += 2.5f*sin(flickeringLightPosX * 4.0f + 3.0f*flickeringLight);
-		bRenderer().getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getCamera("camera")->getForward()*10.0f);
+		bRenderer().getAssets()->getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getAssets()->getCamera("camera")->getForward()*10.0f);
 	}
 
 	//// Draw Models ////
@@ -118,7 +115,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	GLint defaultFBO;
 	if (!_running){
 		defaultFBO = Framebuffer::getCurrentFramebuffer();
-		bRenderer().getFramebuffer("fbo")->bind(bRenderer().getTexture("fbo_texture1"), false);
+		bRenderer().getAssets()->getFramebuffer("fbo")->bind(bRenderer().getAssets()->getTexture("fbo_texture1"), false);
 	}
 
 	/*** Cave Start ***/
@@ -137,30 +134,30 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	// translate and scale
 	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(780.0, -170.0, 55.0));
 	// draw
-	bRenderer().setAmbientColor(vmml::vec3f(0.2f, 0.2f, 0.8f));
+	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.2f, 0.2f, 0.8f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight"}));
-	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
+	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (green) ***/
 	// translate and scale 
 	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(1480.0f, -170.0f, 70.0f));
 	// draw
-	bRenderer().setAmbientColor(vmml::vec3f(0.1f, 0.45f, 0.1f));
+	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.1f, 0.45f, 0.1f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }));
-	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
+	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (red) ***/
 	// translate and scale 
 	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(2180.0f, -170.0f, 40.0f));
 	// draw
-	bRenderer().setAmbientColor(vmml::vec3f(0.6f, 0.1f, 0.1f));
+	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.6f, 0.1f, 0.1f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }));
-	bRenderer().setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
+	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	///*** Torch ***/
 	// translate and scale 	
 		// Position the torch relative to the camera
-		modelMatrix = bRenderer().getCamera("camera")->getInverseViewMatrix();
+	modelMatrix = bRenderer().getAssets()->getCamera("camera")->getInverseViewMatrix();
 	modelMatrix *= vmml::create_translation(vmml::vec3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::vec3f(1.2f)) * vmml::create_rotation(1.64f, vmml::vec3f::UNIT_Y);
 	// draw
 	bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight" }));
@@ -169,7 +166,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	// view matrix
 	vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-	vmml::mat4f viewMatrix = bRenderer().lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
+	vmml::mat4f viewMatrix = Camera::lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
 	// create three flames
 	for (GLfloat z = 0.0f; z < 3.0f; z++) 
 	{
@@ -194,8 +191,8 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		GLfloat transparency = 1.0f;
 		if (z == 0.0f)transparency = 0.8f;
 		// pass additional properties to the shader
-		bRenderer().getProperties("flameProperties")->setScalar("offset", offset);
-		bRenderer().getProperties("flameProperties")->setScalar("transparency", transparency);
+		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("offset", offset);
+		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("transparency", transparency);
 		// draw
 		bRenderer().drawModel("flame", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
 	}    
@@ -235,12 +232,12 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		bool b = true;		int numberOfBlurSteps = 2;
 		for (int i = 0; i < numberOfBlurSteps; i++) {
 			if (i == numberOfBlurSteps - 1)
-				bRenderer().getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
+				bRenderer().getAssets()->getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
 			else
-				bRenderer().getFramebuffer("fbo")->bind(bRenderer().getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);
+				bRenderer().getAssets()->getFramebuffer("fbo")->bind(bRenderer().getAssets()->getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);
             
-			bRenderer().getMaterial("quad")->setTexture("fbo_texture", bRenderer().getTexture(b ? "fbo_texture1" : "fbo_texture2"));
-			bRenderer().getMaterial("quad")->setScalar("isVertical", (GLfloat)b);
+			bRenderer().getAssets()->getMaterial("quad")->setTexture("fbo_texture", bRenderer().getAssets()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
+			bRenderer().getAssets()->getMaterial("quad")->setScalar("isVertical", (GLfloat)b);
 			// draw
 			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
 			b = !b;
@@ -297,8 +294,8 @@ void ProjectMain::moveCamera(const double &deltaTime)
                 // If touch is in right half of the view: look around
                 else
                 {
-                    deltaCameraY = (touch.currentPositionX - touch.startPositionX)/5000;
-                    deltaCameraX = (touch.currentPositionY - touch.startPositionY)/5000;
+                    deltaCameraY = (touch.currentPositionX - touch.startPositionX)/2000;
+                    deltaCameraX = (touch.currentPositionY - touch.startPositionY)/2000;
                 }
                 if(++i > 2)
                     break;
@@ -337,24 +334,24 @@ void ProjectMain::moveCamera(const double &deltaTime)
 				cameraForward = 0.0;
 
 			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_A) == bRenderer::INPUT_PRESS)
-				bRenderer().getCamera("camera")->moveCameraSideward(-0.5);
+				bRenderer().getAssets()->getCamera("camera")->moveCameraSideward(-0.5);
 			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_D) == bRenderer::INPUT_PRESS)
-				bRenderer().getCamera("camera")->moveCameraSideward(0.5);
+				bRenderer().getAssets()->getCamera("camera")->moveCameraSideward(0.5);
 			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_UP) == bRenderer::INPUT_PRESS)
-				bRenderer().getCamera("camera")->moveCameraUpward(0.5);
+				bRenderer().getAssets()->getCamera("camera")->moveCameraUpward(0.5);
 			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_DOWN) == bRenderer::INPUT_PRESS)
-				bRenderer().getCamera("camera")->moveCameraUpward(-0.5);
+				bRenderer().getAssets()->getCamera("camera")->moveCameraUpward(-0.5);
 			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT) == bRenderer::INPUT_PRESS)
-				bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
+				bRenderer().getAssets()->getCamera("camera")->rotateCamera(0.0f, 0.0f, 0.03f);
 			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_RIGHT) == bRenderer::INPUT_PRESS)
-				bRenderer().getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
+				bRenderer().getAssets()->getCamera("camera")->rotateCamera(0.0f, 0.0f, -0.03f);
 		}
 	}
 
 	//// Camera ////
 	if (_running){
-		bRenderer().getCamera("camera")->moveCameraForward(cameraForward);
-		bRenderer().getCamera("camera")->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
+		bRenderer().getAssets()->getCamera("camera")->moveCameraForward(cameraForward);
+		bRenderer().getAssets()->getCamera("camera")->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 	}
 }
 

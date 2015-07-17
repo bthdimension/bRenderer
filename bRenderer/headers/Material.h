@@ -7,7 +7,7 @@
 #include "Texture.h"
 #include "MaterialData.h"
 
-class Renderer;
+class AssetManagement;
 
 /** @brief A material associated with textures and a shader to define the look of an object
 *	@author David Steiner
@@ -23,11 +23,11 @@ public:
 	/* Functions */
     
 	/**	@brief Initializes the geometry object based on material data and a shader
-	*	@param[in] r Instance of the renderer main class
+	*	@param[in] a Asset management
 	*	@param[in] materialData 
 	*	@param[in] shader
 	*/
-	void initialize(Renderer *r, const MaterialData &materialData, ShaderPtr shader);
+	void initialize(AssetManagement *a, const MaterialData &materialData, ShaderPtr shader);
     
 	/**	@brief Bind the shader and pass the attributes of the material
 	*/

@@ -1,9 +1,9 @@
 #include "../headers/Model.h"
 #include "../headers/ModelData.h"
 #include "../headers/TextureData.h"
-#include "../headers/Renderer.h"
+#include "../headers/AssetManagement.h"
 
-Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties)
+Model::Model(AssetManagement *a, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties)
 	: _properties(properties)
 {
 	ModelData::GroupMap data = modelData.getData();
@@ -13,14 +13,14 @@ Model::Model(Renderer *r, const ModelData &modelData, GLuint shaderMaxLights, bo
 		Geometry &g = _groups[i->first];
 		GeometryDataPtr gData = i->second;
 
-		MaterialPtr material = r->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting);
+		MaterialPtr material = a->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting);
 		g.initialize(gData);
 		g.setMaterial(material);
 		g.setProperties(properties);
 	}
 }
 
-Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
+Model::Model(AssetManagement *a, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
 	: _properties(properties)
 {
     ModelData::GroupMap data = modelData.getData();
@@ -28,7 +28,7 @@ Model::Model(Renderer *r, const ModelData &modelData, ShaderPtr shader, Properti
     {
         Geometry &g = _groups[i->first];
         GeometryDataPtr gData = i->second;
-		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData, shader);
+		MaterialPtr material = a->createMaterial(gData->materialData.name, gData->materialData, shader);
         g.initialize(gData);
         g.setMaterial(material);
 		g.setProperties(properties);
