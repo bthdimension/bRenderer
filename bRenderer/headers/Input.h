@@ -150,9 +150,6 @@ namespace bRenderer
 } // namespace bRenderer
 
 /** @brief Maintenance of user inputs
-*
-*	Input methods that don't exist on the chosen platform will always return 0
-*
 *	@author Benjamin Bürgisser
 */
 class Input
