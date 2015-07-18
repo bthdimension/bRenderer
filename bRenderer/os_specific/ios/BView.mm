@@ -3,7 +3,6 @@
 
 #import "BView.h"
 #include "../../bRenderer.h"
-//#import "BViewLink.h"
 
 class BViewLink
 {

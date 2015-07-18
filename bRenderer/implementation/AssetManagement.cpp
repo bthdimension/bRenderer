@@ -420,6 +420,51 @@ vmml::vec3f AssetManagement::getAmbientColor()
 	return _ambientColor;
 }
 
+void AssetManagement::deleteShader(const std::string &name)
+{
+	_shaders.erase(name);
+}
+
+void AssetManagement::deleteTexture(const std::string &name)
+{
+	_textures.erase(name);
+}
+
+void AssetManagement::deleteMaterial(const std::string &name)
+{
+	_materials.erase(name);
+}
+
+void AssetManagement::deleteProperties(const std::string &name)
+{
+	_properties.erase(name);
+}
+
+void AssetManagement::deleteModel(const std::string &name)
+{
+	_models.erase(name);
+}
+
+void AssetManagement::deleteCamera(const std::string &name)
+{
+	_cameras.erase(name);
+}
+
+void AssetManagement::deleteMatrixStack(const std::string &name)
+{
+	_matrixStacks.erase(name);
+}
+
+void AssetManagement::deleteLight(const std::string &name)
+{
+	_lights.erase(name);
+}
+
+void AssetManagement::deleteFramebuffer(const std::string &name)
+{
+	_framebuffers.erase(name);
+}
+
 void AssetManagement::clear()
 {
 	_shaders.clear();

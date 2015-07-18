@@ -358,6 +358,51 @@ public:
 	*/
 	vmml::vec3f getAmbientColor();
 
+	/**	@brief Delete a shader
+	*	@param[in] name Name of the shader
+	*/
+	void deleteShader(const std::string &name);
+
+	/**	@brief Delete a texture
+	*	@param[in] name Name of the texture
+	*/
+	void deleteTexture(const std::string &name);
+
+	/**	@brief Delete a material
+	*	@param[in] name Name of the material
+	*/
+	void deleteMaterial(const std::string &name);
+
+	/**	@brief Delete properties
+	*	@param[in] name Name of the properties
+	*/
+	void deleteProperties(const std::string &name);
+
+	/**	@brief Delete a 3D model
+	*	@param[in] name Name of the model
+	*/
+	void deleteModel(const std::string &name);
+
+	/**	@brief Delete a camera
+	*	@param[in] name Name of the camera
+	*/
+	void deleteCamera(const std::string &name);
+
+	/**	@brief Delete a matrix stack
+	*	@param[in] name Name of the matrix stack
+	*/
+	void deleteMatrixStack(const std::string &name);
+
+	/**	@brief Delete a light
+	*	@param[in] name Name of the light
+	*/
+	void deleteLight(const std::string &name);
+
+	/**	@brief Delete a framebuffer
+	*	@param[in] name Name of the framebuffer
+	*/
+	void deleteFramebuffer(const std::string &name);
+
 	/**	@brief Clear all assets
 	*/
 	void clear();

@@ -80,11 +80,11 @@ void ProjectMain::initFunction()
 /* Draw your scene here */
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-//	if ((int)elapsedTime >= 6 && (int)elapsedTime <= 7)
-//	{
-//		/* Start animating after 6 seconds */
-//		if (!_running){ _running = true; bRenderer().getInput()->setCursorEnabled(!_running); }
-//	}
+	//if ((int)elapsedTime >= 6 && (int)elapsedTime <= 7)
+	//{
+	//	/* Start animating after 6 seconds */
+	//	if (!_running){ _running = true; bRenderer().getInput()->setCursorEnabled(!_running); }
+	//}
 
 	//bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
 	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
