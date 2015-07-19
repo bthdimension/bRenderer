@@ -12,28 +12,32 @@
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
 
+#ifdef __OBJC__
+@class RendererCaller;
+#endif
+
 class IRenderProject;
 
 /** @brief The main class that is able to initialize and maintain everything that is necessary to render an image to the screen
-*
-*	Using the singleton pattern the renderer is accessible from everywhere in the project
-*
 *	@author Benjamin Bürgisser
 */
 class Renderer
 {
-    friend class BViewLink;
 public:
+    
+#ifndef __OBJC__
+    typedef int RendererCaller;
+#endif
 
 	/* Functions */
 
-	/**	@brief Returns the single instance of the Renderer
-	 */
-	static Renderer& get()
-	{
-		static Renderer renderer;
-		return renderer;
-	}
+	/**	@brief Constructor
+	*/
+	Renderer();
+
+	/**	@brief Destructor
+	*/
+	~Renderer(){}
 
 	/**	@brief Returns a pointer to the view of the renderer
 	*
@@ -148,25 +152,9 @@ public:
 private:
 	/* Functions */
 
-	/**	@brief Private constructor
-	 */
-	Renderer();
-
-	/**	@brief Private constructor to prevent instantiation via copy constructor
-	 */
-	Renderer(const Renderer&){}
-
-	/**	@brief Private operator overloading to prevent instantiation of the renderer
-	 */
-	Renderer & operator = (const Renderer &){}
-
-	/**	@brief Private destructor
-	 */
-	~Renderer(){}
-
     /**	@brief Draw the scene
      */
-    void draw(double currentTime);
+    void draw();
     
 	/**	@brief Reset all variables
 	*/
@@ -184,6 +172,8 @@ private:
 	AssetManagementPtr	_assetManagement;
 
 	IRenderProject *_renderProject;
+    
+    RendererCaller *_rendererCaller;
 	
 	void(*_initFunction)();
 	void(*_loopFunction)(const double deltaTime, const double elapsedTime);

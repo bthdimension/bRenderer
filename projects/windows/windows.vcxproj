@@ -97,7 +97,6 @@
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\Renderer_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp" />
-    <ClCompile Include="..\..\bRenderer\os_specific\ios\Renderer_ios.cpp" />
     <ClCompile Include="..\implementation\ProjectMain.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -143,6 +142,7 @@
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\Input_ios.mm" />
+    <None Include="..\..\bRenderer\os_specific\ios\Renderer_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
     <None Include="..\data\blurShader.frag" />

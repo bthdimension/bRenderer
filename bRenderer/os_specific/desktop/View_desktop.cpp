@@ -169,16 +169,6 @@ View::BView* View::getUIView()
 
 void View::attachToUIView(View::UIView* view){}
 
-double View::getTime()
-{
-	return glfwGetTime();
-}
-
-void View::setRunning(bool running)
-{
-	glfwSetWindowShouldClose(_window, !running);
-}
-
 void View::setFullscreen(bool fullscreen)
 {
 	bRenderer::log("Setting fullscreen not yet supported on desktop systems", bRenderer::LM_WARNING);
@@ -238,7 +228,12 @@ void View::setContextCurrent()
 	glfwMakeContextCurrent(_window);
 }
 
-void View::swapBuffers()
+void View::bindFramebuffer()
+{
+
+}
+
+void View::presentBuffer()
 {
 	glfwSwapBuffers(_window);
 }

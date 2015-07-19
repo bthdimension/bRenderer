@@ -4,17 +4,6 @@
 #import "BView.h"
 #include "../../bRenderer.h"
 
-class BViewLink
-{
-public:
-    /* Functions */
-    
-    /**	@brief Draw the scene using the renderer of this instance
-     */
-    static void draw(Renderer *r, double currentTime)       { r->draw(currentTime); }
-    
-};
-
 @interface BView (PrivateMethods)
 /* Private methods */
 - (void)createFramebuffer;
@@ -81,10 +70,6 @@ public:
     _defaultFramebuffer = 0;
     _colorRenderbuffer = 0;
     _depthRenderbuffer = 0;
-    
-    // initial time is not set at this point because the renderer hasn't fully started yet
-    _initialTime = -1.0;
-    _wasStopped = false;
     
     // handle touches and taps
     _doubleTapRecognized = false;
@@ -158,66 +143,26 @@ public:
     }
 }
 
-/* This methdod is called every time the view is redrawn (ideally 60 times a secod)*/
-- (void)render
+/* Bind the framebuffer of the view */
+- (void)bindFramebuffer
 {
-    if (_context != nil)
-    {
-        // handle time
-        if(_initialTime < 0)
-            _initialTime = (int)CACurrentMediaTime();
-        else if (_wasStopped){
-            _initialTime += [self getTime]-_stopTime;
-            _wasStopped = false;
-        }
-        
-        if (!_defaultFramebuffer)
-            [self createFramebuffer];
+    if (!_defaultFramebuffer)
+        [self createFramebuffer];
     
-        glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
-        
-        BViewLink::draw(&Renderer::get(), [self getTime]);
-    
-        // set current context
-        [self setContextCurrent];
-        
-        // display the color buffer to the screen
-        glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
-        [_context presentRenderbuffer:GL_RENDERBUFFER];
-        
-        _stopTime = [self getTime];
-    }
-    else
-        bRenderer::log("Context not set!", bRenderer::LM_SYS);
+    glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
 }
 
-- (void)runRenderer
+/* Display the Renderbuffer of the view  */
+- (void)presentRenderbuffer
 {
-    // check whether the loop is already running
-    if(_displayLink == nil)
-    {
-        // specify render method
-        _displayLink = [self.window.screen displayLinkWithTarget:self selector:@selector(render)];
-        
-        // add the display link to the run loop (will be called 60 times per second)
-        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    }
+    // display the color buffer to the screen
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+    [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
-- (void)stopRenderer
+-(bool)setContextCurrent
 {
-    _wasStopped = true;
-    
-    if (_displayLink != nil) {
-        // if the display link is present, it gets invalidated (loop stops)
-        [_displayLink invalidate];
-        _displayLink = nil;
-    }
-}
-
--(bool)isRunning
-{
-    return _displayLink != nil;
+    return [EAGLContext setCurrentContext:_context];
 }
 
 - (int) getViewWidth
@@ -238,11 +183,6 @@ public:
 - (int) getViewPositionY
 {
     return self.center.y - [self getViewHeight]*0.5;
-}
-
--(double)getTime
-{
-    return (CACurrentMediaTime() - _initialTime);
 }
 
 /* Set view to fullscreen */
@@ -286,11 +226,6 @@ public:
 - (void) setViewPositionX:(GLint)x setViewPositionY:(GLint)y
 {
     self.frame = CGRectMake(x, y, self.frame.size.width, self.frame.size.height);
-}
-
--(bool)setContextCurrent
-{
-    return [EAGLContext setCurrentContext:_context];
 }
 
 /* As soon as the view is resized or new subviews are added, this method is called,

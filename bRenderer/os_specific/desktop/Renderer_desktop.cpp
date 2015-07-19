@@ -7,24 +7,19 @@
 
 /* Public functions */
 
-bool Renderer::isRunning()
-{
-	return _running;
-}
-
 void Renderer::runRenderer()
 {
 	_running = true;
 	bRenderer::log("Renderer started", bRenderer::LM_SYS);
 
-	_initialTime += (_view->getTime() - _initialTime) - _stopTime;
+	_initialTime += (glfwGetTime() - _initialTime) - _stopTime;
 
-	// Loop until the user closes the window 
+	// loop until the user closes the window
 	while (_running && _view->isRunning())
 	{
-		draw((_view->getTime() - _initialTime));
+		draw();
 
-		// Poll for and process events
+		// poll for and process events
 		glfwPollEvents();
 	}
 
@@ -34,7 +29,7 @@ void Renderer::runRenderer()
 
 void Renderer::stopRenderer()
 {
-	_stopTime = (_view->getTime() - _initialTime);
+	_stopTime = (glfwGetTime() - _initialTime);
 	_running = false;
 	bRenderer::log("Renderer stopped", bRenderer::LM_SYS);
 }
@@ -59,25 +54,28 @@ void Renderer::terminateRenderer()
 
 /* Private functions */
 
-void Renderer::draw(double currentTime)
+void Renderer::draw()
 {
+    // get time
+    double currentTime = (glfwGetTime() - _initialTime);
+    
 	_view->setContextCurrent();
 
 	// clear
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Render here
+	// render here
 	if (_loopFunction)
 		_loopFunction(currentTime - _elapsedTime, currentTime);
 
 	if (_renderProject)
 		_renderProject->loopFunction(currentTime - _elapsedTime, currentTime);
 
-	// Adjust time
+	// adjust time
 	_elapsedTime = currentTime;
 
-	// Swap front and back buffers 
-	_view->swapBuffers();
+	// display
+	_view->presentBuffer();
 }
 
 #endif

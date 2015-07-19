@@ -7,13 +7,12 @@
 
 using boost::lexical_cast;
 
-/* Private constructor */
+/* Public functions */
+
 Renderer::Renderer()
 {
 	reset();
 }
-
-/* Public functions */
 
 ViewPtr Renderer::getView()
 {
@@ -33,6 +32,11 @@ AssetManagementPtr Renderer::getAssets()
 bool Renderer::isInitialized()
 {
 	return _initialized;
+}
+
+bool Renderer::isRunning()
+{
+    return _running;
 }
 
 void Renderer::setRenderProject(IRenderProject *p)

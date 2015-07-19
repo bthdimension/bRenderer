@@ -93,9 +93,6 @@
     <ClCompile Include="..\..\bRenderer\implementation\Light.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\os_specific\ios\Renderer_ios.cpp">
-      <Filter>bRenderer\os_specific\ios</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
@@ -296,6 +293,9 @@
       <Filter>Project\data</Filter>
     </None>
     <None Include="..\..\bRenderer\os_specific\ios\Input_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
+    </None>
+    <None Include="..\..\bRenderer\os_specific\ios\Renderer_ios.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
   </ItemGroup>

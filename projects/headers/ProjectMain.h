@@ -41,6 +41,11 @@ public:
     /* For iOS only: Handle app being terminated */
     void appWillTerminate();
     
+    Renderer& getProjectRenderer()
+    {
+        return bRenderer();
+    }
+    
 private:
     
 	/* Helper Functions */

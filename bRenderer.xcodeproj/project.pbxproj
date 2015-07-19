@@ -78,7 +78,7 @@
 		B5FB0E961B5963240095C731 /* BView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB0E761B5963240095C731 /* BView.mm */; };
 		B5FB0E971B5963240095C731 /* FileHandler_ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB0E771B5963240095C731 /* FileHandler_ios.mm */; };
 		B5FB0E981B5963240095C731 /* Input_ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB0E781B5963240095C731 /* Input_ios.mm */; };
-		B5FB0E991B5963240095C731 /* Renderer_ios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5FB0E791B5963240095C731 /* Renderer_ios.cpp */; };
+		B5FB0E991B5963240095C731 /* Renderer_ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB0E791B5963240095C731 /* Renderer_ios.mm */; };
 		B5FB0E9A1B5963240095C731 /* TextureData_ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB0E7A1B5963240095C731 /* TextureData_ios.mm */; };
 		B5FB0E9B1B5963240095C731 /* View_ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB0E7B1B5963240095C731 /* View_ios.mm */; };
 /* End PBXBuildFile section */
@@ -195,7 +195,7 @@
 		B5FB0E761B5963240095C731 /* BView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BView.mm; sourceTree = "<group>"; };
 		B5FB0E771B5963240095C731 /* FileHandler_ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileHandler_ios.mm; sourceTree = "<group>"; };
 		B5FB0E781B5963240095C731 /* Input_ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Input_ios.mm; sourceTree = "<group>"; };
-		B5FB0E791B5963240095C731 /* Renderer_ios.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer_ios.cpp; sourceTree = "<group>"; };
+		B5FB0E791B5963240095C731 /* Renderer_ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Renderer_ios.mm; sourceTree = "<group>"; };
 		B5FB0E7A1B5963240095C731 /* TextureData_ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextureData_ios.mm; sourceTree = "<group>"; };
 		B5FB0E7B1B5963240095C731 /* View_ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = View_ios.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -437,7 +437,7 @@
 				B5FB0E761B5963240095C731 /* BView.mm */,
 				B5FB0E771B5963240095C731 /* FileHandler_ios.mm */,
 				B5FB0E781B5963240095C731 /* Input_ios.mm */,
-				B5FB0E791B5963240095C731 /* Renderer_ios.cpp */,
+				B5FB0E791B5963240095C731 /* Renderer_ios.mm */,
 				B5FB0E7A1B5963240095C731 /* TextureData_ios.mm */,
 				B5FB0E7B1B5963240095C731 /* View_ios.mm */,
 			);
@@ -574,7 +574,7 @@
 				B5FB0E821B5963240095C731 /* Logger.cpp in Sources */,
 				B5FB0E841B5963240095C731 /* MatrixStack.cpp in Sources */,
 				B5FB0E851B5963240095C731 /* Model.cpp in Sources */,
-				B5FB0E991B5963240095C731 /* Renderer_ios.cpp in Sources */,
+				B5FB0E991B5963240095C731 /* Renderer_ios.mm in Sources */,
 				B5FB0E801B5963240095C731 /* Geometry.cpp in Sources */,
 				B5B066CB1B37650F0060F2B4 /* ViewController.mm in Sources */,
 				B5FB0E861B5963240095C731 /* ModelData.cpp in Sources */,

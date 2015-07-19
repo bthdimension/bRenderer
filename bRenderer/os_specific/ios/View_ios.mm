@@ -60,8 +60,6 @@ bool View::initView(GLint width, GLint height, bool fullscreen, std::string wind
 
 void View::terminateView()
 {
-	setRunning(false);
-
     [_view removeFromSuperview];
     _view = nil;
 
@@ -75,7 +73,7 @@ bool View::isInitialized()
 
 bool View::isRunning()
 {
-    return [_view isRunning];
+    return _initialized;
 }
 
 bool View::isFullscreen()
@@ -155,19 +153,6 @@ void View::attachToUIView(UIView* view)
         [_view setFullscreen];
 }
 
-double View::getTime()
-{
-    return [_view getTime];
-}
-
-void View::setRunning(bool running)
-{
-    if(running)
-        [_view runRenderer];
-    else
-        [_view stopRenderer];
-}
-
 void View::setFullscreen(bool fullscreen)
 {
     if(fullscreen){
@@ -207,9 +192,14 @@ void View::setContextCurrent()
 	[_view setContextCurrent];
 }
 
-void View::swapBuffers()
+void View::bindFramebuffer()
 {
-    bRenderer::log("Not yet supported on iOS", bRenderer::LM_WARNING);
+    [_view bindFramebuffer];
+}
+
+void View::presentBuffer()
+{
+    [_view presentRenderbuffer];
 }
 
 static void windowSizeChanged(View::GLFWwindow* window, int width, int height)

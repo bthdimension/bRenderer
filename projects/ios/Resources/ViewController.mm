@@ -20,14 +20,14 @@
     p.init();
     
     // There are two ways to display the view of the renderer in your project:
-//    [self.view addSubview:Renderer::get().getView()->getUIView()];    // method 1
-    Renderer::get().getView()->attachToUIView(self.view);   // method 2
+//    [self.view addSubview:p.getProjectRenderer().getView()->getUIView()];    // method 1
+    p.getProjectRenderer().getView()->attachToUIView(self.view);   // method 2
     
     //TEST adding BView to a UIView of our choosing
 //    UIView *newView = [[UIView alloc] initWithFrame:CGRectMake(100,100,600,600)];
 //    newView.backgroundColor=[UIColor blueColor];
 //    [self.view addSubview:newView];
-//    Renderer::get().getView()->attachToUIView(newView);
+//    p.getProjectRenderer().getView()->attachToUIView(newView);
 }
 
 

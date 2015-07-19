@@ -29,8 +29,11 @@ public:
 protected:
     Renderer& bRenderer()
     {
-        return Renderer::get();
+		return _renderer;
     }
+
+private:
+	Renderer _renderer;
 };
 
 #endif /* defined(B_I_RENDERER_PROJECT_H) */

@@ -139,15 +139,6 @@ public:
      */
     void attachToUIView(UIView* view);
 
-	/**	@brief Returns the elapsed Time
-	*/
-	double getTime();
-    
-    /**	@brief Set whether view is running or not
-     *	@param[in] running
-     */
-    void setRunning(bool running);
-
 	/**	@brief Set fullscreen mode
 	*	@param[in] fullscreen Set fullscreen to be true if fullscreen is desired
 	*/
@@ -178,10 +169,14 @@ public:
 	/**	@brief Sets the context of this view to be current
 	*/
 	void setContextCurrent();
+    
+    /**	@brief Bind the framebuffer (on iOS only)
+     */
+    void bindFramebuffer();
 
-	/**	@brief Swaps the front and back buffers
+	/**	@brief Displays the buffer to the screen
 	*/
-	void swapBuffers();
+	void presentBuffer();
 
 private:
 	/* Functions */
