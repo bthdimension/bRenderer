@@ -17,6 +17,9 @@ Model::Model(AssetManagement *a, const ModelData &modelData, GLuint shaderMaxLig
 		g.initialize(gData);
 		g.setMaterial(material);
 		g.setProperties(properties);
+
+		// expand bounding box
+		_boundingBox.merge(g.getBoundingBoxObjectSpace());
 	}
 }
 
@@ -32,6 +35,9 @@ Model::Model(AssetManagement *a, const ModelData &modelData, ShaderPtr shader, P
         g.initialize(gData);
         g.setMaterial(material);
 		g.setProperties(properties);
+
+		// expand bounding box
+		_boundingBox.merge(g.getBoundingBoxObjectSpace());
     }
 }
 
@@ -47,6 +53,9 @@ Model::Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr pro
 		g.initialize(gData);
 		g.setMaterial(material);
 		g.setProperties(properties);
+
+		// expand bounding box
+		_boundingBox.merge(g.getBoundingBoxObjectSpace());
 	}
 }
 

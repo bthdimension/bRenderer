@@ -288,13 +288,13 @@
             // double Tap
             _lastDoubleTapLocation = [touch locationInView:self];
             _doubleTapRecognized = true;
-            bRenderer::log("Double Tap");
+//            bRenderer::log("Double Tap");
         }
         else {
             // single Tap
             _lastSingleTapLocation = [touch locationInView:self];
             _singleTapRecognized = true;
-            bRenderer::log("Single Tap");
+//            bRenderer::log("Single Tap");
         }
     }
 }

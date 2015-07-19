@@ -137,8 +137,10 @@ public:
 	*	@param[in] cameraName Name of the camera
 	*	@param[in] modelMatrix 
 	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
+	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
 
 	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] modelName Name of the model
@@ -146,8 +148,10 @@ public:
 	*	@param[in] viewMatrix
 	*	@param[in] projectionMatrix
 	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
+	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
 	*/
-	void drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames);
+	void drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
 
 private:
 	/* Functions */

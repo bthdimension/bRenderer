@@ -1,10 +1,15 @@
+// Some operations of vmmlib will cause a warning in Visual C++ (specifically culling)
+#define _SCL_SECURE_NO_WARNINGS
+
 #include "../headers/Renderer.h"
 #include "../headers/IRenderProject.h"
-#include <boost/lexical_cast.hpp>
-#include "headers/ShaderDataFile.h"
-#include "headers/ShaderData.h"
-#include "headers/Configuration.h"
+#include "../headers/ShaderDataFile.h"
+#include "../headers/ShaderData.h"
+#include "../headers/Configuration.h"
 
+#include "vmmlib/frustum_culler.hpp"
+
+#include <boost/lexical_cast.hpp>
 using boost::lexical_cast;
 
 /* Public functions */
@@ -128,54 +133,82 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen, std::str
 	return initRenderer(windowTitle);
 }
 
-void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames)
+void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
 {
-	drawModel(modelName, modelMatrix, _assetManagement->getCamera(cameraName)->getViewMatrix(), _assetManagement->getCamera(cameraName)->getProjectionMatrix(), lightNames);
+	drawModel(modelName, modelMatrix, _assetManagement->getCamera(cameraName)->getViewMatrix(), _assetManagement->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry);
 }
 
-void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames)
+void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
 {
-	Model::GroupMap &groupsCaveStart = _assetManagement->getModel(modelName)->getGroups();
-	for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
-	{
-		Geometry &geometry = i->second;
-		ShaderPtr shader = geometry.getMaterial()->getShader();
-		if (shader)
+	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
+	vmml::Visibility visibility = vmml::VISIBILITY_FULL;
+
+	// Frsutum culling
+	if (doFrustumCulling){
+		vmml::AABBf aabbObjectSpace = _assetManagement->getModel(modelName)->getBoundingBoxObjectSpace();
+		vmml::FrustumCullerf culler;
+		culler.setup(projectionMatrix*modelViewMatrix);
+		visibility = culler.test_aabb(vmml::Vector2f(aabbObjectSpace.getMin().x(), aabbObjectSpace.getMax().x()), vmml::Vector2f(aabbObjectSpace.getMin().y(), aabbObjectSpace.getMax().y()), vmml::Vector2f(aabbObjectSpace.getMin().z(), aabbObjectSpace.getMax().z()));
+		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
+	}
+
+	// Draw geometry
+	if (visibility != vmml::VISIBILITY_NONE){
+		Model::GroupMap &groupsCaveStart = _assetManagement->getModel(modelName)->getGroups();
+		for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
 		{
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX(), projectionMatrix);
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX(), viewMatrix*modelMatrix);
+			Geometry &geometry = i->second;
 
-			// Lighting
-			if (shader->supportsDiffuseLighting() || shader->supportsSpecularLighting()){
-				GLfloat numLights = lightNames.size();
-				bool variableNumberOfLights = shader->supportsVariableNumberOfLights();
-				GLuint maxLights = shader->getMaxLights();
-				if (numLights > maxLights)
-					numLights = maxLights;
-
-				if (variableNumberOfLights)
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
-				for (int i = 0; i < numLights; i++){
-					std::string pos = lexical_cast<std::string>(i);
-					LightPtr l = _assetManagement->getLight(lightNames[i]);
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
-					if (shader->supportsDiffuseLighting())
-						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
-					if (shader->supportsSpecularLighting())
-						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, l->getSpecularColor());
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, l->getIntensity());
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
-				}
+			// Only do frsutum culling for the geometry if the model has more than one geometry object, 
+			// otherwise the culling restult of the whole model is the same as for the geometry
+			if (doFrustumCulling && cullIndividualGeometry && groupsCaveStart.size() > 1){
+				vmml::AABBf aabbObjectSpace = geometry.getBoundingBoxObjectSpace();
+				vmml::FrustumCullerf culler;
+				culler.setup(projectionMatrix*modelViewMatrix);
+				visibility = culler.test_aabb(vmml::Vector2f(aabbObjectSpace.getMin().x(), aabbObjectSpace.getMax().x()), vmml::Vector2f(aabbObjectSpace.getMin().y(), aabbObjectSpace.getMax().y()), vmml::Vector2f(aabbObjectSpace.getMin().z(), aabbObjectSpace.getMax().z()));
+				//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 			}
-			// ambient
-			if (shader->supportsAmbientLighting())
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _assetManagement->getAmbientColor());
+
+			if (visibility != vmml::VISIBILITY_NONE){
+				ShaderPtr shader = geometry.getMaterial()->getShader();
+				if (shader)
+				{
+					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX(), projectionMatrix);
+					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX(), modelViewMatrix);
+
+					// Lighting
+					if (shader->supportsDiffuseLighting() || shader->supportsSpecularLighting()){
+						GLfloat numLights = lightNames.size();
+						bool variableNumberOfLights = shader->supportsVariableNumberOfLights();
+						GLuint maxLights = shader->getMaxLights();
+						if (numLights > maxLights)
+							numLights = maxLights;
+
+						if (variableNumberOfLights)
+							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
+						for (int i = 0; i < numLights; i++){
+							std::string pos = lexical_cast<std::string>(i);
+							LightPtr l = _assetManagement->getLight(lightNames[i]);
+							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
+							if (shader->supportsDiffuseLighting())
+								shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
+							if (shader->supportsSpecularLighting())
+								shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, l->getSpecularColor());
+							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, l->getIntensity());
+							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
+						}
+					}
+					// ambient
+					if (shader->supportsAmbientLighting())
+						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _assetManagement->getAmbientColor());
+				}
+				else
+				{
+					bRenderer::log("No shader available.", bRenderer::LM_WARNING);
+				}
+				geometry.draw();
+			}
 		}
-		else
-		{
-			bRenderer::log("No shader available.", bRenderer::LM_WARNING);
-		}
-		geometry.draw();
 	}
 }
 

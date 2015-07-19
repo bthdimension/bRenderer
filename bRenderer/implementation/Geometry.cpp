@@ -5,7 +5,7 @@
 void Geometry::initialize(GeometryDataPtr geometryData)
 {
 	// Create bounding volume
-	_boundingBox = createBoundingBox(geometryData->vboVertices);
+	_boundingBox = createBoundingBoxObjectSpace(geometryData->vboVertices);
 	
 	// Initialize geometry
     copyVertexData(geometryData->vboVertices);
@@ -73,7 +73,7 @@ void Geometry::initializeVertexBuffer()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-Geometry::BoundingBoxPtr Geometry::createBoundingBox(const GeometryData::VboVertices &arg)
+vmml::AABBf Geometry::createBoundingBoxObjectSpace(const GeometryData::VboVertices &arg)
 {
 	Point3 min = arg[0].position;
 	Point3 max = arg[0].position;
@@ -96,5 +96,5 @@ Geometry::BoundingBoxPtr Geometry::createBoundingBox(const GeometryData::VboVert
 			max.z = i->position.z;
 	}
 
-	return BoundingBoxPtr(new vmml::AABBf(vmml::Vector3f(min.x, min.y, min.z), vmml::Vector3f(max.x, max.y, max.z)));
+	return vmml::AABBf(vmml::Vector3f(min.x, min.y, min.z), vmml::Vector3f(max.x, max.y, max.z));
 }

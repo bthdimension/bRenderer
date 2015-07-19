@@ -21,7 +21,6 @@ public:
 	/* Typedefs */
 	typedef std::shared_ptr< Vertex >   VertexDataPtr;
     typedef std::shared_ptr< GLushort > IndexDataPtr;
-	typedef std::shared_ptr<vmml::AABBf> BoundingBoxPtr;
 
 	/* Functions */
 
@@ -64,21 +63,21 @@ public:
 
 	/**	@brief Returns a pointer to the properties of the geometry
 	*/
-	PropertiesPtr     getProperties()                       { return _properties; }
+	PropertiesPtr     getProperties()					{ return _properties; }
 
 	/**	@brief Sets the properties of the geometry
 	*	@param[in] arg The properties for the geometry
 	*/
-	void            setProperties(PropertiesPtr arg)        { _properties = arg; }
+	void            setProperties(PropertiesPtr arg)	{ _properties = arg; }
 
-	/**	@brief Returns a pointer to the bounding box of the geometry
+	/**	@brief Returns the bounding box of the geometry in object space
 	*/
-	BoundingBoxPtr     getBoundingBox()                       { return _boundingBox; }
+	vmml::AABBf     getBoundingBoxObjectSpace()			{ return _boundingBox; }
 
-	/**	@brief Sets the bounding box of the geometry
-	*	@param[in] arg The bounding box for the geometry
+	/**	@brief Sets the bounding box of the geometry in object space
+	*	@param[in] arg The bounding box for the geometry in object space
 	*/
-	void            setBoundingBox(BoundingBoxPtr arg)        { _boundingBox = arg; }
+	void            setBoundingBoxObjectSpace(vmml::AABBf arg)						{ _boundingBox = arg; }
 
 private:
 
@@ -109,7 +108,7 @@ private:
 	/**	@brief Creates an axis-aligned bounding box around the object
 	*	@param[in] arg The vertices that should be used in the geometry
 	*/
-	BoundingBoxPtr createBoundingBox(const GeometryData::VboVertices &arg);
+	vmml::AABBf createBoundingBoxObjectSpace(const GeometryData::VboVertices &arg);
 
 	/* Variables */
 
@@ -122,7 +121,7 @@ private:
     MaterialPtr _material;
 	PropertiesPtr _properties;
 
-	BoundingBoxPtr _boundingBox;
+	vmml::AABBf _boundingBox;
 };
 
 typedef std::shared_ptr<Geometry> GeometryPtr;

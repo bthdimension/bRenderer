@@ -103,6 +103,15 @@ public:
 	*/
     GroupMap &getGroups()   { return _groups; }
 
+	/**	@brief Returns the bounding box of the geometry in object space
+	*/
+	vmml::AABBf     getBoundingBoxObjectSpace()			{ return _boundingBox; }
+
+	/**	@brief Sets the bounding box of the geometry in object space
+	*	@param[in] arg The bounding box for the geometry in object space
+	*/
+	void            setBoundingBoxObjectSpace(vmml::AABBf arg)						{ _boundingBox = arg; }
+
 private:
 
 	/* Variables */
@@ -110,6 +119,7 @@ private:
     GroupMap        _groups;
     MaterialPtr     _material;
 	PropertiesPtr	_properties;
+	vmml::AABBf		_boundingBox;
 };
 
 typedef std::shared_ptr<Model> ModelPtr;
