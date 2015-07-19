@@ -82,10 +82,10 @@ void ShaderData::initializeSourceCommonVariables()
 {
 	std::string common = "";
 
-#ifdef OS_DESKTOP	
+#ifdef B_OS_DESKTOP	
 	common = bRenderer::SHADER_SOURCE_HEAD_DESKTOP;
 #endif
-#ifdef OS_IOS
+#ifdef B_OS_IOS
 	common = bRenderer::SHADER_SOURCE_HEAD_ES;
 #endif	
 	// lights

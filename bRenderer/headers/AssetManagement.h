@@ -60,7 +60,7 @@ public:
 	/**	@brief Set an ambient color for the scene
 	*	@param[in] ambientColor Ambient color for the scene
 	*/
-	void setAmbientColor(const vmml::vec3f &ambientColor);
+	void setAmbientColor(const vmml::Vector3f &ambientColor);
 
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
@@ -238,7 +238,7 @@ public:
 	*	@param[in] position Position of the camera
 	*	@param[in] rotationAxes Rotation axes of the camera
 	*/
-	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes);
+	CameraPtr createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes);
 
 	/**	@brief Create a camera
 	*	@param[in] name Name of the camera
@@ -258,7 +258,7 @@ public:
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	CameraPtr createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+	CameraPtr createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
 
 	/**	@brief Create a matrix stack
 	*	@param[in] name Name of the matrix stack
@@ -275,7 +275,7 @@ public:
 	*	@param[in] position Position of the light
 	*	@param[in] color Color of the light for both diffuse and specular lighting
 	*/
-	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color);
+	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color);
 
 	/**	@brief Create a light
 	*	@param[in] name Name of the light
@@ -284,7 +284,7 @@ public:
 	*	@param[in] intensity Intensity of the light
 	*	@param[in] attenuation Attenuation of the light
 	*/
-	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation);
+	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation);
 
 	/**	@brief Create a light
 	*	@param[in] name Name of the light
@@ -294,7 +294,7 @@ public:
 	*	@param[in] intensity Intensity of the light
 	*	@param[in] attenuation Attenuation of the light
 	*/
-	LightPtr createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &diffuseColor, const vmml::vec3f &specularColor, GLfloat intensity, GLfloat attenuation);
+	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation);
 
 	/**	@brief Create a framebuffer
 	*	@param[in] name Name of the framebuffer
@@ -356,7 +356,7 @@ public:
 
 	/**	@brief Get the ambient color of the scene
 	*/
-	vmml::vec3f getAmbientColor();
+	vmml::Vector3f getAmbientColor();
 
 	/**	@brief Delete a shader
 	*	@param[in] name Name of the shader
@@ -428,7 +428,7 @@ private:
 	LightMap		_lights;
 	FramebufferMap	_framebuffers;
 
-	vmml::vec3f		_ambientColor;
+	vmml::Vector3f		_ambientColor;
 
 	std::string		_shaderVersionDesktop;
 	std::string		_shaderVersionES;

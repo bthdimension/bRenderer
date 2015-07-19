@@ -17,7 +17,7 @@ class Material
 public:
 	/* Typedefs */
 	typedef std::unordered_map<std::string, TexturePtr>     TextureMap;
-	typedef std::unordered_map<std::string, vmml::vec3f>    Vector3Map;
+	typedef std::unordered_map<std::string, vmml::Vector3f>    Vector3Map;
 	typedef std::unordered_map<std::string, GLfloat>          ScalarMap;
 
 	/* Functions */
@@ -49,7 +49,7 @@ public:
 	/**	@brief Returns a vector associated with the material
 	*	@param[in] name Name of the vector
 	*/
-    vmml::vec3f     getVector(const std::string &name)  { return _vectors[name];    }
+    vmml::Vector3f     getVector(const std::string &name)  { return _vectors[name];    }
     
 	/**	@brief Returns the scalars associated with the material
 	*/
@@ -80,7 +80,7 @@ public:
 	*	@param[in] name Name of the vector
 	*	@param[in] arg Vector for the material
 	*/
-    void            setVector(const std::string &name, const vmml::vec3f &arg)  { _vectors[name] = arg;     }
+    void            setVector(const std::string &name, const vmml::Vector3f &arg)  { _vectors[name] = arg;     }
     
 	/**	@brief Sets all scalars for the material
 	*	@param[in] arg Scalar for the material

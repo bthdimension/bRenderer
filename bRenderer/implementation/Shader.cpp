@@ -67,7 +67,7 @@ Shader::~Shader()
     }
 }
 
-void Shader::setUniform(const std::string &name, const vmml::vec4f &arg)
+void Shader::setUniform(const std::string &name, const vmml::Vector4f &arg)
 {
     glUseProgram(_programID);
     
@@ -78,7 +78,7 @@ void Shader::setUniform(const std::string &name, const vmml::vec4f &arg)
     }
 }
 
-void Shader::setUniform(const std::string &name, const vmml::vec3f &arg)
+void Shader::setUniform(const std::string &name, const vmml::Vector3f &arg)
 {
     glUseProgram(_programID);
     
@@ -89,7 +89,7 @@ void Shader::setUniform(const std::string &name, const vmml::vec3f &arg)
     }
 }
 
-void Shader::setUniform(const std::string &name, const vmml::mat4f &arg)
+void Shader::setUniform(const std::string &name, const vmml::Matrix4f &arg)
 {
     glUseProgram(_programID);
     
@@ -100,7 +100,7 @@ void Shader::setUniform(const std::string &name, const vmml::mat4f &arg)
     }
 }
 
-void Shader::setUniform(const std::string &name, const vmml::mat3f &arg)
+void Shader::setUniform(const std::string &name, const vmml::Matrix3f &arg)
 {
     glUseProgram(_programID);
     

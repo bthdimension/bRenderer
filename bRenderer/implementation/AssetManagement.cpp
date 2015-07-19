@@ -17,7 +17,7 @@ void AssetManagement::setShaderVersionES(const std::string &shaderVersionES)
 	_shaderVersionES = shaderVersionES;
 }
 
-void AssetManagement::setAmbientColor(const vmml::vec3f &ambientColor)
+void AssetManagement::setAmbientColor(const vmml::Vector3f &ambientColor)
 {
 	_ambientColor = ambientColor;
 }
@@ -262,7 +262,7 @@ CameraPtr AssetManagement::createCamera(const std::string &name)
 	return camera;
 }
 
-CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes)
+CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
@@ -280,7 +280,7 @@ CameraPtr AssetManagement::createCamera(const std::string &name, GLfloat fov, GL
 	return camera;
 }
 
-CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
@@ -307,7 +307,7 @@ LightPtr AssetManagement::createLight(const std::string &name)
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color)
+LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
@@ -316,7 +316,7 @@ LightPtr AssetManagement::createLight(const std::string &name, const vmml::vec3f
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation)
+LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
@@ -325,7 +325,7 @@ LightPtr AssetManagement::createLight(const std::string &name, const vmml::vec3f
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::vec3f &position, const vmml::vec3f &diffuseColor, const vmml::vec3f &specularColor, GLfloat intensity, GLfloat attenuation)
+LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
@@ -415,7 +415,7 @@ std::string AssetManagement::getShaderVersionES()
 	return _shaderVersionES;
 }
 
-vmml::vec3f AssetManagement::getAmbientColor()
+vmml::Vector3f AssetManagement::getAmbientColor()
 {
 	return _ambientColor;
 }

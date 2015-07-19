@@ -1,6 +1,6 @@
 #include "../../headers/OSdetect.h"
 
-#ifdef OS_DESKTOP
+#ifdef B_OS_DESKTOP
 
 #include "../../headers/Renderer.h"
 #include "../../headers/IRenderProject.h"

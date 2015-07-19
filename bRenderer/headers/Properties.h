@@ -14,11 +14,11 @@ class Properties
 {
 public:
 	/* Typedefs */
-	typedef std::unordered_map<std::string, vmml::mat4f>    Matrix4x4Map;
-	typedef std::unordered_map<std::string, vmml::mat3f>    Matrix3x3Map;
-	typedef std::unordered_map<std::string, vmml::vec4f>    Vector4Map;
-	typedef std::unordered_map<std::string, vmml::vec3f>    Vector3Map;
-	typedef std::unordered_map<std::string, GLfloat>          ScalarMap;
+	typedef std::unordered_map<std::string, vmml::Matrix4f>		Matrix4x4Map;
+	typedef std::unordered_map<std::string, vmml::Matrix3f>		Matrix3x3Map;
+	typedef std::unordered_map<std::string, vmml::Vector4f>		Vector4Map;
+	typedef std::unordered_map<std::string, vmml::Vector3f>		Vector3Map;
+	typedef std::unordered_map<std::string, GLfloat>			ScalarMap;
 
 	/* Functions */
 
@@ -29,7 +29,7 @@ public:
 	/**	@brief Returns a 4x4 matrix
 	*	@param[in] name Name of the matrix
 	*/
-	vmml::mat4f			getMatrix4x4(const std::string &name)							{ return _matrices4x4[name]; }
+	vmml::Matrix4f			getMatrix4x4(const std::string &name)							{ return _matrices4x4[name]; }
 
 	/**	@brief Returns all 3x3 matrices
 	*/
@@ -38,7 +38,7 @@ public:
 	/**	@brief Returns a 3x3 matrix
 	*	@param[in] name Name of the matrix
 	*/
-	vmml::mat3f			getMatrix3x3(const std::string &name)							{ return _matrices3x3[name]; }
+	vmml::Matrix3f			getMatrix3x3(const std::string &name)							{ return _matrices3x3[name]; }
 
 	/**	@brief Returns all 4x1 vectors
 	*/
@@ -47,7 +47,7 @@ public:
 	/**	@brief Returns a 4x1 vector
 	*	@param[in] name Name of the vector
 	*/
-	vmml::vec4f			getVector4(const std::string &name)								{ return _vectors4[name]; }
+	vmml::Vector4f			getVector4(const std::string &name)								{ return _vectors4[name]; }
 
 	/**	@brief Returns all 3x1 vectors 
 	*/
@@ -56,7 +56,7 @@ public:
 	/**	@brief Returns a 3x1 vector
 	*	@param[in] name Name of the vector
 	*/
-	vmml::vec3f			getVector3(const std::string &name)								{ return _vectors3[name]; }
+	vmml::Vector3f			getVector3(const std::string &name)								{ return _vectors3[name]; }
 
 	/**	@brief Returns all scalars
 	*/
@@ -76,7 +76,7 @@ public:
 	*	@param[in] name Name of the matrix
 	*	@param[in] arg 4x4 matrix
 	*/
-	void				setMatrix(const std::string &name, const vmml::mat4f &arg)		{ _matrices4x4[name] = arg; }
+	void				setMatrix(const std::string &name, const vmml::Matrix4f &arg)		{ _matrices4x4[name] = arg; }
 
 	/**	@brief Sets all 3x3 matrices
 	*	@param[in] arg 3x3 matrices
@@ -87,7 +87,7 @@ public:
 	*	@param[in] name Name of the matrix
 	*	@param[in] arg 3x3 matrix
 	*/
-	void				setMatrix(const std::string &name, const vmml::mat3f &arg)		{ _matrices3x3[name] = arg; }
+	void				setMatrix(const std::string &name, const vmml::Matrix3f &arg)		{ _matrices3x3[name] = arg; }
 
 	/**	@brief Sets all 4x1 vectors
 	*	@param[in] arg 4x1 Vectors
@@ -98,7 +98,7 @@ public:
 	*	@param[in] name Name of the vector
 	*	@param[in] arg 4x1 vector
 	*/
-	void				setVector(const std::string &name, const vmml::vec4f &arg)		{ _vectors4[name] = arg; }
+	void				setVector(const std::string &name, const vmml::Vector4f &arg)		{ _vectors4[name] = arg; }
 
 	/**	@brief Sets all 3x1 vectors
 	*	@param[in] arg 3x1 vectors
@@ -109,7 +109,7 @@ public:
 	*	@param[in] name Name of the vector
 	*	@param[in] arg 3x1 vector
 	*/
-	void				setVector(const std::string &name, const vmml::vec3f &arg)		{ _vectors3[name] = arg; }
+	void				setVector(const std::string &name, const vmml::Vector3f &arg)		{ _vectors3[name] = arg; }
 
 	/**	@brief Sets all scalars
 	*	@param[in] arg Scalar

@@ -8,7 +8,7 @@
 namespace bRenderer
 {
 	/* Renderer configuration */
-	vmml::vec3f DEFAULT_AMBIENT_COLOR();
+	vmml::Vector3f DEFAULT_AMBIENT_COLOR();
 
 	/* Logger */
 	std::string LOG_MODE_INFO();
@@ -77,12 +77,12 @@ namespace bRenderer
 	GLfloat DEFAULT_ASPECT_RATIO();
 	GLfloat DEFAULT_NEAR_CLIPPING_PLANE();
 	GLfloat DEFAULT_FAR_CLIPPING_PLANE();
-	vmml::vec3f DEFAULT_CAMERA_POSITION();
-	vmml::vec3f DEFAULT_CAMERA_ROTATION_AXES();
+	vmml::Vector3f DEFAULT_CAMERA_POSITION();
+	vmml::Vector3f DEFAULT_CAMERA_ROTATION_AXES();
 
 	/* Light configuration */
-	vmml::vec4f DEFAULT_LIGHT_POSITION();
-	vmml::vec3f DEFAULT_LIGHT_COLOR();
+	vmml::Vector4f DEFAULT_LIGHT_POSITION();
+	vmml::Vector3f DEFAULT_LIGHT_COLOR();
 	GLfloat DEFAULT_LIGHT_INTENSITY();
 	GLfloat DEFAULT_LIGHT_ATTENUATION();
 

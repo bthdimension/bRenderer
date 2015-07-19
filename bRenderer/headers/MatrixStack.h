@@ -27,17 +27,17 @@ public:
 	/**	@brief Push a translation matrix to the stack
 	*	@param[in] transformationMatrix Matrix that moves an object in space
 	*/
-	void pushTranslation(const vmml::mat4f &transformationMatrix);
+	void pushTranslation(const vmml::Matrix4f &transformationMatrix);
 
 	/**	@brief Push a scale matrix to the stack
 	*	@param[in] transformationMatrix Matrix that scales an object
 	*/
-	void pushScaling(const vmml::mat4f &transformationMatrix);
+	void pushScaling(const vmml::Matrix4f &transformationMatrix);
 
 	/**	@brief Push a rotation matrix to the stack
 	*	@param[in] transformationMatrix Matrix that rotates an object
 	*/
-	void pushRotation(const vmml::mat4f &transformationMatrix);
+	void pushRotation(const vmml::Matrix4f &transformationMatrix);
 
 	/**	@brief Delete last element on the stack
 	*/
@@ -49,18 +49,18 @@ public:
 
 	/**	@brief Returns the model matrix as the product of all pushed transformations
 	*/
-    vmml::mat4f getModelMatrix();
+    vmml::Matrix4f getModelMatrix();
 
 	/**	@brief Returns the normal matrix as the product of all pushed transformations
 	*/
-    vmml::mat4f getNormalMatrix();
+    vmml::Matrix4f getNormalMatrix();
 
 private:
 
 	/* Variables */
 
-    std::vector<vmml::mat4f> modelMatrixStack;
-	std::vector<vmml::mat4f> normalMatrixStack;
+    std::vector<vmml::Matrix4f> modelMatrixStack;
+	std::vector<vmml::Matrix4f> normalMatrixStack;
 };
 
 typedef std::shared_ptr<MatrixStack> MatrixStackPtr;

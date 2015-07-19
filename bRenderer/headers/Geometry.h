@@ -4,13 +4,13 @@
 #include <string>
 #include <fstream>
 #include <memory>
-
 #include "GeometryData.h"
 #include "Material.h"
 #include "Texture.h"
 #include "Properties.h"
 #include "Renderer_GL.h"
 #include "IDrawable.h"
+#include "vmmlib/aabb.hpp"
 
 /** @brief The geometry that can be rendered to the screen
 *	@author Rahul Mukhi, David Steiner
@@ -21,6 +21,7 @@ public:
 	/* Typedefs */
 	typedef std::shared_ptr< Vertex >   VertexDataPtr;
     typedef std::shared_ptr< GLushort > IndexDataPtr;
+	typedef std::shared_ptr<vmml::AABBf> BoundingBoxPtr;
 
 	/* Functions */
 
@@ -70,6 +71,15 @@ public:
 	*/
 	void            setProperties(PropertiesPtr arg)        { _properties = arg; }
 
+	/**	@brief Returns a pointer to the bounding box of the geometry
+	*/
+	BoundingBoxPtr     getBoundingBox()                       { return _boundingBox; }
+
+	/**	@brief Sets the bounding box of the geometry
+	*	@param[in] arg The bounding box for the geometry
+	*/
+	void            setBoundingBox(BoundingBoxPtr arg)        { _boundingBox = arg; }
+
 private:
 
 	/* Functions */
@@ -96,6 +106,11 @@ private:
 	*/
 	IndexDataPtr    copyIndexData(const GeometryData::VboIndices &arg);
 
+	/**	@brief Creates an axis-aligned bounding box around the object
+	*	@param[in] arg The vertices that should be used in the geometry
+	*/
+	BoundingBoxPtr createBoundingBox(const GeometryData::VboVertices &arg);
+
 	/* Variables */
 
     GLuint _indexBuffer, _vertexBuffer;
@@ -106,6 +121,8 @@ private:
     
     MaterialPtr _material;
 	PropertiesPtr _properties;
+
+	BoundingBoxPtr _boundingBox;
 };
 
 typedef std::shared_ptr<Geometry> GeometryPtr;

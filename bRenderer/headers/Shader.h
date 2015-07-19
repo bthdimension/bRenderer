@@ -44,25 +44,25 @@ public:
 	*	@param[in] name Uniform name
 	*	@param[in] arg 4 dimensional matrix
 	*/
-    virtual void setUniform(const std::string &name, const vmml::mat4f &arg);
+    virtual void setUniform(const std::string &name, const vmml::Matrix4f &arg);
 
 	/**	@brief Pass a 3 dimensional matrix to the shader
 	*	@param[in] name Uniform name
 	*	@param[in] arg 3 dimensional matrix
 	*/
-    virtual void setUniform(const std::string &name, const vmml::mat3f &arg);
+    virtual void setUniform(const std::string &name, const vmml::Matrix3f &arg);
 
 	/**	@brief Pass a 4 dimensional vector to the shader
 	*	@param[in] name Uniform name
 	*	@param[in] arg 4 dimensional vector
 	*/
-    virtual void setUniform(const std::string &name, const vmml::vec4f &arg);
+    virtual void setUniform(const std::string &name, const vmml::Vector4f &arg);
 
 	/**	@brief Pass a 3 dimensional vector to the shader
 	*	@param[in] name Uniform name
 	*	@param[in] arg 3 dimensional vector
 	*/
-    virtual void setUniform(const std::string &name, const vmml::vec3f &arg);
+    virtual void setUniform(const std::string &name, const vmml::Vector3f &arg);
 
 	/**	@brief Pass a floating-point number to the shader
 	*	@param[in] name Uniform name

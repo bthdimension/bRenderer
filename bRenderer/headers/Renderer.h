@@ -138,7 +138,7 @@ public:
 	*	@param[in] modelMatrix 
 	*	@param[in] lightNames Names of the lights in a vector
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f &modelMatrix, const std::vector<std::string> &lightNames);
+	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames);
 
 	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] modelName Name of the model
@@ -147,7 +147,7 @@ public:
 	*	@param[in] projectionMatrix
 	*	@param[in] lightNames Names of the lights in a vector
 	*/
-	void drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames);
+	void drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames);
 
 private:
 	/* Functions */

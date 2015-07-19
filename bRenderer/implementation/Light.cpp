@@ -5,32 +5,32 @@ Light::Light()
 	: Light(bRenderer::DEFAULT_LIGHT_POSITION(), bRenderer::DEFAULT_LIGHT_COLOR(), bRenderer::DEFAULT_LIGHT_INTENSITY(), bRenderer::DEFAULT_LIGHT_ATTENUATION())
 {}
 
-Light::Light(const vmml::vec3f &position, const vmml::vec3f &color)
+Light::Light(const vmml::Vector3f &position, const vmml::Vector3f &color)
 	: Light(position, color, bRenderer::DEFAULT_LIGHT_INTENSITY(), bRenderer::DEFAULT_LIGHT_ATTENUATION())
 {}
 
-Light::Light(const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation)
+Light::Light(const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation)
 	: Light(position, color, color, intensity, attenuation)
 {}
 
-Light::Light(const vmml::vec3f &position, const vmml::vec3f &diffuseColor, const vmml::vec3f &specularColor, GLfloat intensity, GLfloat attenuation)
-	: _position(vmml::vec4f(position, 1.0)), _diffuseColor(diffuseColor), _specularColor(specularColor), _intensity(intensity), _attenuation(attenuation)
+Light::Light(const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation)
+	: _position(vmml::Vector4f(position, 1.0)), _diffuseColor(diffuseColor), _specularColor(specularColor), _intensity(intensity), _attenuation(attenuation)
 {}
 
 Light::~Light()
 {}
 
-void Light::setPosition(const vmml::vec3f &position)
+void Light::setPosition(const vmml::Vector3f &position)
 {
-	_position = vmml::vec4f(position, 1.0);
+	_position = vmml::Vector4f(position, 1.0);
 }
 
-void Light::setDiffuseColor(const vmml::vec3f &color)
+void Light::setDiffuseColor(const vmml::Vector3f &color)
 {
 	_diffuseColor = color;
 }
 
-void Light::setSpecularColor(const vmml::vec3f &color)
+void Light::setSpecularColor(const vmml::Vector3f &color)
 {
 	_specularColor = color;
 }
@@ -46,17 +46,17 @@ void Light::setAttenuation(GLfloat attenuation)
 	_attenuation = attenuation;
 }
 
-vmml::vec4f Light::getPosition()
+vmml::Vector4f Light::getPosition()
 {
 	return _position;
 }
 
-vmml::vec3f Light::getDiffuseColor()
+vmml::Vector3f Light::getDiffuseColor()
 {
 	return _diffuseColor;
 }
 
-vmml::vec3f Light::getSpecularColor()
+vmml::Vector3f Light::getSpecularColor()
 {
 	return _specularColor;
 }

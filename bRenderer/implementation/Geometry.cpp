@@ -4,6 +4,10 @@
 
 void Geometry::initialize(GeometryDataPtr geometryData)
 {
+	// Create bounding volume
+	_boundingBox = createBoundingBox(geometryData->vboVertices);
+	
+	// Initialize geometry
     copyVertexData(geometryData->vboVertices);
     copyIndexData(geometryData->vboIndices);
     initializeVertexBuffer();
@@ -69,3 +73,28 @@ void Geometry::initializeVertexBuffer()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+Geometry::BoundingBoxPtr Geometry::createBoundingBox(const GeometryData::VboVertices &arg)
+{
+	Point3 min = arg[0].position;
+	Point3 max = arg[0].position;
+
+	for (auto i = arg.begin(); i != arg.end(); ++i)
+	{
+		if (i->position.x < min.x)
+			min.x = i->position.x;
+		else if (i->position.x > max.x)
+			max.x = i->position.x;
+
+		if (i->position.y < min.y)
+			min.y = i->position.y;
+		else if (i->position.y > max.y)
+			max.y = i->position.y;
+
+		if (i->position.z < min.z)
+			min.z = i->position.z;
+		else if (i->position.z > max.z)
+			max.z = i->position.z;
+	}
+
+	return BoundingBoxPtr(new vmml::AABBf(vmml::Vector3f(min.x, min.y, min.z), vmml::Vector3f(max.x, max.y, max.z)));
+}

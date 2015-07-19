@@ -156,7 +156,7 @@ class Input
 {
 public:
 
-#ifdef OS_IOS
+#ifdef B_OS_IOS
 	/* Typedefs */
 	typedef int GLFWwindow;
 #endif

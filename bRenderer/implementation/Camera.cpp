@@ -12,11 +12,11 @@ Camera::Camera(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 	: Camera(bRenderer::DEFAULT_CAMERA_POSITION(), bRenderer::DEFAULT_CAMERA_ROTATION_AXES(), fov, aspect, near, far)
 {}
 
-Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes)
+Camera::Camera(const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes)
 	: Camera(position, rotationAxes, bRenderer::DEFAULT_FIELD_OF_VIEW(), bRenderer::DEFAULT_ASPECT_RATIO(), bRenderer::DEFAULT_NEAR_CLIPPING_PLANE(), bRenderer::DEFAULT_FAR_CLIPPING_PLANE())
 {}
 
-Camera::Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+Camera::Camera(const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 	: _position(position), _rotationAxes(rotationAxes), _fov(fov), _aspect(aspect), _near(near), _far(far)
 {}
 
@@ -54,12 +54,12 @@ void Camera::resetCamera()
 }
 
 
-void Camera::setPosition(const vmml::vec3f &position)
+void Camera::setPosition(const vmml::Vector3f &position)
 {
 	_position = position;
 }
 
-void Camera::setRotation(const vmml::vec3f &rotationAxes)
+void Camera::setRotation(const vmml::Vector3f &rotationAxes)
 {
 	_rotationAxes = rotationAxes;
 }
@@ -84,68 +84,68 @@ void Camera::setFarClippingPlane(GLfloat far)
 	_far = far;
 }
 
-vmml::mat4f Camera::getViewMatrix(){
+vmml::Matrix4f Camera::getViewMatrix(){
 	return getRotation() * vmml::create_translation(getPosition());
 }
 
-vmml::mat4f Camera::getInverseViewMatrix(){
-	vmml::mat4f rotInv = vmml::mat4f::IDENTITY;
+vmml::Matrix4f Camera::getInverseViewMatrix(){
+	vmml::Matrix4f rotInv = vmml::Matrix4f::IDENTITY;
 	getRotation().transpose_to(rotInv);
 	return vmml::create_translation(-getPosition()) * rotInv;
 }
 
-vmml::mat4f Camera::getProjectionMatrix()
+vmml::Matrix4f Camera::getProjectionMatrix()
 {
 	return createPerspective(_fov, _aspect, _near, _far);
 }
 
-vmml::vec3f Camera::getPosition()
+vmml::Vector3f Camera::getPosition()
 {
 	return _position;
 }
 
-vmml::mat4f Camera::getRotation()
+vmml::Matrix4f Camera::getRotation()
 {
-	return  vmml::create_rotation(_rotationAxes[2], vmml::vec3f::UNIT_Z) * vmml::create_rotation(_rotationAxes[0], vmml::vec3f::UNIT_X) * vmml::create_rotation(_rotationAxes[1], vmml::vec3f::UNIT_Y);
+	return  vmml::create_rotation(_rotationAxes[2], vmml::Vector3f::UNIT_Z) * vmml::create_rotation(_rotationAxes[0], vmml::Vector3f::UNIT_X) * vmml::create_rotation(_rotationAxes[1], vmml::Vector3f::UNIT_Y);
 }
 
-vmml::vec3f Camera::getForward()
+vmml::Vector3f Camera::getForward()
 {
-	vmml::mat4f r = getRotation();
-	return vmml::vec3f(r.at(2,0), r.at(2,1), r.at(2,2));
+	vmml::Matrix4f r = getRotation();
+	return vmml::Vector3f(r.at(2,0), r.at(2,1), r.at(2,2));
 }
 
-vmml::vec3f Camera::getRight()
+vmml::Vector3f Camera::getRight()
 {
-	vmml::mat4f r = getRotation();
-	return vmml::vec3f(r.at(0, 0), r.at(0, 1), r.at(0, 2));
+	vmml::Matrix4f r = getRotation();
+	return vmml::Vector3f(r.at(0, 0), r.at(0, 1), r.at(0, 2));
 }
 
-vmml::vec3f Camera::getUp()
+vmml::Vector3f Camera::getUp()
 {
-	vmml::mat4f r = getRotation();
-	return vmml::vec3f(r.at(1, 0), r.at(1, 1), r.at(1, 2));
+	vmml::Matrix4f r = getRotation();
+	return vmml::Vector3f(r.at(1, 0), r.at(1, 1), r.at(1, 2));
 }
 
 /* Static Functions */
 
-vmml::mat4f Camera::lookAt(const vmml::vec3f &eye, const vmml::vec3f &target, const vmml::vec3f &up){
-	vmml::vec3f zaxis = vmml::normalize(eye - target);
-	vmml::vec3f xaxis = vmml::normalize(vmml::cross<3>(up, zaxis));
-	vmml::vec3f yaxis = vmml::cross<3>(zaxis, xaxis);
+vmml::Matrix4f Camera::lookAt(const vmml::Vector3f &eye, const vmml::Vector3f &target, const vmml::Vector3f &up){
+	vmml::Vector3f zaxis = vmml::normalize(eye - target);
+	vmml::Vector3f xaxis = vmml::normalize(vmml::cross<3>(up, zaxis));
+	vmml::Vector3f yaxis = vmml::cross<3>(zaxis, xaxis);
 
-	vmml::mat4f view;
-	view.set_row(0, vmml::vec4f(xaxis.x(), xaxis.y(), xaxis.z(), -vmml::dot(xaxis, eye)));
-	view.set_row(1, vmml::vec4f(yaxis.x(), yaxis.y(), yaxis.z(), -vmml::dot(yaxis, eye)));
-	view.set_row(2, vmml::vec4f(zaxis.x(), zaxis.y(), zaxis.z(), -vmml::dot(zaxis, eye)));
-	view.set_row(3, vmml::vec4f(0, 0, 0, 1.0));
+	vmml::Matrix4f view;
+	view.set_row(0, vmml::Vector4f(xaxis.x(), xaxis.y(), xaxis.z(), -vmml::dot(xaxis, eye)));
+	view.set_row(1, vmml::Vector4f(yaxis.x(), yaxis.y(), yaxis.z(), -vmml::dot(yaxis, eye)));
+	view.set_row(2, vmml::Vector4f(zaxis.x(), zaxis.y(), zaxis.z(), -vmml::dot(zaxis, eye)));
+	view.set_row(3, vmml::Vector4f(0, 0, 0, 1.0));
 
 	return view;
 }
 
-vmml::mat4f Camera::createPerspective(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+vmml::Matrix4f Camera::createPerspective(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 {
-	vmml::mat4f perspective = vmml::mat4f::IDENTITY;
+	vmml::Matrix4f perspective = vmml::Matrix4f::IDENTITY;
 
 	for (int i = 0; i<3; i++) {
 		for (int j = 0; j<3; j++) {

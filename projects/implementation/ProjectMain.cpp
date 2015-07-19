@@ -13,11 +13,11 @@ void ProjectMain::init()
 	bRenderer::log("Screen width: "+lexical_cast< std::string >(w)+", Screen height: "+lexical_cast< std::string >(h));
 
 	// let the renderer create an OpenGL context and the main window
-#ifdef OS_DESKTOP
+#ifdef B_OS_DESKTOP
 	bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");
 	//bRenderer().initRenderer(w, h, true);	// Fullscreen using full width and height of the screen
 #endif
-#ifdef OS_IOS
+#ifdef B_OS_IOS
     bRenderer().initRenderer(true);
 #endif
 
@@ -55,16 +55,16 @@ void ProjectMain::initFunction()
 	_running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 
 	// initialize free moving camera
-	bRenderer().getAssets()->createCamera("camera", vmml::vec3f(-33.0, 0.0, -13.0), vmml::vec3f(0.0, -M_PI_F / 2, 0.0));
+	bRenderer().getAssets()->createCamera("camera", vmml::Vector3f(-33.0, 0.0, -13.0), vmml::Vector3f(0.0, -M_PI_F / 2, 0.0));
 
 	// get shading language version
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	// create lights
-	bRenderer().getAssets()->createLight("firstLight", vmml::vec3f(80.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 0.5f, 1.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.3f);
-	bRenderer().getAssets()->createLight("secondLight", vmml::vec3f(150.0f, 0.0f, 0.0f), vmml::vec3f(0.5f, 1.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
-	bRenderer().getAssets()->createLight("thirdLight", vmml::vec3f(210.0f, 0.0f, 0.0f), vmml::vec3f(0.8f, 0.0f, 0.0f), vmml::vec3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
-	bRenderer().getAssets()->createLight("torchLight", -bRenderer().getAssets()->getCamera("camera")->getPosition(), vmml::vec3f(1.0f, 0.4f, -0.5f), vmml::vec3f(1.0f, 1.0f, 1.0f), 1200.0f, 0.7f);
+	bRenderer().getAssets()->createLight("firstLight", vmml::Vector3f(80.0f, 0.0f, 0.0f), vmml::Vector3f(0.5f, 0.5f, 1.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.3f);
+	bRenderer().getAssets()->createLight("secondLight", vmml::Vector3f(150.0f, 0.0f, 0.0f), vmml::Vector3f(0.5f, 1.0f, 0.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
+	bRenderer().getAssets()->createLight("thirdLight", vmml::Vector3f(210.0f, 0.0f, 0.0f), vmml::Vector3f(0.8f, 0.0f, 0.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
+	bRenderer().getAssets()->createLight("torchLight", -bRenderer().getAssets()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 0.4f, -0.5f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1200.0f, 0.7f);
 
 	// postprocessing
 	bRenderer().getAssets()->createFramebuffer("fbo");
@@ -74,7 +74,7 @@ void ProjectMain::initFunction()
 	bRenderer().getAssets()->loadModel("quad.obj", false, true, blurShader);
 
 	// set ambient color
-	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.0f, 0.0f, 0.05f));
+	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.0f, 0.0f, 0.05f));
 }
 
 /* Draw your scene here */
@@ -106,7 +106,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		GLfloat flickeringLightPosZ = -bRenderer().getAssets()->getCamera("camera")->getPosition().z();
 		flickeringLightPosX += 2.5f*sin(flickeringLightPosY * 4.0f + 3.0f*flickeringLight);
 		flickeringLightPosY += 2.5f*sin(flickeringLightPosX * 4.0f + 3.0f*flickeringLight);
-		bRenderer().getAssets()->getLight("torchLight")->setPosition(vmml::vec3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getAssets()->getCamera("camera")->getForward()*10.0f);
+		bRenderer().getAssets()->getLight("torchLight")->setPosition(vmml::Vector3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getAssets()->getCamera("camera")->getForward()*10.0f);
 	}
 
 	//// Draw Models ////
@@ -120,37 +120,37 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 
 	/*** Cave Start ***/
 	// translate and scale 
-	vmml::mat4f modelMatrix = vmml::create_scaling(vmml::vec3f(0.3f)) * vmml::create_translation(vmml::vec3f(100.0, -80.0, 0.0));
+	vmml::Matrix4f modelMatrix = vmml::create_scaling(vmml::Vector3f(0.3f)) * vmml::create_translation(vmml::Vector3f(100.0, -80.0, 0.0));
 	// draw
 	bRenderer().drawModel("cave_start", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
 
 	/*** Sphere ***/
 	// translate and scale
-	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(1480.0, 50.0, 300.0));
+	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(1480.0, 50.0, 300.0));
 	// draw 
 	bRenderer().drawModel("sphere", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
 
 	/*** Crystal (blue) ***/
 	// translate and scale
-	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(780.0, -170.0, 55.0));
+	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(780.0, -170.0, 55.0));
 	// draw
-	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.2f, 0.2f, 0.8f));
+	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 0.8f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight"}));
 	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (green) ***/
 	// translate and scale 
-	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(1480.0f, -170.0f, 70.0f));
+	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(1480.0f, -170.0f, 70.0f));
 	// draw
-	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.1f, 0.45f, 0.1f));
+	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.1f, 0.45f, 0.1f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }));
 	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (red) ***/
 	// translate and scale 
-	modelMatrix = vmml::create_scaling(vmml::vec3f(0.1f)) * vmml::create_translation(vmml::vec3f(2180.0f, -170.0f, 40.0f));
+	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(2180.0f, -170.0f, 40.0f));
 	// draw
-	bRenderer().getAssets()->setAmbientColor(vmml::vec3f(0.6f, 0.1f, 0.1f));
+	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.6f, 0.1f, 0.1f));
 	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }));
 	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
@@ -158,32 +158,32 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	// translate and scale 	
 		// Position the torch relative to the camera
 	modelMatrix = bRenderer().getAssets()->getCamera("camera")->getInverseViewMatrix();
-	modelMatrix *= vmml::create_translation(vmml::vec3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::vec3f(1.2f)) * vmml::create_rotation(1.64f, vmml::vec3f::UNIT_Y);
+	modelMatrix *= vmml::create_translation(vmml::Vector3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::Vector3f(1.2f)) * vmml::create_rotation(1.64f, vmml::Vector3f::UNIT_Y);
 	// draw
 	bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight" }));
     
     /*** Flame ***/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	// view matrix
-	vmml::vec3f eyePos(0.0f, 0.0f, 0.25f);
-	vmml::mat4f viewMatrix = Camera::lookAt(eyePos, vmml::vec3f::ZERO, vmml::vec3f::UP);
+	vmml::Vector3f eyePos(0.0f, 0.0f, 0.25f);
+	vmml::Matrix4f viewMatrix = Camera::lookAt(eyePos, vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 	// create three flames
 	for (GLfloat z = 0.0f; z < 3.0f; z++) 
 	{
 		if (z == 1.0f)
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		// translate
-		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.6f + (0.08f*z), (-z / 100.0f - 0.50f)));
+		vmml::Matrix4f translation = vmml::create_translation(vmml::Vector3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.6f + (0.08f*z), (-z / 100.0f - 0.50f)));
 		// rotate
 		GLfloat rot = 0.0f;
 		if (fmod(z, 2.0f) == 0.0f)
 			rot = 0.0f;
 		else
 			rot = M_PI_F;
-		vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
+		vmml::Matrix4f rotation = vmml::create_rotation(rot, vmml::Vector3f::UNIT_Z);
 		// scale
 		GLfloat ParticleScale = 2.45f - (0.46f*z);
-		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
+		vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
 		// wave effect
@@ -194,27 +194,27 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("offset", offset);
 		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("transparency", transparency);
 		// draw
-		bRenderer().drawModel("flame", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
+		bRenderer().drawModel("flame", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
 	}    
     
     /*** Sparks ***/
 	for (GLfloat z = 1.0f; z < 2.0f; z++)
 	{
 		// translate
-		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.65f, (-z / 100.0f - 0.58f)));
+		vmml::Matrix4f translation = vmml::create_translation(vmml::Vector3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.65f, (-z / 100.0f - 0.58f)));
 		// rotate
 		GLfloat rot = 1.0f;
 		if (_running)
 			rot = randomNumber(1.0f, 1.1f)*_randomTime*(z + 0.3f)*M_PI_F;
-		vmml::mat4f rotation = vmml::create_rotation(rot, vmml::vec3f::UNIT_Z);
+		vmml::Matrix4f rotation = vmml::create_rotation(rot, vmml::Vector3f::UNIT_Z);
 		// scale
 		GLfloat ParticleScale = 1.1f - (0.5f*z);
-		vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0f*ParticleScale, ParticleScale));
+		vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0f*ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
 
 		// draw
-		bRenderer().drawModel("sparks", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
+		bRenderer().drawModel("sparks", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
 	}
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -225,7 +225,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		
         /*** Blur ***/
 		// translate
-		vmml::mat4f translation = vmml::create_translation(vmml::vec3f(0.0f, 0.0f, -0.5));
+		vmml::Matrix4f translation = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
 		// model matrix
 		modelMatrix = translation;
 		// blur vertically and horizontally
@@ -239,18 +239,18 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			bRenderer().getAssets()->getMaterial("quad")->setTexture("fbo_texture", bRenderer().getAssets()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
 			bRenderer().getAssets()->getMaterial("quad")->setScalar("isVertical", (GLfloat)b);
 			// draw
-			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
+			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
 			b = !b;
 		}
 	
         /*** Title ***/
         // translate and scale 
         GLfloat titleScale = 0.4f;
-        translation = vmml::create_translation(vmml::vec3f(-0.4f, 0.0f, -0.65f));	
-        vmml::mat4f scaling = vmml::create_scaling(vmml::vec3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        translation = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f));	
+        vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
         modelMatrix = translation * scaling;
         // draw
-        bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::mat4f::IDENTITY, std::vector<std::string>({}));
+        bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
     }
 }
 

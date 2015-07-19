@@ -25,24 +25,24 @@ public:
 		Index       v1;
 		Index       v2;
 		Index       v3;
-		vmml::vec3f normal;
-		vmml::vec3f tangent;
-		vmml::vec3f bitangent;
+		vmml::Vector3f normal;
+		vmml::Vector3f tangent;
+		vmml::Vector3f bitangent;
 	};
 
 	struct VertexData
 	{
 		std::vector<Index>  faces;
-		vmml::vec3f         position;
-		vmml::vec3f         normal;
-		vmml::vec3f         tangent;
-		vmml::vec3f         bitangent;
+		vmml::Vector3f         position;
+		vmml::Vector3f         normal;
+		vmml::Vector3f         tangent;
+		vmml::Vector3f         bitangent;
 
 		GLfloat x()   { return position.x(); }
 		GLfloat y()   { return position.y(); }
 		GLfloat z()   { return position.z(); }
 
-		VertexData(const vmml::vec3f &position)
+		VertexData(const vmml::Vector3f &position)
 			: position(position)
 		{}
 	};
@@ -156,10 +156,10 @@ private:
 
 	std::vector<FaceData>       _faces;
 	std::vector<VertexData>     _vertices;
-	std::vector<vmml::vec2f>    _texCoords;
-	std::vector<vmml::vec3f>    _normals;
-	std::vector<vmml::vec3f>    _tangents;
-	std::vector<vmml::vec3f>    _bitangents;
+	std::vector<vmml::Vector2f>    _texCoords;
+	std::vector<vmml::Vector3f>    _normals;
+	std::vector<vmml::Vector3f>    _tangents;
+	std::vector<vmml::Vector3f>    _bitangents;
 };
 
 

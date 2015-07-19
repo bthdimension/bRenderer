@@ -21,7 +21,7 @@ typedef void (^block_t)();
     if(_displayLink == nil)
     {
         // specify update method
-        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update)];
         
         // add the display link to the run loop (will be called 60 times per second)
         [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -38,7 +38,7 @@ typedef void (^block_t)();
     }
 }
 
-- (void)update:(CADisplayLink *)sender
+- (void)update
 {
     _updateBlock();
 }

@@ -3,7 +3,7 @@
 namespace bRenderer
 {
 	/* Renderer configuration */
-	vmml::vec3f DEFAULT_AMBIENT_COLOR() { static const vmml::vec3f x = vmml::vec3f(0.0f, 0.0f, 0.0f); return x; }
+	vmml::Vector3f DEFAULT_AMBIENT_COLOR() { static const vmml::Vector3f x = vmml::Vector3f(0.0f, 0.0f, 0.0f); return x; }
 
 	/* Logger */
 	std::string LOG_MODE_INFO() { static const std::string x = "INFO"; return x; }
@@ -72,12 +72,12 @@ namespace bRenderer
 	GLfloat DEFAULT_ASPECT_RATIO() { static const GLfloat x = 4.0f / 3.0f; return x; }
 	GLfloat DEFAULT_NEAR_CLIPPING_PLANE() { static const GLfloat x = -1.0f; return x; }
 	GLfloat DEFAULT_FAR_CLIPPING_PLANE() { static const GLfloat x = 1.0f; return x; }
-	vmml::vec3f DEFAULT_CAMERA_POSITION() { static const vmml::vec3f x = vmml::vec3f(0.0f, 0.0f, 0.0f); return x; }
-	vmml::vec3f DEFAULT_CAMERA_ROTATION_AXES() { static const vmml::vec3f x = vmml::vec3f(0.0f, 0.0f, 0.0f); return x; }
+	vmml::Vector3f DEFAULT_CAMERA_POSITION() { static const vmml::Vector3f x = vmml::Vector3f(0.0f, 0.0f, 0.0f); return x; }
+	vmml::Vector3f DEFAULT_CAMERA_ROTATION_AXES() { static const vmml::Vector3f x = vmml::Vector3f(0.0f, 0.0f, 0.0f); return x; }
 
 	/* Light configuration */
-	vmml::vec4f DEFAULT_LIGHT_POSITION() { static const vmml::vec4f x = vmml::vec4f(0.0f, 0.0f, 0.0f, 1.0f); return x; }
-	vmml::vec3f DEFAULT_LIGHT_COLOR() { static const vmml::vec3f x = vmml::vec4f(1.0f, 1.0f, 1.0f, 1.0f); return x; }
+	vmml::Vector4f DEFAULT_LIGHT_POSITION() { static const vmml::Vector4f x = vmml::Vector4f(0.0f, 0.0f, 0.0f, 1.0f); return x; }
+	vmml::Vector3f DEFAULT_LIGHT_COLOR() { static const vmml::Vector3f x = vmml::Vector3f(1.0f, 1.0f, 1.0f); return x; }
 	GLfloat DEFAULT_LIGHT_INTENSITY() { static const GLfloat x = 1000.0f; return x; }
 	GLfloat DEFAULT_LIGHT_ATTENUATION() { static const GLfloat x = 1.0f; return x; }
 

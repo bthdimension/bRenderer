@@ -128,12 +128,12 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen, std::str
 	return initRenderer(windowTitle);
 }
 
-void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::mat4f & modelMatrix, const std::vector<std::string> &lightNames)
+void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames)
 {
 	drawModel(modelName, modelMatrix, _assetManagement->getCamera(cameraName)->getViewMatrix(), _assetManagement->getCamera(cameraName)->getProjectionMatrix(), lightNames);
 }
 
-void Renderer::drawModel(const std::string &modelName, const vmml::mat4f &modelMatrix, const vmml::mat4f &viewMatrix, const vmml::mat4f &projectionMatrix, const std::vector<std::string> &lightNames)
+void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames)
 {
 	Model::GroupMap &groupsCaveStart = _assetManagement->getModel(modelName)->getGroups();
 	for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)

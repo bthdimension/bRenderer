@@ -33,10 +33,10 @@ ShaderDataFile &ShaderDataFile::load(const std::string &vertShaderFileName, cons
     _fragShaderSrc = loadSrc(fragShaderFileName);
 
 	
-#ifdef OS_DESKTOP	
+#ifdef B_OS_DESKTOP	
 	replaceMacro(bRenderer::SHADER_VERSION_MACRO(), _shaderVersionDesktop);
 #endif
-#ifdef OS_IOS
+#ifdef B_OS_IOS
 	replaceMacro(bRenderer::SHADER_VERSION_MACRO(), _shaderVersionES);
 #endif
 	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO(), lexical_cast< std::string >(_maxLights));

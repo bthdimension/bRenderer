@@ -28,7 +28,7 @@ public:
 	*	@param[in] position Position of the light
 	*	@param[in] color Color of the light for both diffuse and specular lighting
 	*/
-	Light(const vmml::vec3f &position, const vmml::vec3f &color);
+	Light(const vmml::Vector3f &position, const vmml::Vector3f &color);
 
 	/**	@brief Constructor 
 	*	@param[in] position Position of the light
@@ -36,7 +36,7 @@ public:
 	*	@param[in] intensity Intensity of the light
 	*	@param[in] attenuation Attenuation of the light
 	*/
-	Light(const vmml::vec3f &position, const vmml::vec3f &color, GLfloat intensity, GLfloat attenuation);
+	Light(const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation);
 
 	/**	@brief Constructor
 	*	@param[in] position Position of the light
@@ -45,7 +45,7 @@ public:
 	*	@param[in] intensity Intensity of the light
 	*	@param[in] attenuation Attenuation of the light
 	*/
-	Light(const vmml::vec3f &position, const vmml::vec3f &diffuseColor, const vmml::vec3f &specularColor, GLfloat intensity, GLfloat attenuation);
+	Light(const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation);
 
 	/**	@brief Destructor
 	*/
@@ -54,17 +54,17 @@ public:
 	/**	@brief Sets the position of the light
 	*	@param[in] position Position of the light
 	*/
-	void setPosition(const vmml::vec3f &position);
+	void setPosition(const vmml::Vector3f &position);
 
 	/**	@brief Sets the color of the light for diffuse lighting
 	*	@param[in] color Color of the light for diffuse lighting
 	*/
-	void setDiffuseColor(const vmml::vec3f &color);
+	void setDiffuseColor(const vmml::Vector3f &color);
 
 	/**	@brief Sets the color of the light for specular lighting
 	*	@param[in] color Color of the light for specular lighting
 	*/
-	void setSpecularColor(const vmml::vec3f &color);
+	void setSpecularColor(const vmml::Vector3f &color);
 
 	/**	@brief Sets the intensity of the light
 	*	@param[in] intensity Intensity of the light
@@ -78,15 +78,15 @@ public:
 
 	/**	@brief Returns the position of the light
 	*/
-	vmml::vec4f getPosition();
+	vmml::Vector4f getPosition();
 
 	/**	@brief Returns the color of the light for diffuse lighting
 	*/
-	vmml::vec3f getDiffuseColor();
+	vmml::Vector3f getDiffuseColor();
 
 	/**	@brief Returns the color of the light for specular lighting
 	*/
-	vmml::vec3f getSpecularColor();
+	vmml::Vector3f getSpecularColor();
 
 	/**	@brief Returns the intensity of the light
 	*/
@@ -100,9 +100,9 @@ private:
 
 	/* Variables */
 
-	vmml::vec4f _position;
-	vmml::vec3f _diffuseColor;
-	vmml::vec3f _specularColor;
+	vmml::Vector4f _position;
+	vmml::Vector3f _diffuseColor;
+	vmml::Vector3f _specularColor;
 	GLfloat _intensity;
 	GLfloat _attenuation;
 

@@ -33,7 +33,7 @@ public:
 	*	@param[in] position Position of the camera
 	*	@param[in] rotationAxes Rotation axes of the camera
 	*/
-	Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes);
+	Camera(const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes);
 
 	/**	@brief Constructor
 	*	@param[in] position Position of the camera
@@ -43,7 +43,7 @@ public:
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	Camera(const vmml::vec3f &position, const vmml::vec3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+	Camera(const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
 
 	/**	@brief Destructor
 	*/
@@ -78,12 +78,12 @@ public:
 	/**	@brief Sets the position of the camera
 	*	@param[in] position Position of the camera
 	*/
-	void setPosition(const vmml::vec3f &position);
+	void setPosition(const vmml::Vector3f &position);
 
 	/**	@brief Sets the rotation matrix of the camera
 	*	@param[in] rotationAxes Rotation axes of the camera
 	*/
-	void setRotation(const vmml::vec3f &rotationAxes);
+	void setRotation(const vmml::Vector3f &rotationAxes);
 
 	/**	@brief Sets field of view
 	*	@param[in] fov Field of view
@@ -107,37 +107,37 @@ public:
     
 	/**	@brief Returns the view matrix of the camera
 	*/
-    vmml::mat4f getViewMatrix();
+    vmml::Matrix4f getViewMatrix();
 
 	/**	@brief Returns the inverse of the view matrix of the camera
 	*
 	*	The inverse view matrix may be useful to keep an object at the cameras position 
 	*/
-	vmml::mat4f getInverseViewMatrix();
+	vmml::Matrix4f getInverseViewMatrix();
 
 	/**	@brief Returns the view projection of the camera
 	*/
-	vmml::mat4f getProjectionMatrix();
+	vmml::Matrix4f getProjectionMatrix();
 
 	/**	@brief Returns the position of the camera
 	*/
-	vmml::vec3f getPosition();
+	vmml::Vector3f getPosition();
 
 	/**	@brief Returns the rotation matrix of the camera
 	*/
-	vmml::mat4f getRotation();
+	vmml::Matrix4f getRotation();
 
 	/**	@brief Returns the orientation of the camera
 	*/
-	vmml::vec3f getForward();
+	vmml::Vector3f getForward();
 
 	/**	@brief Returns the right vector of the camera
 	*/
-	vmml::vec3f getRight();
+	vmml::Vector3f getRight();
 
 	/**	@brief Returns the up vector of the camera
 	*/
-	vmml::vec3f getUp();
+	vmml::Vector3f getUp();
 
 	/* Static Functions */
 
@@ -146,7 +146,7 @@ public:
 	*	@param[in] target Specifies the position of the reference point
 	*	@param[in] up Specifies the direction of the up vector
 	*/
-	static vmml::mat4f lookAt(const vmml::vec3f &eye, const vmml::vec3f &target, const vmml::vec3f &up);
+	static vmml::Matrix4f lookAt(const vmml::Vector3f &eye, const vmml::Vector3f &target, const vmml::Vector3f &up);
 
 	/**	@brief Create a 3D perspective
 	*	@param[in] fov Field of view
@@ -154,14 +154,14 @@ public:
 	*	@param[in] near Near clipping plane
 	*	@param[in] far Far clipping plane
 	*/
-	static vmml::mat4f createPerspective(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
+	static vmml::Matrix4f createPerspective(GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far);
     
 private:
 
 	/* Variables */
 
-	vmml::vec3f _position;
-	vmml::vec3f _rotationAxes;
+	vmml::Vector3f _position;
+	vmml::Vector3f _rotationAxes;
 
 	GLfloat _fov, _aspect, _near, _far;
 };

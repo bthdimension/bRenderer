@@ -20,17 +20,17 @@ void OBJLoader::error_callback(const std::string& filename, std::size_t line_num
 
 void OBJLoader::geometric_vertex_callback(obj::float_type x, obj::float_type y, obj::float_type z)
 {
-	_vertices.push_back(vmml::vec3f(x, y, z));
+	_vertices.push_back(vmml::Vector3f(x, y, z));
 }
 
 void OBJLoader::texture_vertex_callback(obj::float_type u, obj::float_type v)
 {
-	_texCoords.push_back(vmml::vec2f(u, v));
+	_texCoords.push_back(vmml::Vector2f(u, v));
 }
 
 void OBJLoader::vertex_normal_callback(obj::float_type x, obj::float_type y, obj::float_type z)
 {
-	_normals.push_back(vmml::vec3f(x, y, z));
+	_normals.push_back(vmml::Vector3f(x, y, z));
 }
 
 template< bool POSITION, bool TEX_COORD, bool NORMAL >
@@ -82,7 +82,7 @@ void OBJLoader::genVertex(const IndexData &d)
 		v.normal.x = 0;
 		v.normal.y = 0;
 		v.normal.z = 0;
-		_vertices[d.vertexIndex].normal = vmml::vec3f::ZERO;
+		_vertices[d.vertexIndex].normal = vmml::Vector3f::ZERO;
 	}
 
 	v.tangent.x = 0.0;
@@ -103,7 +103,7 @@ void OBJLoader::genFace(const IndexData &d1, const IndexData &d2, const IndexDat
 	f.v1 = d1.vertexIndex;
 	f.v2 = d2.vertexIndex;
 	f.v3 = d3.vertexIndex;
-	f.normal = vmml::vec3f::ZERO;
+	f.normal = vmml::Vector3f::ZERO;
 
 	_faces.push_back(f);
 }
@@ -330,19 +330,19 @@ bool OBJLoader::load(std::istream& istream)
 			{
 				auto idx = i->second->indices[*j].vertexIndex;
 
-				vmml::vec3f cNormal = _vertices[idx].normal;
+				vmml::Vector3f cNormal = _vertices[idx].normal;
 				Vector3 &normal = i->second->vboVertices[*j].normal;
 				normal.x = cNormal.x();
 				normal.y = cNormal.y();
 				normal.z = cNormal.z();
 
-				vmml::vec3f cTangent = _vertices[idx].tangent;
+				vmml::Vector3f cTangent = _vertices[idx].tangent;
 				Vector3 &tangent = i->second->vboVertices[*j].tangent;
 				tangent.x = cTangent.x();
 				tangent.y = cTangent.y();
 				tangent.z = cTangent.z();
 
-				vmml::vec3f cBitangent = _vertices[idx].bitangent;
+				vmml::Vector3f cBitangent = _vertices[idx].bitangent;
 				Vector3 &bitangent = i->second->vboVertices[*j].bitangent;
 				bitangent.x = cBitangent.x();
 				bitangent.y = cBitangent.y();
@@ -394,25 +394,25 @@ void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, 
 		{
 			if (key == bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR())
 			{
-				vmml::vec3f kA;
+				vmml::Vector3f kA;
 				ss >> kA[0] >> std::ws >> kA[1] >> std::ws >> kA[2] >> std::ws;
 				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_AMBIENT_COLOR()] = kA;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR())
 			{
-				vmml::vec3f kD;
+				vmml::Vector3f kD;
 				ss >> kD[0] >> std::ws >> kD[1] >> std::ws >> kD[2] >> std::ws;
 				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR()] = kD;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR())
 			{
-				vmml::vec3f kS;
+				vmml::Vector3f kS;
 				ss >> kS[0] >> std::ws >> kS[1] >> std::ws >> kS[2] >> std::ws;
 				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_SPECULAR_COLOR()] = kS;
 			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER())
 			{
-				vmml::vec3f tF;
+				vmml::Vector3f tF;
 				ss >> tF[0] >> std::ws >> tF[1] >> std::ws >> tF[2] >> std::ws;
 				materials[matName].vectors[bRenderer::WAVEFRONT_MATERIAL_TRANSMISSION_FILTER()] = tF;
 			}
@@ -471,15 +471,15 @@ void OBJLoader::createFaceNormals()
 		_vertices[indexV3].faces.push_back(i);
 
 		// obtain each of this face's vertex positions
-		const vmml::vec3f &p1 = _vertices[indexV1].position;
-		const vmml::vec3f &p2 = _vertices[indexV2].position;
-		const vmml::vec3f &p3 = _vertices[indexV3].position;
+		const vmml::Vector3f &p1 = _vertices[indexV1].position;
+		const vmml::Vector3f &p2 = _vertices[indexV2].position;
+		const vmml::Vector3f &p3 = _vertices[indexV3].position;
 
-		vmml::vec3f e = p2 - p1;
-		vmml::vec3f f = p3 - p1;
+		vmml::Vector3f e = p2 - p1;
+		vmml::Vector3f f = p3 - p1;
 
 		// calculate normal for this face
-		vmml::vec3f normal = e.cross(f);
+		vmml::Vector3f normal = e.cross(f);
 		//invert z Axis
 		normal.set(normal.x(), normal.y(), (-1.0f)*normal.z());
 
@@ -491,26 +491,26 @@ void OBJLoader::createFaceNormals()
 		if (nT > indexV1 && nT > indexV2 && nT > indexV3)
 		{
 			//// obtain each of this face's texture coordinates
-			//const vmml::vec2f &t1 = _texCoords[indexV1];
-			//const vmml::vec2f &t2 = _texCoords[indexV2];
-			//const vmml::vec2f &t3 = _texCoords[indexV3];
+			//const vmml::Vector2f &t1 = _texCoords[indexV1];
+			//const vmml::Vector2f &t2 = _texCoords[indexV2];
+			//const vmml::Vector2f &t3 = _texCoords[indexV3];
 
-			//vmml::vec2f u = t2 - t1;
-			//vmml::vec2f v = t3 - t1;
+			//vmml::Vector2f u = t2 - t1;
+			//vmml::Vector2f v = t3 - t1;
 			//
 			//// method by opengl-tutorial.org
 			//GLfloat r = 1.0f / (u.x() * v.y() - u.y() * v.x());
-			//vmml::vec3f tangent = (e * v.y() - f * u.y())*r;
-			//vmml::vec3f bitangent = (f * u.x() - e * v.x())*r;
+			//vmml::Vector3f tangent = (e * v.y() - f * u.y())*r;
+			//vmml::Vector3f bitangent = (f * u.x() - e * v.x())*r;
 
 			//face.tangent = tangent;
 			//face.bitangent = bitangent;
 
 			// method by "cplusplusguy"
-			vmml::vec3f v1(0.0, 0.0, 0.0);
-			v1.cross(face.normal, vmml::vec3f(0.0, 0.0, -1.0));
-			vmml::vec3f v2(0.0, 0.0, 0.0);
-			v2.cross(face.normal, vmml::vec3f(0.0, -1.0, 0.0));
+			vmml::Vector3f v1(0.0, 0.0, 0.0);
+			v1.cross(face.normal, vmml::Vector3f(0.0, 0.0, -1.0));
+			vmml::Vector3f v2(0.0, 0.0, 0.0);
+			v2.cross(face.normal, vmml::Vector3f(0.0, -1.0, 0.0));
 			if (v1.length() > v2.length()){
 				face.tangent = v1;
 			}
@@ -529,10 +529,10 @@ void OBJLoader::createVertexNormals()
 	for (VertexData &vertex : _vertices)
 	{
 		// only calculate vertex normal if not present
-		vmml::vec3f n = vmml::vec3f::ZERO;
+		vmml::Vector3f n = vmml::Vector3f::ZERO;
 		if (vertex.normal.squared_length() < std::numeric_limits< float >::epsilon())
 		{
-			vmml::vec3f normalSum = vmml::vec3f::ZERO;
+			vmml::Vector3f normalSum = vmml::Vector3f::ZERO;
 			for (Index &face : vertex.faces)
 			{
 				normalSum += _faces[face].normal;
@@ -544,8 +544,8 @@ void OBJLoader::createVertexNormals()
 			n = vmml::normalize(vertex.normal);
 		}
 
-		vmml::vec3f tangentSum = vmml::vec3f::ZERO;
-		vmml::vec3f bitangentSum = vmml::vec3f::ZERO;
+		vmml::Vector3f tangentSum = vmml::Vector3f::ZERO;
+		vmml::Vector3f bitangentSum = vmml::Vector3f::ZERO;
 		for (Index &face : vertex.faces)
 		{
 			tangentSum += _faces[face].tangent;
