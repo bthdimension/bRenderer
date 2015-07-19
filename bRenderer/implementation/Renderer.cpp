@@ -7,8 +7,6 @@
 #include "../headers/ShaderData.h"
 #include "../headers/Configuration.h"
 
-#include "vmmlib/frustum_culler.hpp"
-
 #include <boost/lexical_cast.hpp>
 using boost::lexical_cast;
 
@@ -143,12 +141,11 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
 	vmml::Visibility visibility = vmml::VISIBILITY_FULL;
 
+	GLint compareShader = -1;
+
 	// Frsutum culling
 	if (doFrustumCulling){
-		vmml::AABBf aabbObjectSpace = _assetManagement->getModel(modelName)->getBoundingBoxObjectSpace();
-		vmml::FrustumCullerf culler;
-		culler.setup(projectionMatrix*modelViewMatrix);
-		visibility = culler.test_aabb(vmml::Vector2f(aabbObjectSpace.getMin().x(), aabbObjectSpace.getMax().x()), vmml::Vector2f(aabbObjectSpace.getMin().y(), aabbObjectSpace.getMax().y()), vmml::Vector2f(aabbObjectSpace.getMin().z(), aabbObjectSpace.getMax().z()));
+		visibility = viewFrustumCulling(_assetManagement->getModel(modelName)->getBoundingBoxObjectSpace(), projectionMatrix*modelViewMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 	}
 
@@ -162,17 +159,18 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 			// Only do frsutum culling for the geometry if the model has more than one geometry object, 
 			// otherwise the culling restult of the whole model is the same as for the geometry
 			if (doFrustumCulling && cullIndividualGeometry && groupsCaveStart.size() > 1){
-				vmml::AABBf aabbObjectSpace = geometry.getBoundingBoxObjectSpace();
-				vmml::FrustumCullerf culler;
-				culler.setup(projectionMatrix*modelViewMatrix);
-				visibility = culler.test_aabb(vmml::Vector2f(aabbObjectSpace.getMin().x(), aabbObjectSpace.getMax().x()), vmml::Vector2f(aabbObjectSpace.getMin().y(), aabbObjectSpace.getMax().y()), vmml::Vector2f(aabbObjectSpace.getMin().z(), aabbObjectSpace.getMax().z()));
+				visibility = viewFrustumCulling(geometry.getBoundingBoxObjectSpace(), projectionMatrix*modelViewMatrix);
 				//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 			}
 
 			if (visibility != vmml::VISIBILITY_NONE){
 				ShaderPtr shader = geometry.getMaterial()->getShader();
-				if (shader)
+
+				// Only pass Uniforms if the shader of the current geometry differs from the one of the last
+				if (shader && compareShader != shader->getProgramID())
 				{
+					compareShader = shader->getProgramID();
+
 					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX(), projectionMatrix);
 					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX(), modelViewMatrix);
 
@@ -202,14 +200,18 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 					if (shader->supportsAmbientLighting())
 						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _assetManagement->getAmbientColor());
 				}
-				else
-				{
-					bRenderer::log("No shader available.", bRenderer::LM_WARNING);
-				}
+
 				geometry.draw();
 			}
 		}
 	}
+}
+
+vmml::Visibility Renderer::viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix)
+{
+	vmml::FrustumCullerf culler;
+	culler.setup(modelViewProjectionMatrix);
+	return culler.test_aabb(vmml::Vector2f(aabbObjectSpace.getMin().x(), aabbObjectSpace.getMax().x()), vmml::Vector2f(aabbObjectSpace.getMin().y(), aabbObjectSpace.getMax().y()), vmml::Vector2f(aabbObjectSpace.getMin().z(), aabbObjectSpace.getMax().z()));
 }
 
 /* Private functions */

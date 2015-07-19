@@ -11,6 +11,7 @@
 
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
+#include "vmmlib/frustum_culler.hpp"
 
 #ifdef __OBJC__
 @class RendererCaller;
@@ -152,6 +153,12 @@ public:
 	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
 	*/
 	void drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
+
+	/**	@brief Tests an axis-aligned bounding box against the view frustum
+	*	@param[in] aabbObjectSpace The axis-aligned bounding box in object space
+	*	@param[in] modelViewProjectionMatrix The model view projection matrix (projection * view * model)
+	*/
+	vmml::Visibility viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix);
 
 private:
 	/* Functions */
