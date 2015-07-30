@@ -8,6 +8,7 @@
 #include "View.h"
 #include "Input.h"
 #include "AssetManagement.h"
+#include "RenderQueue.h"
 
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
@@ -55,6 +56,10 @@ public:
 	/**	@brief Returns a pointer to the asset management of the renderer
 	*/
 	AssetManagementPtr getAssets();
+
+	/**	@brief Returns a pointer to the render queue of the renderer
+	*/
+	RenderQueuePtr getRenderQueue();
 
 	/**	@brief Returns true if the renderer has already been initialized
 	*/
@@ -154,11 +159,56 @@ public:
 	*/
 	void drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
 
+	/**	@brief Queue specified model into a render queue
+	*
+	*	To allow for postprocessing multiple render queues are processed in order of their creation
+	*
+	*	@param[in] modelName Name of the model
+	*	@param[in] cameraName Name of the camera
+	*	@param[in] modelMatrix
+	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
+	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
+	*	@param[in] isTransparent Set true if the model is (partially) transparent and sorting according to distance should occur (optional)
+	*/
+	void queueModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+
+	/**	@brief Queue specified model into a render queue
+	*
+	*	To allow for postprocessing multiple render queues are processed in order of their creation
+	*
+	*	@param[in] modelName Name of the model
+	*	@param[in] modelMatrix
+	*	@param[in] viewMatrix
+	*	@param[in] projectionMatrix
+	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
+	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
+	*	@param[in] isTransparent Set true if the model is (partially) transparent and sorting according to distance should occur (optional)
+	*/
+	void queueModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+
+	/**	@brief Queue specified model into a render queue
+	*
+	*	Every binding and unbinding results in a new render queue so only the geometry gets drawn into the buffer that was intended to
+	*
+	*	@param[in] texture The texture to draw to
+	*	@param[in] preserveCurrentFramebuffer If true the framebuffer that was active before binding is bound again when unbinding
+	*/
+	//void queueBufferBinding(TexturePtr texture, bool preserveCurrentFramebuffer);
+
 	/**	@brief Tests an axis-aligned bounding box against the view frustum
 	*	@param[in] aabbObjectSpace The axis-aligned bounding box in object space
 	*	@param[in] modelViewProjectionMatrix The model view projection matrix (projection * view * model)
 	*/
 	vmml::Visibility viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix);
+
+	/**	@brief Tests an axis-aligned bounding box against the view frustum
+	*	@param[in] aabbObjectSpace The axis-aligned bounding box in object space
+	*	@param[in] modelViewProjectionMatrix The model view projection matrix (projection * view * model)
+	*	@param[in] culler View frustum culler
+	*/
+	vmml::Visibility viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix, vmml::FrustumCullerf &culler);
 
 private:
 	/* Functions */
@@ -182,9 +232,13 @@ private:
 	InputPtr			_input;
 	AssetManagementPtr	_assetManagement;
 
+	RenderQueuePtr		_renderQueue;
+
 	IRenderProject *_renderProject;
     
     RendererCaller *_rendererCaller;
+
+	Properties propertiesRenderQueue;
 	
 	void(*_initFunction)();
 	void(*_loopFunction)(const double deltaTime, const double elapsedTime);

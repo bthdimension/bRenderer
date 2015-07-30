@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <string>
-#include <map>
+#include <unordered_map>
 
 #include "IDrawable.h"
 #include "Geometry.h"
@@ -20,7 +20,7 @@ class Model: public IDrawable
 {
 public:
 	/* Typedefs */
-	typedef std::map< std::string, Geometry > GroupMap;
+	typedef std::unordered_map< std::string, GeometryPtr > GroupMap;
 
 	/* Functions */
     
@@ -78,7 +78,7 @@ public:
         
         for (auto i = _groups.begin(); i != _groups.end(); ++i)
         {
-            i->second.setMaterial(_material);
+            i->second->setMaterial(_material);
         }
     }
 
@@ -95,7 +95,7 @@ public:
 
 		for (auto i = _groups.begin(); i != _groups.end(); ++i)
 		{
-			i->second.setProperties(_properties);
+			i->second->setProperties(_properties);
 		}
 	}
     

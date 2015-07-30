@@ -42,7 +42,7 @@ void ProjectMain::initFunction()
 	PropertiesPtr flameProperties = bRenderer().getAssets()->createProperties("flameProperties");	// Add additional properties to a model
 
 	// load models
-	bRenderer().getAssets()->loadModel("cave_start.obj", true, true, false, 4, true, true);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getAssets()->loadModel("cave.obj", true, true, false, 4, true, true);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
 	bRenderer().getAssets()->loadModel("sphere.obj", true, true, false, 4, true, true);				// create custom shader with a maximum of 4 lights 
 	bRenderer().getAssets()->loadModel("crystal.obj", false, true, customShader);					// the custom shader created above is used
 	bRenderer().getAssets()->loadModel("torch.obj", false, true, false, 1, false, true);				// create custom shader with a maximum of 1 light
@@ -78,16 +78,11 @@ void ProjectMain::initFunction()
 }
 
 /* Draw your scene here */
+
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-	//if ((int)elapsedTime >= 6 && (int)elapsedTime <= 7)
-	//{
-	//	/* Start animating after 6 seconds */
-	//	if (!_running){ _running = true; bRenderer().getInput()->setCursorEnabled(!_running); }
-	//}
-
 	//bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-	//bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
 
 	//// Camera Movement ////
 	moveCamera(deltaTime);
@@ -108,6 +103,9 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		flickeringLightPosY += 2.5f*sin(flickeringLightPosX * 4.0f + 3.0f*flickeringLight);
 		bRenderer().getAssets()->getLight("torchLight")->setPosition(vmml::Vector3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getAssets()->getCamera("camera")->getForward()*10.0f);
 	}
+	else{
+		bRenderer().getAssets()->getLight("torchLight")->setPosition(-bRenderer().getAssets()->getCamera("camera")->getPosition() - bRenderer().getAssets()->getCamera("camera")->getForward()*10.0f);
+	}
 
 	//// Draw Models ////
 
@@ -122,20 +120,20 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	// translate and scale 
 	vmml::Matrix4f modelMatrix = vmml::create_scaling(vmml::Vector3f(0.3f)) * vmml::create_translation(vmml::Vector3f(100.0, -80.0, 0.0));
 	// draw
-	bRenderer().drawModel("cave_start", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
+	bRenderer().queueModel("cave", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true, true);
 
 	/*** Sphere ***/
 	// translate and scale
 	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(1480.0, 50.0, 300.0));
 	// draw 
-	bRenderer().drawModel("sphere", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
+	bRenderer().queueModel("sphere", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
 
 	/*** Crystal (blue) ***/
 	// translate and scale
 	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(780.0, -170.0, 55.0));
 	// draw
 	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 0.8f));
-	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight"}));
+	bRenderer().queueModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
 	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (green) ***/
@@ -143,7 +141,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(1480.0f, -170.0f, 70.0f));
 	// draw
 	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.1f, 0.45f, 0.1f));
-	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }));
+	bRenderer().queueModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }), true, false, true);
 	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (red) ***/
@@ -151,7 +149,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(2180.0f, -170.0f, 40.0f));
 	// draw
 	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.6f, 0.1f, 0.1f));
-	bRenderer().drawModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }));
+	bRenderer().queueModel("crystal", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }), true, false, true);
 	bRenderer().getAssets()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	///*** Torch ***/
@@ -160,18 +158,15 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	modelMatrix = bRenderer().getAssets()->getCamera("camera")->getInverseViewMatrix();
 	modelMatrix *= vmml::create_translation(vmml::Vector3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::Vector3f(1.2f)) * vmml::create_rotation(1.64f, vmml::Vector3f::UNIT_Y);
 	// draw
-	bRenderer().drawModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight" }));
+	bRenderer().queueModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight" }));
     
     /*** Flame ***/
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	// view matrix
 	vmml::Vector3f eyePos(0.0f, 0.0f, 0.25f);
 	vmml::Matrix4f viewMatrix = Camera::lookAt(eyePos, vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 	// create three flames
 	for (GLfloat z = 0.0f; z < 3.0f; z++) 
 	{
-		if (z == 1.0f)
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		// translate
 		vmml::Matrix4f translation = vmml::create_translation(vmml::Vector3f(0.65f / bRenderer().getView()->getAspectRatio(), 0.6f + (0.08f*z), (-z / 100.0f - 0.50f)));
 		// rotate
@@ -194,7 +189,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("offset", offset);
 		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("transparency", transparency);
 		// draw
-		bRenderer().drawModel("flame", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
+		bRenderer().queueModel("flame", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), true, false, true, GL_SRC_ALPHA, GL_ONE, (-1.0f - 0.01*z));  // negative distance because always in foreground
 	}    
     
     /*** Sparks ***/
@@ -214,10 +209,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		modelMatrix = translation * scaling * rotation;
 
 		// draw
-		bRenderer().drawModel("sparks", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
+		bRenderer().queueModel("sparks", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), true, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01*z)); // negative distance because always in foreground
 	}
-    
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	bRenderer().getRenderQueue()->draw();
 
 	if (!_running){
         
@@ -234,8 +229,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			if (i == numberOfBlurSteps - 1)
 				bRenderer().getAssets()->getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
 			else
-				bRenderer().getAssets()->getFramebuffer("fbo")->bind(bRenderer().getAssets()->getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);
-            
+				bRenderer().getAssets()->getFramebuffer("fbo")->bind(bRenderer().getAssets()->getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);            
 			bRenderer().getAssets()->getMaterial("quad")->setTexture("fbo_texture", bRenderer().getAssets()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
 			bRenderer().getAssets()->getMaterial("quad")->setScalar("isVertical", (GLfloat)b);
 			// draw
@@ -250,8 +244,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
         vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
         modelMatrix = translation * scaling;
         // draw
-        bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
+		bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), true, false);	
     }
+
+	
 }
 
 /* This function is executed when terminating the renderer */

@@ -84,6 +84,7 @@
     <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\RenderQueue.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="..\..\bRenderer\headers\Renderer.h" />
     <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
     <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h" />
+    <ClInclude Include="..\..\bRenderer\headers\RenderQueue.h" />
     <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h" />

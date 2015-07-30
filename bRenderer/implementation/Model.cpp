@@ -10,16 +10,17 @@ Model::Model(AssetManagement *a, const ModelData &modelData, GLuint shaderMaxLig
 
 	for (auto i = data.begin(); i != data.end(); ++i)
 	{
-		Geometry &g = _groups[i->first];
+		GeometryPtr g = GeometryPtr(new Geometry);
+		_groups.insert(std::pair< std::string, GeometryPtr >(i->first, g));
 		GeometryDataPtr gData = i->second;
 
 		MaterialPtr material = a->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting);
-		g.initialize(gData);
-		g.setMaterial(material);
-		g.setProperties(properties);
+		g->initialize(gData);
+		g->setMaterial(material);
+		g->setProperties(properties);
 
 		// expand bounding box
-		_boundingBox.merge(g.getBoundingBoxObjectSpace());
+		_boundingBox.merge(g->getBoundingBoxObjectSpace());
 	}
 }
 
@@ -29,15 +30,16 @@ Model::Model(AssetManagement *a, const ModelData &modelData, ShaderPtr shader, P
     ModelData::GroupMap data = modelData.getData();
     for (auto i = data.begin(); i != data.end(); ++i)
     {
-        Geometry &g = _groups[i->first];
+		GeometryPtr g = GeometryPtr(new Geometry);
+		_groups.insert(std::pair< std::string, GeometryPtr >(i->first, g));
         GeometryDataPtr gData = i->second;
 		MaterialPtr material = a->createMaterial(gData->materialData.name, gData->materialData, shader);
-        g.initialize(gData);
-        g.setMaterial(material);
-		g.setProperties(properties);
+        g->initialize(gData);
+        g->setMaterial(material);
+		g->setProperties(properties);
 
 		// expand bounding box
-		_boundingBox.merge(g.getBoundingBoxObjectSpace());
+		_boundingBox.merge(g->getBoundingBoxObjectSpace());
     }
 }
 
@@ -48,14 +50,15 @@ Model::Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr pro
 	_properties = properties;
 	for (auto i = data.begin(); i != data.end(); ++i)
 	{
-		Geometry &g = _groups[i->first];
+		GeometryPtr g = GeometryPtr(new Geometry);
+		_groups.insert(std::pair< std::string, GeometryPtr >(i->first, g));
 		GeometryDataPtr gData = i->second;
-		g.initialize(gData);
-		g.setMaterial(material);
-		g.setProperties(properties);
+		g->initialize(gData);
+		g->setMaterial(material);
+		g->setProperties(properties);
 
 		// expand bounding box
-		_boundingBox.merge(g.getBoundingBoxObjectSpace());
+		_boundingBox.merge(g->getBoundingBoxObjectSpace());
 	}
 }
 
@@ -66,11 +69,11 @@ void Model::draw(GLenum mode)
 {
     for (auto i = _groups.begin(); i != _groups.end(); ++i)
     {
-        i->second.draw(mode);
+        i->second->draw(mode);
     }
 }
 
 void Model::draw(const std::string &groupName, GLenum mode)
 {
-    _groups[groupName].draw(mode);
+    _groups[groupName]->draw(mode);
 }

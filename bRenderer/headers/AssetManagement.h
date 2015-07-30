@@ -358,50 +358,50 @@ public:
 	*/
 	vmml::Vector3f getAmbientColor();
 
-	/**	@brief Delete a shader
+	/**	@brief Remove a shader
 	*	@param[in] name Name of the shader
 	*/
-	void deleteShader(const std::string &name);
+	void removeShader(const std::string &name);
 
-	/**	@brief Delete a texture
+	/**	@brief Remove a texture
 	*	@param[in] name Name of the texture
 	*/
-	void deleteTexture(const std::string &name);
+	void removeTexture(const std::string &name);
 
-	/**	@brief Delete a material
+	/**	@brief Remove a material
 	*	@param[in] name Name of the material
 	*/
-	void deleteMaterial(const std::string &name);
+	void removeMaterial(const std::string &name);
 
-	/**	@brief Delete properties
+	/**	@brief Remove properties
 	*	@param[in] name Name of the properties
 	*/
-	void deleteProperties(const std::string &name);
+	void removeProperties(const std::string &name);
 
-	/**	@brief Delete a 3D model
+	/**	@brief Remove a 3D model
 	*	@param[in] name Name of the model
 	*/
-	void deleteModel(const std::string &name);
+	void removeModel(const std::string &name);
 
-	/**	@brief Delete a camera
+	/**	@brief Remove a camera
 	*	@param[in] name Name of the camera
 	*/
-	void deleteCamera(const std::string &name);
+	void removeCamera(const std::string &name);
 
-	/**	@brief Delete a matrix stack
+	/**	@brief Remove a matrix stack
 	*	@param[in] name Name of the matrix stack
 	*/
-	void deleteMatrixStack(const std::string &name);
+	void removeMatrixStack(const std::string &name);
 
-	/**	@brief Delete a light
+	/**	@brief Remove a light
 	*	@param[in] name Name of the light
 	*/
-	void deleteLight(const std::string &name);
+	void removeLight(const std::string &name);
 
-	/**	@brief Delete a framebuffer
+	/**	@brief Remove a framebuffer
 	*	@param[in] name Name of the framebuffer
 	*/
-	void deleteFramebuffer(const std::string &name);
+	void removeFramebuffer(const std::string &name);
 
 	/**	@brief Clear all assets
 	*/

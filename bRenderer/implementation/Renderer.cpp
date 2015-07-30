@@ -32,6 +32,11 @@ AssetManagementPtr Renderer::getAssets()
 	return _assetManagement;
 }
 
+RenderQueuePtr Renderer::getRenderQueue()
+{
+	return _renderQueue;
+}
+
 bool Renderer::isInitialized()
 {
 	return _initialized;
@@ -92,6 +97,9 @@ bool Renderer::initRenderer(std::string windowTitle)
 	// Asset management
 	if (!_assetManagement)  _assetManagement = AssetManagementPtr(new AssetManagement);
 
+	// Render queue
+	if (!_renderQueue)  _renderQueue = RenderQueuePtr(new RenderQueue);
+
     // call static function if set
     if (_initFunction)
         _initFunction();
@@ -139,32 +147,34 @@ void Renderer::drawModel(const std::string &modelName, const std::string &camera
 void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
 {
 	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
+	vmml::Matrix4f modelViewProjectionMatrix;
 	vmml::Visibility visibility = vmml::VISIBILITY_FULL;
 
 	GLint compareShader = -1;
 
 	// Frsutum culling
 	if (doFrustumCulling){
-		visibility = viewFrustumCulling(_assetManagement->getModel(modelName)->getBoundingBoxObjectSpace(), projectionMatrix*modelViewMatrix);
+		modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
+		visibility = viewFrustumCulling(_assetManagement->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 	}
 
 	// Draw geometry
 	if (visibility != vmml::VISIBILITY_NONE){
-		Model::GroupMap &groupsCaveStart = _assetManagement->getModel(modelName)->getGroups();
-		for (auto i = groupsCaveStart.begin(); i != groupsCaveStart.end(); ++i)
+		Model::GroupMap &groupsModel = _assetManagement->getModel(modelName)->getGroups();
+		for (auto i = groupsModel.begin(); i != groupsModel.end(); ++i)
 		{
-			Geometry &geometry = i->second;
+			GeometryPtr geometry = i->second;
 
 			// Only do frsutum culling for the geometry if the model has more than one geometry object, 
 			// otherwise the culling restult of the whole model is the same as for the geometry
-			if (doFrustumCulling && cullIndividualGeometry && groupsCaveStart.size() > 1){
-				visibility = viewFrustumCulling(geometry.getBoundingBoxObjectSpace(), projectionMatrix*modelViewMatrix);
+			if (doFrustumCulling && cullIndividualGeometry && groupsModel.size() > 1){
+				visibility = viewFrustumCulling(geometry->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 				//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 			}
 
 			if (visibility != vmml::VISIBILITY_NONE){
-				ShaderPtr shader = geometry.getMaterial()->getShader();
+				ShaderPtr shader = geometry->getMaterial()->getShader();
 
 				// Only pass Uniforms if the shader of the current geometry differs from the one of the last
 				if (shader && compareShader != shader->getProgramID())
@@ -196,12 +206,114 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
 						}
 					}
-					// ambient
+					// Ambient
 					if (shader->supportsAmbientLighting())
 						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _assetManagement->getAmbientColor());
 				}
 
-				geometry.draw();
+				geometry->draw();
+			}
+		}
+	}
+}
+
+
+void Renderer::queueModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
+{
+	queueModel(modelName, modelMatrix, _assetManagement->getCamera(cameraName)->getViewMatrix(), _assetManagement->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry, isTransparent, blendSfactor, blendDfactor, customDistance);
+}
+
+void Renderer::queueModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
+{
+	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
+	vmml::Matrix4f modelViewProjectionMatrix;
+	vmml::Visibility visibility = vmml::VISIBILITY_FULL;
+
+	// Frsutum culling
+	if (doFrustumCulling){
+		modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
+		visibility = viewFrustumCulling(_assetManagement->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
+		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
+	}
+
+	// Draw geometry
+	if (visibility != vmml::VISIBILITY_NONE){
+		Model::GroupMap &groupsModel = _assetManagement->getModel(modelName)->getGroups();
+		ShaderPtr shaderLastGeometry;
+		PropertiesPtr propertiesLastGeometry;
+		for (auto i = groupsModel.begin(); i != groupsModel.end(); ++i)
+		{
+			std::string groupName = i->first;
+			GeometryPtr geometry = i->second;
+
+			// Only do frsutum culling for the geometry if the model has more than one geometry object, 
+			// otherwise the culling restult of the whole model is the same as for the geometry
+			if (doFrustumCulling && cullIndividualGeometry && groupsModel.size() > 1){
+				visibility = viewFrustumCulling(geometry->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
+				//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
+			}
+
+			if (visibility != vmml::VISIBILITY_NONE){
+				ShaderPtr shader = geometry->getMaterial()->getShader();
+				if (shader)
+				{
+					// Get existing properties of the geometry
+					PropertiesPtr propertiesGeometry = geometry->getProperties();
+
+					// Only create new properties if current geometry has different properties or a different shader than the last
+					if (shader != shaderLastGeometry || propertiesGeometry != propertiesLastGeometry){
+						propertiesLastGeometry = propertiesGeometry;
+						shaderLastGeometry = shader;
+
+						if (propertiesGeometry){
+							propertiesRenderQueue = *propertiesGeometry;
+						}
+						else
+							propertiesRenderQueue.clear();
+
+						propertiesRenderQueue.setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX(), projectionMatrix);
+						propertiesRenderQueue.setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX(), modelViewMatrix);
+
+						// Lighting
+						if (shader->supportsDiffuseLighting() || shader->supportsSpecularLighting()){
+							GLfloat numLights = lightNames.size();
+							bool variableNumberOfLights = shader->supportsVariableNumberOfLights();
+							GLuint maxLights = shader->getMaxLights();
+							if (numLights > maxLights)
+								numLights = maxLights;
+
+							if (variableNumberOfLights)
+								propertiesRenderQueue.setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
+							for (int i = 0; i < numLights; i++){
+								std::string pos = lexical_cast<std::string>(i);
+								LightPtr l = _assetManagement->getLight(lightNames[i]);
+								propertiesRenderQueue.setVector(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
+								if (shader->supportsDiffuseLighting())
+									propertiesRenderQueue.setVector(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
+								if (shader->supportsSpecularLighting())
+									propertiesRenderQueue.setVector(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, l->getSpecularColor());
+								propertiesRenderQueue.setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, l->getIntensity());
+								propertiesRenderQueue.setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
+							}
+						}
+						// Ambient
+						if (shader->supportsAmbientLighting())
+							propertiesRenderQueue.setVector(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _assetManagement->getAmbientColor());
+					}
+
+					if (isTransparent){
+						// Find out distance
+						GLfloat distance = customDistance;
+						if (distance > 9999.0f){
+							vmml::Vector3f centerViewSpace = (modelViewProjectionMatrix * geometry->getBoundingBoxObjectSpace().getCenter());
+							distance = centerViewSpace.z();
+						}
+						_renderQueue->submitToRenderQueue(shader->getProgramID(), groupName, geometry->getMaterial()->getName(), geometry, propertiesRenderQueue, distance, isTransparent, blendSfactor, blendDfactor);
+					}
+					else
+						_renderQueue->submitToRenderQueue(shader->getProgramID(), groupName, geometry->getMaterial()->getName(), geometry, propertiesRenderQueue);
+				}
+
 			}
 		}
 	}
@@ -210,6 +322,12 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 vmml::Visibility Renderer::viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix)
 {
 	vmml::FrustumCullerf culler;
+	culler.setup(modelViewProjectionMatrix);
+	return culler.test_aabb(vmml::Vector2f(aabbObjectSpace.getMin().x(), aabbObjectSpace.getMax().x()), vmml::Vector2f(aabbObjectSpace.getMin().y(), aabbObjectSpace.getMax().y()), vmml::Vector2f(aabbObjectSpace.getMin().z(), aabbObjectSpace.getMax().z()));
+}
+
+vmml::Visibility Renderer::viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix, vmml::FrustumCullerf &culler)
+{
 	culler.setup(modelViewProjectionMatrix);
 	return culler.test_aabb(vmml::Vector2f(aabbObjectSpace.getMin().x(), aabbObjectSpace.getMax().x()), vmml::Vector2f(aabbObjectSpace.getMin().y(), aabbObjectSpace.getMax().y()), vmml::Vector2f(aabbObjectSpace.getMin().z(), aabbObjectSpace.getMax().z()));
 }

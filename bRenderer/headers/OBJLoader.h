@@ -1,7 +1,7 @@
 #ifndef B_OBJ_LOADER_H
 #define B_OBJ_LOADER_H
 
-#include <map>
+#include <unordered_map>
 #include <boost/bind.hpp>
 
 #include "GeometryData.h"
@@ -17,7 +17,7 @@ class OBJLoader
 {
 public:
 	/* Typedefs */
-	typedef std::map< std::string, MaterialData >   MaterialMap;
+	typedef std::unordered_map< std::string, MaterialData >   MaterialMap;
 
 	/* Structs */
 	struct FaceData

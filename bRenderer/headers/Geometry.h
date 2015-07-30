@@ -28,6 +28,12 @@ public:
 	*	@param[in] mode 
 	*/
     void draw(GLenum mode = GL_TRIANGLES);
+
+	/**	@brief Draws the geometry to the screen
+	*	@param[in] customProperties Pass custom properties to replace the properties of the geometry
+	*	@param[in] mode
+	*/
+	void draw(Properties *customProperties, GLenum mode = GL_TRIANGLES);
     
 	/**	@brief Initializes the geometry object based on geometry data 
 	*	@param[in] geometryData	
@@ -36,11 +42,11 @@ public:
 
 	/**	@brief Returns a pointer to the vertices of the geometry
 	*/
-    VertexDataPtr   getVertexData()                     { return _vertexData;   }
+    VertexDataPtr   getVertexData()					{ return _vertexData;   }
 
 	/**	@brief Returns a pointer to the indices of the geometry
 	*/
-    IndexDataPtr    getIndexData()                      { return _indexData;    }
+	IndexDataPtr    getIndexData()					{ return _indexData; }
     
 	/**	@brief Sets the vertices of the geometry
 	*	@param[in] arg The new vertices that should be used for the geometry
@@ -54,7 +60,7 @@ public:
     
 	/**	@brief Returns a pointer to the material of the geometry
 	*/
-    MaterialPtr     getMaterial()                       { return _material;     }
+	MaterialPtr     getMaterial()					{ return _material; }
 
 	/**	@brief Sets the material of the geometry
 	*	@param[in] arg The new material that should be used for the geometry
@@ -72,7 +78,7 @@ public:
 
 	/**	@brief Returns the bounding box of the geometry in object space
 	*/
-	vmml::AABBf     getBoundingBoxObjectSpace()			{ return _boundingBox; }
+	vmml::AABBf     getBoundingBoxObjectSpace()					{ return _boundingBox; }
 
 	/**	@brief Sets the bounding box of the geometry in object space
 	*	@param[in] arg The bounding box for the geometry in object space

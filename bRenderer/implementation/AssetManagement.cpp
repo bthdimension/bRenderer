@@ -420,47 +420,47 @@ vmml::Vector3f AssetManagement::getAmbientColor()
 	return _ambientColor;
 }
 
-void AssetManagement::deleteShader(const std::string &name)
+void AssetManagement::removeShader(const std::string &name)
 {
 	_shaders.erase(name);
 }
 
-void AssetManagement::deleteTexture(const std::string &name)
+void AssetManagement::removeTexture(const std::string &name)
 {
 	_textures.erase(name);
 }
 
-void AssetManagement::deleteMaterial(const std::string &name)
+void AssetManagement::removeMaterial(const std::string &name)
 {
 	_materials.erase(name);
 }
 
-void AssetManagement::deleteProperties(const std::string &name)
+void AssetManagement::removeProperties(const std::string &name)
 {
 	_properties.erase(name);
 }
 
-void AssetManagement::deleteModel(const std::string &name)
+void AssetManagement::removeModel(const std::string &name)
 {
 	_models.erase(name);
 }
 
-void AssetManagement::deleteCamera(const std::string &name)
+void AssetManagement::removeCamera(const std::string &name)
 {
 	_cameras.erase(name);
 }
 
-void AssetManagement::deleteMatrixStack(const std::string &name)
+void AssetManagement::removeMatrixStack(const std::string &name)
 {
 	_matrixStacks.erase(name);
 }
 
-void AssetManagement::deleteLight(const std::string &name)
+void AssetManagement::removeLight(const std::string &name)
 {
 	_lights.erase(name);
 }
 
-void AssetManagement::deleteFramebuffer(const std::string &name)
+void AssetManagement::removeFramebuffer(const std::string &name)
 {
 	_framebuffers.erase(name);
 }

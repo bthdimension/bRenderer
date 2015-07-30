@@ -2,7 +2,6 @@
 #define B_GEOMETRY_DATA_H
 
 #include <vector>
-#include <unordered_map>
 #include "Renderer_GL.h"
 #include "vmmlib/vector.hpp"
 #include "MaterialData.h"

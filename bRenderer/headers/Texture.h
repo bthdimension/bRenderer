@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include "Renderer_GL.h"
 
 class TextureData;

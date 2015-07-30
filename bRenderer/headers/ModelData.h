@@ -14,7 +14,7 @@ class ModelData
     
 public:
 	/* Typedefs */
-    typedef std::map< std::string, GeometryDataPtr >    GroupMap;
+	typedef std::unordered_map< std::string, GeometryDataPtr >    GroupMap;
 
 	/* Functions */
     

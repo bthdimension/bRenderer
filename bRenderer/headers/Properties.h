@@ -2,7 +2,7 @@
 #define B_PROPERTIES_H
 
 #include <memory>
-#include <unordered_map>
+#include <map>
 #include "vmmlib/matrix.hpp"
 
 #include "Shader.h"
@@ -14,11 +14,12 @@ class Properties
 {
 public:
 	/* Typedefs */
-	typedef std::unordered_map<std::string, vmml::Matrix4f>		Matrix4x4Map;
-	typedef std::unordered_map<std::string, vmml::Matrix3f>		Matrix3x3Map;
-	typedef std::unordered_map<std::string, vmml::Vector4f>		Vector4Map;
-	typedef std::unordered_map<std::string, vmml::Vector3f>		Vector3Map;
-	typedef std::unordered_map<std::string, GLfloat>			ScalarMap;
+	// Since properties are likely to change every frame (transformation matrices) maps are used over unordered maps
+	typedef std::map<std::string, vmml::Matrix4f>		Matrix4x4Map;
+	typedef std::map<std::string, vmml::Matrix3f>		Matrix3x3Map;
+	typedef std::map<std::string, vmml::Vector4f>		Vector4Map;
+	typedef std::map<std::string, vmml::Vector3f>		Vector3Map;
+	typedef std::map<std::string, GLfloat>				ScalarMap;
 
 	/* Functions */
 
@@ -132,6 +133,17 @@ public:
 		shader->setUniforms(_vectors4);
 		shader->setUniforms(_vectors3);
 		shader->setUniforms(_scalars);
+	}
+
+	/**	@brief Clear all properties
+	*/
+	void				clear()
+	{
+		_matrices4x4.clear();
+		_matrices3x3.clear();
+		_vectors4.clear();
+		_vectors3.clear();
+		_scalars.clear();
 	}
 
 

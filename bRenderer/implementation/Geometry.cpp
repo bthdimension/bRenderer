@@ -29,6 +29,21 @@ void Geometry::draw(GLenum mode)
 
 }
 
+void Geometry::draw(Properties *customProperties, GLenum mode)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+
+	if (_material)
+		_material->bind();
+
+	customProperties->passToShader(_material->getShader());
+
+	glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+}
+
 /* Private functions */
 
 Geometry::VertexDataPtr Geometry::allocVertexData(size_t nVertices)
