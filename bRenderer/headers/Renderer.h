@@ -170,6 +170,9 @@ public:
 	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
 	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
 	*	@param[in] isTransparent Set true if the model is (partially) transparent and sorting according to distance should occur (optional)
+	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
+	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
+	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
 	*/
 	void queueModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
@@ -185,17 +188,11 @@ public:
 	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
 	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
 	*	@param[in] isTransparent Set true if the model is (partially) transparent and sorting according to distance should occur (optional)
+	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
+	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
+	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
 	*/
 	void queueModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
-
-	/**	@brief Queue specified model into a render queue
-	*
-	*	Every binding and unbinding results in a new render queue so only the geometry gets drawn into the buffer that was intended to
-	*
-	*	@param[in] texture The texture to draw to
-	*	@param[in] preserveCurrentFramebuffer If true the framebuffer that was active before binding is bound again when unbinding
-	*/
-	//void queueBufferBinding(TexturePtr texture, bool preserveCurrentFramebuffer);
 
 	/**	@brief Tests an axis-aligned bounding box against the view frustum
 	*	@param[in] aabbObjectSpace The axis-aligned bounding box in object space

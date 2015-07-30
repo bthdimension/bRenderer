@@ -45,7 +45,9 @@ public:
 	*	@param[in] geometry
 	*	@param[in] properties 
 	*	@param[in] distanceToCamera The distance of the transparent geometry to the camera (optional)
-	*	@param[in] opaque Set true if the object isn't transparent (optional)
+	*	@param[in] isTransparent Set true if the object is transparent (optional)
+	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
+	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*/
 	void submitToRenderQueue(GLuint programID, const std::string &geometryName, const std::string &materialName, GeometryPtr geometry, const Properties &properties, GLfloat distanceToCamera = 0.0, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA);
 
@@ -62,8 +64,6 @@ private:
 
 	/* Variables */
 	
-	/*std::vector< RenderCallOpaque >			_renderCallsOpaque;
-	std::vector< RenderCallTransparent >	_renderCallsTransparent;*/
 	RenderCallsOpaque			_renderCallsOpaque;
 	RenderCallsTransparent		_renderCallsTransparent;
 
