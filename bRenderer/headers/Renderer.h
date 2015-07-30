@@ -228,7 +228,6 @@ private:
 	ViewPtr				_view;
 	InputPtr			_input;
 	AssetManagementPtr	_assetManagement;
-
 	RenderQueuePtr		_renderQueue;
 
 	IRenderProject *_renderProject;

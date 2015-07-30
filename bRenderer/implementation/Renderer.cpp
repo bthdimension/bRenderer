@@ -308,10 +308,10 @@ void Renderer::queueModel(const std::string &modelName, const vmml::Matrix4f &mo
 							vmml::Vector3f centerViewSpace = (modelViewProjectionMatrix * geometry->getBoundingBoxObjectSpace().getCenter());
 							distance = centerViewSpace.z();
 						}
-						_renderQueue->submitToRenderQueue(shader->getProgramID(), groupName, geometry->getMaterial()->getName(), geometry, propertiesRenderQueue, distance, isTransparent, blendSfactor, blendDfactor);
+						_renderQueue->submitToRenderQueue(shader->getProgramID(), geometry->getMaterial()->getName(), groupName, geometry, propertiesRenderQueue, distance, isTransparent, blendSfactor, blendDfactor);
 					}
 					else
-						_renderQueue->submitToRenderQueue(shader->getProgramID(), groupName, geometry->getMaterial()->getName(), geometry, propertiesRenderQueue);
+						_renderQueue->submitToRenderQueue(shader->getProgramID(), geometry->getMaterial()->getName(), groupName, geometry, propertiesRenderQueue);
 				}
 
 			}

@@ -3,7 +3,7 @@
 #include <boost/lexical_cast.hpp>
 using boost::lexical_cast;
 
-void RenderQueue::submitToRenderQueue(GLuint programID, const std::string &geometryName, const std::string &materialName, GeometryPtr geometry, const Properties &properties, GLfloat distanceToCamera, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor)
+void RenderQueue::submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &geometryName, GeometryPtr geometry, const Properties &properties, GLfloat distanceToCamera, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor)
 {
 	// Transparent
 	if (isTransparent){
