@@ -1,2 +1,2 @@
 # bRenderer
-Renderer for Windows and iOS
+Renderer for Windows, Linux, Mac and iOS
