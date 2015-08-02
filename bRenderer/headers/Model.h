@@ -16,14 +16,18 @@ class ModelData;
 /** @brief A 3d model that can be rendered to the screen
 *	@author Rahul Mukhi, David Steiner
 */
-class Model: public IDrawable
+class Model : public IDrawable
 {
 public:
 	/* Typedefs */
 	typedef std::unordered_map< std::string, GeometryPtr > GroupMap;
 
 	/* Functions */
-    
+
+	/**	@brief Constructor
+	*/
+	explicit Model() {}
+
 	/**	@brief Constructor
 	*	@param[in] a Asset management
 	*	@param[in] modelData
@@ -50,20 +54,20 @@ public:
 	*/
 	explicit Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr	properties = nullptr);
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-    ~Model();
+	virtual ~Model() {}
     
 	/**	@brief Draws the model to the screen
 	*	@param[in] mode
 	*/
-    void draw(GLenum mode = GL_TRIANGLES);
+	virtual void draw(GLenum mode = GL_TRIANGLES);
 
 	/**	@brief Draws the specified group of geometry to the screen
 	*	@param[in] groupName Name of the group to draw
 	*	@param[in] mode
 	*/
-    void draw(const std::string &groupName, GLenum mode = GL_TRIANGLES);
+	virtual void draw(const std::string &groupName, GLenum mode = GL_TRIANGLES);
     
 	/**	@brief Returns the material of the model
 	*/
@@ -111,6 +115,17 @@ public:
 	*	@param[in] arg The bounding box for the geometry in object space
 	*/
 	void            setBoundingBoxObjectSpace(vmml::AABBf arg)						{ _boundingBox = arg; }
+
+	/**	@brief Adds geometry to the model
+	*	@param[in] name	Name of the geometry
+	*	@param[in] geometry A pointer to the geometry
+	*/
+	void			addGeometry(std::string name, GeometryPtr geometry)				{ _groups.insert(GroupMap::value_type(name, geometry)); }
+
+	/**	@brief Removes geometry from the model
+	*	@param[in] name	Name of the geometry
+	*/
+	void			removeGeometry(std::string name)								{ _groups.erase(name); }
 
 private:
 

@@ -90,9 +90,6 @@
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\Renderer_desktop.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Light.cpp">
-      <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
@@ -127,6 +124,9 @@
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\RenderQueue.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Sprite.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,6 +242,9 @@
     <ClInclude Include="..\..\bRenderer\headers\RenderQueue.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Sprite.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\FileHandler_ios.mm">
@@ -256,31 +259,13 @@
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
-    <None Include="..\data\bTitle.mtl">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\bRenderer\os_specific\ios\Input_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
     </None>
-    <None Include="..\data\cave_start.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\crystal.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\flame.frag">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\bRenderer\os_specific\ios\Renderer_ios.mm">
+      <Filter>bRenderer\os_specific\ios</Filter>
     </None>
     <None Include="..\data\flame.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\flame.vert">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\sparks.frag">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\sparks.mtl">
-      <Filter>Project\data</Filter>
-    </None>
-    <None Include="..\data\sparks.vert">
       <Filter>Project\data</Filter>
     </None>
     <None Include="..\data\sphere.mtl">
@@ -289,33 +274,33 @@
     <None Include="..\data\torch.mtl">
       <Filter>Project\data</Filter>
     </None>
-    <None Include="..\data\blurShader.frag">
-      <Filter>Project\data</Filter>
-    </None>
     <None Include="..\data\blurShader.vert">
       <Filter>Project\data</Filter>
     </None>
-    <None Include="..\data\quad.mtl">
+    <None Include="..\data\flame.vert">
       <Filter>Project\data</Filter>
     </None>
-    <None Include="..\..\bRenderer\os_specific\ios\Input_ios.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
+    <None Include="..\data\blurShader.frag">
+      <Filter>Project\data</Filter>
     </None>
-    <None Include="..\..\bRenderer\os_specific\ios\Renderer_ios.mm">
-      <Filter>bRenderer\os_specific\ios</Filter>
+    <None Include="..\data\flame.frag">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\cave.mtl">
+      <Filter>Project\data</Filter>
+    </None>
+    <None Include="..\data\crystal.mtl">
+      <Filter>Project\data</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\data\torchSurface_Color.png">
-      <Filter>Project\data</Filter>
-    </Image>
     <Image Include="..\data\bTitle.png">
       <Filter>Project\data</Filter>
     </Image>
-    <Image Include="..\data\caveStart_d.png">
+    <Image Include="..\data\cave_d.png">
       <Filter>Project\data</Filter>
     </Image>
-    <Image Include="..\data\caveStart_n.png">
+    <Image Include="..\data\cave_n.png">
       <Filter>Project\data</Filter>
     </Image>
     <Image Include="..\data\crystal_d.png">
@@ -331,6 +316,9 @@
       <Filter>Project\data</Filter>
     </Image>
     <Image Include="..\data\sparks.png">
+      <Filter>Project\data</Filter>
+    </Image>
+    <Image Include="..\data\torchSurface_Color.png">
       <Filter>Project\data</Filter>
     </Image>
   </ItemGroup>

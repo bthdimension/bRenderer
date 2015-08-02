@@ -76,7 +76,6 @@
     <ClCompile Include="..\..\bRenderer\implementation\Configuration.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp" />
-    <ClCompile Include="..\..\bRenderer\implementation\Light.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Material.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp" />
@@ -89,6 +88,7 @@
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderSource.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\Sprite.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\TextureData.cpp" />
     <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp" />
@@ -131,6 +131,7 @@
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderSource.h" />
+    <ClInclude Include="..\..\bRenderer\headers\Sprite.h" />
     <ClInclude Include="..\..\bRenderer\headers\Texture.h" />
     <ClInclude Include="..\..\bRenderer\headers\TextureData.h" />
     <ClInclude Include="..\..\bRenderer\headers\Touch.h" />
@@ -149,23 +150,18 @@
     <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
     <None Include="..\data\blurShader.frag" />
     <None Include="..\data\blurShader.vert" />
-    <None Include="..\data\bTitle.mtl" />
-    <None Include="..\data\cave_start.mtl" />
+    <None Include="..\data\cave.mtl" />
     <None Include="..\data\crystal.mtl" />
     <None Include="..\data\flame.frag" />
     <None Include="..\data\flame.mtl" />
     <None Include="..\data\flame.vert" />
-    <None Include="..\data\quad.mtl" />
-    <None Include="..\data\sparks.frag" />
-    <None Include="..\data\sparks.mtl" />
-    <None Include="..\data\sparks.vert" />
     <None Include="..\data\sphere.mtl" />
     <None Include="..\data\torch.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\data\bTitle.png" />
-    <Image Include="..\data\caveStart_d.png" />
-    <Image Include="..\data\caveStart_n.png" />
+    <Image Include="..\data\cave_d.png" />
+    <Image Include="..\data\cave_n.png" />
     <Image Include="..\data\crystal_d.png" />
     <Image Include="..\data\crystal_n.png" />
     <Image Include="..\data\crystal_s.png" />

@@ -28,14 +28,17 @@ namespace bRenderer
 	// Varyings
 	extern const std::string SHADER_SOURCE_VARYINGS_TEX_COORD;
 
-	extern const std::string SHADER_SOURCE_VARYINGS_POS;
-
 	extern const std::string SHADER_SOURCE_VARYINGS_NORMAL;
 
 	extern const std::string SHADER_SOURCE_VARYINGS_CAMERA_TANGENT;
 
+	extern const std::string SHADER_SOURCE_VARYINGS_CAMERA_VIEW;
+
 	// Colors 
 	extern const std::string SHADER_SOURCE_COLORS;
+
+	// Transparency value 
+	extern const std::string SHADER_SOURCE_TRANSPARENCY_VALUE;
 
 	// Textures
 	extern const std::string SHADER_SOURCE_TEXTURES;
@@ -50,6 +53,8 @@ namespace bRenderer
 	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_TBN;
 	// Camera tangent space
 	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_TANGENT_SPACE;
+	// Camera view space
+	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_VIEW_SPACE;
 	// Lighting
     std::string shader_source_function_lightVector(GLuint maxLights, bool normalMap, bool variableNumberOfLights);
 	
@@ -72,8 +77,10 @@ namespace bRenderer
 
 	// Initialize diffuse lighting
 	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE;
-
 	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS;
+	// Initialize diffuse lighting with transparency value
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_TRANSPARENCY;
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS_TRANSPARENCY;
 
 	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_LIGHTING;
 

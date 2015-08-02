@@ -5,21 +5,12 @@ using boost::lexical_cast;
 /* Initialize the Project */
 void ProjectMain::init()
 {
-	// set this instance of RenderProject to be used for function calls
-	bRenderer().setRenderProject(this);
-
-	int w, h;
-	View::getScreenSize(&w, &h);
-	bRenderer::log("Screen width: "+lexical_cast< std::string >(w)+", Screen height: "+lexical_cast< std::string >(h));
-
 	// let the renderer create an OpenGL context and the main window
-#ifdef B_OS_DESKTOP
-	bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");
-	//bRenderer().initRenderer(w, h, true);	// Fullscreen using full width and height of the screen
-#endif
-#ifdef B_OS_IOS
-    bRenderer().initRenderer(true);
-#endif
+	if(bRenderer().getInput()->isTouchDevice())
+		bRenderer().initRenderer(true);										// fullscreen on iOS
+	else
+		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
+		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
 
 	// set shader versions (optional)
 	bRenderer().getAssets()->setShaderVersionDesktop("#version 120");
@@ -32,53 +23,54 @@ void ProjectMain::init()
 /* This function is executed when initializing the renderer */
 void ProjectMain::initFunction()
 {
-	bRenderer::log("my initialize function was started");
-
-	// TEST: load material and shader before loading the model
-	ShaderPtr customShader = bRenderer().getAssets()->generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false);		// create custom shader with a maximum of 2 lights
-	ShaderPtr flameShader = bRenderer().getAssets()->loadShaderFile("flame", 0, false, true, true, false);												// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-	MaterialPtr flameMaterial = bRenderer().getAssets()->loadMaterial("flame.mtl", "flame", flameShader);												// load material from file using the shader created above
-
-	PropertiesPtr flameProperties = bRenderer().getAssets()->createProperties("flameProperties");	// Add additional properties to a model
-
-	// load models
-	bRenderer().getAssets()->loadModel("cave.obj", true, true, false, 4, true, true);			// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().getAssets()->loadModel("sphere.obj", true, true, false, 4, true, true);				// create custom shader with a maximum of 4 lights 
-	bRenderer().getAssets()->loadModel("crystal.obj", false, true, customShader);					// the custom shader created above is used
-	bRenderer().getAssets()->loadModel("torch.obj", false, true, false, 1, false, true);				// create custom shader with a maximum of 1 light
-	bRenderer().getAssets()->loadModel("flame.obj", false, true, flameMaterial, flameProperties);	// the flame material created above is used, to pass additional properties a Properties object is used
-	bRenderer().getAssets()->loadModel("sparks.obj", false, true, true, 0, false, true);				// automatically loads shader files "sparks.vert" and "sparks.frag", we specify 0 lights since the shader doesn't consider lights
-	bRenderer().getAssets()->loadModel("bTitle.obj", false, true, false, 0, false, false);			// create custom shader with 0 lights -> the title will always be fully lit
-
 	// initialize variables
 	_randomTime = 0.0f;
 	_running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 
-	// initialize free moving camera
+	// demo: load material and shader before loading the model
+	ShaderPtr customShader = bRenderer().getAssets()->generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false, false);	// create custom shader with a maximum of 2 lights
+	ShaderPtr flameShader = bRenderer().getAssets()->loadShaderFile("flame", 0, false, true, true, false);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+	MaterialPtr flameMaterial = bRenderer().getAssets()->loadMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+
+	// create additional properties for a model
+	PropertiesPtr flameProperties = bRenderer().getAssets()->createProperties("flameProperties");		
+
+	// load models
+	bRenderer().getAssets()->loadObjModel("cave.obj", true, true, false, 4, true, true);				// create custom shader with a maximum of 4 lights (since nothing else was specified, number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getAssets()->loadObjModel("sphere.obj", true, true, false, 4, true, true);				// create custom shader with a maximum of 4 lights 
+	bRenderer().getAssets()->loadObjModel("crystal.obj", false, true, customShader);					// the custom shader created above is used
+	bRenderer().getAssets()->loadObjModel("torch.obj", false, true, false, 1, false, true);				// create custom shader with a maximum of 1 light
+	
+	// create sprites
+	bRenderer().getAssets()->createSprite("flame", flameMaterial, flameProperties);						// create a sprite using the material created above, to pass additional properties a Properties object is used
+	bRenderer().getAssets()->createSprite("sparks", "sparks.png");										// create a sprite displaying sparks as a texture
+	bRenderer().getAssets()->createSprite("bTitle", "bTitle.png");										// create a sprite displaying the title as a texture
+
+	// create camera
 	bRenderer().getAssets()->createCamera("camera", vmml::Vector3f(-33.0, 0.0, -13.0), vmml::Vector3f(0.0, -M_PI_F / 2, 0.0));
 
-	// get shading language version
-	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
-
 	// create lights
-	bRenderer().getAssets()->createLight("firstLight", vmml::Vector3f(80.0f, 0.0f, 0.0f), vmml::Vector3f(0.5f, 0.5f, 1.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.3f);
-	bRenderer().getAssets()->createLight("secondLight", vmml::Vector3f(150.0f, 0.0f, 0.0f), vmml::Vector3f(0.5f, 1.0f, 0.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
-	bRenderer().getAssets()->createLight("thirdLight", vmml::Vector3f(210.0f, 0.0f, 0.0f), vmml::Vector3f(0.8f, 0.0f, 0.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f);
-	bRenderer().getAssets()->createLight("torchLight", -bRenderer().getAssets()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 0.4f, -0.5f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1200.0f, 0.7f);
+	bRenderer().getAssets()->createLight("firstLight", vmml::Vector3f(80.0f, 0.0f, 0.0f), vmml::Vector3f(0.5f, 0.5f, 1.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.3f, 120.0f);
+	bRenderer().getAssets()->createLight("secondLight", vmml::Vector3f(150.0f, 0.0f, 0.0f), vmml::Vector3f(0.5f, 1.0f, 0.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f, 120.0f);
+	bRenderer().getAssets()->createLight("thirdLight", vmml::Vector3f(210.0f, 0.0f, 0.0f), vmml::Vector3f(0.8f, 0.0f, 0.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 100.0f, 0.5f, 120.0f);
+	bRenderer().getAssets()->createLight("torchLight", -bRenderer().getAssets()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 0.4f, -0.5f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1200.0f, 0.7f, 600.0f);
 
 	// postprocessing
-	bRenderer().getAssets()->createFramebuffer("fbo");
-	bRenderer().getAssets()->createTexture("fbo_texture1", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
-	bRenderer().getAssets()->createTexture("fbo_texture2", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());
-	ShaderPtr blurShader = bRenderer().getAssets()->loadShaderFile("blurShader", 0, false, false, false, false);
-	bRenderer().getAssets()->loadModel("quad.obj", false, true, blurShader);
+	bRenderer().getAssets()->createFramebuffer("fbo");																				// create framebuffer object
+	bRenderer().getAssets()->createTexture("fbo_texture1", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());	// create texture to bind to the fbo
+	bRenderer().getAssets()->createTexture("fbo_texture2", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());	// create texture to bind to the fbo
+	ShaderPtr blurShader = bRenderer().getAssets()->loadShaderFile("blurShader", 0, false, false, false, false);					// load shader that blurs the texture
+	MaterialPtr blurMaterial = bRenderer().getAssets()->createMaterial("blurMaterial", blurShader);									// create an empty material to assign either texture1 or texture2 to
+	bRenderer().getAssets()->createSprite("blurSprite", blurMaterial);																// create a sprite using the material created above
 
 	// set ambient color
 	bRenderer().getAssets()->setAmbientColor(vmml::Vector3f(0.0f, 0.0f, 0.05f));
+
+	// get shading language version
+	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 /* Draw your scene here */
-
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
 	//bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
@@ -96,14 +88,17 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			_randomTime += deltaTime + randomNumber(0.0f, 0.12f);
 		}
 		GLfloat flickeringLight = 1.0f + (_randomTime)* 2.0f * M_PI_F*(0.032f);
+		// let the light follow the camera
 		GLfloat flickeringLightPosX = -bRenderer().getAssets()->getCamera("camera")->getPosition().x();
 		GLfloat flickeringLightPosY = -bRenderer().getAssets()->getCamera("camera")->getPosition().y();
 		GLfloat flickeringLightPosZ = -bRenderer().getAssets()->getCamera("camera")->getPosition().z();
+		// let the light flicker
 		flickeringLightPosX += 2.5f*sin(flickeringLightPosY * 4.0f + 3.0f*flickeringLight);
 		flickeringLightPosY += 2.5f*sin(flickeringLightPosX * 4.0f + 3.0f*flickeringLight);
 		bRenderer().getAssets()->getLight("torchLight")->setPosition(vmml::Vector3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getAssets()->getCamera("camera")->getForward()*10.0f);
 	}
 	else{
+		// set the light to be at the camera position
 		bRenderer().getAssets()->getLight("torchLight")->setPosition(-bRenderer().getAssets()->getCamera("camera")->getPosition() - bRenderer().getAssets()->getCamera("camera")->getForward()*10.0f);
 	}
 
@@ -112,8 +107,8 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	/// Begin postprocessing ///
 	GLint defaultFBO;
 	if (!_running){
-		defaultFBO = Framebuffer::getCurrentFramebuffer();
-		bRenderer().getAssets()->getFramebuffer("fbo")->bind(bRenderer().getAssets()->getTexture("fbo_texture1"), false);
+		defaultFBO = Framebuffer::getCurrentFramebuffer();	// get current fbo to bind it again after drawing the scene
+		bRenderer().getAssets()->getFramebuffer("fbo")->bind(bRenderer().getAssets()->getTexture("fbo_texture1"), false); // bind the fbo
 	}
 
 	/*** Cave Start ***/
@@ -126,7 +121,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	// translate and scale
 	modelMatrix = vmml::create_scaling(vmml::Vector3f(0.1f)) * vmml::create_translation(vmml::Vector3f(1480.0, 50.0, 300.0));
 	// draw 
-	bRenderer().queueModel("sphere", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }));
+	bRenderer().queueModel("sphere", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true,false,true);
 
 	/*** Crystal (blue) ***/
 	// translate and scale
@@ -155,8 +150,8 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	///*** Torch ***/
 	// translate and scale 	
 		// Position the torch relative to the camera
-	modelMatrix = bRenderer().getAssets()->getCamera("camera")->getInverseViewMatrix();
-	modelMatrix *= vmml::create_translation(vmml::Vector3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::Vector3f(1.2f)) * vmml::create_rotation(1.64f, vmml::Vector3f::UNIT_Y);
+	modelMatrix = bRenderer().getAssets()->getCamera("camera")->getInverseViewMatrix();		// position and orient to match camera
+	modelMatrix *= vmml::create_translation(vmml::Vector3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::Vector3f(1.2f)) * vmml::create_rotation(1.64f, vmml::Vector3f::UNIT_Y); // now position it relative to the camera
 	// draw
 	bRenderer().queueModel("torch", "camera", modelMatrix, std::vector<std::string>({ "torchLight" }));
     
@@ -177,7 +172,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			rot = M_PI_F;
 		vmml::Matrix4f rotation = vmml::create_rotation(rot, vmml::Vector3f::UNIT_Z);
 		// scale
-		GLfloat ParticleScale = 2.45f - (0.46f*z);
+		GLfloat ParticleScale = 1.225f - (0.23f*z);
 		vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(ParticleScale / bRenderer().getView()->getAspectRatio(), ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
@@ -186,10 +181,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		GLfloat transparency = 1.0f;
 		if (z == 0.0f)transparency = 0.8f;
 		// pass additional properties to the shader
-		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("offset", offset);
-		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("transparency", transparency);
+		bRenderer().getAssets()->getProperties("flameProperties")->setScalar("offset", offset);		// pass offset for wave effect
+		bRenderer().getAssets()->getProperties("flameProperties")->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_TRANSPARENCY(), transparency); // pass transparency value
 		// draw
-		bRenderer().queueModel("flame", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), true, false, true, GL_SRC_ALPHA, GL_ONE, (-1.0f - 0.01*z));  // negative distance because always in foreground
+		bRenderer().queueModel("flame", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-1.0f - 0.01*z));  // negative distance because always in foreground
 	}    
     
     /*** Sparks ***/
@@ -203,13 +198,13 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			rot = randomNumber(1.0f, 1.1f)*_randomTime*(z + 0.3f)*M_PI_F;
 		vmml::Matrix4f rotation = vmml::create_rotation(rot, vmml::Vector3f::UNIT_Z);
 		// scale
-		GLfloat ParticleScale = 1.1f - (0.5f*z);
+		GLfloat ParticleScale = 0.55f - (0.25f*z);
 		vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(ParticleScale / bRenderer().getView()->getAspectRatio(), 4.0f*ParticleScale, ParticleScale));
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
 
 		// draw
-		bRenderer().queueModel("sparks", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), true, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01*z)); // negative distance because always in foreground
+		bRenderer().queueModel("sparks", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01*z)); // negative distance because always in foreground
 	}
 
 	bRenderer().getRenderQueue()->draw();
@@ -230,10 +225,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 				bRenderer().getAssets()->getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
 			else
 				bRenderer().getAssets()->getFramebuffer("fbo")->bind(bRenderer().getAssets()->getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);            
-			bRenderer().getAssets()->getMaterial("quad")->setTexture("fbo_texture", bRenderer().getAssets()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
-			bRenderer().getAssets()->getMaterial("quad")->setScalar("isVertical", (GLfloat)b);
+			bRenderer().getAssets()->getMaterial("blurMaterial")->setTexture("fbo_texture", bRenderer().getAssets()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
+			bRenderer().getAssets()->getMaterial("blurMaterial")->setScalar("isVertical", (GLfloat)b);
 			// draw
-			bRenderer().drawModel("quad", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}));
+			bRenderer().drawModel("blurSprite", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
 			b = !b;
 		}
 	
@@ -244,7 +239,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
         vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
         modelMatrix = translation * scaling;
         // draw
-		bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), true, false);	
+		bRenderer().drawModel("bTitle", modelMatrix, viewMatrix, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);	
     }
 
 	
@@ -264,10 +259,10 @@ void ProjectMain::moveCamera(const double &deltaTime)
 	double deltaCameraX = 0.0;
     double cameraForward = 0.0;
 
-	/* On iOS automatic movement (for now) */
+	/* iOS: control movement using touch screen */
 	if (bRenderer().getInput()->isTouchDevice()){
         
-        // Pause using double tap
+        // pause using double tap
         if (bRenderer().getInput()->doubleTapRecognized()){
             _running = !_running;
         }
@@ -277,7 +272,7 @@ void ProjectMain::moveCamera(const double &deltaTime)
 //		cameraForward = -bRenderer().getInput()->getGyroscopeRoll();
         
         if(_running){
-            // Control using touch
+            // control using touch
             TouchMap touchMap = bRenderer().getInput()->getTouches();
             int i = 0;
             for(auto t = touchMap.begin(); t != touchMap.end(); ++t)
@@ -287,7 +282,7 @@ void ProjectMain::moveCamera(const double &deltaTime)
                 if(touch.startPositionX < bRenderer().getView()->getWidth()/2){
                     cameraForward = -(touch.currentPositionY - touch.startPositionY)/100;
                 }
-                // If touch is in right half of the view: look around
+                // if touch is in right half of the view: look around
                 else
                 {
                     deltaCameraY = (touch.currentPositionX - touch.startPositionX)/2000;
@@ -299,8 +294,9 @@ void ProjectMain::moveCamera(const double &deltaTime)
         }
         
 	}
-	/* Windows only: Mouse and Keyboard Movement */
+	/* Windows: control movement using mouse and keyboard */
 	else{
+		// use space to pause and unpause
 		GLint currentStateSpaceKey = bRenderer().getInput()->getKeyState(bRenderer::KEY_SPACE);
 		if (currentStateSpaceKey != _lastStateSpaceKey)
 		{
@@ -311,6 +307,7 @@ void ProjectMain::moveCamera(const double &deltaTime)
 			}
 		}
 
+		// mouse look
 		double xpos, ypos; bool hasCursor = false;
 		bRenderer().getInput()->getCursorPosition(&xpos, &ypos, &hasCursor);
 
@@ -320,6 +317,7 @@ void ProjectMain::moveCamera(const double &deltaTime)
 		_mouseY = ypos;
 
 		if (_running){
+			// movement using wasd keys
 			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_W) == bRenderer::INPUT_PRESS)
 				if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT_SHIFT) == bRenderer::INPUT_PRESS) 			cameraForward = 1.0;
 				else			cameraForward = 0.5;
@@ -344,7 +342,7 @@ void ProjectMain::moveCamera(const double &deltaTime)
 		}
 	}
 
-	//// Camera ////
+	//// Update camera ////
 	if (_running){
 		bRenderer().getAssets()->getCamera("camera")->moveCameraForward(cameraForward);
 		bRenderer().getAssets()->getCamera("camera")->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);

@@ -10,6 +10,10 @@ class IDrawable
 {
 public:
 
+	/**	@brief Virtual destructor
+	*/
+	virtual ~IDrawable(){}
+
 	/**	@brief Draws an object to the screen
 	*	@param[in] mode
 	*/

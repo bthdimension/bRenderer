@@ -13,9 +13,9 @@ class ShaderData : public IShaderData
 public:
 
 	/* Typedefs */
-	typedef std::unordered_map<std::string, std::string>    TextureMap;
-	typedef std::unordered_map<std::string, vmml::Vector3f>    Vector3Map;
-	typedef std::unordered_map<std::string, GLfloat>          ScalarMap;
+	typedef std::unordered_map<std::string, std::string>		TextureMap;
+	typedef std::unordered_map<std::string, vmml::Vector3f>		Vector3Map;
+	typedef std::unordered_map<std::string, GLfloat>			ScalarMap;
 
 	/* Functions */
 
@@ -42,9 +42,10 @@ public:
 	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring
 	*	@param[in] normalMap Set true if a texture should be used to define the normals
 	*	@param[in] specularMap Set true if a texture should be used to define specularity
+	*	@param[in] transparencyValue Set true if a transparency value should be passed
 	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	ShaderData(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights);
+	ShaderData(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights);
 
 	/**	@brief Constructor
 	*	@param[in] maxLights The maximum number of light sources to be used 
@@ -57,9 +58,10 @@ public:
 	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring
 	*	@param[in] normalMap Set true if a texture should be used to define the normals
 	*	@param[in] specularMap Set true if a texture should be used to define specularity
+	*	@param[in] transparencyValue Set true if a transparency value should be passed
 	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	ShaderData &create(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights);
+	ShaderData &create(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights);
 
 	/**	@brief Gets the source code of the vertex shader as a string
 	*/
@@ -120,6 +122,7 @@ private:
 	bool		_diffuseMap;
 	bool		_normalMap;
 	bool		_specularMap;
+	bool		_transparencyValue;
 
 };
 

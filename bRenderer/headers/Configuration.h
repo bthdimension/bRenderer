@@ -24,6 +24,9 @@ namespace bRenderer
 	/* Desktop specific file path configuration */
 	std::string DEFAULT_FILE_PATH();
 
+	/* OBJ loader default group name */
+	std::string DEFAULT_GROUP_NAME();
+
 	/* Shader macros*/
 	std::string SHADER_VERSION_MACRO();
 	std::string SHADER_MAX_LIGHTS_MACRO();
@@ -50,7 +53,9 @@ namespace bRenderer
 	std::string DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR();
 	std::string DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY();
 	std::string DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION();
+	std::string DEFAULT_SHADER_UNIFORM_LIGHT_RADIUS();
 	std::string DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR();
+	std::string DEFAULT_SHADER_UNIFORM_TRANSPARENCY();
 	
 	/* Shader attributes */
 	std::string DEFAULT_SHADER_ATTRIBUTE_POSITION();
@@ -71,6 +76,7 @@ namespace bRenderer
 	std::string WAVEFRONT_MATERIAL_DIFFUSE_MAP();
 	std::string WAVEFRONT_MATERIAL_SPECULAR_MAP();
 	std::string WAVEFRONT_MATERIAL_NORMAL_MAP();
+	std::string WAVEFRONT_MATERIAL_DISSOLVE();
 
 	/* Camera configuration */
 	GLfloat DEFAULT_FIELD_OF_VIEW();
@@ -85,6 +91,7 @@ namespace bRenderer
 	vmml::Vector3f DEFAULT_LIGHT_COLOR();
 	GLfloat DEFAULT_LIGHT_INTENSITY();
 	GLfloat DEFAULT_LIGHT_ATTENUATION();
+	GLfloat DEFAULT_LIGHT_RADIUS();
 
 } // namespace bRenderer
 

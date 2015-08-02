@@ -89,9 +89,7 @@ vmml::Matrix4f Camera::getViewMatrix(){
 }
 
 vmml::Matrix4f Camera::getInverseViewMatrix(){
-	vmml::Matrix4f rotInv = vmml::Matrix4f::IDENTITY;
-	getRotation().transpose_to(rotInv);
-	return vmml::create_translation(-getPosition()) * rotInv;
+	return vmml::create_translation(-getPosition()) * getInverseRotation();
 }
 
 vmml::Matrix4f Camera::getProjectionMatrix()
@@ -107,6 +105,13 @@ vmml::Vector3f Camera::getPosition()
 vmml::Matrix4f Camera::getRotation()
 {
 	return  vmml::create_rotation(_rotationAxes[2], vmml::Vector3f::UNIT_Z) * vmml::create_rotation(_rotationAxes[0], vmml::Vector3f::UNIT_X) * vmml::create_rotation(_rotationAxes[1], vmml::Vector3f::UNIT_Y);
+}
+
+vmml::Matrix4f Camera::getInverseRotation()
+{
+	vmml::Matrix4f rotInv = vmml::Matrix4f::IDENTITY;
+	getRotation().transpose_to(rotInv);
+	return rotInv;
 }
 
 vmml::Vector3f Camera::getForward()

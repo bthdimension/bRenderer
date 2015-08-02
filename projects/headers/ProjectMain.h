@@ -41,6 +41,7 @@ public:
     /* For iOS only: Handle app being terminated */
     void appWillTerminate();
     
+	/* Make renderer accessible to public so we can get the UIView on iOS */
     Renderer& getProjectRenderer()
     {
         return bRenderer();

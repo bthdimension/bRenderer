@@ -25,9 +25,9 @@ public:
 	*/
     Texture();
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-    ~Texture();
+	virtual ~Texture() {}
     
 	/**	@brief Returns texture id
 	*/

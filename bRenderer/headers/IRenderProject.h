@@ -10,6 +10,16 @@
 class IRenderProject
 {
 public:
+
+	/**	@brief Constructor
+	*/
+	IRenderProject()
+	{		
+		bRenderer().setRenderProject(this);	// set this instance of RenderProject to be used for function calls
+	}
+
+	/**	@brief Virtual destructor
+	*/
 	virtual ~IRenderProject(){}
 
 	/**	@brief Function that gets called when initializing the renderer

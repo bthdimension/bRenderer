@@ -204,6 +204,7 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 								shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, l->getSpecularColor());
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, l->getIntensity());
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
+							propertiesRenderQueue.setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_RADIUS() + pos, l->getRadius());
 						}
 					}
 					// Ambient
@@ -294,6 +295,7 @@ void Renderer::queueModel(const std::string &modelName, const vmml::Matrix4f &mo
 									propertiesRenderQueue.setVector(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, l->getSpecularColor());
 								propertiesRenderQueue.setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, l->getIntensity());
 								propertiesRenderQueue.setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
+								propertiesRenderQueue.setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_RADIUS() + pos, l->getRadius());
 							}
 						}
 						// Ambient

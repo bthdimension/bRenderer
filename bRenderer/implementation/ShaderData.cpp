@@ -17,12 +17,12 @@ ShaderData::ShaderData(GLuint maxLights, bool ambientLighting, const MaterialDat
 	buildShader();
 }
 
-ShaderData::ShaderData(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights)
+ShaderData::ShaderData(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights)
 {
-	create(maxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, variableNumberOfLights);
+	create(maxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, transparencyValue, variableNumberOfLights);
 }
 
-ShaderData &ShaderData::create(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights)
+ShaderData &ShaderData::create(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights)
 {
 	_maxLights = maxLights;
 	_variableNumberOfLights = variableNumberOfLights;
@@ -38,6 +38,8 @@ ShaderData &ShaderData::create(GLuint maxLights, bool ambientLighting, bool diff
 	_diffuseMap = diffuseMap;
 	_normalMap = normalMap;
 	_specularMap = specularMap;
+
+	_transparencyValue = transparencyValue;
 
 	buildShader();
 	
@@ -63,6 +65,8 @@ void ShaderData::readMaterialAttributes(GLuint maxLights, bool variableNumberOfL
 	_specularMap = _specularLighting && t.count(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP()) > 0;
 
 	_diffuseLighting = _diffuseMap || _diffuseColor;
+
+	_transparencyValue = s.count(bRenderer::DEFAULT_SHADER_UNIFORM_TRANSPARENCY()) > 0;
 }
 
 void ShaderData::buildShader()
@@ -93,13 +97,14 @@ void ShaderData::initializeSourceCommonVariables()
 		common += bRenderer::SHADER_SOURCE_NUM_LIGHTS;
 	common += bRenderer::shader_source_light_properties(_maxLights, _normalMap, _diffuseLighting, _specularLighting);
 	// varyings
-	common += bRenderer::SHADER_SOURCE_VARYINGS_POS;
 	if (_diffuseMap || _normalMap || _specularMap)
 		common += bRenderer::SHADER_SOURCE_VARYINGS_TEX_COORD;
 	if (!_normalMap && (_diffuseLighting || _specularLighting))
 		common += bRenderer::SHADER_SOURCE_VARYINGS_NORMAL;
 	if (_normalMap && _specularLighting)
 		common += bRenderer::SHADER_SOURCE_VARYINGS_CAMERA_TANGENT;
+	else if (_specularLighting)
+		common += bRenderer::SHADER_SOURCE_VARYINGS_CAMERA_VIEW;
 
 	_vertShaderSrc = common;
 	_fragShaderSrc = common;
@@ -122,6 +127,9 @@ void ShaderData::createVertShader()
 			_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_TANGENT_SPACE;
 		}
 	}
+	else if (_specularLighting){
+		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_VIEW_SPACE;
+	}
 	// main function lights
 	_vertShaderSrc += bRenderer::shader_source_function_lightVector(_maxLights, _normalMap, _variableNumberOfLights);
 
@@ -135,6 +143,9 @@ void ShaderData::createFragShader()
 	_fragShaderSrc += bRenderer::SHADER_SOURCE_TEXTURES;
 	// colors 
 	_fragShaderSrc += bRenderer::SHADER_SOURCE_COLORS;
+	// transparency value
+	if (_transparencyValue)
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_TRANSPARENCY_VALUE;
 
 	// main function begin
 	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_BEGIN;
@@ -148,9 +159,9 @@ void ShaderData::createFragShader()
 	{
 		// initialize
 		if (_maxLights > 0)
-			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE;
+			_fragShaderSrc += _transparencyValue ? bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_TRANSPARENCY : bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE;
 		else
-			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS;
+			_fragShaderSrc += _transparencyValue ? bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS_TRANSPARENCY : bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS;
 	}
 			
 	if (_specularLighting)

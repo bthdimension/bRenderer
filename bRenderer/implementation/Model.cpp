@@ -62,9 +62,6 @@ Model::Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr pro
 	}
 }
 
-Model::~Model()
-{}
-
 void Model::draw(GLenum mode)
 {
     for (auto i = _groups.begin(); i != _groups.end(); ++i)

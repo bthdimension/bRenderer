@@ -13,6 +13,10 @@ public:
 
 	/* Functions */
 
+	/**	@brief Virtual destructor
+	*/
+	virtual ~IShaderData(){}
+
 	/**	@brief Gets the source code of the vertex shader as a string
 	*/
 	virtual std::string getVertShaderSrc() const  = 0;

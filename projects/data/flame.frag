@@ -19,8 +19,7 @@ void main()
     texcoord.x += sin(texcoord.y * 4.0 * 1.0 * 3.14159 + offset) / 250.0;
     texcoord.y += sin(texcoord.x * 4.0 * 2.0 * 3.14159 + offset) / 100.0;
     
-    vec4 transparencyVec = vec4(1.0,1.0,1.0,transparency);
-    vec4 lightColor = vec4(1.0, 0.6, 1.0, 1.0);
+    vec4 lightColor = vec4(1.0, 0.6, 1.0, transparency);
     
-    gl_FragColor = vec4(ambientColor, 0.0) + lightColor * texture2D(DiffuseMap, texcoord)*transparencyVec;
+    gl_FragColor = vec4(ambientColor, 0.0) + lightColor * texture2D(DiffuseMap, texcoord);
 }

@@ -281,7 +281,7 @@ void OBJLoader::comment_callback(const std::string& comment)
 
 bool OBJLoader::load(std::istream& istream)
 {
-	createGroup("default");
+	createGroup(bRenderer::DEFAULT_GROUP_NAME());
 	obj::obj_parser obj_parser(_flags);
 
 	std::string ifilename;
@@ -448,6 +448,12 @@ void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, 
 			{
 				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP()];
 				ss >> mat >> std::ws;
+			}
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_DISSOLVE())
+			{
+				GLfloat d;
+				ss >> d >> std::ws;
+				materials[matName].scalars[bRenderer::DEFAULT_SHADER_UNIFORM_TRANSPARENCY()] = d;
 			}
 		}
 	}

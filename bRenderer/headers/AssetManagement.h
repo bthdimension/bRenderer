@@ -11,6 +11,7 @@
 #include "Properties.h"
 #include "Framebuffer.h"
 #include "Model.h"
+#include "Sprite.h"
 #include "Texture.h"
 #include "ModelData.h"
 #include "OBJLoader.h"
@@ -72,7 +73,7 @@ public:
 	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting (optional)
 	*	@param[in] specularLighting Set true if the shader supports specular lighting (optional)
 	*/
-	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
+	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
 
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
@@ -94,7 +95,7 @@ public:
 	*	This function will automatically create one shader for every material of the model
 	*
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
+	ModelPtr loadObjModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, PropertiesPtr properties = nullptr);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
@@ -103,7 +104,7 @@ public:
 	*	@param[in] shader Custom shader for the model
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr	properties = nullptr);
+	ModelPtr loadObjModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
@@ -112,7 +113,7 @@ public:
 	*	@param[in] material Custom material for the model
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr	properties = nullptr);
+	ModelPtr loadObjModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Load a texture
 	*	@param[in] fileName File name including extension
@@ -131,7 +132,7 @@ public:
 	*	the default shader will be used.
 	*
 	*/
-	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
+	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
@@ -144,7 +145,7 @@ public:
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
-	*	@param[in] maxLights The maximum number of light sources to be used
+	*	@param[in] shaderMaxLights The maximum number of light sources to be used
 	*	@param[in] ambientLighting Set true if the shader should support ambient lighting
 	*	@param[in] diffuseLighting Set true if the shader should support diffuse lighting
 	*	@param[in] specularLighting Set true if the shader should support specular lighting
@@ -154,9 +155,16 @@ public:
 	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring
 	*	@param[in] normalMap Set true if a texture should be used to define the normals
 	*	@param[in] specularMap Set true if a texture should be used to define specularity
+	*	@param[in] transparencyValue Set true if a transparency value should be passed
 	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*/
-	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights);
+	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights);
+
+	/**	@brief Create empty material
+	*	@param[in] name Name of the material
+	*	@param[in] shader
+	*/
+	MaterialPtr createMaterial(const std::string &name, ShaderPtr shader);
 
 	/**	@brief Create a material
 	*	@param[in] name Name of the material
@@ -173,7 +181,7 @@ public:
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*/
-	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true);
+	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true);
 
 	/**	@brief Create properties
 	*	@param[in] name Name of the properties
@@ -189,7 +197,7 @@ public:
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = true, bool ambientLighting = true, PropertiesPtr properties = nullptr);
+	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, PropertiesPtr properties = nullptr);
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
@@ -206,6 +214,29 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr createModel(const std::string &name, const ModelData &modelData, MaterialPtr material, PropertiesPtr	properties = nullptr);
+
+	/**	@brief Create a sprite
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] material
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr createSprite(const std::string &name, MaterialPtr material, PropertiesPtr properties = nullptr);
+
+	/**	@brief Create a sprite
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] textureFileName	The filename of the texture that should be loaded and displayed 
+	*	@param[in] shader
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, PropertiesPtr properties = nullptr);
+
+	/**	@brief Create a sprite
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] textureFileName The filename of the texture that should be loaded and displayed
+	*	@param[in] shaderMaxLights The maximum number of light sources to be used (optional)
+	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
+	*/
+	ModelPtr createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights = 0, bool variableNumberOfLights = false);
 
 	/**	@brief Create a texture
 	*	@param[in] name The raw name of the texture
@@ -283,8 +314,9 @@ public:
 	*	@param[in] color Color of the light for both diffuse and specular lighting
 	*	@param[in] intensity Intensity of the light
 	*	@param[in] attenuation Attenuation of the light
+	*	@param[in] radius Radius of the light (clamps the light at a certain distance)
 	*/
-	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation);
+	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation, GLfloat radius);
 
 	/**	@brief Create a light
 	*	@param[in] name Name of the light
@@ -293,8 +325,9 @@ public:
 	*	@param[in] specularColor Color of the light for specular lighting
 	*	@param[in] intensity Intensity of the light
 	*	@param[in] attenuation Attenuation of the light
+	*	@param[in] radius Radius of the light (clamps the light at a certain distance)
 	*/
-	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation);
+	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation, GLfloat radius);
 
 	/**	@brief Create a framebuffer
 	*	@param[in] name Name of the framebuffer

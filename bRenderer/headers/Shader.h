@@ -95,9 +95,9 @@ public:
 	*/
     Shader(const IShaderData &shaderData);
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-    ~Shader();
+	virtual ~Shader();
     
 	/**	@brief Returns the shader ID
 	*/

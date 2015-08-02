@@ -127,6 +127,12 @@ public:
 	*/
 	vmml::Matrix4f getRotation();
 
+	/**	@brief Returns the inverse of the rotation matrix of the camera
+	*
+	*	The inverse view matrix may be useful to keep an object to face the camera (e.g. a sprite)
+	*/
+	vmml::Matrix4f getInverseRotation();
+
 	/**	@brief Returns the orientation of the camera
 	*/
 	vmml::Vector3f getForward();

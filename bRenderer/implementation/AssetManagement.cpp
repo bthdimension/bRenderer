@@ -44,7 +44,7 @@ MaterialPtr AssetManagement::loadMaterial(const std::string &fileName, const std
 	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), shader);
 }
 
-ModelPtr AssetManagement::loadModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, PropertiesPtr properties)
+ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -60,7 +60,7 @@ ModelPtr AssetManagement::loadModel(const std::string &fileName, bool flipT, boo
 	return createModel(name, modelData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting, properties);
 }
 
-ModelPtr AssetManagement::loadModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr properties)
+ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -77,7 +77,7 @@ ModelPtr AssetManagement::loadModel(const std::string &fileName, bool flipT, boo
 	return createModel(name, modelData, shader, properties);
 }
 
-ModelPtr AssetManagement::loadModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr properties)
+ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -132,15 +132,25 @@ ShaderPtr AssetManagement::generateShader(std::string shaderName, GLuint shaderM
 	return createShader(name, shaderData);
 }
 
-ShaderPtr AssetManagement::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool variableNumberOfLights)
+ShaderPtr AssetManagement::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights)
 {
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderData shaderData(shaderMaxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, variableNumberOfLights);
+	ShaderData shaderData(shaderMaxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, transparencyValue, variableNumberOfLights);
 	return createShader(name, shaderData);
+}
+
+MaterialPtr AssetManagement::createMaterial(const std::string &name, ShaderPtr shader)
+{
+	if (getMaterial(name)) return getMaterial(name);
+	MaterialPtr &material = _materials[name];
+
+	material = MaterialPtr(new Material);
+	material->setShader(shader);
+	return material;
 }
 
 MaterialPtr AssetManagement::createMaterial(const std::string &name, const MaterialData &materialData, ShaderPtr shader)
@@ -207,6 +217,33 @@ ModelPtr AssetManagement::createModel(const std::string &name, const ModelData &
 	ModelPtr &model = _models[name];
 
 	model = ModelPtr(new Model(modelData, material, properties));
+	return model;
+}
+
+ModelPtr AssetManagement::createSprite(const std::string &name, MaterialPtr material, PropertiesPtr properties)
+{
+	if (getModel(name)) return getModel(name);
+	ModelPtr &model = _models[name];
+
+	model = ModelPtr(new Sprite(material, properties));
+	return model;
+}
+
+ModelPtr AssetManagement::createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, PropertiesPtr properties)
+{
+	if (getModel(name)) return getModel(name);
+	ModelPtr &model = _models[name];
+
+	model = ModelPtr(new Sprite(this, textureFileName, name, shader, properties));
+	return model;
+}
+
+ModelPtr AssetManagement::createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights)
+{
+	if (getModel(name)) return getModel(name);
+	ModelPtr &model = _models[name];
+
+	model = ModelPtr(new Sprite(this, name, textureFileName, shaderMaxLights, variableNumberOfLights));
 	return model;
 }
 
@@ -316,21 +353,21 @@ LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vecto
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation)
+LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation, GLfloat radius)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
 
-	light = LightPtr(new Light(position, color, intensity, attenuation));
+	light = LightPtr(new Light(position, color, intensity, attenuation, radius));
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation)
+LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation, GLfloat radius)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
 
-	light = LightPtr(new Light(position, diffuseColor, specularColor, intensity, attenuation));
+	light = LightPtr(new Light(position, diffuseColor, specularColor, intensity, attenuation, radius));
 	return light;
 }
 
