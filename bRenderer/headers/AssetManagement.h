@@ -73,14 +73,14 @@ public:
 	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting (optional)
 	*	@param[in] specularLighting Set true if the shader supports specular lighting (optional)
 	*/
-	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
+	MaterialPtr loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
 
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
 	*	@param[in] materialName Name of the material
 	*	@param[in] shader Custom shader for the model
 	*/
-	MaterialPtr loadMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader);
+	MaterialPtr loadObjMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader);
 
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension

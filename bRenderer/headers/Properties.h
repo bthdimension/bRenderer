@@ -123,6 +123,15 @@ public:
 	*/
 	void				setScalar(const std::string &name, GLfloat arg)					{ _scalars[name] = arg; }
 
+	/**	@brief Returns the name of the properties
+	*/
+	std::string getName()                       { return _name; }
+
+	/**	@brief Sets the name of the properties
+	*	@param[in] arg Name for the properties
+	*/
+	void        setName(const std::string &arg) { _name = arg; }
+
 	/**	@brief Pass properties to specified shader
 	*	@param[in] shader The shader the properties are passed to
 	*/
@@ -155,6 +164,8 @@ private:
 	Vector4Map		_vectors4;
 	Vector3Map		_vectors3;
 	ScalarMap		_scalars;
+
+	std::string _name;
 };
 
 typedef std::shared_ptr< Properties > PropertiesPtr;

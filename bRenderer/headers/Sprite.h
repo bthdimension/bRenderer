@@ -3,8 +3,8 @@
 
 #include "Model.h"
 
-/** @brief A 3d model that can be rendered to the screen
-*	@author Rahul Mukhi, David Steiner
+/** @brief A 2d plane that can be rendered to the screen
+*	@author Benjamin Bürgisser
 */
 class Sprite : public Model
 {

@@ -159,10 +159,7 @@ public:
 	*/
 	void drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
 
-	/**	@brief Queue specified model into a render queue
-	*
-	*	To allow for postprocessing multiple render queues are processed in order of their creation
-	*
+	/**	@brief Queue specified model into the render queue of the renderer
 	*	@param[in] modelName Name of the model
 	*	@param[in] instanceName The name of the model instance to be queued (instance is created automatically if not present)
 	*	@param[in] cameraName Name of the camera
@@ -177,10 +174,7 @@ public:
 	*/
 	void queueModelInstance(const std::string &modelName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
-	/**	@brief Queue specified model into a render queue
-	*
-	*	To allow for postprocessing multiple render queues are processed in order of their creation
-	*
+	/**	@brief Queue specified model into the render queue of the renderer
 	*	@param[in] modelName Name of the model
 	*	@param[in] instanceName The name of the model instance to be queued (instance is created automatically if not present)
 	*	@param[in] modelMatrix

@@ -52,6 +52,7 @@ PropertiesPtr Geometry::addInstance(const std::string &instanceName)
 	if (getInstanceProperties(instanceName)) return getInstanceProperties(instanceName); // return if already existing
 	PropertiesPtr &properties = _instances[instanceName];
 	properties = PropertiesPtr(new Properties);
+	properties->setName(instanceName);
 	return properties;
 }
 

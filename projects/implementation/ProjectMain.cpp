@@ -9,8 +9,8 @@ void ProjectMain::init()
 	if(bRenderer().getInput()->isTouchDevice())
 		bRenderer().initRenderer(true);										// fullscreen on iOS
 	else
-		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
-		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
+		//bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
+		bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
 
 	// set shader versions (optional)
 	bRenderer().getAssets()->setShaderVersionDesktop("#version 120");
@@ -31,7 +31,7 @@ void ProjectMain::initFunction()
 	// demo: load material and shader before loading the model
 	ShaderPtr customShader = bRenderer().getAssets()->generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false, false);	// create custom shader with a maximum of 2 lights
 	ShaderPtr flameShader = bRenderer().getAssets()->loadShaderFile("flame", 0, false, true, true, false);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-	MaterialPtr flameMaterial = bRenderer().getAssets()->loadMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+	MaterialPtr flameMaterial = bRenderer().getAssets()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
 
 	// create additional properties for a model
 	PropertiesPtr flameProperties = bRenderer().getAssets()->createProperties("flameProperties");		
@@ -131,7 +131,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	//// Torch Light ////
 	if (_running){
 		if (deltaTime < 0.5f){
-			_randomTime += deltaTime + randomNumber(0.0f, 0.12f);
+			_randomTime += (deltaTime + randomNumber(0.0f, 0.12f))*0.5;
 		}
 		GLfloat flickeringLight = 1.0f + (_randomTime)* 2.0f * M_PI_F*(0.032f);
 		// let the light follow the camera

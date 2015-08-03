@@ -22,7 +22,7 @@ void AssetManagement::setAmbientColor(const vmml::Vector3f &ambientColor)
 	_ambientColor = ambientColor;
 }
 
-MaterialPtr AssetManagement::loadMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
+MaterialPtr AssetManagement::loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
 {
 	// log activity
 	bRenderer::log("loading Material: " + materialName, bRenderer::LM_SYS);
@@ -33,7 +33,7 @@ MaterialPtr AssetManagement::loadMaterial(const std::string &fileName, const std
 	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting));
 }
 
-MaterialPtr AssetManagement::loadMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader)
+MaterialPtr AssetManagement::loadObjMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader)
 {
 	// log activity
 	bRenderer::log("loading Material: " + materialName, bRenderer::LM_SYS);
@@ -150,6 +150,7 @@ MaterialPtr AssetManagement::createMaterial(const std::string &name, ShaderPtr s
 
 	material = MaterialPtr(new Material);
 	material->setShader(shader);
+	material->setName(name);
 	return material;
 }
 
@@ -190,6 +191,7 @@ PropertiesPtr AssetManagement::createProperties(const std::string &name)
 	PropertiesPtr &properties = _properties[name];
 
 	properties = PropertiesPtr(new Properties);
+	properties->setName(name);
 	return properties;
 }
 
