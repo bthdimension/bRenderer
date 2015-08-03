@@ -13,8 +13,8 @@
 
 struct RenderCall
 {
-	GeometryPtr g;
-	Properties p;
+	GeometryPtr geometry;
+	std::string instanceName;
 	GLenum blendSfactor, blendDfactor;
 };
 
@@ -42,14 +42,14 @@ public:
 	*	@param[in] programID
 	*	@param[in] materialName
 	*	@param[in] geometryName
+	*	@param[in] instanceName
 	*	@param[in] geometry
-	*	@param[in] properties 
 	*	@param[in] distanceToCamera The distance of the transparent geometry to the camera (optional)
 	*	@param[in] isTransparent Set true if the object is transparent (optional)
 	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*/
-	void submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &geometryName, GeometryPtr geometry, const Properties &properties, GLfloat distanceToCamera = 0.0, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA);
+	void submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &geometryName, const std::string &instanceName, GeometryPtr geometry, GLfloat distanceToCamera = 0.0, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA);
 
 	/**	@brief Draw all geometry in the queue in a sorted manner
 	*/

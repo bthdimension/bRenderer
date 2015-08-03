@@ -21,6 +21,8 @@ class Model : public IDrawable
 public:
 	/* Typedefs */
 	typedef std::unordered_map< std::string, GeometryPtr > GroupMap;
+	typedef  std::shared_ptr< std::unordered_map< ShaderPtr, PropertiesPtr > >	InstanceMapPtr;
+	typedef std::unordered_map< std::string, InstanceMapPtr >	InstancesMap;
 
 	/* Functions */
 
@@ -64,10 +66,44 @@ public:
 	virtual void draw(GLenum mode = GL_TRIANGLES);
 
 	/**	@brief Draws the specified group of geometry to the screen
-	*	@param[in] groupName Name of the group to draw
+	*	@param[in] geometryName Name of the group to draw
 	*	@param[in] mode
 	*/
-	virtual void draw(const std::string &groupName, GLenum mode = GL_TRIANGLES);
+	virtual void draw(const std::string &geometryName, GLenum mode = GL_TRIANGLES);
+
+	/**	@brief Draws an instance of the model to the screen
+	*	@param[in] instanceName
+	*	@param[in] mode
+	*/
+	void drawInstance(const std::string &instanceName, GLenum mode = GL_TRIANGLES);
+
+	/**	@brief Creates an instance of this model and associated geometry
+	*
+	*	All geometry that belong to this model get additional properties
+	*
+	*	@param[in] instanceName	Name of the instance
+	*/
+	InstanceMapPtr	addInstance(const std::string &instanceName);
+
+	/**	@brief Get the properties of a geometry instance
+	*	@param[in] instanceName	Name of the instance
+	*	@param[in] geometryName	Name of the geometry
+	*/
+	PropertiesPtr	getInstanceProperties(const std::string &instanceName, const std::string &geometryName);
+
+	/**	@brief Get the instance properties for every shader used in the model
+	*	@param[in] instanceName	Name of the instance
+	*/
+	InstanceMapPtr	getInstanceProperties(const std::string &instanceName);
+
+	/**	@brief Removes an instance of the model and associated geometry
+	*	@param[in] instanceName	Name of the instance
+	*/
+	void			removeInstance(const std::string &instanceName);
+
+	/**	@brief Removes all instances of the model and associated geometry
+	*/
+	void			clearInstances();
     
 	/**	@brief Returns the material of the model
 	*/
@@ -120,12 +156,13 @@ public:
 	*	@param[in] name	Name of the geometry
 	*	@param[in] geometry A pointer to the geometry
 	*/
-	void			addGeometry(std::string name, GeometryPtr geometry)				{ _groups.insert(GroupMap::value_type(name, geometry)); }
+	void			addGeometry(const std::string &name, GeometryPtr geometry);
 
 	/**	@brief Removes geometry from the model
 	*	@param[in] name	Name of the geometry
 	*/
-	void			removeGeometry(std::string name)								{ _groups.erase(name); }
+	void			removeGeometry(const std::string &name)								{ _groups.erase(name); }
+
 
 private:
 
@@ -135,6 +172,7 @@ private:
     MaterialPtr     _material;
 	PropertiesPtr	_properties;
 	vmml::AABBf		_boundingBox;
+	InstancesMap	_instances;
 };
 
 typedef std::shared_ptr<Model> ModelPtr;

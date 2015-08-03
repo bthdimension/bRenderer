@@ -29,19 +29,51 @@ void Geometry::draw(GLenum mode)
 
 }
 
-void Geometry::draw(Properties *customProperties, GLenum mode)
+void Geometry::drawInstance(const std::string &instanceName, GLenum mode)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
 
 	if (_material)
 		_material->bind();
 
-	customProperties->passToShader(_material->getShader());
+	if (_properties)
+		_properties->passToShader(_material->getShader());
+
+	getInstanceProperties(instanceName)->passToShader(_material->getShader());
 
 	glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+
+PropertiesPtr Geometry::addInstance(const std::string &instanceName)
+{
+	if (getInstanceProperties(instanceName)) return getInstanceProperties(instanceName); // return if already existing
+	PropertiesPtr &properties = _instances[instanceName];
+	properties = PropertiesPtr(new Properties);
+	return properties;
+}
+
+void Geometry::addInstance(const std::string &instanceName, PropertiesPtr instanceProperties)
+{
+	_instances.insert(PropertiesMap::value_type(instanceName, instanceProperties));
+}
+
+PropertiesPtr Geometry::getInstanceProperties(const std::string &instanceName)
+{
+	if (_instances.count(instanceName) > 0)
+		return _instances[instanceName];
+	return nullptr;
+}
+void Geometry::removeInstance(const std::string &instanceName)
+{
+	_instances.erase(instanceName);
+}
+
+void Geometry::clearInstances()
+{
+	_instances.clear();
 }
 
 /* Private functions */
@@ -113,3 +145,4 @@ vmml::AABBf Geometry::createBoundingBoxObjectSpace(const GeometryData::VboVertic
 
 	return vmml::AABBf(vmml::Vector3f(min.x, min.y, min.z), vmml::Vector3f(max.x, max.y, max.z));
 }
+

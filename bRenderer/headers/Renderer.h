@@ -164,6 +164,7 @@ public:
 	*	To allow for postprocessing multiple render queues are processed in order of their creation
 	*
 	*	@param[in] modelName Name of the model
+	*	@param[in] instanceName The name of the model instance to be queued (instance is created automatically if not present)
 	*	@param[in] cameraName Name of the camera
 	*	@param[in] modelMatrix
 	*	@param[in] lightNames Names of the lights in a vector
@@ -174,13 +175,14 @@ public:
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
 	*/
-	void queueModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+	void queueModelInstance(const std::string &modelName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
 	/**	@brief Queue specified model into a render queue
 	*
 	*	To allow for postprocessing multiple render queues are processed in order of their creation
 	*
 	*	@param[in] modelName Name of the model
+	*	@param[in] instanceName The name of the model instance to be queued (instance is created automatically if not present)
 	*	@param[in] modelMatrix
 	*	@param[in] viewMatrix
 	*	@param[in] projectionMatrix
@@ -192,7 +194,7 @@ public:
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
 	*/
-	void queueModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+	void queueModelInstance(const std::string &modelName, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
 	/**	@brief Tests an axis-aligned bounding box against the view frustum
 	*	@param[in] aabbObjectSpace The axis-aligned bounding box in object space
@@ -233,8 +235,6 @@ private:
 	IRenderProject *_renderProject;
     
     RendererCaller *_rendererCaller;
-
-	Properties propertiesRenderQueue;
 	
 	void(*_initFunction)();
 	void(*_loopFunction)(const double deltaTime, const double elapsedTime);

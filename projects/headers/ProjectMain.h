@@ -24,8 +24,11 @@ public:
 	/* This function is executed when terminating the renderer */
 	void terminateFunction();
 
-	//// Camera movement ////
-	void moveCamera(const double &deltaTime);
+	/* Camera movement */
+	void updateCamera(const double &deltaTime);
+
+	/* Update render queue */
+	void updateRenderQueue();
 
 	//// iOS specific ////
 
@@ -56,6 +59,7 @@ private:
 	GLfloat _randomTime;
 	double _mouseX, _mouseY;
 	bool _running; GLint _lastStateSpaceKey;
+	vmml::Matrix4f _viewMatrixHUD;
 };
 
 #endif /* defined(PROJECT_MAIN_H) */

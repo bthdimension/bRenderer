@@ -21,24 +21,50 @@ public:
 	/* Typedefs */
 	typedef std::shared_ptr< Vertex >   VertexDataPtr;
     typedef std::shared_ptr< GLushort > IndexDataPtr;
+	typedef std::unordered_map< std::string, PropertiesPtr >	PropertiesMap;
 
 	/* Functions */
+
+	/**	@brief Initializes the geometry object based on geometry data
+	*	@param[in] geometryData
+	*/
+	void initialize(GeometryDataPtr geometryData);
 
 	/**	@brief Draws the geometry to the screen
 	*	@param[in] mode 
 	*/
     void draw(GLenum mode = GL_TRIANGLES);
 
-	/**	@brief Draws the geometry to the screen
-	*	@param[in] customProperties Pass custom properties to replace the properties of the geometry
+	/**	@brief Draws an instance of the geometry to the screen
+	*	@param[in] instanceName
 	*	@param[in] mode
 	*/
-	void draw(Properties *customProperties, GLenum mode = GL_TRIANGLES);
-    
-	/**	@brief Initializes the geometry object based on geometry data 
-	*	@param[in] geometryData	
+	void drawInstance(const std::string &instanceName, GLenum mode = GL_TRIANGLES);
+
+	/**	@brief Creates an instance of this geometry
+	*	@param[in] instanceName	Name of the instance
 	*/
-    void initialize(GeometryDataPtr geometryData);
+	PropertiesPtr	addInstance(const std::string &instanceName);
+
+	/**	@brief Creates an instance of this geometry
+	*	@param[in] instanceName	Name of the instance
+	*	@param[in] instanceProperties Properties for the instance
+	*/
+	void addInstance(const std::string &instanceName, PropertiesPtr instanceProperties);
+
+	/**	@brief Get the properties of a geometry instance
+	*	@param[in] instanceName	Name of the instance
+	*/
+	PropertiesPtr	getInstanceProperties(const std::string &instanceName);
+
+	/**	@brief Removes an instance
+	*	@param[in] instanceName	Name of the instance
+	*/
+	void			removeInstance(const std::string &instanceName);
+
+	/**	@brief Removes all instances
+	*/
+	void			clearInstances();
 
 	/**	@brief Returns a pointer to the vertices of the geometry
 	*/
@@ -128,6 +154,8 @@ private:
 	PropertiesPtr _properties;
 
 	vmml::AABBf _boundingBox;
+
+	PropertiesMap _instances;
 };
 
 typedef std::shared_ptr<Geometry> GeometryPtr;
