@@ -1,9 +1,9 @@
-#include "../headers/Model.h"
-#include "../headers/ModelData.h"
-#include "../headers/TextureData.h"
-#include "../headers/AssetManagement.h"
+#include "headers/Model.h"
+#include "headers/ModelData.h"
+#include "headers/TextureData.h"
+#include "headers/ResourceManager.h"
 
-Model::Model(AssetManagement *a, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties)
+Model::Model(ResourceManager *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties)
 	: _properties(properties)
 {
 	ModelData::GroupMap data = modelData.getData();
@@ -14,7 +14,7 @@ Model::Model(AssetManagement *a, const ModelData &modelData, GLuint shaderMaxLig
 		_groups.insert(std::pair< std::string, GeometryPtr >(i->first, g));
 		GeometryDataPtr gData = i->second;
 
-		MaterialPtr material = a->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting);
+		MaterialPtr material = r->createMaterialShaderCombination(gData->materialData.name, gData->materialData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting);
 		g->initialize(gData);
 		g->setMaterial(material);
 		g->setProperties(properties);
@@ -24,7 +24,7 @@ Model::Model(AssetManagement *a, const ModelData &modelData, GLuint shaderMaxLig
 	}
 }
 
-Model::Model(AssetManagement *a, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
+Model::Model(ResourceManager *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
 	: _properties(properties)
 {
     ModelData::GroupMap data = modelData.getData();
@@ -33,7 +33,7 @@ Model::Model(AssetManagement *a, const ModelData &modelData, ShaderPtr shader, P
 		GeometryPtr g = GeometryPtr(new Geometry);
 		_groups.insert(std::pair< std::string, GeometryPtr >(i->first, g));
         GeometryDataPtr gData = i->second;
-		MaterialPtr material = a->createMaterial(gData->materialData.name, gData->materialData, shader);
+		MaterialPtr material = r->createMaterial(gData->materialData.name, gData->materialData, shader);
         g->initialize(gData);
         g->setMaterial(material);
 		g->setProperties(properties);

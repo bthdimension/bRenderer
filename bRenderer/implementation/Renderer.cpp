@@ -1,11 +1,11 @@
 // Some operations of vmmlib will cause a warning in Visual C++ (specifically culling)
 #define _SCL_SECURE_NO_WARNINGS
 
-#include "../headers/Renderer.h"
-#include "../headers/IRenderProject.h"
-#include "../headers/ShaderDataFile.h"
-#include "../headers/ShaderData.h"
-#include "../headers/Configuration.h"
+#include "headers/Renderer.h"
+#include "headers/IRenderProject.h"
+#include "headers/ShaderDataFile.h"
+#include "headers/ShaderData.h"
+#include "headers/Configuration.h"
 
 #include <boost/lexical_cast.hpp>
 using boost::lexical_cast;
@@ -27,9 +27,9 @@ InputPtr Renderer::getInput()
 	return _input;
 }
 
-AssetManagementPtr Renderer::getAssets()
+ResourceManagerPtr Renderer::getResources()
 {
-	return _assetManagement;
+	return _resourceManager;
 }
 
 RenderQueuePtr Renderer::getRenderQueue()
@@ -94,8 +94,8 @@ bool Renderer::initRenderer(std::string windowTitle)
     if(!_input)  			_input = InputPtr(new Input);
     _input->setView(_view);
 
-	// Asset management
-	if (!_assetManagement)  _assetManagement = AssetManagementPtr(new AssetManagement);
+	// Resource management
+	if (!_resourceManager)  _resourceManager = ResourceManagerPtr(new ResourceManager);
 
 	// Render queue
 	if (!_renderQueue)  _renderQueue = RenderQueuePtr(new RenderQueue);
@@ -141,7 +141,7 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen, std::str
 
 void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
 {
-	drawModel(modelName, modelMatrix, _assetManagement->getCamera(cameraName)->getViewMatrix(), _assetManagement->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry);
+	drawModel(modelName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry);
 }
 
 void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
@@ -155,13 +155,13 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 	// Frsutum culling
 	if (doFrustumCulling){
 		modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
-		visibility = viewFrustumCulling(_assetManagement->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
+		visibility = viewFrustumCulling(_resourceManager->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 	}
 
 	// Draw geometry
 	if (visibility != vmml::VISIBILITY_NONE){
-		Model::GroupMap &groupsModel = _assetManagement->getModel(modelName)->getGroups();
+		Model::GroupMap &groupsModel = _resourceManager->getModel(modelName)->getGroups();
 		for (auto i = groupsModel.begin(); i != groupsModel.end(); ++i)
 		{
 			GeometryPtr geometry = i->second;
@@ -196,7 +196,7 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
 						for (int i = 0; i < numLights; i++){
 							std::string pos = lexical_cast<std::string>(i);
-							LightPtr l = _assetManagement->getLight(lightNames[i]);
+							LightPtr l = _resourceManager->getLight(lightNames[i]);
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
 							if (shader->supportsDiffuseLighting())
 								shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
@@ -209,7 +209,7 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 					}
 					// Ambient
 					if (shader->supportsAmbientLighting())
-						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _assetManagement->getAmbientColor());
+						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _resourceManager->getAmbientColor());
 				}
 
 				geometry->draw();
@@ -221,7 +221,7 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 
 void Renderer::queueModelInstance(const std::string &modelName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
 {
-	queueModelInstance(modelName, instanceName, modelMatrix, _assetManagement->getCamera(cameraName)->getViewMatrix(), _assetManagement->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry, isTransparent, blendSfactor, blendDfactor, customDistance);
+	queueModelInstance(modelName, instanceName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry, isTransparent, blendSfactor, blendDfactor, customDistance);
 }
 
 void Renderer::queueModelInstance(const std::string &modelName, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
@@ -233,7 +233,7 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 	// Frsutum culling
 	if (doFrustumCulling){
 		modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
-		visibility = viewFrustumCulling(_assetManagement->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
+		visibility = viewFrustumCulling(_resourceManager->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 	}
 
@@ -241,7 +241,7 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 	if (visibility != vmml::VISIBILITY_NONE){
 		
 		// Update instance properties
-		Model::InstanceMapPtr instanceMap = _assetManagement->getModel(modelName)->addInstance(instanceName);
+		Model::InstanceMapPtr instanceMap = _resourceManager->getModel(modelName)->addInstance(instanceName);
 		for (auto i = instanceMap->begin(); i != instanceMap->end(); ++i)
 		{
 			ShaderPtr shader = i->first;
@@ -262,7 +262,7 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 					properties->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
 				for (int i = 0; i < numLights; i++){
 					std::string pos = lexical_cast<std::string>(i);
-					LightPtr l = _assetManagement->getLight(lightNames[i]);
+					LightPtr l = _resourceManager->getLight(lightNames[i]);
 					properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
 					if (shader->supportsDiffuseLighting())
 						properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
@@ -275,11 +275,11 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 			}
 			// Ambient
 			if (shader->supportsAmbientLighting())
-				properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _assetManagement->getAmbientColor());
+				properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _resourceManager->getAmbientColor());
 		}
 
 		// Queue geometry
-		Model::GroupMap &groupsModel = _assetManagement->getModel(modelName)->getGroups();
+		Model::GroupMap &groupsModel = _resourceManager->getModel(modelName)->getGroups();
 		for (auto i = groupsModel.begin(); i != groupsModel.end(); ++i)
 		{
 			std::string geometryName = i->first;
@@ -332,6 +332,6 @@ void Renderer::reset()
 	_initialTime = 0;
 	_elapsedTime = 0;
 
-	if (_assetManagement)
-		_assetManagement->clear();
+	if (_resourceManager)
+		_resourceManager->clear();
 }

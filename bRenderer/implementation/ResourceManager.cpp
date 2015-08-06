@@ -1,28 +1,28 @@
-#include "../headers/AssetManagement.h"
-#include <boost/lexical_cast.hpp>
+#include "headers/ResourceManager.h"
 #include "headers/ShaderDataFile.h"
 #include "headers/ShaderData.h"
+#include <boost/lexical_cast.hpp>
 
 using boost::lexical_cast;
 
 /* Public functions */
 
-void AssetManagement::setShaderVersionDesktop(const std::string &shaderVersionDesktop)
+void ResourceManager::setShaderVersionDesktop(const std::string &shaderVersionDesktop)
 {
 	_shaderVersionDesktop = shaderVersionDesktop;
 }
 
-void AssetManagement::setShaderVersionES(const std::string &shaderVersionES)
+void ResourceManager::setShaderVersionES(const std::string &shaderVersionES)
 {
 	_shaderVersionES = shaderVersionES;
 }
 
-void AssetManagement::setAmbientColor(const vmml::Vector3f &ambientColor)
+void ResourceManager::setAmbientColor(const vmml::Vector3f &ambientColor)
 {
 	_ambientColor = ambientColor;
 }
 
-MaterialPtr AssetManagement::loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
+MaterialPtr ResourceManager::loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
 {
 	// log activity
 	bRenderer::log("loading Material: " + materialName, bRenderer::LM_SYS);
@@ -33,7 +33,7 @@ MaterialPtr AssetManagement::loadObjMaterial(const std::string &fileName, const 
 	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting));
 }
 
-MaterialPtr AssetManagement::loadObjMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader)
+MaterialPtr ResourceManager::loadObjMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader)
 {
 	// log activity
 	bRenderer::log("loading Material: " + materialName, bRenderer::LM_SYS);
@@ -44,7 +44,7 @@ MaterialPtr AssetManagement::loadObjMaterial(const std::string &fileName, const 
 	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), shader);
 }
 
-ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, PropertiesPtr properties)
+ModelPtr ResourceManager::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -60,7 +60,7 @@ ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, 
 	return createModel(name, modelData, shaderFromFile, shaderMaxLights, variableNumberOfLights, ambientLighting, properties);
 }
 
-ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr properties)
+ModelPtr ResourceManager::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -77,7 +77,7 @@ ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, 
 	return createModel(name, modelData, shader, properties);
 }
 
-ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr properties)
+ModelPtr ResourceManager::loadObjModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr properties)
 {
 	// log activity
 	bRenderer::log("loading Model: " + fileName, bRenderer::LM_SYS);
@@ -93,7 +93,7 @@ ModelPtr AssetManagement::loadObjModel(const std::string &fileName, bool flipT, 
 	return createModel(name, modelData, material, properties);
 }
 
-TexturePtr AssetManagement::loadTexture(const std::string &fileName)
+TexturePtr ResourceManager::loadTexture(const std::string &fileName)
 {
 	// get file name
 	std::string name = getRawName(fileName);
@@ -106,7 +106,7 @@ TexturePtr AssetManagement::loadTexture(const std::string &fileName)
 	return createTexture(name, textureData);
 }
 
-ShaderPtr AssetManagement::loadShaderFile(std::string shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
+ShaderPtr ResourceManager::loadShaderFile(std::string shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
 {
 	std::string name = getRawName(shaderName);
 
@@ -121,7 +121,7 @@ ShaderPtr AssetManagement::loadShaderFile(std::string shaderName, GLuint shaderM
 	return nullptr;
 }
 
-ShaderPtr AssetManagement::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights)
+ShaderPtr ResourceManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights)
 {
 	std::string name = getRawName(shaderName);
 
@@ -132,7 +132,7 @@ ShaderPtr AssetManagement::generateShader(std::string shaderName, GLuint shaderM
 	return createShader(name, shaderData);
 }
 
-ShaderPtr AssetManagement::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights)
+ShaderPtr ResourceManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights)
 {
 	std::string name = getRawName(shaderName);
 
@@ -143,7 +143,7 @@ ShaderPtr AssetManagement::generateShader(std::string shaderName, GLuint shaderM
 	return createShader(name, shaderData);
 }
 
-MaterialPtr AssetManagement::createMaterial(const std::string &name, ShaderPtr shader)
+MaterialPtr ResourceManager::createMaterial(const std::string &name, ShaderPtr shader)
 {
 	if (getMaterial(name)) return getMaterial(name);
 	MaterialPtr &material = _materials[name];
@@ -154,7 +154,7 @@ MaterialPtr AssetManagement::createMaterial(const std::string &name, ShaderPtr s
 	return material;
 }
 
-MaterialPtr AssetManagement::createMaterial(const std::string &name, const MaterialData &materialData, ShaderPtr shader)
+MaterialPtr ResourceManager::createMaterial(const std::string &name, const MaterialData &materialData, ShaderPtr shader)
 {
 	if (getMaterial(name)) return getMaterial(name);
 	MaterialPtr &material = _materials[name];
@@ -164,7 +164,7 @@ MaterialPtr AssetManagement::createMaterial(const std::string &name, const Mater
 	return material;
 }
 
-MaterialPtr AssetManagement::createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting)
+MaterialPtr ResourceManager::createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting)
 {
 	if (getMaterial(name)) return getMaterial(name);
 	MaterialPtr &material = _materials[name];
@@ -185,7 +185,7 @@ MaterialPtr AssetManagement::createMaterialShaderCombination(const std::string &
 	return material;
 }
 
-PropertiesPtr AssetManagement::createProperties(const std::string &name)
+PropertiesPtr ResourceManager::createProperties(const std::string &name)
 {
 	if (getProperties(name)) return getProperties(name);
 	PropertiesPtr &properties = _properties[name];
@@ -195,7 +195,7 @@ PropertiesPtr AssetManagement::createProperties(const std::string &name)
 	return properties;
 }
 
-ModelPtr AssetManagement::createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, PropertiesPtr properties)
+ModelPtr ResourceManager::createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
@@ -204,7 +204,7 @@ ModelPtr AssetManagement::createModel(const std::string &name, const ModelData &
 	return model;
 }
 
-ModelPtr AssetManagement::createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
+ModelPtr ResourceManager::createModel(const std::string &name, const ModelData &modelData, ShaderPtr shader, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
@@ -213,7 +213,7 @@ ModelPtr AssetManagement::createModel(const std::string &name, const ModelData &
 	return model;
 }
 
-ModelPtr AssetManagement::createModel(const std::string &name, const ModelData &modelData, MaterialPtr material, PropertiesPtr properties)
+ModelPtr ResourceManager::createModel(const std::string &name, const ModelData &modelData, MaterialPtr material, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
@@ -222,7 +222,7 @@ ModelPtr AssetManagement::createModel(const std::string &name, const ModelData &
 	return model;
 }
 
-ModelPtr AssetManagement::createSprite(const std::string &name, MaterialPtr material, PropertiesPtr properties)
+ModelPtr ResourceManager::createSprite(const std::string &name, MaterialPtr material, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
@@ -231,7 +231,7 @@ ModelPtr AssetManagement::createSprite(const std::string &name, MaterialPtr mate
 	return model;
 }
 
-ModelPtr AssetManagement::createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, PropertiesPtr properties)
+ModelPtr ResourceManager::createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
@@ -240,7 +240,7 @@ ModelPtr AssetManagement::createSprite(const std::string &name, const std::strin
 	return model;
 }
 
-ModelPtr AssetManagement::createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights)
+ModelPtr ResourceManager::createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
@@ -249,7 +249,7 @@ ModelPtr AssetManagement::createSprite(const std::string &name, const std::strin
 	return model;
 }
 
-TexturePtr AssetManagement::createTexture(const std::string &name, const TextureData &textureData)
+TexturePtr ResourceManager::createTexture(const std::string &name, const TextureData &textureData)
 {
 	if (getTexture(name)) return getTexture(name);
 	TexturePtr &texture = _textures[name];
@@ -259,7 +259,7 @@ TexturePtr AssetManagement::createTexture(const std::string &name, const Texture
 	return texture;
 }
 
-TexturePtr AssetManagement::createTexture(const std::string &name, GLsizei width, GLsizei height, GLenum format, ImageDataPtr imageData)
+TexturePtr ResourceManager::createTexture(const std::string &name, GLsizei width, GLsizei height, GLenum format, ImageDataPtr imageData)
 {
 	if (getTexture(name)) return getTexture(name);
 	TexturePtr &texture = _textures[name];
@@ -272,7 +272,7 @@ TexturePtr AssetManagement::createTexture(const std::string &name, GLsizei width
 	return texture;
 }
 
-ShaderPtr AssetManagement::createShader(const std::string &name, const IShaderData &shaderData)
+ShaderPtr ResourceManager::createShader(const std::string &name, const IShaderData &shaderData)
 {
 	if (shaderData.isValid())
 	{
@@ -292,7 +292,7 @@ ShaderPtr AssetManagement::createShader(const std::string &name, const IShaderDa
 	return nullptr;
 }
 
-CameraPtr AssetManagement::createCamera(const std::string &name)
+CameraPtr ResourceManager::createCamera(const std::string &name)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
@@ -301,7 +301,7 @@ CameraPtr AssetManagement::createCamera(const std::string &name)
 	return camera;
 }
 
-CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes)
+CameraPtr ResourceManager::createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
@@ -310,7 +310,7 @@ CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::Vec
 	return camera;
 }
 
-CameraPtr AssetManagement::createCamera(const std::string &name, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+CameraPtr ResourceManager::createCamera(const std::string &name, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
@@ -319,7 +319,7 @@ CameraPtr AssetManagement::createCamera(const std::string &name, GLfloat fov, GL
 	return camera;
 }
 
-CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
+CameraPtr ResourceManager::createCamera(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 {
 	if (getCamera(name)) return getCamera(name);
 	CameraPtr &camera = _cameras[name];
@@ -328,7 +328,7 @@ CameraPtr AssetManagement::createCamera(const std::string &name, const vmml::Vec
 	return camera;
 }
 
-MatrixStackPtr AssetManagement::createMatrixStack(const std::string &name)
+MatrixStackPtr ResourceManager::createMatrixStack(const std::string &name)
 {
 	if (getMatrixStack(name)) return getMatrixStack(name);
 	MatrixStackPtr &matrixStack = _matrixStacks[name];
@@ -337,7 +337,7 @@ MatrixStackPtr AssetManagement::createMatrixStack(const std::string &name)
 	return matrixStack;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name)
+LightPtr ResourceManager::createLight(const std::string &name)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
@@ -346,7 +346,7 @@ LightPtr AssetManagement::createLight(const std::string &name)
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color)
+LightPtr ResourceManager::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
@@ -355,7 +355,7 @@ LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vecto
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation, GLfloat radius)
+LightPtr ResourceManager::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &color, GLfloat intensity, GLfloat attenuation, GLfloat radius)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
@@ -364,7 +364,7 @@ LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vecto
 	return light;
 }
 
-LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation, GLfloat radius)
+LightPtr ResourceManager::createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation, GLfloat radius)
 {
 	if (getLight(name)) return getLight(name);
 	LightPtr &light = _lights[name];
@@ -373,7 +373,7 @@ LightPtr AssetManagement::createLight(const std::string &name, const vmml::Vecto
 	return light;
 }
 
-FramebufferPtr AssetManagement::createFramebuffer(const std::string &name)
+FramebufferPtr ResourceManager::createFramebuffer(const std::string &name)
 {
 	if (getFramebuffer(name)) return getFramebuffer(name);
 	FramebufferPtr &framebuffer = _framebuffers[name];
@@ -381,130 +381,130 @@ FramebufferPtr AssetManagement::createFramebuffer(const std::string &name)
 	return framebuffer;
 }
 
-ShaderPtr AssetManagement::getShader(const std::string &name)
+ShaderPtr ResourceManager::getShader(const std::string &name)
 {
 	if (_shaders.count(name) > 0)
 		return _shaders[name];
 	return nullptr;
 }
 
-TexturePtr AssetManagement::getTexture(const std::string &name)
+TexturePtr ResourceManager::getTexture(const std::string &name)
 {
 	if (_textures.count(name) > 0)
 		return _textures[name];
 	return nullptr;
 }
 
-MaterialPtr AssetManagement::getMaterial(const std::string &name)
+MaterialPtr ResourceManager::getMaterial(const std::string &name)
 {
 	if (_materials.count(name) > 0)
 		return _materials[name];
 	return nullptr;
 }
 
-PropertiesPtr AssetManagement::getProperties(const std::string &name)
+PropertiesPtr ResourceManager::getProperties(const std::string &name)
 {
 	if (_properties.count(name) > 0)
 		return _properties[name];
 	return nullptr;
 }
 
-ModelPtr AssetManagement::getModel(const std::string &name)
+ModelPtr ResourceManager::getModel(const std::string &name)
 {
 	if (_models.count(name) > 0)
 		return _models[name];
 	return nullptr;
 }
 
-CameraPtr AssetManagement::getCamera(const std::string &name)
+CameraPtr ResourceManager::getCamera(const std::string &name)
 {
 	if (_cameras.count(name) > 0)
 		return _cameras[name];
 	return nullptr;
 }
 
-MatrixStackPtr AssetManagement::getMatrixStack(const std::string &name)
+MatrixStackPtr ResourceManager::getMatrixStack(const std::string &name)
 {
 	if (_matrixStacks.count(name) > 0)
 		return _matrixStacks[name];
 	return nullptr;
 }
 
-LightPtr AssetManagement::getLight(const std::string &name)
+LightPtr ResourceManager::getLight(const std::string &name)
 {
 	if (_lights.count(name) > 0)
 		return _lights[name];
 	return nullptr;
 }
 
-FramebufferPtr AssetManagement::getFramebuffer(const std::string &name)
+FramebufferPtr ResourceManager::getFramebuffer(const std::string &name)
 {
 	if (_framebuffers.count(name) > 0)
 		return _framebuffers[name];
 	return nullptr;
 }
 
-std::string AssetManagement::getShaderVersionDesktop()
+std::string ResourceManager::getShaderVersionDesktop()
 {
 	return _shaderVersionDesktop;
 }
 
-std::string AssetManagement::getShaderVersionES()
+std::string ResourceManager::getShaderVersionES()
 {
 	return _shaderVersionES;
 }
 
-vmml::Vector3f AssetManagement::getAmbientColor()
+vmml::Vector3f ResourceManager::getAmbientColor()
 {
 	return _ambientColor;
 }
 
-void AssetManagement::removeShader(const std::string &name)
+void ResourceManager::removeShader(const std::string &name)
 {
 	_shaders.erase(name);
 }
 
-void AssetManagement::removeTexture(const std::string &name)
+void ResourceManager::removeTexture(const std::string &name)
 {
 	_textures.erase(name);
 }
 
-void AssetManagement::removeMaterial(const std::string &name)
+void ResourceManager::removeMaterial(const std::string &name)
 {
 	_materials.erase(name);
 }
 
-void AssetManagement::removeProperties(const std::string &name)
+void ResourceManager::removeProperties(const std::string &name)
 {
 	_properties.erase(name);
 }
 
-void AssetManagement::removeModel(const std::string &name)
+void ResourceManager::removeModel(const std::string &name)
 {
 	_models.erase(name);
 }
 
-void AssetManagement::removeCamera(const std::string &name)
+void ResourceManager::removeCamera(const std::string &name)
 {
 	_cameras.erase(name);
 }
 
-void AssetManagement::removeMatrixStack(const std::string &name)
+void ResourceManager::removeMatrixStack(const std::string &name)
 {
 	_matrixStacks.erase(name);
 }
 
-void AssetManagement::removeLight(const std::string &name)
+void ResourceManager::removeLight(const std::string &name)
 {
 	_lights.erase(name);
 }
 
-void AssetManagement::removeFramebuffer(const std::string &name)
+void ResourceManager::removeFramebuffer(const std::string &name)
 {
 	_framebuffers.erase(name);
 }
 
-void AssetManagement::clear()
+void ResourceManager::clear()
 {
 	_shaders.clear();
 	_textures.clear();
@@ -524,7 +524,7 @@ void AssetManagement::clear()
 
 /* Private functions */
 
-std::string AssetManagement::getRawName(const std::string &fileName, std::string *ext)
+std::string ResourceManager::getRawName(const std::string &fileName, std::string *ext)
 {
 	std::string rawName = fileName;
 	int indexSlash = rawName.find_last_of("/\\");

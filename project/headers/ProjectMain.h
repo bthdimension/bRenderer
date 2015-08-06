@@ -24,12 +24,6 @@ public:
 	/* This function is executed when terminating the renderer */
 	void terminateFunction();
 
-	/* Camera movement */
-	void updateCamera(const double &deltaTime);
-
-	/* Update render queue */
-	void updateRenderQueue();
-
 	//// iOS specific ////
 
     /* For iOS only: Handle device rotation */
@@ -52,11 +46,18 @@ public:
     
 private:
     
+	/* Camera movement */
+	void updateCamera(const std::string &camera, const double &deltaTime);
+
+	/* Update render queue */
+	void updateRenderQueue(const std::string &camera, const double &deltaTime);
+
 	/* Helper Functions */
 	GLfloat randomNumber(GLfloat min, GLfloat max);
 
 	/* Variables */
-	GLfloat _randomTime;
+	GLfloat _randomOffset;
+	GLfloat _offset;
 	double _mouseX, _mouseY;
 	bool _running; GLint _lastStateSpaceKey;
 	vmml::Matrix4f _viewMatrixHUD;

@@ -45,7 +45,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\project\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -60,7 +60,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\projects\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\externalLibraries\vmmlib-library;$(SolutionDir)\externalLibraries\boost-library;$(SolutionDir)\externalLibraries\glew-1.12.0\include;$(SolutionDir)\externalLibraries\FreeImage3170Win32;$(SolutionDir)\externalLibraries\glfw-3.1.bin.WIN32\include;$(SolutionDir)\project\headers;$(SolutionDir)\bRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,7 +71,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\bRenderer\implementation\AssetManagement.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Configuration.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp" />
@@ -84,6 +83,7 @@
     <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\RenderQueue.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\ResourceManager.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp" />
@@ -98,12 +98,11 @@
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\Renderer_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp" />
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp" />
-    <ClCompile Include="..\implementation\ProjectMain.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\project\implementation\ProjectMain.cpp" />
+    <ClCompile Include="..\..\project\windows\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
-    <ClInclude Include="..\..\bRenderer\headers\AssetManagement.h" />
     <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
     <ClInclude Include="..\..\bRenderer\headers\Configuration.h" />
     <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
@@ -127,6 +126,7 @@
     <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
     <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h" />
     <ClInclude Include="..\..\bRenderer\headers\RenderQueue.h" />
+    <ClInclude Include="..\..\bRenderer\headers\ResourceManager.h" />
     <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderData.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h" />
@@ -139,7 +139,7 @@
     <ClInclude Include="..\..\bRenderer\obj_parser\obj.hpp" />
     <ClInclude Include="..\..\bRenderer\obj_parser\obj_parser.hpp" />
     <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h" />
-    <ClInclude Include="..\headers\ProjectMain.h" />
+    <ClInclude Include="..\..\project\headers\ProjectMain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm" />
@@ -148,26 +148,30 @@
     <None Include="..\..\bRenderer\os_specific\ios\Renderer_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
-    <None Include="..\data\blurShader.frag" />
-    <None Include="..\data\blurShader.vert" />
-    <None Include="..\data\cave.mtl" />
-    <None Include="..\data\crystal.mtl" />
-    <None Include="..\data\flame.frag" />
-    <None Include="..\data\flame.mtl" />
-    <None Include="..\data\flame.vert" />
-    <None Include="..\data\sphere.mtl" />
-    <None Include="..\data\torch.mtl" />
+    <None Include="..\..\project\data\blurShader.frag" />
+    <None Include="..\..\project\data\blurShader.vert" />
+    <None Include="..\..\project\data\cave.mtl" />
+    <None Include="..\..\project\data\cave_stream.frag" />
+    <None Include="..\..\project\data\cave_stream.mtl" />
+    <None Include="..\..\project\data\cave_stream.vert" />
+    <None Include="..\..\project\data\crystal.mtl" />
+    <None Include="..\..\project\data\flame.frag" />
+    <None Include="..\..\project\data\flame.mtl" />
+    <None Include="..\..\project\data\flame.vert" />
+    <None Include="..\..\project\data\sphere.mtl" />
+    <None Include="..\..\project\data\torch.mtl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\data\bTitle.png" />
-    <Image Include="..\data\cave_d.png" />
-    <Image Include="..\data\cave_n.png" />
-    <Image Include="..\data\crystal_d.png" />
-    <Image Include="..\data\crystal_n.png" />
-    <Image Include="..\data\crystal_s.png" />
-    <Image Include="..\data\flame.png" />
-    <Image Include="..\data\sparks.png" />
-    <Image Include="..\data\torchSurface_Color.png" />
+    <Image Include="..\..\project\data\bTitle.png" />
+    <Image Include="..\..\project\data\cave_d.png" />
+    <Image Include="..\..\project\data\cave_n.png" />
+    <Image Include="..\..\project\data\cave_stream_n.png" />
+    <Image Include="..\..\project\data\crystal_d.png" />
+    <Image Include="..\..\project\data\crystal_n.png" />
+    <Image Include="..\..\project\data\crystal_s.png" />
+    <Image Include="..\..\project\data\flame.png" />
+    <Image Include="..\..\project\data\sparks.png" />
+    <Image Include="..\..\project\data\torchSurface_Color.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

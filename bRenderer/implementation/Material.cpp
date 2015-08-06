@@ -1,13 +1,13 @@
-#include "../headers/Material.h"
-#include "../headers/AssetManagement.h"
+#include "headers/Material.h"
+#include "headers/ResourceManager.h"
 
-void Material::initialize(AssetManagement *a, const MaterialData &materialData, ShaderPtr shader)
+void Material::initialize(ResourceManager *r, const MaterialData &materialData, ShaderPtr shader)
 {
     for (auto i = materialData.textures.cbegin(); i != materialData.textures.cend(); ++i)
     {
         const std::string &texName = i->first;
         const std::string &texFileName = i->second;
-        TexturePtr texture = a->loadTexture(texFileName);
+        TexturePtr texture = r->loadTexture(texFileName);
         setTexture(texName, texture);
     }
     setVectors(materialData.vectors);

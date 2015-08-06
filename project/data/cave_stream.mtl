@@ -1,0 +1,6 @@
+newmtl cave_stream
+Kd 0.20000 0.20000 0.600000
+Ks 1.000000 1.000000 1.000000
+Ns 6.00000
+d 0.55
+map_Bump cave_stream_n.png

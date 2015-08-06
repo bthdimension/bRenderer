@@ -9,9 +9,7 @@
 class OBJLoader;
 
 class ModelData
-{
-	friend OBJLoader;
-    
+{   
 public:
 	/* Typedefs */
 	typedef std::unordered_map< std::string, GeometryDataPtr >    GroupMap;
@@ -43,6 +41,14 @@ public:
 	/**	@brief Returns the geometry groups
 	*/
     GroupMap getData() const;
+
+	/**	@brief Returns true if the T axis of texture is flipped
+	*/
+	bool getFlipT() { return _flipT; }
+
+	/**	@brief Returns true if the Z axis of the geometry is flipped
+	*/
+	bool getFlipZ() { return _flipZ; }
     
 private:
 	

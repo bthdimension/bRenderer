@@ -53,7 +53,7 @@ public:
 
 	/**	@brief Draw all geometry in the queue in a sorted manner
 	*/
-	void draw(GLenum mode = GL_TRIANGLES);
+	virtual void draw(GLenum mode = GL_TRIANGLES);
 
 	/**	@brief Remove all render calls
 	*/

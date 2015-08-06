@@ -43,7 +43,7 @@ void OBJLoader::genVertex(const IndexData &d)
 		v.position.x = _vertices[d.vertexIndex].x();
 		v.position.y = _vertices[d.vertexIndex].y();
 		v.position.z = _vertices[d.vertexIndex].z();
-		if (_data->_flipZ)
+		if (_data->getFlipZ())
 		{
 			v.position.z *= -1.0f;
 		}
@@ -59,7 +59,7 @@ void OBJLoader::genVertex(const IndexData &d)
 	{
 		v.texCoord.s = _texCoords[d.texCoordsIndex].x();
 		v.texCoord.t = _texCoords[d.texCoordsIndex].y();
-		if (_data->_flipT)
+		if (_data->getFlipT())
 		{
 			v.texCoord.t = 1.0f - v.texCoord.t;
 		}

@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Project">
-      <UniqueIdentifier>{a125e7c8-332b-4a2e-a6fd-176a8a9611bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\headers">
-      <UniqueIdentifier>{bd45fb12-af0b-40d3-81be-900a11d9e871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\implementation">
-      <UniqueIdentifier>{e1590151-8d67-4f96-829e-8c1e406388b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\data">
-      <UniqueIdentifier>{ca0ad66b-bfed-4af4-8925-cb71e1960e9d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="bRenderer">
       <UniqueIdentifier>{76d25104-996d-4473-a31d-ed73139bffa9}</UniqueIdentifier>
     </Filter>
@@ -40,14 +28,20 @@
     <Filter Include="bRenderer\obj_parser">
       <UniqueIdentifier>{58782cf0-2266-417a-8d76-784eb6bb7e99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="project">
+      <UniqueIdentifier>{a125e7c8-332b-4a2e-a6fd-176a8a9611bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\headers">
+      <UniqueIdentifier>{bd45fb12-af0b-40d3-81be-900a11d9e871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\implementation">
+      <UniqueIdentifier>{e1590151-8d67-4f96-829e-8c1e406388b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\data">
+      <UniqueIdentifier>{ca0ad66b-bfed-4af4-8925-cb71e1960e9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Project</Filter>
-    </ClCompile>
-    <ClCompile Include="..\implementation\ProjectMain.cpp">
-      <Filter>Project\implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
@@ -120,20 +114,23 @@
     <ClCompile Include="..\..\bRenderer\implementation\ShaderSource.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\AssetManagement.cpp">
-      <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\RenderQueue.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Sprite.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ResourceManager.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\project\windows\main.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\project\implementation\ProjectMain.cpp">
+      <Filter>project\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\headers\ProjectMain.h">
-      <Filter>Project\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
       <Filter>bRenderer</Filter>
     </ClInclude>
@@ -236,14 +233,17 @@
     <ClInclude Include="..\..\bRenderer\headers\Touch.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\AssetManagement.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\RenderQueue.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Sprite.h">
       <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ResourceManager.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\project\headers\ProjectMain.h">
+      <Filter>project\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -265,61 +265,73 @@
     <None Include="..\..\bRenderer\os_specific\ios\Renderer_ios.mm">
       <Filter>bRenderer\os_specific\ios</Filter>
     </None>
-    <None Include="..\data\flame.mtl">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\flame.vert">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\sphere.mtl">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\blurShader.frag">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\torch.mtl">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\cave_stream.frag">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\blurShader.vert">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\flame.frag">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\flame.vert">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\cave.mtl">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\blurShader.frag">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\cave_stream.mtl">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\flame.frag">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\crystal.mtl">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\cave.mtl">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\flame.mtl">
+      <Filter>project\data</Filter>
     </None>
-    <None Include="..\data\crystal.mtl">
-      <Filter>Project\data</Filter>
+    <None Include="..\..\project\data\sphere.mtl">
+      <Filter>project\data</Filter>
+    </None>
+    <None Include="..\..\project\data\torch.mtl">
+      <Filter>project\data</Filter>
+    </None>
+    <None Include="..\..\project\data\blurShader.vert">
+      <Filter>project\data</Filter>
+    </None>
+    <None Include="..\..\project\data\cave_stream.vert">
+      <Filter>project\data</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\data\bTitle.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\bTitle.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\cave_d.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\cave_d.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\cave_n.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\cave_n.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\crystal_d.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\cave_stream_n.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\crystal_n.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\crystal_d.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\crystal_s.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\crystal_n.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\flame.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\crystal_s.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\sparks.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\flame.png">
+      <Filter>project\data</Filter>
     </Image>
-    <Image Include="..\data\torchSurface_Color.png">
-      <Filter>Project\data</Filter>
+    <Image Include="..\..\project\data\sparks.png">
+      <Filter>project\data</Filter>
+    </Image>
+    <Image Include="..\..\project\data\torchSurface_Color.png">
+      <Filter>project\data</Filter>
     </Image>
   </ItemGroup>
 </Project>

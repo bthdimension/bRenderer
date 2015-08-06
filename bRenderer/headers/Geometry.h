@@ -28,12 +28,12 @@ public:
 	/**	@brief Initializes the geometry object based on geometry data
 	*	@param[in] geometryData
 	*/
-	void initialize(GeometryDataPtr geometryData);
+	virtual void initialize(GeometryDataPtr geometryData);
 
 	/**	@brief Draws the geometry to the screen
 	*	@param[in] mode 
 	*/
-    void draw(GLenum mode = GL_TRIANGLES);
+	virtual void draw(GLenum mode = GL_TRIANGLES);
 
 	/**	@brief Draws an instance of the geometry to the screen
 	*	@param[in] instanceName

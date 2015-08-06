@@ -1,5 +1,5 @@
-#ifndef B_ASSETMANAGEMENT_H
-#define B_ASSETMANAGEMENT_H
+#ifndef B_RESOURCEMANAGER_H
+#define B_RESOURCEMANAGER_H
 
 /* bRenderer includes */
 #include "Renderer_GL.h"
@@ -21,10 +21,10 @@
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
 
-/** @brief This class manages all assets in a project and makes sure no asset is created twice
+/** @brief This class manages all resources in a project and makes sure no resource is created twice
 *	@author Benjamin Bürgisser
 */
-class AssetManagement
+class ResourceManager
 {
 public:
 	/* Typedefs */
@@ -42,11 +42,11 @@ public:
 
 	/**	@brief Constructor
 	*/
-	AssetManagement(){}
+	ResourceManager(){}
 
 	/**	@brief Destructor
 	*/
-	~AssetManagement(){}
+	~ResourceManager(){}
 
 	/**	@brief Set the shader version used on desktop systems
 	*	@param[in] shaderVersionDesktop The shader version used on desktop systems, e.g. "#version 120"
@@ -436,7 +436,7 @@ public:
 	*/
 	void removeFramebuffer(const std::string &name);
 
-	/**	@brief Clear all assets
+	/**	@brief Clear all resources
 	*/
 	void clear();
 
@@ -468,6 +468,6 @@ private:
 
 };
 
-typedef std::shared_ptr< AssetManagement >  AssetManagementPtr;
+typedef std::shared_ptr< ResourceManager >  ResourceManagerPtr;
 
-#endif /* defined(B_ASSETMANAGEMENT_H) */
+#endif /* defined(B_RESOURCEMANAGER_H) */

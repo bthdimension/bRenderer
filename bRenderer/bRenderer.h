@@ -7,10 +7,7 @@
 #include "headers/Logger.h"
 #include "headers/FileHandler.h"
 #include "headers/Renderer.h"
-#include "headers/View.h"
 #include "headers/IRenderProject.h"
-#include "headers/MatrixStack.h"
-#include "headers/Camera.h"
 
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
