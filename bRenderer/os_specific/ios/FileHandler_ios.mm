@@ -30,7 +30,6 @@ namespace bRenderer
                                                 encoding:[NSString defaultCStringEncoding]];
         
         NSFileManager *fileManager = [NSFileManager defaultManager];
-//        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: fullFile];
         
         return [fileManager fileExistsAtPath:path];
