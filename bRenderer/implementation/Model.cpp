@@ -162,4 +162,7 @@ void  Model::addGeometry(const std::string &name, GeometryPtr geometry)
 			instanceMap->insert(std::unordered_map< ShaderPtr, PropertiesPtr >::value_type(shader, properties));
 		}
 	}
+
+	// expand bounding box
+	_boundingBox.merge(geometry->getBoundingBoxObjectSpace());
 }
