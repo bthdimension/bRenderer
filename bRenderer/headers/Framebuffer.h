@@ -24,6 +24,10 @@ public:
 	*/
 	Framebuffer(GLint width, GLint height);
 
+	/**	@brief Virtual destructor
+	*/
+	virtual ~Framebuffer() { destroy(); }
+
 	/**	@brief Bind the framebuffer object
 	*	@param[in] preserveCurrentFramebuffer If true the framebuffer that was active before binding is bound again when unbinding
 	*/
@@ -79,6 +83,7 @@ private:
 	/* Functions */
 
 	void create();
+	void destroy();
 
 	/* Variables */
 	GLint _width, _height, _oldFbo;

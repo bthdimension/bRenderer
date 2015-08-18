@@ -2,17 +2,24 @@
 #include "headers/Configuration.h"
 #include "headers/ResourceManager.h"
 
-Sprite::Sprite(MaterialPtr material, PropertiesPtr	properties)
+Sprite::Sprite(bool flipT, PropertiesPtr properties)
 {
-	createGeometry();
+	createGeometry(flipT);
+
+	setProperties(properties);
+}
+
+Sprite::Sprite(MaterialPtr material, bool flipT, PropertiesPtr	properties)
+{
+	createGeometry(flipT);
 
 	setMaterial(material);
 	setProperties(properties);
 }
 
-Sprite::Sprite(ResourceManager *r, const std::string &textureFileName, const std::string &materialName, ShaderPtr shader, PropertiesPtr	properties)
+Sprite::Sprite(ResourceManager *r, const std::string &textureFileName, const std::string &materialName, ShaderPtr shader, bool flipT, PropertiesPtr	properties)
 {
-	createGeometry();
+	createGeometry(flipT);
 
 	MaterialData md; 
 	md.textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()] = textureFileName;
@@ -23,21 +30,22 @@ Sprite::Sprite(ResourceManager *r, const std::string &textureFileName, const std
 	setProperties(properties);
 }
 
-Sprite::Sprite(ResourceManager *r, const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights)
+Sprite::Sprite(ResourceManager *r, const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights, bool flipT, PropertiesPtr	properties)
 {
-	createGeometry();
+	createGeometry(flipT);
 
 	MaterialData md;
 	md.textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()] = textureFileName;
 
-	ShaderPtr shader = r->generateShader(name, shaderMaxLights, false, md, variableNumberOfLights);
+	ShaderPtr shader = r->generateShader(name, shaderMaxLights, false, md, variableNumberOfLights, false);
 
 	MaterialPtr material = r->createMaterial(name, md, shader);
 
 	setMaterial(material);
+	setProperties(properties);
 }
 
-void Sprite::createGeometry()
+void Sprite::createGeometry(bool flipT)
 {
 	Model::GroupMap &groups = getGroups();
 	GeometryPtr g = GeometryPtr(new Geometry);
@@ -46,46 +54,46 @@ void Sprite::createGeometry()
 	GeometryDataPtr gData = GeometryDataPtr(new GeometryData);
 	// Add vertices
 	gData->vboVertices.push_back(Vertex(
-		1.0f, 1.0f, 0.0f,		// position
-		0.0f, 0.0f, -1.0f,		// normal
-		-1.0f, 0.0f, 0.0f,		// tangent
-		0.0f, 1.0f, 0.0f,		// bitangent
-		1.0f, 1.0f				// texCoord
+		1.0f, 1.0f, 0.0f,			// position
+		0.0f, 0.0f, -1.0f,			// normal
+		-1.0f, 0.0f, 0.0f,			// tangent
+		0.0f, 1.0f, 0.0f,			// bitangent
+		1.0f, flipT ? 0.0f : 1.0f	// texCoord	
 	));
 	gData->vboVertices.push_back(Vertex(
-		-1.0f, 1.0f, 0.0f, 		// position
-		0.0f, 0.0f, -1.0f,		// normal
-		-1.0f, 0.0f, 0.0f,		// tangent
-		0.0f, 1.0f, 0.0f,		// bitangent
-		0.0f, 1.0f				// texCoord
+		-1.0f, 1.0f, 0.0f, 			// position
+		0.0f, 0.0f, -1.0f,			// normal
+		-1.0f, 0.0f, 0.0f,			// tangent
+		0.0f, 1.0f, 0.0f,			// bitangent
+		0.0f, flipT ? 0.0f : 1.0f	// texCoord
 	));
 	gData->vboVertices.push_back(Vertex(
-		-1.0f, -1.0f, 0.0f,		// position
-		0.0f, 0.0f, -1.0f,		// normal
-		-1.0f, 0.0f, 0.0f,		// tangent
-		0.0f, 1.0f, 0.0f,		// bitangent
-		0.0f, 0.0f				// texCoord
+		-1.0f, -1.0f, 0.0f,			// position
+		0.0f, 0.0f, -1.0f,			// normal
+		-1.0f, 0.0f, 0.0f,			// tangent
+		0.0f, 1.0f, 0.0f,			// bitangent
+		0.0f, flipT ? 1.0f : 0.0f	// texCoord
 	));
 	gData->vboVertices.push_back(Vertex(
-		1.0f, -1.0f, 0.0f,		// position
-		0.0f, 0.0f, -1.0f,		// normal
-		-1.0f, 0.0f, 0.0f,		// tangent
-		0.0f, 1.0f, 0.0f,		// bitangent
-		1.0f, 0.0f				// texCoord
+		1.0f, -1.0f, 0.0f,			// position
+		0.0f, 0.0f, -1.0f,			// normal
+		-1.0f, 0.0f, 0.0f,			// tangent
+		0.0f, 1.0f, 0.0f,			// bitangent
+		1.0f, flipT ? 1.0f : 0.0f	// texCoord
 	));
 	gData->vboVertices.push_back(Vertex(
-		1.0f, 1.0f, 0.0f,		// position
-		0.0f, 0.0f, -1.0f,		// normal
-		-1.0f, 0.0f, 0.0f,		// tangent
-		0.0f, 1.0f, 0.0f,		// bitangent
-		1.0f, 1.0f				// texCoord
+		1.0f, 1.0f, 0.0f,			// position
+		0.0f, 0.0f, -1.0f,			// normal
+		-1.0f, 0.0f, 0.0f,			// tangent
+		0.0f, 1.0f, 0.0f,			// bitangent
+		1.0f, flipT ? 0.0f : 1.0f	// texCoord
 	));
 	gData->vboVertices.push_back(Vertex(
-		-1.0f, -1.0f, 0.0f,		// position
-		0.0f, 0.0f, -1.0f,		// normal
-		-1.0f, 0.0f, 0.0f,		// tangent
-		0.0f, 1.0f, 0.0f,		// bitangent
-		0.0f, 0.0f				// texCoord
+		-1.0f, -1.0f, 0.0f,			// position
+		0.0f, 0.0f, -1.0f,			// normal
+		-1.0f, 0.0f, 0.0f,			// tangent
+		0.0f, 1.0f, 0.0f,			// bitangent
+		0.0f, flipT ? 1.0f : 0.0f	// texCoord
 	));
 
 	// Add indices

@@ -41,18 +41,18 @@ public:
 	*/
 	~View();
 
-	/**	@brief Do all necessary initializations for the view to be ready to run
+	/**	@brief Do all necessary initializations for the view to be ready to run (returns true in the case of success)
 	*	@param[in] windowTitle The title for the window on desktop systems (optional)
 	*/
 	bool initView(std::string windowTitle = bRenderer::DEFAULT_WINDOW_TITLE());
 
-	/**	@brief Do all necessary initializations for the view to be ready to run
+	/**	@brief Do all necessary initializations for the view to be ready to run (returns true in the case of success)
 	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode
 	*	@param[in] windowTitle The title for the window on desktop systems (optional)
 	*/
 	bool initView(bool fullscreen, std::string windowTitle = bRenderer::DEFAULT_WINDOW_TITLE());
 
-	/**	@brief Do all necessary initializations for the view to be ready to run
+	/**	@brief Do all necessary initializations for the view to be ready to run (returns true in the case of success)
 	*	@param[in] width The width of the view in pixels
 	*	@param[in] height The height of the view in pixels
 	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode (optional)

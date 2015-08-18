@@ -8,6 +8,10 @@
 #include "Shader.h"
 
 /** @brief Properties such as matrices, vectors and scalars that can be associated with a model
+*
+*	The properties may be passed to the shader as uniforms. The names of the stored objects
+*	should therefore be chosen to match the names of the uniforms in the shader
+*
 *	@author Benjamin Bürgisser
 */
 class Properties

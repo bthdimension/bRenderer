@@ -7,7 +7,8 @@ View::View()
 
 View::~View()
 {
-    _view = nil;
+    if (_initialized)
+		terminateView();
 }
 
 /* Public functions */

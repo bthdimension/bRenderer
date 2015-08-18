@@ -7,7 +7,11 @@ uniform vec3 ambientColor;
 
 uniform sampler2D DiffuseMap;
 
-uniform float offset;
+uniform
+#ifdef GL_ES
+highp   // offset gets very big, needs to be highp on iOS
+#endif
+float offset;
 
 varying vec4 texCoordVarying;
 

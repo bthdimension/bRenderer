@@ -6,9 +6,6 @@
 #include "../headers/FileHandler.h"
 #include "../headers/OSdetect.h"
 #include "../headers/Configuration.h"
-#include <boost/lexical_cast.hpp>
-
-using boost::lexical_cast;
 
 ShaderDataFile::ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
 	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights), _ambientLighting(ambientLighting), _diffuseLighting(diffuseLighting), _specularLighting(specularLighting)
@@ -39,7 +36,7 @@ ShaderDataFile &ShaderDataFile::load(const std::string &vertShaderFileName, cons
 #ifdef B_OS_IOS
 	replaceMacro(bRenderer::SHADER_VERSION_MACRO(), _shaderVersionES);
 #endif
-	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO(), lexical_cast< std::string >(_maxLights));
+	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO(), std::to_string(_maxLights));
 
     return *this;
 }

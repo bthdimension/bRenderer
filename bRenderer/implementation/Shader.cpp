@@ -1,11 +1,7 @@
-#include <boost/lexical_cast.hpp>
-
-#include "../headers/Logger.h"
-#include "../headers/GeometryData.h"
-#include "../headers/IShaderData.h"
-#include "../headers/Shader.h"
-
-using boost::lexical_cast;
+#include "headers/Logger.h"
+#include "headers/GeometryData.h"
+#include "headers/IShaderData.h"
+#include "headers/Shader.h"
 
 Shader::Shader(const IShaderData &shaderData)
 {
@@ -36,7 +32,7 @@ Shader::Shader(const IShaderData &shaderData)
         
     // Link program.
     if (!link()) {
-		bRenderer::log("Failed to link program: " + lexical_cast< std::string >(_programID));
+		bRenderer::log("Failed to link program: " + std::to_string(_programID));
         
         if (vertShader) {
             glDeleteShader(vertShader);
@@ -56,7 +52,7 @@ Shader::Shader(const IShaderData &shaderData)
     
     resetTexUnit();
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &_maxTexUnits);
-	bRenderer::log("Number of available tex units: " + lexical_cast< std::string >(_maxTexUnits)+".", bRenderer::LM_INFO);
+	bRenderer::log("Number of available tex units: " + std::to_string(_maxTexUnits)+".", bRenderer::LM_INFO);
 }
 
 Shader::~Shader()

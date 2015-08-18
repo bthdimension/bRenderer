@@ -23,11 +23,20 @@ public:
 
 	/**	@brief Constructor
 	*/
-    Texture();
+	Texture(){}
+
+	/**	@brief Constructor
+	*
+	*	This constructor should only be used if the texture is already created (e.g. by an external library)
+	*	and should be integrated in the framework
+	*
+	*	@param[in] textureID 
+	*/
+	Texture(GLuint textureID):_textureID(textureID){}
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Texture() {}
+	virtual ~Texture();
     
 	/**	@brief Returns texture id
 	*/

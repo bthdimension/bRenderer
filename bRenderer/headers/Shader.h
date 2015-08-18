@@ -36,6 +36,15 @@ public:
     
 	/* Functions */
 
+	/**	@brief Constructor
+	*	@param[in] shaderData
+	*/
+	Shader(const IShaderData &shaderData);
+
+	/**	@brief Virtual destructor
+	*/
+	virtual ~Shader();
+
 	/**	@brief Binds the sahder and its attributes
 	*/
     virtual void bind();
@@ -89,15 +98,6 @@ public:
 	*	@param[in] offset
 	*/
     virtual GLint registerAttrib(const std::string &name, GLint size, GLenum type, GLsizei stride, size_t offset);
-    
-	/**	@brief Constructor
-	*	@param[in] shaderData
-	*/
-    Shader(const IShaderData &shaderData);
-
-	/**	@brief Virtual destructor
-	*/
-	virtual ~Shader();
     
 	/**	@brief Returns the shader ID
 	*/
@@ -158,6 +158,8 @@ public:
             setUniform(i->first, i->second);
         }
     }
+
+	GLint getCurrentTexUnit() { return GL_TEXTURE0 + _cTexUnit; }
     
 protected:
 	

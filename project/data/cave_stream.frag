@@ -46,7 +46,11 @@ uniform vec3 Kd;
 uniform vec3 Ks;
 uniform float Ns;
 uniform float transparency;
-uniform float offset;
+uniform
+#ifdef GL_ES
+highp   // offset gets very big, needs to be highp on iOS
+#endif
+float offset;
 
 void main() {
 	vec4 diffuse = vec4(0.0,0.0,0.0,transparency);
@@ -54,6 +58,9 @@ void main() {
 	float specularCoefficient = 0.0;
 	vec3 surfaceToCamera = normalize(surfaceToCameraTangentSpace);
 	//wave effect for flame
+#ifdef GL_ES
+    highp
+#endif
 	vec2 texcoord = texCoordVarying.st;
 	texcoord.x -= 0.03*offset + sin(texcoord.y * 50.0 + offset) / 250.0;
 	texcoord.y += sin(texcoord.x * 10.0 + offset) / 100.0;

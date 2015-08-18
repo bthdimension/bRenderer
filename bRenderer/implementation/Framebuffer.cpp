@@ -1,7 +1,5 @@
 #include "../headers/Framebuffer.h"
 #include "../headers/Logger.h"
-#include <boost/lexical_cast.hpp>
-using boost::lexical_cast;
 
 /* Constructors */
 
@@ -110,7 +108,7 @@ void Framebuffer::create()
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _rbo_depth);
 	GLenum status;
 	if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
-		bRenderer::log("Framebuffer status: " + lexical_cast< std::string >(status), bRenderer::LM_ERROR);
+		bRenderer::log("Framebuffer status: " + std::to_string(status), bRenderer::LM_ERROR);
 	}
 
 	// clear
@@ -127,4 +125,11 @@ void Framebuffer::create()
 
 	// unbind
 	unbind();
+}
+
+void Framebuffer::destroy()
+{
+	glDeleteRenderbuffers(1, &_rbo_depth);
+	glDeleteFramebuffers(1, &_fbo);
+
 }

@@ -1,7 +1,5 @@
 #include "../headers/ShaderSource.h"
 
-using boost::lexical_cast;
-
 namespace bRenderer
 {
     const std::string SHADER_SOURCE_LINE_BREAK = "\n";
@@ -19,7 +17,7 @@ namespace bRenderer
     {
         std::string lighting = "";
         for (GLuint light_number = 0; light_number < maxLights; light_number++){
-            std::string num = lexical_cast<std::string>(light_number);
+            std::string num = std::to_string(light_number);
             lighting += "uniform vec4 " + DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + num + SHADER_SOURCE_LINE_ENDING
 				+ "uniform float " + DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + num + SHADER_SOURCE_LINE_ENDING
 				+ "uniform float " + DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + num + SHADER_SOURCE_LINE_ENDING
@@ -41,7 +39,7 @@ namespace bRenderer
     const std::string SHADER_SOURCE_MATRICES =
 		"uniform mat4 " + DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX() + SHADER_SOURCE_LINE_ENDING
 		+ "uniform mat4 " + DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX() + SHADER_SOURCE_LINE_ENDING;
-    
+
     // Attributes
     const std::string SHADER_SOURCE_ATTRIBUTES =
     "attribute vec4 " + DEFAULT_SHADER_ATTRIBUTE_POSITION() + SHADER_SOURCE_LINE_ENDING
@@ -75,7 +73,8 @@ namespace bRenderer
 		"uniform sampler2D " + DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP() + SHADER_SOURCE_LINE_ENDING
 		+ "uniform sampler2D " + DEFAULT_SHADER_UNIFORM_NORMAL_MAP() + SHADER_SOURCE_LINE_ENDING
 		+ "uniform sampler2D " + DEFAULT_SHADER_UNIFORM_SPECULAR_MAP() + SHADER_SOURCE_LINE_ENDING;
-    
+    // Text Textures
+	const std::string SHADER_SOURCE_TEXT_TEXTURES =  "uniform sampler2D " + DEFAULT_SHADER_UNIFORM_CHARACTER_MAP() + SHADER_SOURCE_LINE_ENDING;
     /* Vertex Shader */
     
     // Vertex Shader Main Function
@@ -110,8 +109,8 @@ namespace bRenderer
     {
         std::string lighting = "";
 		for (GLuint light_number = 0; light_number < maxLights; light_number++){
-			std::string num = lexical_cast<std::string>(light_number);
-			std::string numPP = lexical_cast<std::string>(light_number + 1);
+			std::string num = std::to_string(light_number);
+			std::string numPP = std::to_string(light_number + 1);
 			if (variableNumberOfLights)
 				lighting += "if(" + DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS() + " >= " + numPP + ".0){" + SHADER_SOURCE_LINE_BREAK;
 			if (normalMap)
@@ -177,8 +176,8 @@ namespace bRenderer
     {
         std::string lighting = "";
         for (GLuint light_number = 0; light_number < maxLights; light_number++){
-            std::string num = lexical_cast<std::string>(light_number);
-            std::string numPP = lexical_cast<std::string>(light_number + 1);
+            std::string num = std::to_string(light_number);
+            std::string numPP = std::to_string(light_number + 1);
             if (variableNumberOfLights)
 				lighting += "if(" + DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS() + " >= " + numPP + ".0){" + SHADER_SOURCE_LINE_BREAK;
             if (normalMap)
@@ -230,12 +229,13 @@ namespace bRenderer
     }
     
     // End
-    const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART1 = "gl_FragColor = clamp(";
-    const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_AMBIENT = "ambient";
-    const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_DIFFUSE = "diffuse";
-    const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_SPECULAR = "specular";
-    const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART2 = ", 0.0, 1.0);}";
-
+    const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART1 = "gl_FragColor = clamp(";
+    const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_AMBIENT = "ambient";
+    const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_DIFFUSE = "diffuse";
+    const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_SPECULAR = "specular";
+	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART2 = ", 0.0, 1.0)" + SHADER_SOURCE_LINE_ENDING;
+	// End Text
+	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_TEXT = "gl_FragColor.a *= texture2D(" + DEFAULT_SHADER_UNIFORM_CHARACTER_MAP() + ", texCoordVarying.st).r" + SHADER_SOURCE_LINE_ENDING;
     
 } // namespace bRenderer
 

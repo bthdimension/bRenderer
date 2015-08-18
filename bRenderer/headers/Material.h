@@ -18,7 +18,7 @@ public:
 	/* Typedefs */
 	typedef std::unordered_map<std::string, TexturePtr>		TextureMap;
 	typedef std::unordered_map<std::string, vmml::Vector3f>	Vector3Map;
-	typedef std::unordered_map<std::string, GLfloat>			ScalarMap;
+	typedef std::unordered_map<std::string, GLfloat>		ScalarMap;
 
 	/* Functions */
     

@@ -9,12 +9,28 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "project/implementation/ProjectMain.cpp"
-            timestampString = "460515001.035455"
+            filePath = "bRenderer/implementation/TextSprite.cpp"
+            timestampString = "461538667.375529"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "9"
-            endingLineNumber = "9"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "TextSprite::createGeometry()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "project/implementation/ProjectMain.cpp"
+            timestampString = "461540002.674459"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
             landmarkName = "ProjectMain::init()"
             landmarkType = "5">
          </BreakpointContent>

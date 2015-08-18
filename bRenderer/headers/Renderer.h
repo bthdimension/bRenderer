@@ -103,22 +103,18 @@ public:
 	*/
 	void setTerminateFunction(void(*f)());
 
-	/* Initialization method for iOS without full screen and window size options */
-
-	/**	@brief Do all necessary initializations for the renderer to be ready to run
+	/**	@brief Do all necessary initializations for the renderer to be ready to run (returns true in the case of success)
 	*	@param[in] windowTitle The title for the window on desktop systems (optional)
 	*/
 	bool initRenderer(std::string windowTitle = bRenderer::DEFAULT_WINDOW_TITLE());
 
-	/* Initialization methods for desktop with full screen and window size options */
-
-	/**	@brief Do all necessary initializations for the renderer to be ready to run
+	/**	@brief Do all necessary initializations for the renderer to be ready to run (returns true in the case of success)
 	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode
 	*	@param[in] windowTitle The title for the window on desktop systems (optional)
 	*/
 	bool initRenderer(bool fullscreen, std::string windowTitle = bRenderer::DEFAULT_WINDOW_TITLE());
 
-	/**	@brief Do all necessary initializations for the renderer to be ready to run
+	/**	@brief Do all necessary initializations for the renderer to be ready to run (returns true in the case of success)
 	*	@param[in] width The width of the window in pixels
 	*	@param[in] height The height of the window in pixels
 	*	@param[in] fullscreen Decides whether or not the application runs in full screen mode (optional)
@@ -190,25 +186,69 @@ public:
 	*/
 	void queueModelInstance(const std::string &modelName, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
+	/**	@brief Draw specified text sprite into the current framebuffer
+	*	@param[in] textSpriteName Name of the text sprite
+	*	@param[in] cameraName Name of the camera
+	*	@param[in] modelMatrix
+	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the text sprite should be tested against the view frustum (optional)
+	*/
+	void drawText(const std::string &textSpriteName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = false);
+
+	/**	@brief Draw specified text sprite into the current framebuffer
+	*	@param[in] textSpriteName Name of the text sprite
+	*	@param[in] modelMatrix
+	*	@param[in] viewMatrix
+	*	@param[in] projectionMatrix
+	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the text sprite should be tested against the view frustum (optional)
+	*/
+	void drawText(const std::string &textSpriteName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true);
+
+	/**	@brief Queue specified text sprite into the render queue of the renderer
+	*	@param[in] textSpriteName Name of the text sprite
+	*	@param[in] instanceName The name of the text sprite instance to be queued (instance is created automatically if not present)
+	*	@param[in] cameraName Name of the camera
+	*	@param[in] modelMatrix
+	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the text sprite should be tested against the view frustum (optional)
+	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
+	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
+	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
+	*/
+	void queueTextInstance(const std::string &textSpriteName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+
+	/**	@brief Queue specified model into the render queue of the renderer
+	*	@param[in] textSpriteName Name of the text sprite
+	*	@param[in] instanceName The name of the text sprite instance to be queued (instance is created automatically if not present)
+	*	@param[in] modelMatrix
+	*	@param[in] viewMatrix
+	*	@param[in] projectionMatrix
+	*	@param[in] lightNames Names of the lights in a vector
+	*	@param[in] doFrustumCulling Set true if the text sprite should be tested against the view frustum (optional)
+	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
+	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
+	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
+	*/
+	void queueTextInstance(const std::string &textSpriteName, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+
+	/**	@brief Draws the render queue into the current framebuffer
+	*	@param[in] mode
+	*/
+	void drawQueue(GLenum mode = GL_TRIANGLES);
+
 	/**	@brief Tests an axis-aligned bounding box against the view frustum
 	*	@param[in] aabbObjectSpace The axis-aligned bounding box in object space
 	*	@param[in] modelViewProjectionMatrix The model view projection matrix (projection * view * model)
 	*/
 	vmml::Visibility viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix);
 
-	/**	@brief Tests an axis-aligned bounding box against the view frustum
-	*	@param[in] aabbObjectSpace The axis-aligned bounding box in object space
-	*	@param[in] modelViewProjectionMatrix The model view projection matrix (projection * view * model)
-	*	@param[in] culler View frustum culler
-	*/
-	vmml::Visibility viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix, vmml::FrustumCullerf &culler);
-
 private:
 	/* Functions */
 
-    /**	@brief Draw the scene
+    /**	@brief Update the scene
      */
-    void draw();
+    void update();
     
 	/**	@brief Reset all variables
 	*/

@@ -40,6 +40,18 @@
     <Filter Include="project\data">
       <UniqueIdentifier>{ca0ad66b-bfed-4af4-8925-cb71e1960e9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="externalLibraries">
+      <UniqueIdentifier>{ec6bd4bd-565e-4d19-8a01-051d3212e5db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externalLibraries\freetype">
+      <UniqueIdentifier>{ca4f7416-56a9-4e5b-abde-58f5b5db3032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externalLibraries\freetype\FT_MODULES">
+      <UniqueIdentifier>{864ed9aa-5b83-4467-a3ff-c48da239b8e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externalLibraries\freetype-gl">
+      <UniqueIdentifier>{41e1b290-41b7-4b0f-8a55-c36083d30800}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp">
@@ -96,9 +108,6 @@
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\ShaderData.cpp">
-      <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
@@ -128,6 +137,144 @@
     </ClCompile>
     <ClCompile Include="..\..\project\implementation\ProjectMain.cpp">
       <Filter>project\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\autofit\autofit.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\bdf\bdf.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\cff\cff.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftbase.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftbitmap.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\cache\ftcache.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftdebug.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftfstype.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftgasp.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftglyph.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\gzip\ftgzip.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftinit.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\lzw\ftlzw.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftstroke.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftsystem.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\smooth\smooth.c">
+      <Filter>externalLibraries\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftbbox.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftfntfmt.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftgxval.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftlcdfil.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftmm.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftotval.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftpatent.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftpfr.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftsynth.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\fttype1.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\base\ftwinfnt.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\pcf\pcf.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\pfr\pfr.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\psaux\psaux.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\pshinter\pshinter.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\psnames\psmodule.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\raster\raster.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\sfnt\sfnt.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\truetype\truetype.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\type1\type1.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\cid\type1cid.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\type42\type42.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\winfonts\winfnt.c">
+      <Filter>externalLibraries\freetype\FT_MODULES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\TextSprite.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Font.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-gl\platform.c">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-gl\texture-atlas.c">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-gl\texture-font.c">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externalLibraries\freetype-gl\vector.c">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderDataGenerator.cpp">
+      <Filter>bRenderer\implementation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,9 +362,6 @@
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h">
       <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\ShaderData.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ShaderSource.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
@@ -244,6 +388,36 @@
     </ClInclude>
     <ClInclude Include="..\..\project\headers\ProjectMain.h">
       <Filter>project\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\TextSprite.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Font.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externalLibraries\freetype-gl\texture-atlas.h">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externalLibraries\freetype-gl\texture-font.h">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externalLibraries\freetype-gl\vec234.h">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externalLibraries\freetype-gl\vector.h">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externalLibraries\freetype-gl\freetype-gl.h">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externalLibraries\freetype-gl\opengl.h">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externalLibraries\freetype-gl\platform.h">
+      <Filter>externalLibraries\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ShaderDataGenerator.h">
+      <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

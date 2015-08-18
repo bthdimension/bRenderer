@@ -1,18 +1,18 @@
-#include "../../headers/OSdetect.h"
+#include "headers/OSdetect.h"
 
 #ifdef B_OS_DESKTOP
 
-#include "../../headers/View.h"
-#include <boost/lexical_cast.hpp>
-using boost::lexical_cast;
-
+#include "headers/View.h"
 
 /* Constructor and destructor */
 View::View()
 {}
 
 View::~View()
-{}
+{
+	if (_initialized)
+		terminateView();
+}
 
 /* Public functions */
 
@@ -243,7 +243,7 @@ void View::presentBuffer()
 void View::windowSizeChanged(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	bRenderer::log("width: " + lexical_cast<std::string>(width)+", height: " + lexical_cast<std::string>(height), bRenderer::LM_SYS);
+	bRenderer::log("width: " + std::to_string(width)+", height: " + std::to_string(height), bRenderer::LM_SYS);
 }
 
 

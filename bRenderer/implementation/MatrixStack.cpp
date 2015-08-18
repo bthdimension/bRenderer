@@ -3,9 +3,8 @@
 MatrixStack::MatrixStack()
 {}
 
-MatrixStack::~MatrixStack(){
-	clearMatrixStack();
-}
+MatrixStack::~MatrixStack()
+{}
 
 void MatrixStack::pushTranslation(const vmml::Matrix4f &transformationMatrix) 
 {

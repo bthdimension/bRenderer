@@ -1,6 +1,11 @@
-#include "../headers/Geometry.h"
+#include "headers/Geometry.h"
 
 /* Public functions */
+
+Geometry::~Geometry()
+{
+	glDeleteBuffers(1, &_vertexBuffer);
+}
 
 void Geometry::initialize(GeometryDataPtr geometryData)
 {
@@ -11,6 +16,8 @@ void Geometry::initialize(GeometryDataPtr geometryData)
     copyVertexData(geometryData->vboVertices);
     copyIndexData(geometryData->vboIndices);
     initializeVertexBuffer();
+
+	_initialized = true;
 }
 
 void Geometry::draw(GLenum mode)
@@ -39,6 +46,7 @@ void Geometry::drawInstance(const std::string &instanceName, GLenum mode)
 	if (_properties)
 		_properties->passToShader(_material->getShader());
 
+	// Instance properties may override properties set for the geometry in  general
 	getInstanceProperties(instanceName)->passToShader(_material->getShader());
 
 	glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
@@ -115,7 +123,8 @@ Geometry::IndexDataPtr Geometry::copyIndexData(const GeometryData::VboIndices &a
 
 void Geometry::initializeVertexBuffer()
 {
-    glGenBuffers(1, &_vertexBuffer);
+	if (!_initialized)
+		glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, _nVertices*sizeof(Vertex), _vertexData.get(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

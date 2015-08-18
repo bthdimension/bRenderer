@@ -42,6 +42,7 @@ namespace bRenderer
 	std::string DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP();
 	std::string DEFAULT_SHADER_UNIFORM_SPECULAR_MAP();
 	std::string DEFAULT_SHADER_UNIFORM_NORMAL_MAP();
+	std::string DEFAULT_SHADER_UNIFORM_CHARACTER_MAP();
 	std::string DEFAULT_SHADER_UNIFORM_NORMAL_MATRIX();
 	std::string DEFAULT_SHADER_UNIFORM_MODEL_MATRIX();
 	std::string DEFAULT_SHADER_UNIFORM_VIEW_MATRIX();
@@ -92,6 +93,9 @@ namespace bRenderer
 	GLfloat DEFAULT_LIGHT_INTENSITY();
 	GLfloat DEFAULT_LIGHT_ATTENUATION();
 	GLfloat DEFAULT_LIGHT_RADIUS();
+
+	/* Font configuration */
+	GLuint FONT_MAX_PIXEL_SIZE();
 
 } // namespace bRenderer
 

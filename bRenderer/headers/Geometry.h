@@ -10,6 +10,7 @@
 #include "Properties.h"
 #include "Renderer_GL.h"
 #include "IDrawable.h"
+#include "Geometry.h"
 #include "vmmlib/aabb.hpp"
 
 /** @brief The geometry that can be rendered to the screen
@@ -24,6 +25,14 @@ public:
 	typedef std::unordered_map< std::string, PropertiesPtr >	PropertiesMap;
 
 	/* Functions */
+
+	/**	@brief Constructor
+	*/
+	Geometry(){ _initialized = false; }
+
+	/**	@brief Virtual destructor
+	*/
+	virtual ~Geometry();
 
 	/**	@brief Initializes the geometry object based on geometry data
 	*	@param[in] geometryData
@@ -111,7 +120,7 @@ public:
 	*/
 	void            setBoundingBoxObjectSpace(vmml::AABBf arg)						{ _boundingBox = arg; }
 
-private:
+protected:
 
 	/* Functions */
 
@@ -142,8 +151,11 @@ private:
 	*/
 	vmml::AABBf createBoundingBoxObjectSpace(const GeometryData::VboVertices &arg);
 
+private:
+
 	/* Variables */
 
+	bool _initialized;
     GLuint _indexBuffer, _vertexBuffer;
     size_t _nIndices, _nVertices;
     

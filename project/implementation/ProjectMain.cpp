@@ -1,6 +1,4 @@
 #include "ProjectMain.h"
-#include <boost/lexical_cast.hpp>
-using boost::lexical_cast;
 
 /* Initialize the Project */
 void ProjectMain::init()
@@ -30,7 +28,7 @@ void ProjectMain::initFunction()
 	_viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 
 	// demo: load material and shader before loading the model
-	ShaderPtr customShader = bRenderer().getResources()->generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false, false);	// create custom shader with a maximum of 2 lights
+	ShaderPtr customShader = bRenderer().getResources()->generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false, false, false);	// create custom shader with a maximum of 2 lights
 	ShaderPtr flameShader = bRenderer().getResources()->loadShaderFile("flame", 0, false, true, true, false);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
 	MaterialPtr flameMaterial = bRenderer().getResources()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
 
@@ -46,9 +44,23 @@ void ProjectMain::initFunction()
 	bRenderer().getResources()->loadObjModel("torch.obj", false, true, false, 1, false, true);			// create custom shader with a maximum of 1 light
 
 	// create sprites
-	bRenderer().getResources()->createSprite("flame", flameMaterial, flameProperties);						// create a sprite using the material created above, to pass additional properties a Properties object is used
+	bRenderer().getResources()->createSprite("flame", flameMaterial, false, flameProperties);				// create a sprite using the material created above, to pass additional properties a Properties object is used
 	bRenderer().getResources()->createSprite("sparks", "sparks.png");										// create a sprite displaying sparks as a texture
-	bRenderer().getResources()->createSprite("bTitle", "bTitle.png");										// create a sprite displaying the title as a texture
+	bRenderer().getResources()->createSprite("bTitle", "basicTitle_light.png");								// create a sprite displaying the title as a texture
+
+	// create text sprites
+	FontPtr font = bRenderer().getResources()->loadFont("KozGoPro-ExtraLight.otf", 50);
+	if (bRenderer().getInput()->isTouchDevice())
+		bRenderer().getResources()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Double tap to start", font);
+	else
+		bRenderer().getResources()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
+
+	//////////////////////////////////TEXTTEST
+	FontPtr fontTest = bRenderer().getResources()->loadFont("arial.ttf", 128);
+	ShaderPtr testi = bRenderer().getResources()->generateShader("testi", 2, true, true, true, true, true, true, true, true, true, false, false, true);
+	MaterialPtr testMaterial = bRenderer().getResources()->loadObjMaterial("testi.mtl", "testi", testi);
+	TextSpritePtr testSprite = bRenderer().getResources()->createTextSprite("test_text", testMaterial, "Benjamin's Test", fontTest);
+	/////////////////////////////////
 
 	// create camera
 	bRenderer().getResources()->createCamera("camera", vmml::Vector3f(-33.0, 0.0, -13.0), vmml::Vector3f(0.0, -M_PI_F / 2, 0.0));
@@ -80,8 +92,8 @@ void ProjectMain::initFunction()
 /* Draw your scene here */
 void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-	//bRenderer::log("deltaTime: "+lexical_cast< std::string >(deltaTime)+", elapsedTime: "+lexical_cast< std::string >(elapsedTime));
-	bRenderer::log("FPS: "+lexical_cast< std::string >(1/deltaTime));
+	//bRenderer::log("deltaTime: "+std::to_string(deltaTime)+", elapsedTime: "+std::to_string(elapsedTime));
+	//bRenderer::log("FPS: " + std::to_string(1 / deltaTime));
 
 	//// Draw Scene and do postprocessing ////
 	/*
@@ -96,8 +108,9 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		bRenderer().getResources()->getFramebuffer("fbo")->bind(bRenderer().getResources()->getTexture("fbo_texture1"), false); // bind the fbo
 	}
 
-	/// Draw scene ///
-	bRenderer().getRenderQueue()->draw();	
+	/// Draw scene ///	
+	
+	bRenderer().drawQueue(/*GL_LINES*/);
 	
 	if (!_running){
         
@@ -113,7 +126,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			else
 				bRenderer().getResources()->getFramebuffer("fbo")->bind(bRenderer().getResources()->getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);            
 			bRenderer().getResources()->getMaterial("blurMaterial")->setTexture("fbo_texture", bRenderer().getResources()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
-			bRenderer().getResources()->getMaterial("blurMaterial")->setScalar("isVertical", (GLfloat)b);
+			bRenderer().getResources()->getMaterial("blurMaterial")->setScalar("isVertical", static_cast<GLfloat>(b));
 			// draw
 			bRenderer().drawModel("blurSprite", modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
 			b = !b;
@@ -121,11 +134,17 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	
         /*** Title ***/
         // translate and scale 
-        GLfloat titleScale = 0.4f;
+        GLfloat titleScale = 0.5f;
         vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
 		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
         // draw
 		bRenderer().drawModel("bTitle", modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
+
+		/*** Instructions ***/
+		titleScale = 0.1f;
+		scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.45f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
+		bRenderer().drawText("instructions", modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
     }
 
 	//// Camera Movement ////
@@ -142,8 +161,8 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		GLfloat flickeringLightPosY = -bRenderer().getResources()->getCamera("camera")->getPosition().y();
 		GLfloat flickeringLightPosZ = -bRenderer().getResources()->getCamera("camera")->getPosition().z();
 		// let the light flicker
-		flickeringLightPosX += 2*sin(flickeringLightPosY + 0.5*_randomOffset);
-		flickeringLightPosY += 2*sin(flickeringLightPosX + 0.5*_randomOffset);
+		flickeringLightPosX += 2*sin(flickeringLightPosY + 0.5f*_randomOffset);
+		flickeringLightPosY += 2*sin(flickeringLightPosX + 0.5f*_randomOffset);
 		bRenderer().getResources()->getLight("torchLight")->setPosition(vmml::Vector3f(flickeringLightPosX, flickeringLightPosY, flickeringLightPosZ) - bRenderer().getResources()->getCamera("camera")->getForward()*10.0f);
 	}
 	else{
@@ -160,103 +179,6 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 void ProjectMain::terminateFunction()
 {
 	bRenderer::log("I totally terminated this Renderer :-)");
-}
-
-
-/* Camera movement */
-void ProjectMain::updateCamera(const std::string &camera, const double &deltaTime)
-{
-	//// Adjust aspect ratio ////
-	bRenderer().getResources()->getCamera(camera)->setAspectRatio(bRenderer().getView()->getAspectRatio());
-
-	double deltaCameraY = 0.0;
-	double deltaCameraX = 0.0;
-    double cameraForward = 0.0;
-
-	/* iOS: control movement using touch screen */
-	if (bRenderer().getInput()->isTouchDevice()){
-        
-        // pause using double tap
-        if (bRenderer().getInput()->doubleTapRecognized()){
-            _running = !_running;
-        }
-        
-        if(_running){
-            // control using touch
-            TouchMap touchMap = bRenderer().getInput()->getTouches();
-            int i = 0;
-            for(auto t = touchMap.begin(); t != touchMap.end(); ++t)
-            {
-                Touch touch = t->second;
-                // If touch is in left half of the view: move around
-                if(touch.startPositionX < bRenderer().getView()->getWidth()/2){
-                    cameraForward = -(touch.currentPositionY - touch.startPositionY)/100;
-                }
-                // if touch is in right half of the view: look around
-                else
-                {
-                    deltaCameraY = (touch.currentPositionX - touch.startPositionX)/2000;
-                    deltaCameraX = (touch.currentPositionY - touch.startPositionY)/2000;
-                }
-                if(++i > 2)
-                    break;
-            }
-        }
-        
-	}
-	/* Windows: control movement using mouse and keyboard */
-	else{
-		// use space to pause and unpause
-		GLint currentStateSpaceKey = bRenderer().getInput()->getKeyState(bRenderer::KEY_SPACE);
-		if (currentStateSpaceKey != _lastStateSpaceKey)
-		{
-			_lastStateSpaceKey = currentStateSpaceKey;
-			if (currentStateSpaceKey == bRenderer::INPUT_PRESS){
-				_running = !_running;
-				bRenderer().getInput()->setCursorEnabled(!_running);
-			}
-		}
-
-		// mouse look
-		double xpos, ypos; bool hasCursor = false;
-		bRenderer().getInput()->getCursorPosition(&xpos, &ypos, &hasCursor);
-
-		deltaCameraY = (xpos - _mouseX)/1000;
-		_mouseX = xpos;
-		deltaCameraX = (ypos - _mouseY)/1000;
-		_mouseY = ypos;
-
-		if (_running){
-			// movement using wasd keys
-			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_W) == bRenderer::INPUT_PRESS)
-				if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT_SHIFT) == bRenderer::INPUT_PRESS) 			cameraForward = 1.0;
-				else			cameraForward = 0.5;
-			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_S) == bRenderer::INPUT_PRESS)
-				if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT_SHIFT) == bRenderer::INPUT_PRESS) 			cameraForward = -1.0;
-				else			cameraForward = -0.5;
-			else
-				cameraForward = 0.0;
-
-			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_A) == bRenderer::INPUT_PRESS)
-				bRenderer().getResources()->getCamera(camera)->moveCameraSideward(-0.5);
-			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_D) == bRenderer::INPUT_PRESS)
-				bRenderer().getResources()->getCamera(camera)->moveCameraSideward(0.5);
-			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_UP) == bRenderer::INPUT_PRESS)
-				bRenderer().getResources()->getCamera(camera)->moveCameraUpward(0.5);
-			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_DOWN) == bRenderer::INPUT_PRESS)
-				bRenderer().getResources()->getCamera(camera)->moveCameraUpward(-0.5);
-			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT) == bRenderer::INPUT_PRESS)
-				bRenderer().getResources()->getCamera(camera)->rotateCamera(0.0f, 0.0f, 0.03f);
-			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_RIGHT) == bRenderer::INPUT_PRESS)
-				bRenderer().getResources()->getCamera(camera)->rotateCamera(0.0f, 0.0f, -0.03f);
-		}
-	}
-
-	//// Update camera ////
-	if (_running){
-		bRenderer().getResources()->getCamera(camera)->moveCameraForward(cameraForward);
-		bRenderer().getResources()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
-	}
 }
 
 /* Update render queue */
@@ -330,7 +252,7 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
 		// submit to render queue
-		bRenderer().queueModelInstance("flame", ("flame_instance" + lexical_cast< std::string >(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-1.0f - 0.01*z));  // negative distance because always in foreground
+		bRenderer().queueModelInstance("flame", ("flame_instance" + std::to_string(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-1.0f - 0.01f*z));  // negative distance because always in foreground
 	}
 
 	/*** Sparks ***/
@@ -350,7 +272,113 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 		modelMatrix = translation * scaling * rotation;
 
 		// submit to render queue
-		bRenderer().queueModelInstance("sparks", ("sparks_instance" + lexical_cast< std::string >(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01*z)); // negative distance because always in foreground
+		bRenderer().queueModelInstance("sparks", ("sparks_instance" + std::to_string(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01f*z)); // negative distance because always in foreground
+	}
+
+	//////////////////////////////////TEXTTEST
+	//bRenderer().getResources()->getFont("arial")->setPixelSize(static_cast<int>(1 / deltaTime));
+
+	GLfloat titleScale = 6.f;
+	vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(78.f, 0.f, 10.f)) * bRenderer().getResources()->getCamera("camera")->getInverseRotation() * scaling;
+	bRenderer().getResources()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
+	bRenderer().queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
+	//////////////////////////////////
+}
+
+/* Camera movement */
+void ProjectMain::updateCamera(const std::string &camera, const double &deltaTime)
+{
+	//// Adjust aspect ratio ////
+	bRenderer().getResources()->getCamera(camera)->setAspectRatio(bRenderer().getView()->getAspectRatio());
+
+	double deltaCameraY = 0.0;
+	double deltaCameraX = 0.0;
+	double cameraForward = 0.0;
+
+	/* iOS: control movement using touch screen */
+	if (bRenderer().getInput()->isTouchDevice()){
+
+		// pause using double tap
+		if (bRenderer().getInput()->doubleTapRecognized()){
+			_running = !_running;
+		}
+
+		if (_running){
+			// control using touch
+			TouchMap touchMap = bRenderer().getInput()->getTouches();
+			int i = 0;
+			for (auto t = touchMap.begin(); t != touchMap.end(); ++t)
+			{
+				Touch touch = t->second;
+				// If touch is in left half of the view: move around
+				if (touch.startPositionX < bRenderer().getView()->getWidth() / 2){
+					cameraForward = -(touch.currentPositionY - touch.startPositionY) / 100;
+				}
+				// if touch is in right half of the view: look around
+				else
+				{
+					deltaCameraY = (touch.currentPositionX - touch.startPositionX) / 2000;
+					deltaCameraX = (touch.currentPositionY - touch.startPositionY) / 2000;
+				}
+				if (++i > 2)
+					break;
+			}
+		}
+
+	}
+	/* Windows: control movement using mouse and keyboard */
+	else{
+		// use space to pause and unpause
+		GLint currentStateSpaceKey = bRenderer().getInput()->getKeyState(bRenderer::KEY_SPACE);
+		if (currentStateSpaceKey != _lastStateSpaceKey)
+		{
+			_lastStateSpaceKey = currentStateSpaceKey;
+			if (currentStateSpaceKey == bRenderer::INPUT_PRESS){
+				_running = !_running;
+				bRenderer().getInput()->setCursorEnabled(!_running);
+			}
+		}
+
+		// mouse look
+		double xpos, ypos; bool hasCursor = false;
+		bRenderer().getInput()->getCursorPosition(&xpos, &ypos, &hasCursor);
+
+		deltaCameraY = (xpos - _mouseX) / 1000;
+		_mouseX = xpos;
+		deltaCameraX = (ypos - _mouseY) / 1000;
+		_mouseY = ypos;
+
+		if (_running){
+			// movement using wasd keys
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_W) == bRenderer::INPUT_PRESS)
+				if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT_SHIFT) == bRenderer::INPUT_PRESS) 			cameraForward = 1.0;
+				else			cameraForward = 0.5;
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_S) == bRenderer::INPUT_PRESS)
+				if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT_SHIFT) == bRenderer::INPUT_PRESS) 			cameraForward = -1.0;
+				else			cameraForward = -0.5;
+			else
+				cameraForward = 0.0;
+
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_A) == bRenderer::INPUT_PRESS)
+				bRenderer().getResources()->getCamera(camera)->moveCameraSideward(-0.5);
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_D) == bRenderer::INPUT_PRESS)
+				bRenderer().getResources()->getCamera(camera)->moveCameraSideward(0.5);
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_UP) == bRenderer::INPUT_PRESS)
+				bRenderer().getResources()->getCamera(camera)->moveCameraUpward(0.5);
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_DOWN) == bRenderer::INPUT_PRESS)
+				bRenderer().getResources()->getCamera(camera)->moveCameraUpward(-0.5);
+			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_LEFT) == bRenderer::INPUT_PRESS)
+				bRenderer().getResources()->getCamera(camera)->rotateCamera(0.0f, 0.0f, 0.03f);
+			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_RIGHT) == bRenderer::INPUT_PRESS)
+				bRenderer().getResources()->getCamera(camera)->rotateCamera(0.0f, 0.0f, -0.03f);
+		}
+	}
+
+	//// Update camera ////
+	if (_running){
+		bRenderer().getResources()->getCamera(camera)->moveCameraForward(cameraForward);
+		bRenderer().getResources()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 	}
 }
 

@@ -8,12 +8,11 @@
 #include "Shader.h"
 #include "Material.h"
 #include "Properties.h"
-#include "Geometry.h"
 #include "IDrawable.h"
 
 struct RenderCall
 {
-	GeometryPtr geometry;
+	DrawablePtr drawable;
 	std::string instanceName;
 	GLenum blendSfactor, blendDfactor;
 };
@@ -41,19 +40,25 @@ public:
 	/**	@brief Add a render call to the queue
 	*	@param[in] programID
 	*	@param[in] materialName
-	*	@param[in] geometryName
+	*	@param[in] drawableName
 	*	@param[in] instanceName
-	*	@param[in] geometry
-	*	@param[in] distanceToCamera The distance of the transparent geometry to the camera (optional)
+	*	@param[in] drawable
+	*	@param[in] distanceToCamera The distance of the transparent drawable to the camera (optional)
 	*	@param[in] isTransparent Set true if the object is transparent (optional)
 	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*/
-	void submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &geometryName, const std::string &instanceName, GeometryPtr geometry, GLfloat distanceToCamera = 0.0, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA);
+	void submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &drawableName, const std::string &instanceName, DrawablePtr drawable, GLfloat distanceToCamera = 0.0, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA);
 
-	/**	@brief Draw all geometry in the queue in a sorted manner
+	/**	@brief Draw all drawable in the queue in a sorted manner
 	*/
 	virtual void draw(GLenum mode = GL_TRIANGLES);
+
+	/**	@brief Draws an instance of the queue to the screen
+	*	@param[in] instanceName
+	*	@param[in] mode
+	*/
+	virtual void drawInstance(const std::string &instanceName, GLenum mode) { draw(mode); }
 
 	/**	@brief Remove all render calls
 	*/

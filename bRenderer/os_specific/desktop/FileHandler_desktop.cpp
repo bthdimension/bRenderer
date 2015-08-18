@@ -1,10 +1,10 @@
-#include "../../headers/OSdetect.h"
+#include "headers/OSdetect.h"
 
 #ifdef B_OS_DESKTOP
 
-#include "../../headers/FileHandler.h"
-#include "../../headers/Logger.h"
-#include "../../headers/Configuration.h"
+#include "headers/FileHandler.h"
+#include "headers/Logger.h"
+#include "headers/Configuration.h"
 #include <sys/stat.h>
 
 namespace bRenderer

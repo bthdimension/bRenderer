@@ -2,7 +2,6 @@
 #define B_SHADER_SOURCE_H
 
 #include "Configuration.h"
-#include <boost/lexical_cast.hpp>
 
 namespace bRenderer
 {
@@ -43,11 +42,14 @@ namespace bRenderer
 	// Textures
 	extern const std::string SHADER_SOURCE_TEXTURES;
 
+	// Text Textures
+	extern const std::string SHADER_SOURCE_TEXT_TEXTURES;
+
 	/* Vertex Shader */
 
 	// Vertex Shader Main Function
 	//Begin
-    std::string shader_source_function_vertex_main_begin(bool hasLighting, bool hasTextures, bool normalMap);
+	std::string shader_source_function_vertex_main_begin(bool hasLighting, bool hasTextures, bool normalMap);
 
 	// TBN for normal map
 	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_TBN;
@@ -101,11 +103,14 @@ namespace bRenderer
     std::string shader_source_function_fragment_finalize_specular(bool specularColor, bool specularMap);
 
 	// End
-	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART1;
-	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_AMBIENT;
-	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_DIFFUSE;
-	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_SPECULAR;
-	extern const std::string SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END_PART2;
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART1;
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_AMBIENT;
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_DIFFUSE;
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_SPECULAR;
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART2;
+
+	// End Text
+	extern const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_TEXT;
 
 
 } // namespace bRenderer

@@ -12,7 +12,9 @@
 #include "Framebuffer.h"
 #include "Model.h"
 #include "Sprite.h"
+#include "TextSprite.h"
 #include "Texture.h"
+#include "Font.h"
 #include "ModelData.h"
 #include "OBJLoader.h"
 #include "TextureData.h"
@@ -30,9 +32,11 @@ public:
 	/* Typedefs */
 	typedef std::unordered_map< std::string, ShaderPtr >		ShaderMap;
 	typedef std::unordered_map< std::string, TexturePtr >		TextureMap;
+	typedef std::unordered_map< std::string, FontPtr >			FontMap;
 	typedef std::unordered_map< std::string, MaterialPtr >		MaterialMap;
 	typedef std::unordered_map< std::string, PropertiesPtr >	PropertiesMap;
 	typedef std::unordered_map< std::string, ModelPtr >			ModelMap;
+	typedef std::unordered_map< std::string, TextSpritePtr >	TextSpriteMap;
 	typedef std::unordered_map< std::string, CameraPtr >		CameraMap;
 	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStackMap;
 	typedef std::unordered_map< std::string, LightPtr >			LightMap;
@@ -120,6 +124,12 @@ public:
 	*/
 	TexturePtr loadTexture(const std::string &fileName);
 
+	/**	@brief Load a font (e.g. TrueType fonts (TTF) or OpenType fonts (OTF)
+	*	@param[in] fileName File name including extension
+	*	@param[in] fontPixelSize The nominal  font size in pixels (the characters may vary in size)
+	*/
+	FontPtr loadFont(const std::string &fileName, GLuint fontPixelSize);
+
 	/**	@brief Load a shader
 	*	@param[in] shaderName Name of the shader
 	*	@param[in] maxLights The maximum number of light sources to be used  (optional)
@@ -140,8 +150,9 @@ public:
 	*	@param[in] ambientLighting Set true if the shader should support ambient lighting
 	*	@param[in] materialData All necessary information for the shader is read from the material data
 	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
+	*	@param[in] isText Set true if the shader should be used for displaying text
 	*/
-	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights);
+	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText);
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
@@ -157,8 +168,9 @@ public:
 	*	@param[in] specularMap Set true if a texture should be used to define specularity
 	*	@param[in] transparencyValue Set true if a transparency value should be passed
 	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
+	*	@param[in] isText Set true if the shader should be used for displaying text
 	*/
-	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights);
+	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText);
 
 	/**	@brief Create empty material
 	*	@param[in] name Name of the material
@@ -180,8 +192,9 @@ public:
 	*	@param[in] shaderMaxLights (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
+	*	@param[in] isText Set true if the shader should be used for displaying text (optional)
 	*/
-	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true);
+	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool isText = false);
 
 	/**	@brief Create properties
 	*	@param[in] name Name of the properties
@@ -218,25 +231,47 @@ public:
 	/**	@brief Create a sprite
 	*	@param[in] name The raw name of the sprite
 	*	@param[in] material
+	*	@param[in] flipT Flip T axis of texture (optional)
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createSprite(const std::string &name, MaterialPtr material, PropertiesPtr properties = nullptr);
+	ModelPtr createSprite(const std::string &name, MaterialPtr material, bool flipT = false, PropertiesPtr properties = nullptr);
 
 	/**	@brief Create a sprite
 	*	@param[in] name The raw name of the sprite
 	*	@param[in] textureFileName	The filename of the texture that should be loaded and displayed 
 	*	@param[in] shader
+	*	@param[in] flipT Flip T axis of texture (optional)
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, PropertiesPtr properties = nullptr);
+	ModelPtr createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, bool flipT = false, PropertiesPtr properties = nullptr);
 
 	/**	@brief Create a sprite
 	*	@param[in] name The raw name of the sprite
 	*	@param[in] textureFileName The filename of the texture that should be loaded and displayed
 	*	@param[in] shaderMaxLights The maximum number of light sources to be used (optional)
 	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
+	*	@param[in] flipT Flip T axis of texture (optional)
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	ModelPtr createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights = 0, bool variableNumberOfLights = false);
+	ModelPtr createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights = 0, bool variableNumberOfLights = false, bool flipT = false, PropertiesPtr properties = nullptr);
+
+	/**	@brief Create a text sprite to display strings on the screen
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] color The color of the text
+	*	@param[in] text The string to be displayed
+	*	@param[in] font The font to be used to display the string
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	TextSpritePtr createTextSprite(const std::string &name, vmml::Vector3f color, const std::string &text, FontPtr font, PropertiesPtr properties = nullptr);
+
+	/**	@brief Create a text sprite to display strings on the screen
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] material
+	*	@param[in] text The string to be displayed
+	*	@param[in] font The font to be used to display the string
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	TextSpritePtr createTextSprite(const std::string &name, MaterialPtr material, const std::string &text, FontPtr font, PropertiesPtr properties = nullptr);
 
 	/**	@brief Create a texture
 	*	@param[in] name The raw name of the texture
@@ -334,6 +369,71 @@ public:
 	*/
 	FramebufferPtr createFramebuffer(const std::string &name);
 
+	/**	@brief Add a shader (returns true if successful)
+	*	@param[in] name Name of the shader
+	*/
+	bool addShader(const std::string &name, ShaderPtr ptr);
+
+	/**	@brief Add a texture (returns true if successful)
+	*	@param[in] name Name of the texture
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addTexture(const std::string &name, TexturePtr ptr);
+
+	/**	@brief Add a font (returns true if successful)
+	*	@param[in] name Name of the font
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addFont(const std::string &name, FontPtr ptr);
+
+	/**	@brief Add a material (returns true if successful)
+	*	@param[in] name Name of the material
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addMaterial(const std::string &name, MaterialPtr ptr);
+
+	/**	@brief Add properties (returns true if successful)
+	*	@param[in] name Name of the properties
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addProperties(const std::string &name, PropertiesPtr ptr);
+
+	/**	@brief Add a 3D model (returns true if successful)
+	*	@param[in] name Name of the model
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addModel(const std::string &name, ModelPtr ptr);
+
+	/**	@brief Add a text sprite (returns true if successful)
+	*	@param[in] name Name of the text sprite
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addTextSprite(const std::string &name, TextSpritePtr ptr);
+
+	/**	@brief Add a camera (returns true if successful)
+	*	@param[in] name Name of the camera
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addCamera(const std::string &name, CameraPtr ptr);
+
+	/**	@brief Add a matrix stack (returns true if successful)
+	*	@param[in] name Name of the matrix stack
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addMatrixStack(const std::string &name, MatrixStackPtr ptr);
+
+	/**	@brief Add a light (returns true if successful)
+	*	@param[in] name Name of the light
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addLight(const std::string &name, LightPtr ptr);
+
+	/**	@brief Add a framebuffer (returns true if successful)
+	*	@param[in] name Name of the framebuffer
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addFramebuffer(const std::string &name, FramebufferPtr ptr);
+
 	/**	@brief Get a shader
 	*	@param[in] name Name of the shader
 	*/
@@ -343,6 +443,11 @@ public:
 	*	@param[in] name Name of the texture
 	*/
 	TexturePtr getTexture(const std::string &name);
+
+	/**	@brief Get a font
+	*	@param[in] name Name of the font
+	*/
+	FontPtr getFont(const std::string &name);
 
 	/**	@brief Get a material
 	*	@param[in] name Name of the material
@@ -358,6 +463,11 @@ public:
 	*	@param[in] name Name of the model
 	*/
 	ModelPtr getModel(const std::string &name);
+
+	/**	@brief Get a text sprite
+	*	@param[in] name Name of the text sprite
+	*/
+	TextSpritePtr getTextSprite(const std::string &name);
 
 	/**	@brief Get a camera
 	*	@param[in] name Name of the camera
@@ -401,6 +511,11 @@ public:
 	*/
 	void removeTexture(const std::string &name);
 
+	/**	@brief Remove a font
+	*	@param[in] name Name of the font
+	*/
+	void removeFont(const std::string &name);
+
 	/**	@brief Remove a material
 	*	@param[in] name Name of the material
 	*/
@@ -415,6 +530,11 @@ public:
 	*	@param[in] name Name of the model
 	*/
 	void removeModel(const std::string &name);
+
+	/**	@brief Remove a text sprite
+	*	@param[in] name Name of the text sprite
+	*/
+	void removeTextSprite(const std::string &name);
 
 	/**	@brief Remove a camera
 	*	@param[in] name Name of the camera
@@ -453,9 +573,11 @@ private:
 
 	ShaderMap		_shaders;
 	TextureMap		_textures;
+	FontMap			_fonts;
 	MaterialMap		_materials;
 	PropertiesMap	_properties;
 	ModelMap	    _models;
+	TextSpriteMap	_textSprites;
 	CameraMap		_cameras;
 	MatrixStackMap	_matrixStacks;
 	LightMap		_lights;

@@ -56,7 +56,7 @@ void Renderer::runRenderer()
         
         [_rendererCaller start:^()
             {
-                this->draw();
+                this->update();
             }
          ];
         
@@ -104,7 +104,7 @@ void Renderer::terminateRenderer()
 
 /* Private functions */
 
-void Renderer::draw()
+void Renderer::update()
 {
      // get time
     double currentTime = CACurrentMediaTime() - _initialTime;

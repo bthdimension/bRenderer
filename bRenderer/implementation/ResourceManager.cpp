@@ -1,9 +1,6 @@
 #include "headers/ResourceManager.h"
 #include "headers/ShaderDataFile.h"
-#include "headers/ShaderData.h"
-#include <boost/lexical_cast.hpp>
-
-using boost::lexical_cast;
+#include "headers/ShaderDataGenerator.h"
 
 /* Public functions */
 
@@ -106,6 +103,19 @@ TexturePtr ResourceManager::loadTexture(const std::string &fileName)
 	return createTexture(name, textureData);
 }
 
+FontPtr ResourceManager::loadFont(const std::string &fileName, GLuint fontPixelSize)
+{
+	// get file name
+	std::string name = getRawName(fileName);
+
+	if (getFont(name)) return getFont(name);
+	FontPtr &font = _fonts[name];
+
+	font = FontPtr(new Font(fileName, fontPixelSize));
+
+	return font;
+}
+
 ShaderPtr ResourceManager::loadShaderFile(std::string shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
 {
 	std::string name = getRawName(shaderName);
@@ -121,26 +131,26 @@ ShaderPtr ResourceManager::loadShaderFile(std::string shaderName, GLuint shaderM
 	return nullptr;
 }
 
-ShaderPtr ResourceManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights)
+ShaderPtr ResourceManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText)
 {
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderData shaderData(shaderMaxLights, ambientLighting, materialData, variableNumberOfLights);
-	return createShader(name, shaderData);
+	ShaderDataGenerator shaderGenerator(shaderMaxLights, ambientLighting, materialData, variableNumberOfLights, isText);
+	return createShader(name, shaderGenerator);
 }
 
-ShaderPtr ResourceManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights)
+ShaderPtr ResourceManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText)
 {
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderData shaderData(shaderMaxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, transparencyValue, variableNumberOfLights);
-	return createShader(name, shaderData);
+	ShaderDataGenerator shaderGenerator(shaderMaxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, transparencyValue, variableNumberOfLights, isText);
+	return createShader(name, shaderGenerator);
 }
 
 MaterialPtr ResourceManager::createMaterial(const std::string &name, ShaderPtr shader)
@@ -164,7 +174,7 @@ MaterialPtr ResourceManager::createMaterial(const std::string &name, const Mater
 	return material;
 }
 
-MaterialPtr ResourceManager::createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting)
+MaterialPtr ResourceManager::createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool isText)
 {
 	if (getMaterial(name)) return getMaterial(name);
 	MaterialPtr &material = _materials[name];
@@ -178,7 +188,7 @@ MaterialPtr ResourceManager::createMaterialShaderCombination(const std::string &
 		shader = loadShaderFile(name, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting);
 	}
 	else{
-		shader = generateShader(name, shaderMaxLights, ambientLighting, materialData, variableNumberOfLights);
+		shader = generateShader(name, shaderMaxLights, ambientLighting, materialData, variableNumberOfLights, isText);
 	}
 	material = MaterialPtr(new Material);
 	material->initialize(this, materialData, shader);
@@ -222,31 +232,49 @@ ModelPtr ResourceManager::createModel(const std::string &name, const ModelData &
 	return model;
 }
 
-ModelPtr ResourceManager::createSprite(const std::string &name, MaterialPtr material, PropertiesPtr properties)
+ModelPtr ResourceManager::createSprite(const std::string &name, MaterialPtr material, bool flipT, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
 
-	model = ModelPtr(new Sprite(material, properties));
+	model = ModelPtr(new Sprite(material, flipT, properties));
 	return model;
 }
 
-ModelPtr ResourceManager::createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, PropertiesPtr properties)
+ModelPtr ResourceManager::createSprite(const std::string &name, const std::string &textureFileName, ShaderPtr shader, bool flipT, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
 
-	model = ModelPtr(new Sprite(this, textureFileName, name, shader, properties));
+	model = ModelPtr(new Sprite(this, textureFileName, name, shader, flipT, properties));
 	return model;
 }
 
-ModelPtr ResourceManager::createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights)
+ModelPtr ResourceManager::createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights, bool flipT, PropertiesPtr properties)
 {
 	if (getModel(name)) return getModel(name);
 	ModelPtr &model = _models[name];
 
-	model = ModelPtr(new Sprite(this, name, textureFileName, shaderMaxLights, variableNumberOfLights));
+	model = ModelPtr(new Sprite(this, name, textureFileName, shaderMaxLights, variableNumberOfLights, flipT, properties));
 	return model;
+}
+
+TextSpritePtr ResourceManager::createTextSprite(const std::string &name, vmml::Vector3f color, const std::string &text, FontPtr font, PropertiesPtr properties)
+{
+	if (getTextSprite(name)) return getTextSprite(name);
+	TextSpritePtr &textSprite = _textSprites[name];
+
+	textSprite = TextSpritePtr(new TextSprite(this, name, color, text, font, properties));
+	return textSprite;
+}
+
+TextSpritePtr ResourceManager::createTextSprite(const std::string &name, MaterialPtr material, const std::string &text, FontPtr font, PropertiesPtr properties)
+{
+	if (getTextSprite(name)) return getTextSprite(name);
+	TextSpritePtr &textSprite = _textSprites[name];
+
+	textSprite = TextSpritePtr(new TextSprite(material, text, font, properties));
+	return textSprite;
 }
 
 TexturePtr ResourceManager::createTexture(const std::string &name, const TextureData &textureData)
@@ -381,6 +409,83 @@ FramebufferPtr ResourceManager::createFramebuffer(const std::string &name)
 	return framebuffer;
 }
 
+bool ResourceManager::addShader(const std::string &name, ShaderPtr ptr)
+{
+	if (getShader(name)) return false;
+	_shaders.insert(ShaderMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addTexture(const std::string &name, TexturePtr ptr)
+{
+	if (getTexture(name)) return false;
+	_textures.insert(TextureMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addFont(const std::string &name, FontPtr ptr)
+{
+	if (getFont(name)) return false;
+	_fonts.insert(FontMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addMaterial(const std::string &name, MaterialPtr ptr)
+{
+	if (getMaterial(name)) return false;
+	_materials.insert(MaterialMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addProperties(const std::string &name, PropertiesPtr ptr)
+{
+	if (getProperties(name)) return false;
+	_properties.insert(PropertiesMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addModel(const std::string &name, ModelPtr ptr)
+{
+	if (getModel(name)) return false;
+	_models.insert(ModelMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addTextSprite(const std::string &name, TextSpritePtr ptr)
+{
+	if (getTextSprite(name)) return false;
+	_textSprites.insert(TextSpriteMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addCamera(const std::string &name, CameraPtr ptr)
+{
+	if (getCamera(name)) return false;
+	_cameras.insert(CameraMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addMatrixStack(const std::string &name, MatrixStackPtr ptr)
+{
+	if (getMatrixStack(name)) return false;
+	_matrixStacks.insert(MatrixStackMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addLight(const std::string &name, LightPtr ptr)
+{
+	if (getLight(name)) return false;
+	_lights.insert(LightMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addFramebuffer(const std::string &name, FramebufferPtr ptr)
+{
+	if (getFramebuffer(name)) return false;
+	_framebuffers.insert(FramebufferMap::value_type(name, ptr));
+	return true;
+}
+
 ShaderPtr ResourceManager::getShader(const std::string &name)
 {
 	if (_shaders.count(name) > 0)
@@ -392,6 +497,13 @@ TexturePtr ResourceManager::getTexture(const std::string &name)
 {
 	if (_textures.count(name) > 0)
 		return _textures[name];
+	return nullptr;
+}
+
+FontPtr ResourceManager::getFont(const std::string &name)
+{
+	if (_fonts.count(name) > 0)
+		return _fonts[name];
 	return nullptr;
 }
 
@@ -413,6 +525,13 @@ ModelPtr ResourceManager::getModel(const std::string &name)
 {
 	if (_models.count(name) > 0)
 		return _models[name];
+	return nullptr;
+}
+
+TextSpritePtr ResourceManager::getTextSprite(const std::string &name)
+{
+	if (_textSprites.count(name) > 0)
+		return _textSprites[name];
 	return nullptr;
 }
 
@@ -469,6 +588,11 @@ void ResourceManager::removeTexture(const std::string &name)
 	_textures.erase(name);
 }
 
+void ResourceManager::removeFont(const std::string &name)
+{
+	_fonts.erase(name);
+}
+
 void ResourceManager::removeMaterial(const std::string &name)
 {
 	_materials.erase(name);
@@ -482,6 +606,11 @@ void ResourceManager::removeProperties(const std::string &name)
 void ResourceManager::removeModel(const std::string &name)
 {
 	_models.erase(name);
+}
+
+void ResourceManager::removeTextSprite(const std::string &name)
+{
+	_textSprites.erase(name);
 }
 
 void ResourceManager::removeCamera(const std::string &name)
@@ -508,9 +637,11 @@ void ResourceManager::clear()
 {
 	_shaders.clear();
 	_textures.clear();
+	_fonts.clear();
 	_materials.clear();
 	_properties.clear();
 	_models.clear();
+	_textSprites.clear();
 	_cameras.clear();
 	_matrixStacks.clear();
 	_lights.clear();

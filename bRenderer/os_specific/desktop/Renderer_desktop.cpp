@@ -1,9 +1,9 @@
-#include "../../headers/OSdetect.h"
+#include "headers/OSdetect.h"
 
 #ifdef B_OS_DESKTOP
 
-#include "../../headers/Renderer.h"
-#include "../../headers/IRenderProject.h"
+#include "headers/Renderer.h"
+#include "headers/IRenderProject.h"
 
 /* Public functions */
 
@@ -17,7 +17,7 @@ void Renderer::runRenderer()
 	// loop until the user closes the window
 	while (_running && _view->isRunning())
 	{
-		draw();
+		update();
 
 		// poll for and process events
 		glfwPollEvents();
@@ -54,7 +54,7 @@ void Renderer::terminateRenderer()
 
 /* Private functions */
 
-void Renderer::draw()
+void Renderer::update()
 {
     // get time
     double currentTime = (glfwGetTime() - _initialTime);

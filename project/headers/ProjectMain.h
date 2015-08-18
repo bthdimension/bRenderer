@@ -8,7 +8,7 @@ class ProjectMain : public IRenderProject
 public:
 	/* Constructor and Destructor */
     ProjectMain(){}
-    virtual ~ProjectMain(){bRenderer::log("ProjectMain delted");}
+    virtual ~ProjectMain(){bRenderer::log("ProjectMain deleted");}
 
     /* Initialize the Project */
     void init();
@@ -46,11 +46,11 @@ public:
     
 private:
     
-	/* Camera movement */
-	void updateCamera(const std::string &camera, const double &deltaTime);
-
 	/* Update render queue */
 	void updateRenderQueue(const std::string &camera, const double &deltaTime);
+
+	/* Camera movement */
+	void updateCamera(const std::string &camera, const double &deltaTime);
 
 	/* Helper Functions */
 	GLfloat randomNumber(GLfloat min, GLfloat max);
@@ -61,6 +61,7 @@ private:
 	double _mouseX, _mouseY;
 	bool _running; GLint _lastStateSpaceKey;
 	vmml::Matrix4f _viewMatrixHUD;
+
 };
 
 #endif /* defined(PROJECT_MAIN_H) */
