@@ -51,11 +51,11 @@
                                      nil];
     
     // create an OpenGL ES 3.0 context
-    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+//    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
 	// If Es 3.0 is not supported create an OpenGL ES 2.0 context
-	if (_context == nil) {
-	  _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-	}
+//	if (_context == nil) {
+	  _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2]; // freetype-gl doesn't support es3
+//	}
     
     // quit if context creation failed
     if (!_context || ![self setContextCurrent]) {
