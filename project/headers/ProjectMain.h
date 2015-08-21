@@ -7,7 +7,7 @@ class ProjectMain : public IRenderProject
 {
 public:
 	/* Constructor and Destructor */
-    ProjectMain(){}
+	ProjectMain() : IRenderProject(){}
     virtual ~ProjectMain(){bRenderer::log("ProjectMain deleted");}
 
     /* Initialize the Project */
@@ -59,7 +59,8 @@ private:
 	GLfloat _randomOffset;
 	GLfloat _offset;
 	double _mouseX, _mouseY;
-	bool _running; GLint _lastStateSpaceKey;
+	bool _running = false; 
+	GLint _lastStateSpaceKey = 0;
 	vmml::Matrix4f _viewMatrixHUD;
 
 };

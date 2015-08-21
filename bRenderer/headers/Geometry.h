@@ -155,15 +155,15 @@ private:
 
 	/* Variables */
 
-	bool _initialized;
-    GLuint _indexBuffer, _vertexBuffer;
-    size_t _nIndices, _nVertices;
+	bool _initialized = false;
+    GLuint _indexBuffer = 0, _vertexBuffer = 0;
+    size_t _nIndices = 0, _nVertices = 0;
     
-    VertexDataPtr   _vertexData;
-    IndexDataPtr    _indexData;
+	VertexDataPtr   _vertexData = nullptr;
+	IndexDataPtr    _indexData = nullptr;
     
-    MaterialPtr _material;
-	PropertiesPtr _properties;
+	MaterialPtr _material = nullptr;
+	PropertiesPtr _properties = nullptr;
 
 	vmml::AABBf _boundingBox;
 

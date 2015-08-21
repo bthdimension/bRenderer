@@ -257,14 +257,14 @@ public:
 
 	/**	@brief Returns true on mobile devices like the iPad
 	*/
-	bool isTouchDevice();
+	static bool isTouchDevice();
 
 private:
 
 	/* Variables */
 
-    ViewPtr         _view;
-    CMMotionManager *_motionManager;
+	ViewPtr         _view = nullptr;
+	CMMotionManager *_motionManager = nullptr;
 };
 
 typedef std::shared_ptr< Input >  InputPtr;

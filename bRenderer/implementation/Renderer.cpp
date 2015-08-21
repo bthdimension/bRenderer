@@ -443,6 +443,9 @@ vmml::Visibility Renderer::viewFrustumCulling(const vmml::AABBf &aabbObjectSpace
 
 void Renderer::reset()
 {
+	_initialized = false;
+	_running = false;
+
 	_stopTime = 0;
 	_initialTime = 0;
 	_elapsedTime = 0;

@@ -11,6 +11,7 @@ ShaderDataGenerator::ShaderDataGenerator()
 {}
 
 ShaderDataGenerator::ShaderDataGenerator(GLuint maxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText)
+	: _valid(false)
 {
 	// create shader fitting the needs of the material
 	readMaterialAttributes(maxLights, variableNumberOfLights, ambientLighting, isText, materialData.textures, materialData.vectors, materialData.scalars);
@@ -18,6 +19,7 @@ ShaderDataGenerator::ShaderDataGenerator(GLuint maxLights, bool ambientLighting,
 }
 
 ShaderDataGenerator::ShaderDataGenerator(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText)
+	: _valid(false)
 {
 	create(maxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, transparencyValue, variableNumberOfLights, isText);
 }

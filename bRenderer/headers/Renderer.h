@@ -256,23 +256,23 @@ private:
 
 	/* Variables */
 
-	bool _initialized;
-	bool _running;
+	bool _initialized = false;
+	bool _running = false;
 
-	double _elapsedTime, _stopTime, _initialTime;
+	double _elapsedTime = 0.0, _stopTime = 0.0, _initialTime = 0.0;
 
-	ViewPtr				_view;
-	InputPtr			_input;
-	ResourceManagerPtr	_resourceManager;
-	RenderQueuePtr		_renderQueue;
+	ViewPtr				_view = nullptr;
+	InputPtr			_input = nullptr;
+	ResourceManagerPtr	_resourceManager = nullptr;
+	RenderQueuePtr		_renderQueue = nullptr;
 
-	IRenderProject *_renderProject;
+	IRenderProject *_renderProject = nullptr;
     
-    RendererCaller *_rendererCaller;
+	RendererCaller *_rendererCaller = nullptr;
 	
-	void(*_initFunction)();
-	void(*_loopFunction)(const double deltaTime, const double elapsedTime);
-	void(*_terminateFunction)();
+	void(*_initFunction)() = nullptr;
+	void(*_loopFunction)(const double deltaTime, const double elapsedTime) = nullptr;
+	void(*_terminateFunction)() = nullptr;
 
 };
 

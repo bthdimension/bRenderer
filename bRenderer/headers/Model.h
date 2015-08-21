@@ -169,8 +169,8 @@ private:
 	/* Variables */
 
     GroupMap        _groups;
-    MaterialPtr     _material;
-	PropertiesPtr	_properties;
+	MaterialPtr     _material = nullptr;
+	PropertiesPtr	_properties = nullptr;
 	vmml::AABBf		_boundingBox;
 	InstancesMap	_instances;
 };

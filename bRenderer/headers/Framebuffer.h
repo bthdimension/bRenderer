@@ -86,8 +86,8 @@ private:
 	void destroy();
 
 	/* Variables */
-	GLint _width, _height, _oldFbo;
-	GLuint _fbo, _rbo_depth;
+	GLint _width, _height, _oldFbo = 0;
+	GLuint _fbo = 0, _rbo_depth = 0;
 	bool _preserveCurrentFramebuffer, _autoResize;
 
 };

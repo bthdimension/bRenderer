@@ -190,11 +190,11 @@ private:
     
 	/* Variables */
 
-	GLFWwindow  *_window;
-    BView       *_view;
+	GLFWwindow  *_window = nullptr;
+	BView       *_view = nullptr;
 
-	bool _initialized;
-	bool _fullscreen;
+	bool _initialized = false;
+	bool _fullscreen = false;
 
 };
 

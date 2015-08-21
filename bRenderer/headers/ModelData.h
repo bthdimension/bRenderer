@@ -54,9 +54,9 @@ private:
 	
 	/* Variables */
 	
-	OBJLoader		*_objLoader;
-    bool            _flipT;
-    bool            _flipZ;
+	OBJLoader		*_objLoader = nullptr;
+    bool            _flipT = false;
+    bool            _flipZ = false;
 };
 
 #endif /* defined(B_MODEL_DATA_H) */

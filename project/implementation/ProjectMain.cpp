@@ -4,7 +4,7 @@
 void ProjectMain::init()
 {
 	// let the renderer create an OpenGL context and the main window
-	if(bRenderer().getInput()->isTouchDevice())
+	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// fullscreen on iOS
 	else
 		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
@@ -50,7 +50,7 @@ void ProjectMain::initFunction()
 
 	// create text sprites
 	FontPtr font = bRenderer().getResources()->loadFont("KozGoPro-ExtraLight.otf", 50);
-	if (bRenderer().getInput()->isTouchDevice())
+	if (Input::isTouchDevice())
 		bRenderer().getResources()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Double tap to start", font);
 	else
 		bRenderer().getResources()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
@@ -297,7 +297,7 @@ void ProjectMain::updateCamera(const std::string &camera, const double &deltaTim
 	double cameraForward = 0.0;
 
 	/* iOS: control movement using touch screen */
-	if (bRenderer().getInput()->isTouchDevice()){
+	if (Input::isTouchDevice()){
 
 		// pause using double tap
 		if (bRenderer().getInput()->doubleTapRecognized()){

@@ -17,13 +17,13 @@ public:
 	/* Functions */
 
 	/**	@brief Constructor
+	*/
+	Texture(){}
+
+	/**	@brief Constructor
 	*	@param[in] data The texture data to be used
 	*/
     Texture(const TextureData &data);
-
-	/**	@brief Constructor
-	*/
-	Texture(){}
 
 	/**	@brief Constructor
 	*
@@ -51,7 +51,7 @@ private:
 
 	/* Variables */
 
-    GLuint _textureID;
+    GLuint _textureID = 0;
 };
 
 typedef std::shared_ptr< Texture >  TexturePtr;

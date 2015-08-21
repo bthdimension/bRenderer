@@ -69,7 +69,7 @@ private:
     GLsizei         _width;
     GLsizei         _height;
     GLenum          _format;
-    ImageDataPtr    _imageData;
+	ImageDataPtr    _imageData = nullptr;
 };
 
 #endif /* defined(B_TEXTURE_DATA_H) */

@@ -166,18 +166,18 @@ protected:
 	/* Functions */
 
     virtual void resetTexUnit();
+	bool compile(GLuint* shader, GLenum type, const std::string &src);
+	bool link();
+	bool validate();
     
 private:
 
 	/* Variables */
 
-    GLuint _programID;
-    bool compile(GLuint* shader, GLenum type, const std::string &src);
-    bool link();
-    bool validate();
+    GLuint _programID = 0;
     
-    GLint   _cTexUnit;
-    GLint   _maxTexUnits;
+    GLint   _cTexUnit = 0;
+    GLint   _maxTexUnits = 0;
     
 	LocationMap   _uniformLocations;
 	AttribMap     _attribs;

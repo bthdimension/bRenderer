@@ -6,6 +6,7 @@
 
 /* Constructor and destructor */
 View::View()
+	: _initialized(false)
 {}
 
 View::~View()

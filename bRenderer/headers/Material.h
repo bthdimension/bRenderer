@@ -119,7 +119,7 @@ private:
 	Vector3Map	_vectors;
 	ScalarMap	_scalars;
 
-    ShaderPtr   _shader;
+	ShaderPtr   _shader = nullptr;
     
     std::string _name;
 };

@@ -63,10 +63,10 @@ private:
 
 	/* Variables */
 
-	bool _initialized;
-	ftgl::texture_atlas_t *_atlas;
-	ftgl::texture_font_t *_font;
-	TexturePtr _atlasTexture;
+	bool _initialized = false;
+	ftgl::texture_atlas_t *_atlas = nullptr;
+	ftgl::texture_font_t *_font = nullptr;
+	TexturePtr _atlasTexture = nullptr;
 	std::string	_fontFileName;
 	GLuint _fontPixelSize;
 };

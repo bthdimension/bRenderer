@@ -148,11 +148,11 @@ private:
 	/* Variables */
 
 	obj::obj_parser::flags_type _flags;
-	ModelData                   *_data;
+	ModelData                   *_data = nullptr;
 	MaterialMap                  _materials;
 	std::string                 _groupName;
 	ModelData::GroupMap         _groups;
-	GeometryDataPtr             _group;
+	GeometryDataPtr             _group = nullptr;
 
 	std::vector<FaceData>       _faces;
 	std::vector<VertexData>     _vertices;
