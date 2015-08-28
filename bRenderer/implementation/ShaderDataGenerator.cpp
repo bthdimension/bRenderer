@@ -1,8 +1,8 @@
-#include "../headers/ShaderDataGenerator.h"
-#include "../headers/Logger.h"
-#include "../headers/OSdetect.h"
-#include "../headers/Configuration.h"
-#include "../headers/ShaderSource.h"
+#include "headers/ShaderDataGenerator.h"
+#include "headers/Logger.h"
+#include "headers/OSdetect.h"
+#include "headers/Configuration.h"
+#include "headers/ShaderSource.h"
 
 /* Public functions */
 
@@ -40,6 +40,7 @@ ShaderDataGenerator &ShaderDataGenerator::create(GLuint maxLights, bool ambientL
 	_diffuseMap = diffuseMap;
 	_normalMap = normalMap;
 	_specularMap = specularMap;
+	_cubicReflectionMap = false;
 
 	_transparencyValue = transparencyValue;
 
@@ -67,6 +68,8 @@ void ShaderDataGenerator::readMaterialAttributes(GLuint maxLights, bool variable
 	_diffuseMap = t.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()) > 0;
 	_normalMap = _maxLights > 0 && t.count(bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP()) > 0;
 	_specularMap = _specularLighting && t.count(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_MAP()) > 0;
+
+	_cubicReflectionMap = false;
 
 	_diffuseLighting = _diffuseMap || _diffuseColor;
 
@@ -134,6 +137,7 @@ void ShaderDataGenerator::createVertShader()
 		}
 	}
 	else if (_specularLighting){
+		// camera view space
 		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_VIEW_SPACE;
 	}
 	// main function lights
@@ -171,7 +175,7 @@ void ShaderDataGenerator::createFragShader()
 		else
 			_fragShaderSrc += _transparencyValue ? bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS_TRANSPARENCY : bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS;
 	}
-			
+
 	if (_specularLighting)
 	{
 		if (_maxLights > 0){
@@ -183,6 +187,7 @@ void ShaderDataGenerator::createFragShader()
 		else
 			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_NO_LIGHTS;
 	}
+
 	// lighting
 	if (_specularLighting || _diffuseLighting){
 		if (_normalMap)

@@ -23,6 +23,7 @@ Shader::Shader(const IShaderData &shaderData)
 	_ambientLighting = shaderData.supportsAmbientLighting();
 	_diffuseLighting = shaderData.supportsDiffuseLighting();
 	_specularLighting = shaderData.supportsSpecularLighting();
+	_cubicReflectionMap = shaderData.supportsCubicReflectionMap();
     
     // Attach vertex shader to program.
     glAttachShader(_programID, vertShader);
@@ -158,11 +159,6 @@ GLint Shader::registerAttrib(const std::string &name, GLint size, GLenum type, G
     
     glEnableVertexAttribArray(loc);
     return loc;
-}
-
-GLuint Shader::getProgramID()
-{
-    return _programID;
 }
 
 GLint Shader::findUniformLocation(const std::string &name)

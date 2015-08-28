@@ -1,7 +1,7 @@
-#include "../headers/OBJLoader.h"
-#include "../headers/Configuration.h"
-#include "../headers/Logger.h"
-#include "../headers/FileHandler.h"
+#include "headers/OBJLoader.h"
+#include "headers/Configuration.h"
+#include "headers/Logger.h"
+#include "headers/FileHandler.h"
 
 void OBJLoader::info_callback(const std::string& filename, std::size_t line_number, const std::string& message)
 {
@@ -454,6 +454,20 @@ void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, 
 				GLfloat d;
 				ss >> d >> std::ws;
 				materials[matName].scalars[bRenderer::DEFAULT_SHADER_UNIFORM_TRANSPARENCY()] = d;
+			}
+			else if (key == bRenderer::WAVEFRONT_MATERIAL_REFLECTION())
+			{
+				std::string type;
+				std::string mat;
+				ss >> type >> std::ws;
+				if (type == bRenderer::WAVEFRONT_MATERIAL_REFLECTION_TYPE())
+					ss >> type >> std::ws;
+				ss >> mat >> std::ws;
+				if (type == bRenderer::WAVEFRONT_MATERIAL_REFLECTION_TYPE_SPHERE())
+					materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_SPHERE_MAP()] = mat;
+				else
+					materials[matName].cubeTextures[type] = mat;
+				
 			}
 		}
 	}

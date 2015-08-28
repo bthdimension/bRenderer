@@ -21,17 +21,25 @@ public:
 	typedef std::unordered_map<std::string, GLfloat>		ScalarMap;
 
 	/* Functions */
+
+	/**	@brief Constructor
+	*/
+	Material() {}
+
+	/**	@brief Virtual destructor
+	*/
+	virtual ~Material() {}
     
 	/**	@brief Initializes the geometry object based on material data and a shader
 	*	@param[in] r Resource management
 	*	@param[in] materialData 
 	*	@param[in] shader
 	*/
-	void initialize(ResourceManager *r, const MaterialData &materialData, ShaderPtr shader);
+	virtual void initialize(ResourceManager *r, const MaterialData &materialData, ShaderPtr shader);
     
 	/**	@brief Bind the shader and pass the attributes of the material
 	*/
-    void bind();
+	virtual void bind();
     
 	/**	@brief Returns the textures associated with the material
 	*/
@@ -104,7 +112,7 @@ public:
     
 	/**	@brief Returns the name of the material
 	*/
-    std::string getName()                       { return _name; }
+    const std::string &getName()                       { return _name; }
 
 	/**	@brief Sets the name of the material
 	*	@param[in] arg Name for the material

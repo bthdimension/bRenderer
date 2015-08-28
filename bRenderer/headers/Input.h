@@ -165,11 +165,16 @@ public:
 
 	/**	@brief Constructor
 	*/
-	Input();
+    Input();
 
-	/**	@brief Destructor
+	/**	@brief Constructor
+	*	@param[in] view
 	*/
-	~Input();
+    Input(ViewPtr view);
+
+	/**	@brief Virtual destructor
+	*/
+    virtual ~Input();
     
     /**	@brief Set the view to get inputs from
      *	@param[in] view

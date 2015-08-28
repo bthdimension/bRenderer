@@ -1,9 +1,4 @@
-#include "../../headers/TextureData.h"
-
-TextureData::TextureData(const std::string &fileName)
-{
-    load(fileName);
-}
+#include "headers/TextureData.h"
 
 TextureData &TextureData::load(const std::string &fileName)
 {

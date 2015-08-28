@@ -1,4 +1,4 @@
-#include "../../headers/View.h"
+#include "headers/View.h"
 #include <vector>
 
 /* Constructor and destructor */
@@ -183,6 +183,12 @@ void View::setSize(GLint width, GLint height)
     [_view setViewWidth:width setViewHeight:height];
     _fullscreen = false;
 }
+
+void View::setViewportSize(GLint width, GLint height)
+{
+	glViewport(0, 0, width, height);
+}
+
 
 void View::setPosition(GLint x, GLint y)
 {

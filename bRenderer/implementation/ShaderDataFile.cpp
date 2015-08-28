@@ -1,20 +1,20 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "../headers/ShaderDataFile.h"
-#include "../headers/Logger.h"
-#include "../headers/FileHandler.h"
-#include "../headers/OSdetect.h"
-#include "../headers/Configuration.h"
+#include "headers/ShaderDataFile.h"
+#include "headers/Logger.h"
+#include "headers/FileHandler.h"
+#include "headers/OSdetect.h"
+#include "headers/Configuration.h"
 
-ShaderDataFile::ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
-	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights), _ambientLighting(ambientLighting), _diffuseLighting(diffuseLighting), _specularLighting(specularLighting)
+ShaderDataFile::ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool cubicReflectionMap)
+	: _valid(true), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights), _ambientLighting(ambientLighting), _diffuseLighting(diffuseLighting), _specularLighting(specularLighting), _cubicReflectionMap(cubicReflectionMap)
 {
 	load(shaderFileName);
 }
 
-ShaderDataFile::ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
-	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights), _ambientLighting(ambientLighting), _diffuseLighting(diffuseLighting), _specularLighting(specularLighting)
+ShaderDataFile::ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool cubicReflectionMap)
+	: _valid(false), _shaderVersionDesktop(shaderVersionDesktop), _shaderVersionES(shaderVersionES), _maxLights(maxLights), _variableNumberOfLights(variableNumberOfLights), _ambientLighting(ambientLighting), _diffuseLighting(diffuseLighting), _specularLighting(specularLighting), _cubicReflectionMap(cubicReflectionMap)
 {
     load(vertShaderFileName, fragShaderFileName);
 }
@@ -37,6 +37,10 @@ ShaderDataFile &ShaderDataFile::load(const std::string &vertShaderFileName, cons
 	replaceMacro(bRenderer::SHADER_VERSION_MACRO(), _shaderVersionES);
 #endif
 	replaceMacro(bRenderer::SHADER_MAX_LIGHTS_MACRO(), std::to_string(_maxLights));
+
+	bRenderer::log("Loaded shader code: \n");
+	bRenderer::log(_vertShaderSrc);
+	bRenderer::log(_fragShaderSrc);
 
     return *this;
 }

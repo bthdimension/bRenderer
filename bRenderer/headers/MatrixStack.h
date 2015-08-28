@@ -18,11 +18,11 @@ public:
 
 	/**	@brief Constructor
 	*/
-    MatrixStack();
+	MatrixStack() {}
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-    ~MatrixStack();
+	virtual ~MatrixStack(){}
 
 	/**	@brief Push a translation matrix to the stack
 	*	@param[in] transformationMatrix Matrix that moves an object in space

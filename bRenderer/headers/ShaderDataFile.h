@@ -21,8 +21,9 @@ public:
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting
 	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting
 	*	@param[in] specularLighting Set true if the shader supports specular lighting
+	*	@param[in] cubicReflectionMap Set true if the shader supports a cubic reflection map
 	*/
-	explicit ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting);
+	ShaderDataFile(const std::string &shaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool cubicReflectionMap);
 
 	/**	@brief Constructor
 	*	@param[in] vertShaderFileName The filename of the vertex shader (including filename extension!)
@@ -34,8 +35,13 @@ public:
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting
 	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting
 	*	@param[in] specularLighting Set true if the shader supports specular lighting
+	*	@param[in] cubicReflectionMap Set true if the shader supports a cubic reflection map
 	*/
-	ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting);
+	ShaderDataFile(const std::string &vertShaderFileName, const std::string &fragShaderFileName, const std::string &shaderVersionDesktop, const std::string &shaderVersionES, GLuint maxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool cubicReflectionMap);
+
+	/**	@brief Virtual destructor
+	*/
+	virtual ~ShaderDataFile() {}
     
 	/**	@brief Loads shader from file
 	*	@param[in] shaderFileName The filename of both the vertex and fragment shader (without filename extension!)
@@ -76,6 +82,10 @@ public:
 	*/
 	bool supportsSpecularLighting() const	{ return _specularLighting; }
 
+	/**	@brief Returns true if the shader supports a cubic reflection map
+	*/
+	bool supportsCubicReflectionMap() const { return _cubicReflectionMap; }
+
 	/**	@brief Returns true if the shader is valid
 	*/
     bool        isValid()           const   { return _valid;         }
@@ -99,6 +109,7 @@ private:
 	bool		_ambientLighting;
 	bool		_diffuseLighting;
 	bool		_specularLighting;
+	bool		_cubicReflectionMap;
     bool        _valid;
 
 };

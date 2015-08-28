@@ -75,6 +75,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Configuration.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\CubeMap.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\DepthMap.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Font.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp" />
@@ -152,6 +154,8 @@
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
     <ClInclude Include="..\..\bRenderer\headers\Camera.h" />
     <ClInclude Include="..\..\bRenderer\headers\Configuration.h" />
+    <ClInclude Include="..\..\bRenderer\headers\CubeMap.h" />
+    <ClInclude Include="..\..\bRenderer\headers\DepthMap.h" />
     <ClInclude Include="..\..\bRenderer\headers\FileHandler.h" />
     <ClInclude Include="..\..\bRenderer\headers\Font.h" />
     <ClInclude Include="..\..\bRenderer\headers\Framebuffer.h" />

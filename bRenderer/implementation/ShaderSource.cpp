@@ -1,4 +1,4 @@
-#include "../headers/ShaderSource.h"
+#include "headers/ShaderSource.h"
 
 namespace bRenderer
 {
@@ -36,7 +36,7 @@ namespace bRenderer
     }
     
     // Matrices
-    const std::string SHADER_SOURCE_MATRICES =
+	const std::string SHADER_SOURCE_MATRICES =
 		"uniform mat4 " + DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX() + SHADER_SOURCE_LINE_ENDING
 		+ "uniform mat4 " + DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX() + SHADER_SOURCE_LINE_ENDING;
 
@@ -49,7 +49,7 @@ namespace bRenderer
 	+ "attribute vec4 " + DEFAULT_SHADER_ATTRIBUTE_TEXCOORD() + SHADER_SOURCE_LINE_ENDING;
     
     // Varyings
-    const std::string SHADER_SOURCE_VARYINGS_TEX_COORD = "varying vec4 texCoordVarying" + SHADER_SOURCE_LINE_ENDING;
+    const std::string SHADER_SOURCE_VARYINGS_TEX_COORD = "varying vec2 texCoordVarying" + SHADER_SOURCE_LINE_ENDING;
     
     const std::string SHADER_SOURCE_VARYINGS_NORMAL = "varying vec3 normalVaryingViewSpace" + SHADER_SOURCE_LINE_ENDING;
     
@@ -79,14 +79,14 @@ namespace bRenderer
     
     // Vertex Shader Main Function
     //Begin
-    std::string shader_source_function_vertex_main_begin(bool hasLighting, bool hasTextures, bool normalMap)
+	std::string shader_source_function_vertex_main_begin(bool hasLighting, bool hasTextures, bool normalMap)
     {
 		std::string main =
 			"void main() {" + SHADER_SOURCE_LINE_BREAK
 			+ "vec4 posViewSpace = " + DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX() + "*" + DEFAULT_SHADER_ATTRIBUTE_POSITION() + SHADER_SOURCE_LINE_ENDING
 			+ "float lightDistance = 0.0" + SHADER_SOURCE_LINE_ENDING;
         if (hasTextures)
-			main += "texCoordVarying = " + DEFAULT_SHADER_ATTRIBUTE_TEXCOORD() + SHADER_SOURCE_LINE_ENDING;
+			main += "texCoordVarying = " + DEFAULT_SHADER_ATTRIBUTE_TEXCOORD() + ".st" + SHADER_SOURCE_LINE_ENDING;
         if (hasLighting && !normalMap)
 			main += "normalVaryingViewSpace = mat3(" + DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX() + ")*" + DEFAULT_SHADER_ATTRIBUTE_NORMAL() + SHADER_SOURCE_LINE_ENDING;
         return main;
@@ -121,7 +121,7 @@ namespace bRenderer
 				+ "intensityBasedOnDist_" + num + " = 0.0" + SHADER_SOURCE_LINE_ENDING
 				+ "if (lightDistance <= " + DEFAULT_SHADER_UNIFORM_LIGHT_RADIUS() + num + ") {" + SHADER_SOURCE_LINE_BREAK
 				+ "intensityBasedOnDist_" + num + " = clamp(" + DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + num + " / (" + DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + num + "*lightDistance*lightDistance), 0.0, 1.0)" + SHADER_SOURCE_LINE_ENDING
-				+ "}" + SHADER_SOURCE_LINE_ENDING;
+				+ "}" + SHADER_SOURCE_LINE_BREAK;
 		}
         if (variableNumberOfLights){
             for (GLuint light_number = 0; light_number < maxLights; light_number++)
@@ -145,7 +145,7 @@ namespace bRenderer
 	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_AMBIENT_COLOR = "vec4 ambient  = vec4(clamp(" + DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR() + "*" + WAVEFRONT_MATERIAL_AMBIENT_COLOR() + ", 0.0, 1.0), 0.0)" + SHADER_SOURCE_LINE_ENDING;
     
     // Normals
-	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_TANGENT_SPACE = "vec3 surfaceNormal = normalize(texture2D(" + DEFAULT_SHADER_UNIFORM_NORMAL_MAP() + ", texCoordVarying.st).xyz *2.0 - 1.0)" + SHADER_SOURCE_LINE_ENDING;
+	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_TANGENT_SPACE = "vec3 surfaceNormal = normalize(texture2D(" + DEFAULT_SHADER_UNIFORM_NORMAL_MAP() + ", texCoordVarying).xyz *2.0 - 1.0)" + SHADER_SOURCE_LINE_ENDING;
     const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_VIEW_SPACE = "vec3 surfaceNormal = normalize(normalVaryingViewSpace)" + SHADER_SOURCE_LINE_ENDING;
     
     // Initialize diffuse lighting
@@ -161,15 +161,14 @@ namespace bRenderer
     const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_VIEW_SPACE =
     "vec4 specular = vec4(0.0,0.0,0.0,0.0)" + SHADER_SOURCE_LINE_ENDING
     + "float specularCoefficient = 0.0" + SHADER_SOURCE_LINE_ENDING
-    + "vec3 surfaceToCamera = normalize(surfaceToCameraViewSpace)" + SHADER_SOURCE_LINE_ENDING;
+	+ "vec3 surfaceToCamera = normalize(surfaceToCameraViewSpace)" + SHADER_SOURCE_LINE_ENDING;
     
     const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_TANGENT_SPACE =
     "vec4 specular = vec4(0.0,0.0,0.0,0.0)" + SHADER_SOURCE_LINE_ENDING
     + "float specularCoefficient = 0.0" + SHADER_SOURCE_LINE_ENDING
-    + "vec3 surfaceToCamera = normalize(surfaceToCameraTangentSpace)" + SHADER_SOURCE_LINE_ENDING;
-    
-    const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_NO_LIGHTS =
-    "vec4 specular = vec4(0.0,0.0,0.0,0.0)" + SHADER_SOURCE_LINE_ENDING;
+	+ "vec3 surfaceToCamera = normalize(surfaceToCameraTangentSpace)" + SHADER_SOURCE_LINE_ENDING;
+
+	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_NO_LIGHTS = "vec4 specular = vec4(0.0,0.0,0.0,0.0)" + SHADER_SOURCE_LINE_ENDING;
     
     // Lighting
     std::string shader_source_function_lighting(GLuint maxLights, bool normalMap, bool diffuseLighting, bool specularLighting, bool variableNumberOfLights)
@@ -213,7 +212,7 @@ namespace bRenderer
         if (diffuseColor)
 			diffuse += " * vec4(" + WAVEFRONT_MATERIAL_DIFFUSE_COLOR() + ",1.0)";
         if (diffuseMap)
-			diffuse += " * texture2D(" + DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP() + ", texCoordVarying.st)";
+			diffuse += " * texture2D(" + DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP() + ", texCoordVarying)";
         return diffuse + SHADER_SOURCE_LINE_ENDING;
     }
     
@@ -224,7 +223,7 @@ namespace bRenderer
         if (specularColor)
 			specular += " * vec4(" + WAVEFRONT_MATERIAL_SPECULAR_COLOR() + ", 0.0)";
         if (specularMap)
-			specular += " * texture2D(" + DEFAULT_SHADER_UNIFORM_SPECULAR_MAP() + ", texCoordVarying.st)";
+			specular += " * texture2D(" + DEFAULT_SHADER_UNIFORM_SPECULAR_MAP() + ", texCoordVarying)";
         return specular + SHADER_SOURCE_LINE_ENDING;
     }
     
@@ -235,7 +234,7 @@ namespace bRenderer
     const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_SPECULAR = "specular";
 	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART2 = ", 0.0, 1.0)" + SHADER_SOURCE_LINE_ENDING;
 	// End Text
-	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_TEXT = "gl_FragColor.a *= texture2D(" + DEFAULT_SHADER_UNIFORM_CHARACTER_MAP() + ", texCoordVarying.st).r" + SHADER_SOURCE_LINE_ENDING;
+	const std::string SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_TEXT = "gl_FragColor.a *= texture2D(" + DEFAULT_SHADER_UNIFORM_CHARACTER_MAP() + ", texCoordVarying).r" + SHADER_SOURCE_LINE_ENDING;
     
 } // namespace bRenderer
 

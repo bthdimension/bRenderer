@@ -28,7 +28,7 @@ public:
 
 	/**	@brief Constructor
 	*/
-	explicit Model() {}
+	Model() {}
 
 	/**	@brief Constructor
 	*	@param[in] r Resource management
@@ -39,7 +39,7 @@ public:
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Model(ResourceManager *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties = nullptr);
+	Model(ResourceManager *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] r Resource management
@@ -47,14 +47,14 @@ public:
 	*	@param[in] shader
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Model(ResourceManager *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr	properties = nullptr);
+	Model(ResourceManager *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] modelData
 	*	@param[in] material 
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr	properties = nullptr);
+	Model(const ModelData &modelData, MaterialPtr material, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Virtual destructor
 	*/
@@ -63,7 +63,7 @@ public:
 	/**	@brief Draws the model to the screen
 	*	@param[in] mode
 	*/
-	virtual void draw(GLenum mode = GL_TRIANGLES);
+	virtual void draw(GLenum mode = GL_TRIANGLES) override;
 
 	/**	@brief Draws the specified group of geometry to the screen
 	*	@param[in] geometryName Name of the group to draw
@@ -75,7 +75,7 @@ public:
 	*	@param[in] instanceName
 	*	@param[in] mode
 	*/
-	virtual void drawInstance(const std::string &instanceName, GLenum mode = GL_TRIANGLES);
+	virtual void drawInstance(const std::string &instanceName, GLenum mode = GL_TRIANGLES) override;
 
 	/**	@brief Creates an instance of this model and associated geometry
 	*
@@ -83,27 +83,27 @@ public:
 	*
 	*	@param[in] instanceName	Name of the instance
 	*/
-	InstanceMapPtr	addInstance(const std::string &instanceName);
+	virtual InstanceMapPtr	addInstance(const std::string &instanceName);
 
 	/**	@brief Get the properties of a geometry instance
 	*	@param[in] instanceName	Name of the instance
 	*	@param[in] geometryName	Name of the geometry
 	*/
-	PropertiesPtr	getInstanceProperties(const std::string &instanceName, const std::string &geometryName);
+	virtual PropertiesPtr	getInstanceProperties(const std::string &instanceName, const std::string &geometryName);
 
 	/**	@brief Get the instance properties for every shader used in the model
 	*	@param[in] instanceName	Name of the instance
 	*/
-	InstanceMapPtr	getInstanceProperties(const std::string &instanceName);
+	virtual InstanceMapPtr	getInstanceProperties(const std::string &instanceName);
 
 	/**	@brief Removes an instance of the model and associated geometry
 	*	@param[in] instanceName	Name of the instance
 	*/
-	void			removeInstance(const std::string &instanceName);
+	virtual void			removeInstance(const std::string &instanceName);
 
 	/**	@brief Removes all instances of the model and associated geometry
 	*/
-	void			clearInstances();
+	virtual void			clearInstances();
     
 	/**	@brief Returns the material of the model
 	*/
@@ -145,7 +145,7 @@ public:
 
 	/**	@brief Returns the bounding box of the geometry in object space
 	*/
-	vmml::AABBf     getBoundingBoxObjectSpace()			{ return _boundingBox; }
+	vmml::AABBf     &getBoundingBoxObjectSpace()			{ return _boundingBox; }
 
 	/**	@brief Sets the bounding box of the geometry in object space
 	*	@param[in] arg The bounding box for the geometry in object space
@@ -156,12 +156,12 @@ public:
 	*	@param[in] name	Name of the geometry
 	*	@param[in] geometry A pointer to the geometry
 	*/
-	void			addGeometry(const std::string &name, GeometryPtr geometry);
+	virtual void			addGeometry(const std::string &name, GeometryPtr geometry);
 
 	/**	@brief Removes geometry from the model
 	*	@param[in] name	Name of the geometry
 	*/
-	void			removeGeometry(const std::string &name)								{ _groups.erase(name); }
+	virtual void			removeGeometry(const std::string &name)								{ _groups.erase(name); }
 
 
 private:

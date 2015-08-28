@@ -19,7 +19,7 @@ void ResourceManager::setAmbientColor(const vmml::Vector3f &ambientColor)
 	_ambientColor = ambientColor;
 }
 
-MaterialPtr ResourceManager::loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
+MaterialPtr ResourceManager::loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting)
 {
 	// log activity
 	bRenderer::log("loading Material: " + materialName, bRenderer::LM_SYS);
@@ -27,7 +27,16 @@ MaterialPtr ResourceManager::loadObjMaterial(const std::string &fileName, const 
 	if (getModel(materialName))
 		return _materials[materialName];
 
-	return createMaterial(materialName, OBJLoader::loadMaterial(fileName, materialName), loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting));
+	MaterialData materialData = OBJLoader::loadMaterial(fileName, materialName);
+
+	bool diffuseColor = materialData.vectors.count(bRenderer::WAVEFRONT_MATERIAL_DIFFUSE_COLOR()) > 0;
+	bool diffuseMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()) > 0;
+	bool diffuseLighting = diffuseMap || diffuseColor;
+	bool specularLighting = shaderMaxLights > 0 && materialData.scalars.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT()) > 0;
+	bool cubicReflectionMap = materialData.cubeTextures.size() >= 6;
+	ShaderPtr shader = loadShaderFile(shaderName.empty() ? materialName : shaderName, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting, cubicReflectionMap);
+
+	return createMaterial(materialName, materialData, shader);
 }
 
 MaterialPtr ResourceManager::loadObjMaterial(const std::string &fileName, const std::string &materialName, ShaderPtr shader)
@@ -98,9 +107,26 @@ TexturePtr ResourceManager::loadTexture(const std::string &fileName)
 	if (getTexture(name))
 		return _textures[name];
 
-	// create texture
+	// create texture data
 	TextureData textureData(fileName);
+	// create texture
 	return createTexture(name, textureData);
+}
+
+CubeMapPtr ResourceManager::loadCubeMap(const std::string &name, const std::vector<std::string> &fileNames)
+{
+	if (getCubeMap(name))
+		return _cubeMaps[name];
+
+	// create texture data
+	std::vector<TextureData> data;
+	if (fileNames.size() >= 6){
+		for (GLuint i = 0; i < 6; i++){
+			data.push_back(TextureData(fileNames[i]));
+		}
+	}
+	// create cube map
+	return createCubeMap(name, data);
 }
 
 FontPtr ResourceManager::loadFont(const std::string &fileName, GLuint fontPixelSize)
@@ -116,14 +142,14 @@ FontPtr ResourceManager::loadFont(const std::string &fileName, GLuint fontPixelS
 	return font;
 }
 
-ShaderPtr ResourceManager::loadShaderFile(std::string shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting)
+ShaderPtr ResourceManager::loadShaderFile(std::string shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool cubicReflectionMap)
 {
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderDataFile shaderData(shaderName, _shaderVersionDesktop, _shaderVersionES, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting);
+	ShaderDataFile shaderData(shaderName, _shaderVersionDesktop, _shaderVersionES, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting, cubicReflectionMap);
 	ShaderPtr shader = createShader(name, shaderData);
 	if (shader) return shader;
 
@@ -185,7 +211,8 @@ MaterialPtr ResourceManager::createMaterialShaderCombination(const std::string &
 		bool diffuseMap = materialData.textures.count(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()) > 0;
 		bool diffuseLighting = diffuseMap || diffuseColor;
 		bool specularLighting = shaderMaxLights > 0 && materialData.scalars.count(bRenderer::WAVEFRONT_MATERIAL_SPECULAR_EXPONENT()) > 0;
-		shader = loadShaderFile(name, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting);
+		bool cubicReflectionMap = materialData.cubeTextures.size() >= 6;
+		shader = loadShaderFile(name, shaderMaxLights, variableNumberOfLights, ambientLighting, diffuseLighting, specularLighting, cubicReflectionMap);
 	}
 	else{
 		shader = generateShader(name, shaderMaxLights, ambientLighting, materialData, variableNumberOfLights, isText);
@@ -300,6 +327,47 @@ TexturePtr ResourceManager::createTexture(const std::string &name, GLsizei width
 	return texture;
 }
 
+CubeMapPtr ResourceManager::createCubeMap(const std::string &name, const std::vector<TextureData> &data)
+{
+	if (getCubeMap(name)) return getCubeMap(name);
+	CubeMapPtr &cubeMap = _cubeMaps[name];
+
+	cubeMap = CubeMapPtr(new CubeMap(data));
+
+	return cubeMap;
+}
+
+CubeMapPtr ResourceManager::createCubeMap(const std::string &name, GLsizei width, GLenum format, const std::vector<ImageDataPtr> &imageData)
+{
+	if (getCubeMap(name)) return getCubeMap(name);
+	CubeMapPtr &cubeMap = _cubeMaps[name];
+
+	// create empty texture data
+	std::vector<TextureData> data;
+	if (imageData.size() < 6){
+		for (GLuint i = 0; i < 6; i++)
+			data.push_back(TextureData(width, width, format, nullptr));
+	}
+	else{
+		for (GLuint i = 0; i < 6; i++)
+			data.push_back(TextureData(width, width, format, imageData.at(i)));
+	}
+
+	cubeMap = CubeMapPtr(new CubeMap(data));
+
+	return cubeMap;
+}
+
+DepthMapPtr ResourceManager::createDepthMap(const std::string &name, GLint width, GLint height)
+{
+	if (getDepthMap(name)) return getDepthMap(name);
+	DepthMapPtr &depthMap = _depthMaps[name];
+
+	depthMap = DepthMapPtr(new DepthMap(width, height));
+
+	return depthMap;
+}
+
 ShaderPtr ResourceManager::createShader(const std::string &name, const IShaderData &shaderData)
 {
 	if (shaderData.isValid())
@@ -409,6 +477,14 @@ FramebufferPtr ResourceManager::createFramebuffer(const std::string &name)
 	return framebuffer;
 }
 
+FramebufferPtr ResourceManager::createFramebuffer(const std::string &name, GLint width, GLint height)
+{
+    if (getFramebuffer(name)) return getFramebuffer(name);
+    FramebufferPtr &framebuffer = _framebuffers[name];
+    framebuffer = FramebufferPtr(new Framebuffer(width, height));
+    return framebuffer;
+}
+
 bool ResourceManager::addShader(const std::string &name, ShaderPtr ptr)
 {
 	if (getShader(name)) return false;
@@ -420,6 +496,20 @@ bool ResourceManager::addTexture(const std::string &name, TexturePtr ptr)
 {
 	if (getTexture(name)) return false;
 	_textures.insert(TextureMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addCubeMap(const std::string &name, CubeMapPtr ptr)
+{
+	if (getCubeMap(name)) return false;
+	_cubeMaps.insert(CubeMapMap::value_type(name, ptr));
+	return true;
+}
+
+bool ResourceManager::addDepthMap(const std::string &name, DepthMapPtr ptr)
+{
+	if (getDepthMap(name)) return false;
+	_depthMaps.insert(DepthMapMap::value_type(name, ptr));
 	return true;
 }
 
@@ -497,6 +587,20 @@ TexturePtr ResourceManager::getTexture(const std::string &name)
 {
 	if (_textures.count(name) > 0)
 		return _textures[name];
+	return nullptr;
+}
+
+CubeMapPtr ResourceManager::getCubeMap(const std::string &name)
+{
+	if (_cubeMaps.count(name) > 0)
+		return _cubeMaps[name];
+	return nullptr;
+}
+
+DepthMapPtr ResourceManager::getDepthMap(const std::string &name)
+{
+	if (_depthMaps.count(name) > 0)
+		return _depthMaps[name];
 	return nullptr;
 }
 
@@ -588,6 +692,16 @@ void ResourceManager::removeTexture(const std::string &name)
 	_textures.erase(name);
 }
 
+void ResourceManager::removeCubeMap(const std::string &name)
+{
+	_cubeMaps.erase(name);
+}
+
+void ResourceManager::removeDepthMap(const std::string &name)
+{
+	_depthMaps.erase(name);
+}
+
 void ResourceManager::removeFont(const std::string &name)
 {
 	_fonts.erase(name);
@@ -637,6 +751,8 @@ void ResourceManager::clear()
 {
 	_shaders.clear();
 	_textures.clear();
+	_cubeMaps.clear();
+	_depthMaps.clear();
 	_fonts.clear();
 	_materials.clear();
 	_properties.clear();

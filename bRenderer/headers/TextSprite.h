@@ -32,6 +32,10 @@ public:
 	*/
 	TextSprite(MaterialPtr material, const std::string &text, FontPtr font, PropertiesPtr properties = nullptr);
 
+	/**	@brief Virtual destructor
+	*/
+	virtual ~TextSprite() {}
+
 	/**	@brief Set a text string
 	*	@param[in] text The string to be displayed
 	*/

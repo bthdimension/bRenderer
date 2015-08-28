@@ -1,10 +1,4 @@
-#include "../headers/MatrixStack.h"
-
-MatrixStack::MatrixStack()
-{}
-
-MatrixStack::~MatrixStack()
-{}
+#include "headers/MatrixStack.h"
 
 void MatrixStack::pushTranslation(const vmml::Matrix4f &transformationMatrix) 
 {

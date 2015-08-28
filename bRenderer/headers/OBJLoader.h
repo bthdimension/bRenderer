@@ -65,6 +65,10 @@ public:
 		, _flags(flags)
 	{}
 
+	/**	@brief Virtual destructor
+	*/
+	virtual ~OBJLoader() {}
+
 	/**	@brief Loads the model data from an input stream
 	*	@param[in] istream
 	*/

@@ -15,6 +15,10 @@ public:
 	typedef std::unordered_map< std::string, GeometryDataPtr >    GroupMap;
 
 	/* Functions */
+
+	/**	@brief Constructor
+	*/
+	ModelData(){}
     
 	/**	@brief Constructor
 	*	@param[in] fileName The name of the obj file
@@ -29,18 +33,18 @@ public:
 	*/
     ModelData(bool flipT = false, bool flipZ = false);
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-    ~ModelData();
+	virtual ~ModelData();
     
 	/**	@brief Loads the model from a file
 	*	@param[in] fileName The name of the obj file
 	*/
-    ModelData &load(const std::string &fileName);
+    virtual ModelData &load(const std::string &fileName);
     
 	/**	@brief Returns the geometry groups
 	*/
-    GroupMap getData() const;
+	virtual GroupMap getData() const;
 
 	/**	@brief Returns true if the T axis of texture is flipped
 	*/

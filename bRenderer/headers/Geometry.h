@@ -42,13 +42,13 @@ public:
 	/**	@brief Draws the geometry to the screen
 	*	@param[in] mode 
 	*/
-	virtual void draw(GLenum mode = GL_TRIANGLES);
+	virtual void draw(GLenum mode = GL_TRIANGLES) override;
 
 	/**	@brief Draws an instance of the geometry to the screen
 	*	@param[in] instanceName
 	*	@param[in] mode
 	*/
-	void drawInstance(const std::string &instanceName, GLenum mode = GL_TRIANGLES);
+	virtual void drawInstance(const std::string &instanceName, GLenum mode = GL_TRIANGLES) override;
 
 	/**	@brief Creates an instance of this geometry
 	*	@param[in] instanceName	Name of the instance
@@ -59,21 +59,21 @@ public:
 	*	@param[in] instanceName	Name of the instance
 	*	@param[in] instanceProperties Properties for the instance
 	*/
-	void addInstance(const std::string &instanceName, PropertiesPtr instanceProperties);
+	virtual void addInstance(const std::string &instanceName, PropertiesPtr instanceProperties);
 
 	/**	@brief Get the properties of a geometry instance
 	*	@param[in] instanceName	Name of the instance
 	*/
-	PropertiesPtr	getInstanceProperties(const std::string &instanceName);
+	virtual PropertiesPtr	getInstanceProperties(const std::string &instanceName);
 
 	/**	@brief Removes an instance
 	*	@param[in] instanceName	Name of the instance
 	*/
-	void			removeInstance(const std::string &instanceName);
+	virtual void			removeInstance(const std::string &instanceName);
 
 	/**	@brief Removes all instances
 	*/
-	void			clearInstances();
+	virtual void			clearInstances();
 
 	/**	@brief Returns a pointer to the vertices of the geometry
 	*/
@@ -113,7 +113,7 @@ public:
 
 	/**	@brief Returns the bounding box of the geometry in object space
 	*/
-	vmml::AABBf     getBoundingBoxObjectSpace()					{ return _boundingBox; }
+	vmml::AABBf     &getBoundingBoxObjectSpace()					{ return _boundingBox; }
 
 	/**	@brief Sets the bounding box of the geometry in object space
 	*	@param[in] arg The bounding box for the geometry in object space
@@ -126,30 +126,30 @@ protected:
 
 	/**	@brief Initializes a vertex buffer for the geometry data
 	*/
-	void initializeVertexBuffer();
+	virtual void initializeVertexBuffer();
 
 	/**	@brief Allocates the vertex data
 	*/
-	VertexDataPtr   allocVertexData(size_t nVertices);
+	virtual VertexDataPtr   allocVertexData(size_t nVertices);
 
 	/**	@brief Allocates the index data
 	*/
-	IndexDataPtr    allocIndexData(size_t nIndices);
+	virtual IndexDataPtr    allocIndexData(size_t nIndices);
 
 	/**	@brief Copies the given vertices into the geometry object
 	*	@param[in] arg The vertices that should be used in the geometry 
 	*/
-	VertexDataPtr   copyVertexData(const GeometryData::VboVertices &arg);
+	virtual VertexDataPtr   copyVertexData(const GeometryData::VboVertices &arg);
 
 	/**	@brief Copies the given indices into the geometry object
 	*	@param[in] arg The indices that should be used in the geometry
 	*/
-	IndexDataPtr    copyIndexData(const GeometryData::VboIndices &arg);
+	virtual IndexDataPtr    copyIndexData(const GeometryData::VboIndices &arg);
 
 	/**	@brief Creates an axis-aligned bounding box around the object
 	*	@param[in] arg The vertices that should be used in the geometry
 	*/
-	vmml::AABBf createBoundingBoxObjectSpace(const GeometryData::VboVertices &arg);
+	virtual vmml::AABBf createBoundingBoxObjectSpace(const GeometryData::VboVertices &arg);
 
 private:
 

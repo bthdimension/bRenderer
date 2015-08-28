@@ -17,8 +17,10 @@ public:
 	/* Functions */
 
 	/**	@brief Constructor
+	*
+	*	This constructor generates a texture yet doesn't aplly any settings or data
 	*/
-	Texture(){}
+	Texture() { glGenTextures(1, &_textureID); }
 
 	/**	@brief Constructor
 	*	@param[in] data The texture data to be used
@@ -40,12 +42,12 @@ public:
     
 	/**	@brief Returns texture id
 	*/
-    GLuint getTextureID();
+	GLuint getTextureID()	{ return _textureID; }
 
 	/**	@brief Binds the texture
 	*	@param[in] texUnit Specifies which texture unit to bind it to
 	*/
-    void bind(GLint texUnit = GL_TEXTURE0);
+    virtual void bind(GLint texUnit = GL_TEXTURE0);
     
 private:
 

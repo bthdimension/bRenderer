@@ -27,6 +27,10 @@ public:
 
 	/* Functions */
 
+	/**	@brief Virtual destructor
+	*/
+	virtual ~Properties() {}
+
 	/**	@brief Returns all 4x4 matrices
 	*/
 	const Matrix4x4Map	&getMatrices4x4()												{ return _matrices4x4; }
@@ -129,7 +133,7 @@ public:
 
 	/**	@brief Returns the name of the properties
 	*/
-	std::string getName()                       { return _name; }
+	const std::string &getName()                       { return _name; }
 
 	/**	@brief Sets the name of the properties
 	*	@param[in] arg Name for the properties

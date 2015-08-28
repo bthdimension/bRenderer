@@ -14,6 +14,7 @@ public:
 
 	/* Typedefs */
 	typedef std::unordered_map<std::string, std::string>		TextureMap;
+	typedef std::unordered_map<std::string, std::string>		CubeRelflectionMap;
 	typedef std::unordered_map<std::string, vmml::Vector3f>		Vector3Map;
 	typedef std::unordered_map<std::string, GLfloat>			ScalarMap;
 
@@ -48,6 +49,10 @@ public:
 	*	@param[in] isText Set true if the shader should be used for displaying text
 	*/
 	ShaderDataGenerator(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText);
+
+	/**	@brief Virtual destructor
+	*/
+	virtual ~ShaderDataGenerator() {}
 
 	/**	@brief Constructor
 	*	@param[in] maxLights The maximum number of light sources to be used 
@@ -94,6 +99,10 @@ public:
 	*/
 	bool supportsSpecularLighting() const	{ return _specularLighting; }
 
+	/**	@brief Returns true if the shader supports a cubic reflection map
+	*/
+	bool supportsCubicReflectionMap() const { return _cubicReflectionMap; }
+
 	/**	@brief Returns true if the shader is valid
 	*/
 	bool        isValid()           const	{ return _valid; }
@@ -125,6 +134,7 @@ private:
 	bool		_diffuseMap;
 	bool		_normalMap;
 	bool		_specularMap;
+	bool		_cubicReflectionMap;
 	bool		_transparencyValue;
 	bool		_isText;
 

@@ -1,5 +1,6 @@
-#include "../headers/Framebuffer.h"
-#include "../headers/Logger.h"
+#include "headers/Framebuffer.h"
+#include "headers/Logger.h"
+#include "headers/OSdetect.h"
 
 /* Constructors */
 
@@ -31,14 +32,17 @@ void Framebuffer::bind(bool preserveCurrentFramebuffer)
 	if (_autoResize){
 		GLint vp[4];
 		glGetIntegerv(GL_VIEWPORT, vp);
-		resize(vp[2], vp[3]);
+		resize(vp[2], vp[3], _autoResize);
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
 }
 
-void Framebuffer::bind(TexturePtr texture, bool preserveCurrentFramebuffer)
+void Framebuffer::bindTexture(TexturePtr texture, bool preserveCurrentFramebuffer)
 {
 	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
 	if (_preserveCurrentFramebuffer)
@@ -47,20 +51,87 @@ void Framebuffer::bind(TexturePtr texture, bool preserveCurrentFramebuffer)
 	if (_autoResize){
 		GLint vp[4];
 		glGetIntegerv(GL_VIEWPORT, vp);
-		resize(vp[2], vp[3]);
+		resize(vp[2], vp[3], _autoResize);
 	}
-	// Resize texture 
-	glBindTexture(GL_TEXTURE_2D, texture->getTextureID());
+	// Resize and reset texture
+	texture->bind();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);	
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->getTextureID(), 0);
 	// Important: glClear has to be called after binding the texture
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
+}
+
+void Framebuffer::bindCubeMap(CubeMapPtr cubeMap, GLuint cubeFace, bool preserveCurrentFramebuffer)
+{
+	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
+	if (_preserveCurrentFramebuffer)
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFbo);
+
+	if (_autoResize){
+		GLint vp[4];
+		glGetIntegerv(GL_VIEWPORT, vp);
+		resize(vp[2], vp[3], _autoResize);
+	}
+	// Resize and reset texture 
+	cubeMap->bind();
+	GLsizei size = (_width > _height) ? _width : _height;
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + cubeFace, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + cubeFace, cubeMap->getTextureID(), 0);
+	// Important: glClear has to be called after binding the texture
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
+}
+
+void Framebuffer::bindDepthMap(DepthMapPtr depthMap, bool preserveCurrentFramebuffer)
+{
+	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
+	if (_preserveCurrentFramebuffer)
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFbo);
+
+	if (_autoResize){
+		GLint vp[4];
+		glGetIntegerv(GL_VIEWPORT, vp);
+		resize(vp[2], vp[3], _autoResize);
+	}
+	// Resize and reset texture
+	depthMap->bind();
+#ifdef B_OS_DESKTOP
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _width, _height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+#endif
+#ifdef B_OS_IOS
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _width, _height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, 0);
+#endif	
+
+	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+#ifdef B_OS_DESKTOP
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap->getTextureID(), 0);
+	// No color output is needed
+	glDrawBuffer(GL_NONE);
+#endif
+#ifdef B_OS_IOS
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap->getTextureID(), 0);
+#endif
+	// Important: glClear has to be called after binding the texture
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
 }
 
 void Framebuffer::unbind()
 {
+#ifdef B_OS_DESKTOP
+	glDrawBuffer(GL_BACK);
+#endif
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	if (_preserveCurrentFramebuffer)
 		glBindFramebuffer(GL_FRAMEBUFFER, _oldFbo);
@@ -79,8 +150,9 @@ GLint Framebuffer::getCurrentFramebuffer()
 	return currentFbo;
 }
 
-void Framebuffer::resize(GLint width, GLint height)
+void Framebuffer::resize(GLint width, GLint height, bool autoResize)
 {
+    _autoResize = autoResize;
 	if (_width != width || _height != height){
 		_width = width;
 		_height = height;

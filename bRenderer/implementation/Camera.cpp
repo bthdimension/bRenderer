@@ -1,5 +1,5 @@
-#include "../headers/Camera.h"
-#include "../headers/Configuration.h"
+#include "headers/Camera.h"
+#include "headers/Configuration.h"
 #include <cassert>
 
 /* Constructor and Destructor */
@@ -18,9 +18,6 @@ Camera::Camera(const vmml::Vector3f &position, const vmml::Vector3f &rotationAxe
 
 Camera::Camera(const vmml::Vector3f &position, const vmml::Vector3f &rotationAxes, GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far)
 	: _position(position), _rotationAxes(rotationAxes), _fov(fov), _aspect(aspect), _near(near), _far(far)
-{}
-
-Camera::~Camera()
 {}
 
 /* Public Functions */
@@ -53,37 +50,6 @@ void Camera::resetCamera()
 	_rotationAxes = bRenderer::DEFAULT_CAMERA_ROTATION_AXES();
 }
 
-
-void Camera::setPosition(const vmml::Vector3f &position)
-{
-	_position = position;
-}
-
-void Camera::setRotation(const vmml::Vector3f &rotationAxes)
-{
-	_rotationAxes = rotationAxes;
-}
-
-void Camera::setFieldOfView(GLfloat fov)
-{
-	_fov = fov;
-}
-
-void Camera::setAspectRatio(GLfloat aspect)
-{
-	_aspect = aspect;
-}
-
-void Camera::setNearClippingPlane(GLfloat near)
-{
-	_near = near;
-}
-
-void Camera::setFarClippingPlane(GLfloat far)
-{
-	_far = far;
-}
-
 vmml::Matrix4f Camera::getViewMatrix(){
 	return getRotation() * vmml::create_translation(getPosition());
 }
@@ -95,11 +61,6 @@ vmml::Matrix4f Camera::getInverseViewMatrix(){
 vmml::Matrix4f Camera::getProjectionMatrix()
 {
 	return createPerspective(_fov, _aspect, _near, _far);
-}
-
-vmml::Vector3f Camera::getPosition()
-{
-	return _position;
 }
 
 vmml::Matrix4f Camera::getRotation()

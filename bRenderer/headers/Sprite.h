@@ -13,20 +13,20 @@ public:
 
 	/**	@brief Constructor
 	*/
-	explicit Sprite(){}
+	Sprite(){}
 
 	/**	@brief Constructor
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Sprite(bool flipT,  PropertiesPtr properties = nullptr);
+	Sprite(bool flipT,  PropertiesPtr properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] material
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Sprite(MaterialPtr material, bool flipT, PropertiesPtr	properties = nullptr);
+	Sprite(MaterialPtr material, bool flipT, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] r Resource management
@@ -36,7 +36,7 @@ public:
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Sprite(ResourceManager *r, const std::string &textureFileName, const std::string &materialName, ShaderPtr shader, bool flipT, PropertiesPtr properties = nullptr);
+	Sprite(ResourceManager *r, const std::string &textureFileName, const std::string &materialName, ShaderPtr shader, bool flipT, PropertiesPtr properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] r Resource management
@@ -47,11 +47,11 @@ public:
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	explicit Sprite(ResourceManager *r, const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights, bool flipT, PropertiesPtr properties = nullptr);
+	Sprite(ResourceManager *r, const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights, bool flipT, PropertiesPtr properties = nullptr);
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-	~Sprite() {}
+	virtual ~Sprite() {}
 
 private:
 

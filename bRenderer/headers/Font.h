@@ -19,22 +19,28 @@ public:
 	/* Functions */
 
 	/**	@brief Constructor
+	*/
+	Font() { _initialized = false; }
+
+	/**	@brief Constructor
 	*	@param[in] fileName File name including extension
 	*	@param[in] fontPixelSize The nominal  font size in pixels (the characters may vary in size)
 	*/
 	Font(const std::string &fontFileName, GLuint fontPixelSize);
 
-	~Font()	{ reset(); }
+	/**	@brief Virtual destructor
+	*/
+	virtual ~Font()	{ reset(); }
 
 	/**	@brief Loads a font file
 	*	@param[in] fileName File name including extension
 	*/
-	void loadFont(const std::string &fontFileName){ init(fontFileName, _fontPixelSize); }
+	virtual void loadFont(const std::string &fontFileName){ init(fontFileName, _fontPixelSize); }
 
 	/**	@brief Set the nominal font size in pixels (the characters may vary in size)
 	*	@param[in] fontPixelSize The nominal font size in pixels
 	*/
-	void setPixelSize(GLuint fontPixelSize) { init(_fontFileName, fontPixelSize); }
+	virtual void setPixelSize(GLuint fontPixelSize) { init(_fontFileName, fontPixelSize); }
 
 	/**	@brief Returns the nominal font size in pixels (the characters may vary in size)
 	*/
@@ -42,12 +48,12 @@ public:
 
 	/**	@brief Returns the fil name of the current font (including extension)
 	*/
-	std::string getFontFileName() { return _fontFileName; }
+	const std::string &getFontFileName() { return _fontFileName; }
 
 	/**	@brief Returns a character
 	*	@param[in] c The character to get
 	*/
-	ftgl::texture_glyph_t *getCharacter(char c);
+	virtual ftgl::texture_glyph_t *getCharacter(char c);
 
 	/**	@brief Returns the character atlas
 	*/

@@ -276,6 +276,12 @@
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataGenerator.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\CubeMap.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\DepthMap.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
@@ -417,6 +423,12 @@
       <Filter>externalLibraries\freetype-gl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataGenerator.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\CubeMap.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\DepthMap.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>

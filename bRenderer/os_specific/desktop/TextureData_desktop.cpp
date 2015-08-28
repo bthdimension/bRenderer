@@ -6,11 +6,6 @@
 #include "bRenderer.h"
 #include "FreeImage.h"
 
-TextureData::TextureData(const std::string &fileName)
-{
-	load(fileName);
-}
-
 TextureData &TextureData::load(const std::string &fileName)
 {
 	std::string fullFileName = bRenderer::getFilePath(fileName);

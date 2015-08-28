@@ -1,5 +1,4 @@
 #include <map>
-
 #include "headers/ModelData.h"
 #include "obj_parser/obj_parser.hpp"
 #include "headers/FileHandler.h"
@@ -38,7 +37,8 @@ ModelData::GroupMap ModelData::getData() const
 ModelData &ModelData::load(const std::string &fileName)
 {
     std::ifstream file(bRenderer::getFilePath(fileName), std::ifstream::in);
-	_objLoader->load(file);
+	if (!_objLoader) _objLoader = new OBJLoader(this, obj::obj_parser::parse_blank_lines_as_comment | obj::obj_parser::triangulate_faces | obj::obj_parser::translate_negative_indices);
+		_objLoader->load(file);
     return *this;
 }
 

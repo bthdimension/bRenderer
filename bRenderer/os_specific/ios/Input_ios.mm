@@ -1,6 +1,14 @@
-#include "../../headers/Input.h"
+#include "headers/Input.h"
 
 Input::Input()
+{
+    _motionManager = [[CMMotionManager alloc] init];
+    _motionManager.deviceMotionUpdateInterval = 1.0f/60.0f;
+    [_motionManager startDeviceMotionUpdates];
+}
+
+Input::Input(ViewPtr view)
+    : _view(view)
 {
     _motionManager = [[CMMotionManager alloc] init];
     _motionManager.deviceMotionUpdateInterval = 1.0f/60.0f;

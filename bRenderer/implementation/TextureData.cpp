@@ -1,7 +1,10 @@
-#include "../headers/TextureData.h"
+#include "headers/TextureData.h"
 
-TextureData::TextureData() 
-{}
+TextureData::TextureData(const std::string &fileName)
+{
+	load(fileName);
+}
+
 
 TextureData::TextureData(GLsizei width, GLsizei height, GLenum format, ImageDataPtr imageData)
 {

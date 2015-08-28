@@ -37,9 +37,9 @@ public:
 	*/
 	View();
 	
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-	~View();
+	virtual ~View();
 
 	/**	@brief Do all necessary initializations for the view to be ready to run (returns true in the case of success)
 	*	@param[in] windowTitle The title for the window on desktop systems (optional)
@@ -159,6 +159,12 @@ public:
 	*	@param[in] height The height in pixels
 	*/
 	void setSize(GLint width, GLint height);
+
+	/**	@brief Sets the size of the viewport in pixels
+	*	@param[in] width The width in pixels
+	*	@param[in] height The height in pixels
+	*/
+	void setViewportSize(GLint width, GLint height);
 
 	/**	@brief Sets the position of the upper left corner of the view
 	*	@param[in] x The x position of the upper left corner of the view

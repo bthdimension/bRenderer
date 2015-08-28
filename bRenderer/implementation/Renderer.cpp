@@ -83,8 +83,7 @@ bool Renderer::initRenderer(std::string windowTitle)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Input
-    if(!_input)  			_input = InputPtr(new Input);
-    _input->setView(_view);
+    if(!_input)  			_input = InputPtr(new Input(_view));
 
 	// Resource management
 	if (!_resourceManager)  _resourceManager = ResourceManagerPtr(new ResourceManager);
@@ -133,10 +132,10 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen, std::str
 
 void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
 {
-	drawModel(modelName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry);
+	drawModel(_resourceManager->getModel(modelName), modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry);
 }
 
-void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
+void Renderer::drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
 {
 	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
 	vmml::Matrix4f modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
@@ -146,13 +145,13 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 
 	// Frsutum culling
 	if (doFrustumCulling){
-		visibility = viewFrustumCulling(_resourceManager->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
+		visibility = viewFrustumCulling(model->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 	}
 
 	// Draw geometry
 	if (visibility != vmml::VISIBILITY_NONE){
-		Model::GroupMap &groupsModel = _resourceManager->getModel(modelName)->getGroups();
+		Model::GroupMap &groupsModel = model->getGroups();
 		for (auto i = groupsModel.begin(); i != groupsModel.end(); ++i)
 		{
 			GeometryPtr geometry = i->second;
@@ -183,7 +182,7 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 						if (numLights > maxLights)
 							numLights = static_cast<GLfloat>(maxLights);
 
-						if (variableNumberOfLights)
+						if (variableNumberOfLights && numLights > 0)
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
 						for (int i = 0; i < numLights; i++){
 							std::string pos = std::to_string(i);
@@ -211,10 +210,10 @@ void Renderer::drawModel(const std::string &modelName, const vmml::Matrix4f &mod
 
 void Renderer::queueModelInstance(const std::string &modelName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
 {
-	queueModelInstance(modelName, instanceName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry, isTransparent, blendSfactor, blendDfactor, customDistance);
+	queueModelInstance(_resourceManager->getModel(modelName), instanceName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry, isTransparent, blendSfactor, blendDfactor, customDistance);
 }
 
-void Renderer::queueModelInstance(const std::string &modelName, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
+void Renderer::queueModelInstance(ModelPtr model, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
 {
 	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
 	vmml::Matrix4f modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
@@ -222,7 +221,7 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 
 	// Frsutum culling
 	if (doFrustumCulling){
-		visibility = viewFrustumCulling(_resourceManager->getModel(modelName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
+		visibility = viewFrustumCulling(model->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
 	}
 
@@ -230,7 +229,7 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 	if (visibility != vmml::VISIBILITY_NONE){
 		
 		// Update instance properties
-		Model::InstanceMapPtr instanceMap = _resourceManager->getModel(modelName)->addInstance(instanceName);
+		Model::InstanceMapPtr instanceMap = model->addInstance(instanceName);
 		for (auto i = instanceMap->begin(); i != instanceMap->end(); ++i)
 		{
 			ShaderPtr shader = i->first;
@@ -247,7 +246,7 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 				if (numLights > maxLights)
 					numLights = static_cast<GLfloat>(maxLights);
 
-				if (variableNumberOfLights)
+				if (variableNumberOfLights && numLights > 0)
 					properties->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
 				for (int i = 0; i < numLights; i++){
 					std::string pos = std::to_string(i);
@@ -268,7 +267,7 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 		}
 
 		// Queue geometry
-		Model::GroupMap &groupsModel = _resourceManager->getModel(modelName)->getGroups();
+		Model::GroupMap &groupsModel = model->getGroups();
 		for (auto i = groupsModel.begin(); i != groupsModel.end(); ++i)
 		{
 			std::string geometryName = i->first;
@@ -302,134 +301,22 @@ void Renderer::queueModelInstance(const std::string &modelName, const std::strin
 
 void Renderer::drawText(const std::string &textSpriteName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling)
 {
-	drawText(textSpriteName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling);
-}
-
-void Renderer::drawText(const std::string &textSpriteName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling)
-{
-	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
-	vmml::Matrix4f modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
-	vmml::Visibility visibility = vmml::VISIBILITY_FULL;
-
-	// Frsutum culling
-	if (doFrustumCulling){
-		visibility = viewFrustumCulling(_resourceManager->getTextSprite(textSpriteName)->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
-		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(textSpriteName + " was culled");
-	}
-
-	// Draw geometry
-	if (visibility != vmml::VISIBILITY_NONE){
-		TextSpritePtr textSprite = _resourceManager->getTextSprite(textSpriteName);
-		ShaderPtr shader = textSprite->getMaterial()->getShader();
-
-		if (shader)
-		{
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX(), projectionMatrix);
-			shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX(), modelViewMatrix);
-
-			// Lighting
-			if (shader->supportsDiffuseLighting() || shader->supportsSpecularLighting()){
-				GLfloat numLights = static_cast<GLfloat>(lightNames.size());
-				bool variableNumberOfLights = shader->supportsVariableNumberOfLights();
-				GLuint maxLights = shader->getMaxLights();
-				if (numLights > maxLights)
-					numLights = static_cast<GLfloat>(maxLights);
-
-				if (variableNumberOfLights)
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
-				for (int i = 0; i < numLights; i++){
-					std::string pos = std::to_string(i);
-					LightPtr l = _resourceManager->getLight(lightNames[i]);
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
-					if (shader->supportsDiffuseLighting())
-						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
-					if (shader->supportsSpecularLighting())
-						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, l->getSpecularColor());
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, l->getIntensity());
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
-					shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_RADIUS() + pos, l->getRadius());
-				}
-			}
-			// Ambient
-			if (shader->supportsAmbientLighting())
-				shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _resourceManager->getAmbientColor());
-		}
-
-		textSprite->draw();
-	}
+	drawModel(_resourceManager->getTextSprite(textSpriteName), modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, false);
 }
 
 void Renderer::queueTextInstance(const std::string &textSpriteName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
 {
-	queueTextInstance(textSpriteName, instanceName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, blendSfactor, blendDfactor, customDistance);
-}
-
-void Renderer::queueTextInstance(const std::string &textSpriteName, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
-{
-	vmml::Matrix4f modelViewMatrix = viewMatrix*modelMatrix;
-	vmml::Matrix4f modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
-	vmml::Visibility visibility = vmml::VISIBILITY_FULL;
-
-	TextSpritePtr textSprite = _resourceManager->getTextSprite(textSpriteName);
-	ShaderPtr shader = textSprite->getMaterial()->getShader();
-
-	// Frsutum culling
-	if (doFrustumCulling){
-		visibility = viewFrustumCulling(textSprite->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
-		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(textSpriteName + " was culled");
-	}
-
-	// Queue text sprite if visible
-	if (visibility != vmml::VISIBILITY_NONE){
-		
-		// Update instance properties	
-		PropertiesPtr properties = textSprite->getGroups().at(bRenderer::DEFAULT_GROUP_NAME())->addInstance(instanceName);
-
-		properties->setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX(), projectionMatrix);
-		properties->setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX(), modelViewMatrix);
-
-		// Lighting
-		if (shader->supportsDiffuseLighting() || shader->supportsSpecularLighting()){
-			GLfloat numLights = static_cast<GLfloat>(lightNames.size());
-			bool variableNumberOfLights = shader->supportsVariableNumberOfLights();
-			GLuint maxLights = shader->getMaxLights();
-			if (numLights > maxLights)
-				numLights = static_cast<GLfloat>(maxLights);
-
-			if (variableNumberOfLights)
-				properties->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
-			for (int i = 0; i < numLights; i++){
-				std::string pos = std::to_string(i);
-				LightPtr l = _resourceManager->getLight(lightNames[i]);
-				properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
-				if (shader->supportsDiffuseLighting())
-					properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
-				if (shader->supportsSpecularLighting())
-					properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_SPECULAR_LIGHT_COLOR() + pos, l->getSpecularColor());
-				properties->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_INTENSITY() + pos, l->getIntensity());
-				properties->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_ATTENUATION() + pos, l->getAttenuation());
-				properties->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_RADIUS() + pos, l->getRadius());
-			}
-		}
-		// Ambient
-		if (shader->supportsAmbientLighting())
-			properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _resourceManager->getAmbientColor());
-
-
-		// Queue text sprite
-		// Find out distance
-		GLfloat distance = customDistance;
-		if (distance > 9999.0f){
-			vmml::Vector3f centerViewSpace = (modelViewProjectionMatrix * textSprite->getBoundingBoxObjectSpace().getCenter());
-			distance = centerViewSpace.z();
-		}
-		_renderQueue->submitToRenderQueue(shader->getProgramID(), textSprite->getMaterial()->getName(), textSpriteName, instanceName, textSprite, distance, true, blendSfactor, blendDfactor);
-	}
+	queueModelInstance(_resourceManager->getTextSprite(textSpriteName), instanceName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, false, true, blendSfactor, blendDfactor, customDistance);
 }
 
 void Renderer::drawQueue(GLenum mode)
 {
 	_renderQueue->draw(mode);
+}
+
+void Renderer::clearQueue()
+{
+	_renderQueue->clear();
 }
 
 vmml::Visibility Renderer::viewFrustumCulling(const vmml::AABBf &aabbObjectSpace, const vmml::Matrix4f &modelViewProjectionMatrix)

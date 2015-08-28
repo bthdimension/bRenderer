@@ -45,6 +45,10 @@ public:
 	*/
 	virtual bool supportsSpecularLighting() const = 0;
 
+	/**	@brief Returns true if the shader supports a cubic reflection map
+	*/
+	virtual bool supportsCubicReflectionMap() const = 0;
+
 	/**	@brief Returns true if the shader is valid
 	*/
 	virtual bool        isValid() const = 0;

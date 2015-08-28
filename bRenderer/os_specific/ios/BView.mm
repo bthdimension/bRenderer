@@ -2,7 +2,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "BView.h"
-#include "../../bRenderer.h"
+#include "bRenderer.h"
 
 @interface BView (PrivateMethods)
 /* Private methods */

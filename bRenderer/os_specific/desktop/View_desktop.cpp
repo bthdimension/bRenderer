@@ -219,6 +219,11 @@ void View::setSize(GLint width, GLint height)
 	glfwSetWindowSize(_window, width, height);
 }
 
+void View::setViewportSize(GLint width, GLint height)
+{
+	glViewport(0, 0, width, height);
+}
+
 void View::setPosition(GLint x, GLint y)
 {
 	glfwSetWindowPos(_window, x, y);

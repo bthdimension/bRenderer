@@ -1,5 +1,5 @@
-#include "../../headers/FileHandler.h"
-#include "../../headers/Logger.h"
+#include "headers/FileHandler.h"
+#include "headers/Logger.h"
 
 namespace bRenderer
 {

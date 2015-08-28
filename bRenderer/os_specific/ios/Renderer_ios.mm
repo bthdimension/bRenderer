@@ -1,5 +1,5 @@
-#include "../../headers/Renderer.h"
-#include "../../headers/IRenderProject.h"
+#include "headers/Renderer.h"
+#include "headers/IRenderProject.h"
 
 
 /* Main Loop using CADisplayLink */

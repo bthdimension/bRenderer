@@ -1,4 +1,4 @@
-#include "../headers/Configuration.h"
+#include "headers/Configuration.h"
 
 namespace bRenderer
 {
@@ -37,11 +37,14 @@ namespace bRenderer
 	std::string DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP() { static const std::string x = "DiffuseMap"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_SPECULAR_MAP() { static const std::string x = "SpecularMap"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_NORMAL_MAP() { static const std::string x = "NormalMap"; return x; }
+	std::string DEFAULT_SHADER_UNIFORM_CUBE_MAP() { static const std::string x = "CubeMap"; return x; }
+	std::string DEFAULT_SHADER_UNIFORM_SPHERE_MAP() { static const std::string x = "SphereMap"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_CHARACTER_MAP() { static const std::string x = "CharacterMap"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_NORMAL_MATRIX() { static const std::string x = "NormalMatrix"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_MODEL_MATRIX() { static const std::string x = "ModelMatrix"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_VIEW_MATRIX() { static const std::string x = "ViewMatrix"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_MODEL_VIEW_MATRIX() { static const std::string x = "ModelViewMatrix"; return x; }
+	std::string DEFAULT_SHADER_UNIFORM_INVERSE_VIEW_MATRIX()  { static const std::string x = "InverseViewMatrix"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_PROJECTION_MATRIX() { static const std::string x = "ProjectionMatrix"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS() { static const std::string x = "numLights"; return x; }
 	std::string DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() { static const std::string x = "lightPositionViewSpace_"; return x; }
@@ -73,6 +76,15 @@ namespace bRenderer
 	std::string WAVEFRONT_MATERIAL_SPECULAR_MAP() { static const std::string x = "map_Ks"; return x; }
 	std::string WAVEFRONT_MATERIAL_NORMAL_MAP() { static const std::string x = "map_Bump"; return x; }
 	std::string WAVEFRONT_MATERIAL_DISSOLVE() { static const std::string x = "d"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION() { static const std::string x = "refl"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE() { static const std::string x = "-type"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_TOP() { static const std::string x = "cube_top"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_BOTTOM() { static const std::string x = "cube_bottom"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_FRONT() { static const std::string x = "cube_front"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_BACK() { static const std::string x = "cube_back"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_LEFT() { static const std::string x = "cube_left"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_RIGHT() { static const std::string x = "cube_right"; return x; }
+	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE_SPHERE() { static const std::string x = "sphere"; return x; }
 
 	/* Camera configuration */
 	GLfloat DEFAULT_FIELD_OF_VIEW() { static const GLfloat x = 60.0f; return x; }

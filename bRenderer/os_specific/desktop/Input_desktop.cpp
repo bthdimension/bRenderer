@@ -1,14 +1,18 @@
-#include "../../headers/OSdetect.h"
+#include "headers/OSdetect.h"
 
 #ifdef B_OS_DESKTOP
 
-#include "../../headers/Input.h"
+#include "headers/Input.h"
 
 Input::Input()
-{ }
+{}
+
+Input::Input(ViewPtr view)
+	: _view(view)
+{}
 
 Input::~Input()
-{ }
+{}
 
 GLint Input::getKeyState(GLint key)
 {

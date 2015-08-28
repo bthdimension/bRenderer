@@ -33,9 +33,9 @@ public:
 	*/
 	RenderQueue(){}
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-	~RenderQueue(){}
+	virtual ~RenderQueue(){}
 
 	/**	@brief Add a render call to the queue
 	*	@param[in] programID
@@ -48,21 +48,21 @@ public:
 	*	@param[in] blendSfactor Specifies how the red, green, blue, and alpha source blending factors are computed (optional)
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*/
-	void submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &drawableName, const std::string &instanceName, DrawablePtr drawable, GLfloat distanceToCamera = 0.0, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA);
+	virtual void submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &drawableName, const std::string &instanceName, DrawablePtr drawable, GLfloat distanceToCamera = 0.0, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA);
 
 	/**	@brief Draw all drawable in the queue in a sorted manner
 	*/
-	virtual void draw(GLenum mode = GL_TRIANGLES);
+	virtual void draw(GLenum mode = GL_TRIANGLES) override;
 
 	/**	@brief Draws an instance of the queue to the screen
 	*	@param[in] instanceName
 	*	@param[in] mode
 	*/
-	virtual void drawInstance(const std::string &instanceName, GLenum mode) { draw(mode); }
+	virtual void drawInstance(const std::string &instanceName, GLenum mode) override { draw(mode); }
 
 	/**	@brief Remove all render calls
 	*/
-	void clear();
+	virtual void clear();
 
 
 private:

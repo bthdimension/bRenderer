@@ -94,15 +94,15 @@ public:
 
 	/**	@brief Returns the position of the light
 	*/
-	vmml::Vector4f getPosition()		{ return _position; }
+	const vmml::Vector4f &getPosition()		{ return _position; }
 
 	/**	@brief Returns the color of the light for diffuse lighting
 	*/
-	vmml::Vector3f getDiffuseColor()	{ return _diffuseColor; }
+	const vmml::Vector3f &getDiffuseColor()	{ return _diffuseColor; }
 
 	/**	@brief Returns the color of the light for specular lighting
 	*/
-	vmml::Vector3f getSpecularColor()	{ return _specularColor; }
+	const vmml::Vector3f &getSpecularColor()	{ return _specularColor; }
 
 	/**	@brief Returns the intensity of the light
 	*/

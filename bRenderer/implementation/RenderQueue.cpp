@@ -1,4 +1,4 @@
-#include "../headers/RenderQueue.h"
+#include "headers/RenderQueue.h"
 
 void RenderQueue::submitToRenderQueue(GLuint programID, const std::string &materialName, const std::string &drawableName, const std::string &instanceName, DrawablePtr drawable, GLfloat distanceToCamera, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor)
 {
@@ -28,9 +28,6 @@ void RenderQueue::draw(GLenum mode)
 
 	// reset blend function so opaque objects are not affected
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	// clear the queue
-	clear();
 }
 
 void RenderQueue::clear()

@@ -1,5 +1,5 @@
-#include "../headers/Logger.h"
-#include "../headers/Configuration.h"
+#include "headers/Logger.h"
+#include "headers/Configuration.h"
 
 namespace bRenderer
 {

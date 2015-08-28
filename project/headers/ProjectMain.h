@@ -52,12 +52,16 @@ private:
 	/* Camera movement */
 	void updateCamera(const std::string &camera, const double &deltaTime);
 
+	/* Update Reflections */
+	void updateReflections(FramebufferPtr fbo, CubeMapPtr cubeMap, const std::string &camera, const vmml::Vector3f &position);
+
 	/* Helper Functions */
 	GLfloat randomNumber(GLfloat min, GLfloat max);
 
 	/* Variables */
 	GLfloat _randomOffset;
 	GLfloat _offset;
+	GLfloat _cameraSpeed;
 	double _mouseX, _mouseY;
 	bool _running = false; 
 	GLint _lastStateSpaceKey = 0;

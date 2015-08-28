@@ -14,6 +14,8 @@
 #include "Sprite.h"
 #include "TextSprite.h"
 #include "Texture.h"
+#include "CubeMap.h"
+#include "DepthMap.h"
 #include "Font.h"
 #include "ModelData.h"
 #include "OBJLoader.h"
@@ -32,6 +34,8 @@ public:
 	/* Typedefs */
 	typedef std::unordered_map< std::string, ShaderPtr >		ShaderMap;
 	typedef std::unordered_map< std::string, TexturePtr >		TextureMap;
+	typedef std::unordered_map< std::string, CubeMapPtr >		CubeMapMap;
+	typedef std::unordered_map< std::string, DepthMapPtr >		DepthMapMap;
 	typedef std::unordered_map< std::string, FontPtr >			FontMap;
 	typedef std::unordered_map< std::string, MaterialPtr >		MaterialMap;
 	typedef std::unordered_map< std::string, PropertiesPtr >	PropertiesMap;
@@ -46,11 +50,16 @@ public:
 
 	/**	@brief Constructor
 	*/
-	ResourceManager(){}
+	ResourceManager()
+	{
+		_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR();
+		_shaderVersionDesktop = bRenderer::DEFAULT_SHADER_VERSION_DESKTOP();
+		_shaderVersionES = bRenderer::DEFAULT_SHADER_VERSION_ES();
+	}
 
-	/**	@brief Destructor
+	/**	@brief Virtual destructor
 	*/
-	~ResourceManager(){}
+	virtual ~ResourceManager(){}
 
 	/**	@brief Set the shader version used on desktop systems
 	*	@param[in] shaderVersionDesktop The shader version used on desktop systems, e.g. "#version 120"
@@ -74,10 +83,8 @@ public:
 	*	@param[in] maxLights The maximum number of light sources to be used (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
-	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting (optional)
-	*	@param[in] specularLighting Set true if the shader supports specular lighting (optional)
 	*/
-	MaterialPtr loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
+	MaterialPtr loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true);
 
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
@@ -124,6 +131,12 @@ public:
 	*/
 	TexturePtr loadTexture(const std::string &fileName);
 
+	/**	@brief Load a cube map
+	*	@param[in] fileNames File names including extension (size needs to be 6) in the following order: 
+	*	left, right, bottom, top, front, back
+	*/
+	CubeMapPtr loadCubeMap(const std::string &name, const std::vector<std::string> &fileNames);
+
 	/**	@brief Load a font (e.g. TrueType fonts (TTF) or OpenType fonts (OTF)
 	*	@param[in] fileName File name including extension
 	*	@param[in] fontPixelSize The nominal  font size in pixels (the characters may vary in size)
@@ -137,12 +150,13 @@ public:
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
 	*	@param[in] diffuseLighting Set true if the shader supports diffuse lighting (optional)
 	*	@param[in] specularLighting Set true if the shader supports specular lighting (optional)
+	*	@param[in] cubicReflectionMap Set true if the shader supports a cubic reflection map (optional)
 	*
 	*	If no shaders with the chosen name exist or no name is passed to the function
 	*	the default shader will be used.
 	*
 	*/
-	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true);
+	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true, bool cubicReflectionMap = false);
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
@@ -279,7 +293,7 @@ public:
 	*/
 	TexturePtr createTexture(const std::string &name, const TextureData &textureData);
 
-	/**	@brief Create a texture
+	/**	@brief Create a texture (allows for creating empty textures e.g. for binding to a framebuffer)
 	*	@param[in] name The raw name of the texture
 	*	@param[in] width
 	*	@param[in] height
@@ -287,6 +301,29 @@ public:
 	*	@param[in] imageData
 	*/
 	TexturePtr createTexture(const std::string &name, GLsizei width, GLsizei height, GLenum format = GL_RGBA, ImageDataPtr imageData = nullptr);
+
+	/**	@brief Create a cube map
+	*	@param[in] name The raw name of the cube map
+	*	@param[in] data The texture data to be used (size needs to be 6) in the following order: 
+	*	right, left, top, bottom, front, back
+	*/
+	CubeMapPtr createCubeMap(const std::string &name, const std::vector<TextureData> &data);
+
+	/**	@brief Create a cube map ((allows for creating empty cube maps e.g. for binding to a framebuffer)
+	*	@param[in] name The raw name of the cube map
+	*	@param[in] width Sets width and height since cube maps must use square sizes
+	*	@param[in] format
+	*	@param[in] imageData Image data for each face of the cube (size needs to be 6) in the following order: 
+	*	right, left, top, bottom, front, back
+	*/
+	CubeMapPtr createCubeMap(const std::string &name, GLsizei width, GLenum format = GL_RGBA, const std::vector<ImageDataPtr> &imageData = {});
+
+	/**	@brief Create a depth map
+	*	@param[in] name The raw name of the depth map
+	*	@param[in] width
+	*	@param[in] height
+	*/
+	DepthMapPtr createDepthMap(const std::string &name, GLint width, GLint height);
 
 	/**	@brief Create a shader
 	*	@param[in] name The raw name of the shader
@@ -364,10 +401,17 @@ public:
 	*/
 	LightPtr createLight(const std::string &name, const vmml::Vector3f &position, const vmml::Vector3f &diffuseColor, const vmml::Vector3f &specularColor, GLfloat intensity, GLfloat attenuation, GLfloat radius);
 
-	/**	@brief Create a framebuffer
+	/**	@brief Create a framebuffer that adjusts its size automatically according to the viewport size
 	*	@param[in] name Name of the framebuffer
 	*/
 	FramebufferPtr createFramebuffer(const std::string &name);
+    
+    /**	@brief Create a framebuffer with a custom size
+     *	@param[in] name Name of the framebuffer
+     *	@param[in] width
+     *	@param[in] height
+     */
+    FramebufferPtr createFramebuffer(const std::string &name, GLint width, GLint height);
 
 	/**	@brief Add a shader (returns true if successful)
 	*	@param[in] name Name of the shader
@@ -379,6 +423,18 @@ public:
 	*	@param[in] ptr A pointer to the object to be added
 	*/
 	bool addTexture(const std::string &name, TexturePtr ptr);
+
+	/**	@brief Add a cube map (returns true if successful)
+	*	@param[in] name Name of the cube map
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addCubeMap(const std::string &name, CubeMapPtr ptr);
+
+	/**	@brief Add a depth map (returns true if successful)
+	*	@param[in] name Name of the depth map
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addDepthMap(const std::string &name, DepthMapPtr ptr);
 
 	/**	@brief Add a font (returns true if successful)
 	*	@param[in] name Name of the font
@@ -443,6 +499,16 @@ public:
 	*	@param[in] name Name of the texture
 	*/
 	TexturePtr getTexture(const std::string &name);
+
+	/**	@brief Get a cube map
+	*	@param[in] name Name of the cube map
+	*/
+	CubeMapPtr getCubeMap(const std::string &name);
+
+	/**	@brief Get a depth map
+	*	@param[in] name Name of the depth map
+	*/
+	DepthMapPtr getDepthMap(const std::string &name);
 
 	/**	@brief Get a font
 	*	@param[in] name Name of the font
@@ -511,6 +577,16 @@ public:
 	*/
 	void removeTexture(const std::string &name);
 
+	/**	@brief Remove a cube map
+	*	@param[in] name Name of the cube map
+	*/
+	void removeCubeMap(const std::string &name);
+
+	/**	@brief Remove a depth map
+	*	@param[in] name Name of the depth map
+	*/
+	void removeDepthMap(const std::string &name);
+
 	/**	@brief Remove a font
 	*	@param[in] name Name of the font
 	*/
@@ -573,6 +649,8 @@ private:
 
 	ShaderMap		_shaders;
 	TextureMap		_textures;
+	CubeMapMap		_cubeMaps;
+	DepthMapMap		_depthMaps;
 	FontMap			_fonts;
 	MaterialMap		_materials;
 	PropertiesMap	_properties;

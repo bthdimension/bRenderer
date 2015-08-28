@@ -101,7 +101,7 @@ public:
     
 	/**	@brief Returns the shader ID
 	*/
-    GLuint getProgramID();
+	GLuint getProgramID() { return _programID; }
     
 	/**	@brief Returns uniform location (tries to register uniform if not already available)
 	*	@param[in] name Uniform name
@@ -146,6 +146,10 @@ public:
 	/**	@brief Returns true if the shader supports specular lighting
 	*/
 	bool supportsSpecularLighting() const	{ return _specularLighting; }
+
+	/**	@brief Returns true if the shader supports a cubic reflection map
+	*/
+	bool supportsCubicReflectionMap() const { return _cubicReflectionMap; }
     
     template< typename T >
 	/**	@brief Sets multiple uniforms
@@ -166,9 +170,9 @@ protected:
 	/* Functions */
 
     virtual void resetTexUnit();
-	bool compile(GLuint* shader, GLenum type, const std::string &src);
-	bool link();
-	bool validate();
+	virtual bool compile(GLuint* shader, GLenum type, const std::string &src);
+	virtual bool link();
+	virtual bool validate();
     
 private:
 
@@ -187,6 +191,7 @@ private:
 	bool		_ambientLighting;
 	bool		_diffuseLighting;
 	bool		_specularLighting;
+	bool		_cubicReflectionMap;
 };
 
 typedef std::shared_ptr< Shader > ShaderPtr;
