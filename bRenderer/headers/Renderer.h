@@ -256,6 +256,6 @@ private:
 
 };
 
-
+typedef std::shared_ptr< Renderer >  RendererPtr;
 
 #endif /* defined(B_RENDERER_H) */
