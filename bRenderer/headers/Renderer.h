@@ -7,7 +7,7 @@
 #include "Logger.h"
 #include "View.h"
 #include "Input.h"
-#include "ResourceManager.h"
+#include "ObjectManager.h"
 #include "RenderQueue.h"
 
 /* vmmlib includes */
@@ -53,9 +53,9 @@ public:
 	*/
 	InputPtr getInput();
 
-	/**	@brief Returns a pointer to the resource management of the renderer
+	/**	@brief Returns a pointer to the object management of the renderer
 	*/
-	ResourceManagerPtr getResources();
+	ObjectManagerPtr getObjects();
 
 	/**	@brief Returns a pointer to the render queue of the renderer
 	*/
@@ -243,7 +243,7 @@ private:
 
 	ViewPtr				_view = nullptr;
 	InputPtr			_input = nullptr;
-	ResourceManagerPtr	_resourceManager = nullptr;
+	ObjectManagerPtr	_objectManager = nullptr;
 	RenderQueuePtr		_renderQueue = nullptr;
 
 	IRenderProject *_renderProject = nullptr;

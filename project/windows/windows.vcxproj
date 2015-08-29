@@ -85,10 +85,10 @@
     <ClCompile Include="..\..\bRenderer\implementation\MatrixStack.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Model.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp" />
+    <ClCompile Include="..\..\bRenderer\implementation\ObjectManager.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\RenderQueue.cpp" />
-    <ClCompile Include="..\..\bRenderer\implementation\ResourceManager.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp" />
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataGenerator.cpp" />
@@ -171,6 +171,7 @@
     <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h" />
     <ClInclude Include="..\..\bRenderer\headers\Model.h" />
     <ClInclude Include="..\..\bRenderer\headers\ModelData.h" />
+    <ClInclude Include="..\..\bRenderer\headers\ObjectManager.h" />
     <ClInclude Include="..\..\bRenderer\headers\OBJLoader.h" />
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h" />
     <ClInclude Include="..\..\bRenderer\headers\Properties.h" />
@@ -178,7 +179,6 @@
     <ClInclude Include="..\..\bRenderer\headers\Renderer_GL.h" />
     <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h" />
     <ClInclude Include="..\..\bRenderer\headers\RenderQueue.h" />
-    <ClInclude Include="..\..\bRenderer\headers\ResourceManager.h" />
     <ClInclude Include="..\..\bRenderer\headers\Shader.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h" />
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataGenerator.h" />

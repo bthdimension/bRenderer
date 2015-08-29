@@ -10,7 +10,7 @@
 #include "Material.h"
 #include "Renderer_GL.h"
 
-class ResourceManager;
+class ObjectManager;
 class ModelData;
 
 /** @brief A 3d model that can be rendered to the screen
@@ -31,7 +31,7 @@ public:
 	Model() {}
 
 	/**	@brief Constructor
-	*	@param[in] r Resource management
+	*	@param[in] o Object management
 	*	@param[in] modelData
 	*	@param[in] shaderMaxLights The maximum light sources to be used
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
@@ -39,15 +39,15 @@ public:
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	Model(ResourceManager *r, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties = nullptr);
+	Model(ObjectManager *o, const ModelData &modelData, GLuint shaderMaxLights, bool variableNumberOfLights, bool shaderFromFile, bool ambientLighting, PropertiesPtr properties = nullptr);
 
 	/**	@brief Constructor
-	*	@param[in] r Resource management
+	*	@param[in] o Object management
 	*	@param[in] modelData
 	*	@param[in] shader
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	Model(ResourceManager *r, const ModelData &modelData, ShaderPtr shader, PropertiesPtr	properties = nullptr);
+	Model(ObjectManager *o, const ModelData &modelData, ShaderPtr shader, PropertiesPtr	properties = nullptr);
 
 	/**	@brief Constructor
 	*	@param[in] modelData

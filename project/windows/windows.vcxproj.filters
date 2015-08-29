@@ -129,9 +129,6 @@
     <ClCompile Include="..\..\bRenderer\implementation\Sprite.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\ResourceManager.cpp">
-      <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\project\windows\main.cpp">
       <Filter>project</Filter>
     </ClCompile>
@@ -282,6 +279,9 @@
     <ClCompile Include="..\..\bRenderer\implementation\DepthMap.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ObjectManager.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
@@ -389,9 +389,6 @@
     <ClInclude Include="..\..\bRenderer\headers\Sprite.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\ResourceManager.h">
-      <Filter>bRenderer\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\project\headers\ProjectMain.h">
       <Filter>project\headers</Filter>
     </ClInclude>
@@ -429,6 +426,9 @@
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\DepthMap.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ObjectManager.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>

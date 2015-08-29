@@ -19,9 +19,9 @@ InputPtr Renderer::getInput()
 	return _input;
 }
 
-ResourceManagerPtr Renderer::getResources()
+ObjectManagerPtr Renderer::getObjects()
 {
-	return _resourceManager;
+	return _objectManager;
 }
 
 RenderQueuePtr Renderer::getRenderQueue()
@@ -85,8 +85,8 @@ bool Renderer::initRenderer(std::string windowTitle)
 	// Input
     if(!_input)  			_input = InputPtr(new Input(_view));
 
-	// Resource management
-	if (!_resourceManager)  _resourceManager = ResourceManagerPtr(new ResourceManager);
+	// Object management
+	if (!_objectManager)  _objectManager = ObjectManagerPtr(new ObjectManager);
 
 	// Render queue
 	if (!_renderQueue)  _renderQueue = RenderQueuePtr(new RenderQueue);
@@ -132,7 +132,7 @@ bool Renderer::initRenderer(GLint width, GLint height, bool fullscreen, std::str
 
 void Renderer::drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
 {
-	drawModel(_resourceManager->getModel(modelName), modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry);
+	drawModel(_objectManager->getModel(modelName), modelMatrix, _objectManager->getCamera(cameraName)->getViewMatrix(), _objectManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry);
 }
 
 void Renderer::drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry)
@@ -186,7 +186,7 @@ void Renderer::drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix, cons
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
 						for (int i = 0; i < numLights; i++){
 							std::string pos = std::to_string(i);
-							LightPtr l = _resourceManager->getLight(lightNames[i]);
+							LightPtr l = _objectManager->getLight(lightNames[i]);
 							shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
 							if (shader->supportsDiffuseLighting())
 								shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
@@ -199,7 +199,7 @@ void Renderer::drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix, cons
 					}
 					// Ambient
 					if (shader->supportsAmbientLighting())
-						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _resourceManager->getAmbientColor());
+						shader->setUniform(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _objectManager->getAmbientColor());
 				}
 
 				geometry->draw();
@@ -210,7 +210,7 @@ void Renderer::drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix, cons
 
 void Renderer::queueModelInstance(const std::string &modelName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f & modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
 {
-	queueModelInstance(_resourceManager->getModel(modelName), instanceName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry, isTransparent, blendSfactor, blendDfactor, customDistance);
+	queueModelInstance(_objectManager->getModel(modelName), instanceName, modelMatrix, _objectManager->getCamera(cameraName)->getViewMatrix(), _objectManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, cullIndividualGeometry, isTransparent, blendSfactor, blendDfactor, customDistance);
 }
 
 void Renderer::queueModelInstance(ModelPtr model, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, bool cullIndividualGeometry, bool isTransparent, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
@@ -250,7 +250,7 @@ void Renderer::queueModelInstance(ModelPtr model, const std::string &instanceNam
 					properties->setScalar(bRenderer::DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS(), numLights);
 				for (int i = 0; i < numLights; i++){
 					std::string pos = std::to_string(i);
-					LightPtr l = _resourceManager->getLight(lightNames[i]);
+					LightPtr l = _objectManager->getLight(lightNames[i]);
 					properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE() + pos, (viewMatrix*l->getPosition()));
 					if (shader->supportsDiffuseLighting())
 						properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_LIGHT_COLOR() + pos, l->getDiffuseColor());
@@ -263,7 +263,7 @@ void Renderer::queueModelInstance(ModelPtr model, const std::string &instanceNam
 			}
 			// Ambient
 			if (shader->supportsAmbientLighting())
-				properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _resourceManager->getAmbientColor());
+				properties->setVector(bRenderer::DEFAULT_SHADER_UNIFORM_AMBIENT_COLOR(), _objectManager->getAmbientColor());
 		}
 
 		// Queue geometry
@@ -301,12 +301,12 @@ void Renderer::queueModelInstance(ModelPtr model, const std::string &instanceNam
 
 void Renderer::drawText(const std::string &textSpriteName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling)
 {
-	drawModel(_resourceManager->getTextSprite(textSpriteName), modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, false);
+	drawModel(_objectManager->getTextSprite(textSpriteName), modelMatrix, _objectManager->getCamera(cameraName)->getViewMatrix(), _objectManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, false);
 }
 
 void Renderer::queueTextInstance(const std::string &textSpriteName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling, GLenum blendSfactor, GLenum blendDfactor, GLfloat customDistance)
 {
-	queueModelInstance(_resourceManager->getTextSprite(textSpriteName), instanceName, modelMatrix, _resourceManager->getCamera(cameraName)->getViewMatrix(), _resourceManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, false, true, blendSfactor, blendDfactor, customDistance);
+	queueModelInstance(_objectManager->getTextSprite(textSpriteName), instanceName, modelMatrix, _objectManager->getCamera(cameraName)->getViewMatrix(), _objectManager->getCamera(cameraName)->getProjectionMatrix(), lightNames, doFrustumCulling, false, true, blendSfactor, blendDfactor, customDistance);
 }
 
 void Renderer::drawQueue(GLenum mode)
@@ -337,6 +337,6 @@ void Renderer::reset()
 	_initialTime = 0;
 	_elapsedTime = 0;
 
-	if (_resourceManager)
-		_resourceManager->clear();
+	if (_objectManager)
+		_objectManager->clear();
 }

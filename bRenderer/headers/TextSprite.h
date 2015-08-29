@@ -15,14 +15,14 @@ public:
 	/* Functions */
 
 	/**	@brief Constructor
-	*	@param[in] r Resource management
+	*	@param[in] o Object management
 	*	@param[in] name The raw name of the sprite
 	*	@param[in] color The color of the text
 	*	@param[in] text The string to be displayed
 	*	@param[in] font The font to be used to display the string
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
-	TextSprite(ResourceManager *r, const std::string &name, vmml::Vector3f color, const std::string &text, FontPtr font, PropertiesPtr properties = nullptr);
+	TextSprite(ObjectManager *o, const std::string &name, vmml::Vector3f color, const std::string &text, FontPtr font, PropertiesPtr properties = nullptr);
 	
 	/**	@brief Constructor
 	*	@param[in] material

@@ -1,19 +1,19 @@
 #include "headers/TextSprite.h"
 #include "headers/Logger.h"
 #include "headers/FileHandler.h"
-#include "headers/ResourceManager.h"
+#include "headers/ObjectManager.h"
 
 /* Public Functions */
 
-TextSprite::TextSprite(ResourceManager *r, const std::string &name, vmml::Vector3f color, const std::string &text, FontPtr font, PropertiesPtr properties)
+TextSprite::TextSprite(ObjectManager *o, const std::string &name, vmml::Vector3f color, const std::string &text, FontPtr font, PropertiesPtr properties)
 	: Sprite(), _text(text), _font(font)
 {
 	// Create geometry
 	createGeometry();
 
 	// Create shader and material
-	ShaderPtr shader = r->generateShader(name, 0, false, true, false, false, true, false, false, false, false, false, false, true);
-	MaterialPtr material = r->createMaterial(name, shader);
+	ShaderPtr shader = o->generateShader(name, 0, false, true, false, false, true, false, false, false, false, false, false, true);
+	MaterialPtr material = o->createMaterial(name, shader);
 	
 	// Add atlas texture to the material
 	material->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_CHARACTER_MAP(), font->getAtlas());

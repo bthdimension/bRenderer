@@ -1,19 +1,19 @@
 #include "headers/Material.h"
-#include "headers/ResourceManager.h"
+#include "headers/ObjectManager.h"
 #include "headers/Configuration.h"
 
-void Material::initialize(ResourceManager *r, const MaterialData &materialData, ShaderPtr shader)
+void Material::initialize(ObjectManager *o, const MaterialData &materialData, ShaderPtr shader)
 {
     for (auto i = materialData.textures.cbegin(); i != materialData.textures.cend(); ++i)
     {
         const std::string &texName = i->first;
         const std::string &texFileName = i->second;
-        TexturePtr texture = r->loadTexture(texFileName);
+        TexturePtr texture = o->loadTexture(texFileName);
         setTexture(texName, texture);
     }
 	if (materialData.cubeTextures.size() >= 6)
 	{
-		TexturePtr cubeMap = r->loadCubeMap(materialData.name + bRenderer::DEFAULT_SHADER_UNIFORM_CUBE_MAP(), std::vector<std::string>({ 
+		TexturePtr cubeMap = o->loadCubeMap(materialData.name + bRenderer::DEFAULT_SHADER_UNIFORM_CUBE_MAP(), std::vector<std::string>({ 
 			materialData.cubeTextures.at(bRenderer::WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_LEFT()), 
 			materialData.cubeTextures.at(bRenderer::WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_RIGHT()),
 			materialData.cubeTextures.at(bRenderer::WAVEFRONT_MATERIAL_REFLECTION_TYPE_CUBE_BOTTOM()),

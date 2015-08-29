@@ -1,6 +1,6 @@
 #include "headers/Sprite.h"
 #include "headers/Configuration.h"
-#include "headers/ResourceManager.h"
+#include "headers/ObjectManager.h"
 
 Sprite::Sprite(bool flipT, PropertiesPtr properties)
 {
@@ -17,29 +17,29 @@ Sprite::Sprite(MaterialPtr material, bool flipT, PropertiesPtr	properties)
 	setProperties(properties);
 }
 
-Sprite::Sprite(ResourceManager *r, const std::string &textureFileName, const std::string &materialName, ShaderPtr shader, bool flipT, PropertiesPtr	properties)
+Sprite::Sprite(ObjectManager *o, const std::string &textureFileName, const std::string &materialName, ShaderPtr shader, bool flipT, PropertiesPtr	properties)
 {
 	createGeometry(flipT);
 
 	MaterialData md; 
 	md.textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()] = textureFileName;
 
-	MaterialPtr material = r->createMaterial(materialName, md, shader);
+	MaterialPtr material = o->createMaterial(materialName, md, shader);
 
 	setMaterial(material);
 	setProperties(properties);
 }
 
-Sprite::Sprite(ResourceManager *r, const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights, bool flipT, PropertiesPtr	properties)
+Sprite::Sprite(ObjectManager *o, const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights, bool variableNumberOfLights, bool flipT, PropertiesPtr	properties)
 {
 	createGeometry(flipT);
 
 	MaterialData md;
 	md.textures[bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP()] = textureFileName;
 
-	ShaderPtr shader = r->generateShader(name, shaderMaxLights, false, md, variableNumberOfLights, false);
+	ShaderPtr shader = o->generateShader(name, shaderMaxLights, false, md, variableNumberOfLights, false);
 
-	MaterialPtr material = r->createMaterial(name, md, shader);
+	MaterialPtr material = o->createMaterial(name, md, shader);
 
 	setMaterial(material);
 	setProperties(properties);

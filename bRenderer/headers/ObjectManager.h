@@ -1,5 +1,5 @@
-#ifndef B_RESOURCEMANAGER_H
-#define B_RESOURCEMANAGER_H
+#ifndef B_OBJECT_MANAGER_H
+#define B_OBJECT_MANAGER_H
 
 /* bRenderer includes */
 #include "Renderer_GL.h"
@@ -25,10 +25,10 @@
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
 
-/** @brief This class manages all resources in a project and makes sure no resource is created twice
+/** @brief This class manages all objects in a project and makes sure no object is created twice
 *	@author Benjamin Bürgisser
 */
-class ResourceManager
+class ObjectManager
 {
 public:
 	/* Typedefs */
@@ -50,7 +50,7 @@ public:
 
 	/**	@brief Constructor
 	*/
-	ResourceManager()
+	ObjectManager()
 	{
 		_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR();
 		_shaderVersionDesktop = bRenderer::DEFAULT_SHADER_VERSION_DESKTOP();
@@ -59,7 +59,7 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~ResourceManager(){}
+	virtual ~ObjectManager(){}
 
 	/**	@brief Set the shader version used on desktop systems
 	*	@param[in] shaderVersionDesktop The shader version used on desktop systems, e.g. "#version 120"
@@ -632,7 +632,7 @@ public:
 	*/
 	void removeFramebuffer(const std::string &name);
 
-	/**	@brief Clear all resources
+	/**	@brief Clear all objects
 	*/
 	void clear();
 
@@ -668,6 +668,6 @@ private:
 
 };
 
-typedef std::shared_ptr< ResourceManager >  ResourceManagerPtr;
+typedef std::shared_ptr< ObjectManager >  ObjectManagerPtr;
 
-#endif /* defined(B_RESOURCEMANAGER_H) */
+#endif /* defined(B_OBJECT_MANAGER_H) */
