@@ -45,6 +45,7 @@ public:
 	typedef std::unordered_map< std::string, MatrixStackPtr >	MatrixStackMap;
 	typedef std::unordered_map< std::string, LightPtr >			LightMap;
 	typedef std::unordered_map< std::string, FramebufferPtr >	FramebufferMap;
+	typedef std::unordered_map< std::string, DrawablePtr >		DrawableMap;
 
 	/* Functions */
 
@@ -490,6 +491,12 @@ public:
 	*/
 	bool addFramebuffer(const std::string &name, FramebufferPtr ptr);
 
+	/**	@brief Add a drawable (returns true if successful)
+	*	@param[in] name Name of the drawable
+	*	@param[in] ptr A pointer to the object to be added
+	*/
+	bool addDrawable(const std::string &name, DrawablePtr ptr);
+
 	/**	@brief Get a shader
 	*	@param[in] name Name of the shader
 	*/
@@ -554,6 +561,11 @@ public:
 	*	@param[in] name Name of the framebuffer
 	*/
 	FramebufferPtr getFramebuffer(const std::string &name);
+
+	/**	@brief Get a drawable
+	*	@param[in] name Name of the drawable
+	*/
+	DrawablePtr getDrawable(const std::string &name);
 
 	/**	@brief Get the shader version used on desktop systems
 	*/
@@ -632,6 +644,11 @@ public:
 	*/
 	void removeFramebuffer(const std::string &name);
 
+	/**	@brief Remove a drawable
+	*	@param[in] name Name of the drawable
+	*/
+	void removeDrawable(const std::string &name);
+
 	/**	@brief Clear all objects
 	*/
 	void clear();
@@ -660,6 +677,7 @@ private:
 	MatrixStackMap	_matrixStacks;
 	LightMap		_lights;
 	FramebufferMap	_framebuffers;
+	DrawableMap		_drawables;
 
 	vmml::Vector3f		_ambientColor;
 

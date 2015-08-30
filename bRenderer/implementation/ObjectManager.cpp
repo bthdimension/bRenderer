@@ -576,6 +576,13 @@ bool ObjectManager::addFramebuffer(const std::string &name, FramebufferPtr ptr)
 	return true;
 }
 
+bool ObjectManager::addDrawable(const std::string &name, DrawablePtr ptr)
+{
+	if (getDrawable(name)) return false;
+	_drawables.insert(DrawableMap::value_type(name, ptr));
+	return true;
+}
+
 ShaderPtr ObjectManager::getShader(const std::string &name)
 {
 	if (_shaders.count(name) > 0)
@@ -667,6 +674,13 @@ FramebufferPtr ObjectManager::getFramebuffer(const std::string &name)
 	return nullptr;
 }
 
+DrawablePtr ObjectManager::getDrawable(const std::string &name)
+{
+	if (_drawables.count(name) > 0)
+		return _drawables[name];
+	return nullptr;
+}
+
 std::string ObjectManager::getShaderVersionDesktop()
 {
 	return _shaderVersionDesktop;
@@ -747,6 +761,11 @@ void ObjectManager::removeFramebuffer(const std::string &name)
 	_framebuffers.erase(name);
 }
 
+void ObjectManager::removeDrawable(const std::string &name)
+{
+	_drawables.erase(name);
+}
+
 void ObjectManager::clear()
 {
 	_shaders.clear();
@@ -762,6 +781,7 @@ void ObjectManager::clear()
 	_matrixStacks.clear();
 	_lights.clear();
 	_framebuffers.clear();
+	_drawables.clear();
 
 	_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR();
 

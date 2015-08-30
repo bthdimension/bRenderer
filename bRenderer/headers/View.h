@@ -104,6 +104,20 @@ public:
 	*/
 	static void getScreenSize(GLint* width, GLint* height);
 
+	/**	@brief Returns the width of the viewport in pixels
+	*/
+	GLint getViewportWidth();
+
+	/**	@brief Returns the height of the viewport in pixels
+	*/
+	GLint getViewportHeight();
+
+	/**	@brief Gets the size of the viewport in pixels
+	*	@param[out] width The width in pixels
+	*	@param[out] height The height in pixels
+	*/
+	void getViewportSize(GLint* width, GLint* height);
+
 	/**	@brief Returns the aspect ratio of the view
 	*/
 	GLfloat getAspectRatio();

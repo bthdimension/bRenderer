@@ -132,6 +132,28 @@ void View::getScreenSize(GLint* width, GLint* height)
 	*height = getScreenHeight();
 }
 
+GLint View::getViewportWidth()
+{
+	GLint vp[4];
+	glGetIntegerv(GL_VIEWPORT, vp);
+	return vp[2];
+}
+
+GLint View::getViewportHeight()
+{
+	GLint vp[4];
+	glGetIntegerv(GL_VIEWPORT, vp);
+	return vp[3];
+}
+
+void View::getViewportSize(GLint* width, GLint* height)
+{
+	GLint vp[4];
+	glGetIntegerv(GL_VIEWPORT, vp);
+	*width = vp[2];
+	*height = vp[3];
+}
+
 GLfloat View::getAspectRatio()
 {
 	int w, h;
