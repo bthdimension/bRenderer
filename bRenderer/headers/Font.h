@@ -7,7 +7,7 @@
 #include "Renderer_GL.h"
 #include "Texture.h"
 
-#include "freetype-gl.h"
+#include "external/freetype-gl/freetype-gl.h"
 
 /** @brief A font that can be used to display text
 *	@author Benjamin Bürgisser

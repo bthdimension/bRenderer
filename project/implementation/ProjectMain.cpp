@@ -3,6 +3,7 @@
 /* Initialize the Project */
 void ProjectMain::init()
 {
+	bRenderer::loadConfigFile("config.json");
 	// let the renderer create an OpenGL context and the main window
 	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// fullscreen on iOS
@@ -90,19 +91,15 @@ void ProjectMain::initFunction()
 	//////////////////////////////
 
 	//////////////////////////////TEST Depth Map
-	FramebufferPtr fboDepth = bRenderer().getObjects()->createFramebuffer("fboDepth");
+	/*FramebufferPtr fboDepth = bRenderer().getObjects()->createFramebuffer("fboDepth");
 	DepthMapPtr depthMap = bRenderer().getObjects()->createDepthMap("depthMap", 0, 0);
 
 	ShaderPtr depthShader = bRenderer().getObjects()->loadShaderFile("depthShader", 0, false, false, false, false, false);
 	MaterialPtr depthMaterial = bRenderer().getObjects()->createMaterial("depthMaterial", depthShader);
 	bRenderer().getObjects()->createSprite("depthSprite", depthMaterial);
 
-	depthMaterial->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP(), depthMap);
+	depthMaterial->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP(), depthMap);*/
 	//////////////////////////////
-
-
-	// set ambient color
-	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.0f, 0.0f, 0.05f));
 
 	// get shading language version
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -131,15 +128,15 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	/// Begin postprocessing ///
 	GLint defaultFBO;
 	if (!_running){
-		bRenderer().getView()->setViewportSize(bRenderer().getView()->getWidth() / 5, bRenderer().getView()->getHeight() / 5);							// reduce vieport size
+		bRenderer().getView()->setViewportSize(bRenderer().getView()->getWidth() / 5, bRenderer().getView()->getHeight() / 5);		// reduce vieport size
 		defaultFBO = Framebuffer::getCurrentFramebuffer();	// get current fbo to bind it again after drawing the scene
-		bRenderer().getObjects()->getFramebuffer("fbo")->bindTexture(bRenderer().getObjects()->getTexture("fbo_texture1"), false); // bind the fbo
+		bRenderer().getObjects()->getFramebuffer("fbo")->bindTexture(bRenderer().getObjects()->getTexture("fbo_texture1"), false);	// bind the fbo
 	}
 	//////////////////////////////TEST Depth Map
-	else{
-		defaultFBO = Framebuffer::getCurrentFramebuffer();	// get current fbo to bind it again after drawing the scene
-		bRenderer().getObjects()->getFramebuffer("fboDepth")->bindDepthMap(bRenderer().getObjects()->getDepthMap("depthMap"), false); // bind the fbo
-	}
+	//else{
+	//	defaultFBO = Framebuffer::getCurrentFramebuffer();	// get current fbo to bind it again after drawing the scene
+	//	bRenderer().getObjects()->getFramebuffer("fboDepth")->bindDepthMap(bRenderer().getObjects()->getDepthMap("depthMap"), false); // bind the fbo
+	//}
 	//////////////////////////////
 
 	/// Draw scene ///	
@@ -183,22 +180,15 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 		bRenderer().drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
     }
 	//////////////////////////////TEST Depth Map
-	else{
-		bRenderer().getObjects()->getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
+	//else{
+	//	bRenderer().getObjects()->getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
 
-		// translate
-		vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
-		// draw
-		bRenderer().drawModel(bRenderer().getObjects()->getModel("depthSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+	//	// translate
+	//	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+	//	// draw
+	//	bRenderer().drawModel(bRenderer().getObjects()->getModel("depthSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
 
-		/*** Title ***/
-		// translate and scale 
-		GLfloat titleScale = 0.5f;
-		vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
-		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
-		// draw
-		bRenderer().drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
-	}
+	//}
 	//////////////////////////////
 
 
@@ -265,7 +255,6 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
 	bRenderer().queueModelInstance("crystal", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
-	bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (green) ***/
 	// translate and scale 
@@ -273,7 +262,6 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.7f, 0.2f));
 	bRenderer().queueModelInstance("crystal", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }), true, false, true);
-	bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	/*** Crystal (red) ***/
 	// translate and scale 

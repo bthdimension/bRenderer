@@ -25,9 +25,6 @@
     <Filter Include="bRenderer\implementation\Flamework">
       <UniqueIdentifier>{45e66f69-980b-42bc-9bd7-c68a1d35c203}</UniqueIdentifier>
     </Filter>
-    <Filter Include="bRenderer\obj_parser">
-      <UniqueIdentifier>{58782cf0-2266-417a-8d76-784eb6bb7e99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="project">
       <UniqueIdentifier>{a125e7c8-332b-4a2e-a6fd-176a8a9611bb}</UniqueIdentifier>
     </Filter>
@@ -49,8 +46,17 @@
     <Filter Include="externalLibraries\freetype\FT_MODULES">
       <UniqueIdentifier>{864ed9aa-5b83-4467-a3ff-c48da239b8e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="externalLibraries\freetype-gl">
+    <Filter Include="bRenderer\external">
+      <UniqueIdentifier>{b693a18e-892f-4440-9e74-4e08e12974e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\external\obj_parser">
+      <UniqueIdentifier>{44b328a2-cc50-40b3-8460-86b839648357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\external\freetype-gl">
       <UniqueIdentifier>{41e1b290-41b7-4b0f-8a55-c36083d30800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bRenderer\external\jsoncpp">
+      <UniqueIdentifier>{7abc886c-c79c-4b35-960e-57a5231ec8f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -98,12 +104,6 @@
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp">
       <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\obj_parser\obj_parser.cpp">
-      <Filter>bRenderer\obj_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\obj_parser\obj.cpp">
-      <Filter>bRenderer\obj_parser</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp">
       <Filter>bRenderer\implementation\Flamework</Filter>
@@ -258,18 +258,6 @@
     <ClCompile Include="..\..\bRenderer\implementation\Font.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\externalLibraries\freetype-gl\platform.c">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\externalLibraries\freetype-gl\texture-atlas.c">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\externalLibraries\freetype-gl\texture-font.c">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\externalLibraries\freetype-gl\vector.c">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\ShaderDataGenerator.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
@@ -281,6 +269,27 @@
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\ObjectManager.cpp">
       <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\external\obj_parser\obj.cpp">
+      <Filter>bRenderer\external\obj_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\external\obj_parser\obj_parser.cpp">
+      <Filter>bRenderer\external\obj_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\external\freetype-gl\vector.c">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\external\freetype-gl\platform.c">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\external\freetype-gl\texture-atlas.c">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\external\freetype-gl\texture-font.c">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\external\jsoncpp\jsoncpp.cpp">
+      <Filter>bRenderer\external\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,12 +362,6 @@
     <ClInclude Include="..\..\bRenderer\headers\OBJLoader.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\obj_parser\obj.hpp">
-      <Filter>bRenderer\obj_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\obj_parser\obj_parser.hpp">
-      <Filter>bRenderer\obj_parser</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\IRenderProject.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
@@ -398,27 +401,6 @@
     <ClInclude Include="..\..\bRenderer\headers\Font.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\externalLibraries\freetype-gl\texture-atlas.h">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\externalLibraries\freetype-gl\texture-font.h">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\externalLibraries\freetype-gl\vec234.h">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\externalLibraries\freetype-gl\vector.h">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\externalLibraries\freetype-gl\freetype-gl.h">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\externalLibraries\freetype-gl\opengl.h">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\externalLibraries\freetype-gl\platform.h">
-      <Filter>externalLibraries\freetype-gl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ShaderDataGenerator.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
@@ -430,6 +412,39 @@
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ObjectManager.h">
       <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\obj_parser\obj.hpp">
+      <Filter>bRenderer\external\obj_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\obj_parser\obj_parser.hpp">
+      <Filter>bRenderer\external\obj_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\freetype-gl\texture-font.h">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\freetype-gl\vec234.h">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\freetype-gl\vector.h">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\freetype-gl\freetype-gl.h">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\freetype-gl\opengl.h">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\freetype-gl\platform.h">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\freetype-gl\texture-atlas.h">
+      <Filter>bRenderer\external\freetype-gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\jsoncpp\json-forwards.h">
+      <Filter>bRenderer\external\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\external\jsoncpp\json.h">
+      <Filter>bRenderer\external\jsoncpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

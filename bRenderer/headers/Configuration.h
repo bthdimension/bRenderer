@@ -7,6 +7,11 @@
 
 namespace bRenderer
 {
+	/**	@brief Loads a json file containing configurations
+	*	@param[in] fileName Filename including extension
+	*/
+	bool loadConfigFile(const std::string &fileName);
+
 	/* Renderer configuration */
 	vmml::Vector3f DEFAULT_AMBIENT_COLOR();
 

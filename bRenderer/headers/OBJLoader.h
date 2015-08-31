@@ -8,7 +8,7 @@
 #include "ModelData.h"
 
 #include "vmmlib/matrix.hpp"
-#include "../obj_parser/obj_parser.hpp"
+#include "external/obj_parser/obj_parser.hpp"
 
 /** @brief Loads and processes OBJ models and materials
 *	@author David Steiner, Benjamin Bürgisser

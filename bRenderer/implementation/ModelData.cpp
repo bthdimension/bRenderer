@@ -1,6 +1,6 @@
 #include <map>
 #include "headers/ModelData.h"
-#include "obj_parser/obj_parser.hpp"
+#include "external/obj_parser/obj_parser.hpp"
 #include "headers/FileHandler.h"
 #include "headers/OBJLoader.h"
 

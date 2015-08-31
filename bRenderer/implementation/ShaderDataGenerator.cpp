@@ -96,24 +96,24 @@ void ShaderDataGenerator::initializeSourceCommonVariables()
 	std::string common = "";
 
 #ifdef B_OS_DESKTOP	
-	common = bRenderer::SHADER_SOURCE_HEAD_DESKTOP;
+	common = bRenderer::SHADER_SOURCE_HEAD_DESKTOP();
 #endif
 #ifdef B_OS_IOS
-	common = bRenderer::SHADER_SOURCE_HEAD_ES;
+	common = bRenderer::SHADER_SOURCE_HEAD_ES();
 #endif	
 	// lights
 	if (_variableNumberOfLights)
-		common += bRenderer::SHADER_SOURCE_NUM_LIGHTS;
+		common += bRenderer::SHADER_SOURCE_NUM_LIGHTS();
 	common += bRenderer::shader_source_light_properties(_maxLights, _normalMap, _diffuseLighting, _specularLighting);
 	// varyings
 	if (_diffuseMap || _normalMap || _specularMap || _isText)
-		common += bRenderer::SHADER_SOURCE_VARYINGS_TEX_COORD;
+		common += bRenderer::SHADER_SOURCE_VARYINGS_TEX_COORD();
 	if (!_normalMap && (_diffuseLighting || _specularLighting))
-		common += bRenderer::SHADER_SOURCE_VARYINGS_NORMAL;
+		common += bRenderer::SHADER_SOURCE_VARYINGS_NORMAL();
 	if (_normalMap && _specularLighting)
-		common += bRenderer::SHADER_SOURCE_VARYINGS_CAMERA_TANGENT;
+		common += bRenderer::SHADER_SOURCE_VARYINGS_CAMERA_TANGENT();
 	else if (_specularLighting)
-		common += bRenderer::SHADER_SOURCE_VARYINGS_CAMERA_VIEW;
+		common += bRenderer::SHADER_SOURCE_VARYINGS_CAMERA_VIEW();
 
 	_vertShaderSrc = common;
 	_fragShaderSrc = common;
@@ -122,80 +122,80 @@ void ShaderDataGenerator::initializeSourceCommonVariables()
 void ShaderDataGenerator::createVertShader()
 {
 	// matrices
-	_vertShaderSrc += bRenderer::SHADER_SOURCE_MATRICES;
+	_vertShaderSrc += bRenderer::SHADER_SOURCE_MATRICES();
 	// attributes
-	_vertShaderSrc += bRenderer::SHADER_SOURCE_ATTRIBUTES;
+	_vertShaderSrc += bRenderer::SHADER_SOURCE_ATTRIBUTES();
 	
 	// main function begin
 	_vertShaderSrc += bRenderer::shader_source_function_vertex_main_begin((_diffuseLighting || _specularLighting), (_diffuseMap || _normalMap || _specularMap || _isText), _normalMap);
 	if (_normalMap){
 		// main function tbn
-		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_TBN;
+		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_TBN();
 		if (_specularLighting){
 			// camera tangent space
-			_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_TANGENT_SPACE;
+			_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_TANGENT_SPACE();
 		}
 	}
 	else if (_specularLighting){
 		// camera view space
-		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_VIEW_SPACE;
+		_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_CAMERA_VIEW_SPACE();
 	}
 	// main function lights
 	_vertShaderSrc += bRenderer::shader_source_function_lightVector(_maxLights, _normalMap, _variableNumberOfLights);
 
 	// main function end 
-	_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END;
+	_vertShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_VERTEX_MAIN_END();
 }
 
 void ShaderDataGenerator::createFragShader()
 {
 	// textures
-	_fragShaderSrc += bRenderer::SHADER_SOURCE_TEXTURES;
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_TEXTURES();
 	if (_isText)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_TEXT_TEXTURES;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_TEXT_TEXTURES();
 	// colors 
-	_fragShaderSrc += bRenderer::SHADER_SOURCE_COLORS;
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_COLORS();
 	// transparency value
 	if (_transparencyValue)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_TRANSPARENCY_VALUE;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_TRANSPARENCY_VALUE();
 
 	// main function begin
-	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_BEGIN;
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_BEGIN();
 	if (_ambientLighting) {
 		if (_ambientColor)
-			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_AMBIENT_COLOR;
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_AMBIENT_COLOR();
 		else
-			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_AMBIENT;
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_AMBIENT();
 	}
 	if (_diffuseLighting)
 	{
 		// initialize
 		if (_maxLights > 0)
-			_fragShaderSrc += _transparencyValue ? bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_TRANSPARENCY : bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE;
+			_fragShaderSrc += _transparencyValue ? bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_TRANSPARENCY() : bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE();
 		else
-			_fragShaderSrc += _transparencyValue ? bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS_TRANSPARENCY : bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS;
+			_fragShaderSrc += _transparencyValue ? bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS_TRANSPARENCY() : bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_DIFFUSE_NO_LIGHTS();
 	}
 
 	if (_specularLighting)
 	{
 		if (_maxLights > 0){
 			if (_normalMap)
-				_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_TANGENT_SPACE;
+				_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_TANGENT_SPACE();
 			else
-				_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_VIEW_SPACE;
+				_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_VIEW_SPACE();
 		}
 		else
-			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_NO_LIGHTS;
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_SPECULAR_NO_LIGHTS();
 	}
 
 	// lighting
 	if (_specularLighting || _diffuseLighting){
 		if (_normalMap)
-			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_TANGENT_SPACE;
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_TANGENT_SPACE();
 		else
-			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_VIEW_SPACE;
+			_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_SURFACE_NORMAL_VIEW_SPACE();
 
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_LIGHTING;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_INIT_LIGHTING();
 		_fragShaderSrc += bRenderer::shader_source_function_lighting(_maxLights, _normalMap, _diffuseLighting, _specularLighting, _variableNumberOfLights);
 
 		if (_diffuseLighting)
@@ -206,23 +206,23 @@ void ShaderDataGenerator::createFragShader()
 	}
 	
 
-	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART1;
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART1();
 	if (_ambientLighting)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_AMBIENT + "+";
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_AMBIENT() + "+";
 	if (_diffuseLighting && _specularLighting)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_DIFFUSE + "+" + bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_SPECULAR;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_DIFFUSE() + "+" + bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_SPECULAR();
 	else if (_diffuseLighting)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_DIFFUSE;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_DIFFUSE();
 	else if (_specularLighting)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_SPECULAR + "+";
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_SPECULAR() + "+";
 	// If alpha is not defined by diffuse lighting it is set to 1.0
 	if (!_diffuseLighting)
 		_fragShaderSrc += "vec4(0.0, 0.0, 0.0, 1.0)";
 
-	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART2;
+	_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_PART2();
 
 	if (_isText)
-		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_TEXT;
+		_fragShaderSrc += bRenderer::SHADER_SOURCE_FUNCTION_FRAGMENT_MAIN_END_TEXT();
 
 	_fragShaderSrc += "}";
 
