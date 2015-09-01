@@ -25,17 +25,7 @@ Framebuffer::Framebuffer(GLint width, GLint height)
 
 void Framebuffer::bind(bool preserveCurrentFramebuffer)
 {
-	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
-	if (_preserveCurrentFramebuffer)
-		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFbo);
-
-	if (_autoResize){
-		GLint vp[4];
-		glGetIntegerv(GL_VIEWPORT, vp);
-		resize(vp[2], vp[3], _autoResize);
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+	bindBuffer(preserveCurrentFramebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -44,20 +34,11 @@ void Framebuffer::bind(bool preserveCurrentFramebuffer)
 
 void Framebuffer::bindTexture(TexturePtr texture, bool preserveCurrentFramebuffer)
 {
-	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
-	if (_preserveCurrentFramebuffer)
-		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFbo);
-
-	if (_autoResize){
-		GLint vp[4];
-		glGetIntegerv(GL_VIEWPORT, vp);
-		resize(vp[2], vp[3], _autoResize);
-	}
+	bindBuffer(preserveCurrentFramebuffer);
 	// Resize and reset texture
 	texture->bind();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);	
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->getTextureID(), 0);
 	// Important: glClear has to be called after binding the texture
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -68,21 +49,12 @@ void Framebuffer::bindTexture(TexturePtr texture, bool preserveCurrentFramebuffe
 
 void Framebuffer::bindCubeMap(CubeMapPtr cubeMap, GLuint cubeFace, bool preserveCurrentFramebuffer)
 {
-	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
-	if (_preserveCurrentFramebuffer)
-		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFbo);
-
-	if (_autoResize){
-		GLint vp[4];
-		glGetIntegerv(GL_VIEWPORT, vp);
-		resize(vp[2], vp[3], _autoResize);
-	}
+	bindBuffer(preserveCurrentFramebuffer);
 	// Resize and reset texture 
 	cubeMap->bind();
 	GLsizei size = (_width > _height) ? _width : _height;
 	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + cubeFace, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + cubeFace, cubeMap->getTextureID(), 0);
 	// Important: glClear has to be called after binding the texture
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -93,15 +65,7 @@ void Framebuffer::bindCubeMap(CubeMapPtr cubeMap, GLuint cubeFace, bool preserve
 
 void Framebuffer::bindDepthMap(DepthMapPtr depthMap, bool preserveCurrentFramebuffer)
 {
-	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
-	if (_preserveCurrentFramebuffer)
-		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFbo);
-
-	if (_autoResize){
-		GLint vp[4];
-		glGetIntegerv(GL_VIEWPORT, vp);
-		resize(vp[2], vp[3], _autoResize);
-	}
+	bindBuffer(preserveCurrentFramebuffer);
 	// Resize and reset texture
 	depthMap->bind();
 #ifdef B_OS_DESKTOP
@@ -110,8 +74,6 @@ void Framebuffer::bindDepthMap(DepthMapPtr depthMap, bool preserveCurrentFramebu
 #ifdef B_OS_IOS
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _width, _height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, 0);
 #endif	
-
-	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 #ifdef B_OS_DESKTOP
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap->getTextureID(), 0);
 	// No color output is needed
@@ -204,4 +166,19 @@ void Framebuffer::destroy()
 	glDeleteRenderbuffers(1, &_rbo_depth);
 	glDeleteFramebuffers(1, &_fbo);
 
+}
+
+void Framebuffer::bindBuffer(bool preserveCurrentFramebuffer)
+{
+	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;
+	if (_preserveCurrentFramebuffer)
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFbo);
+
+	if (_autoResize){
+		GLint vp[4];
+		glGetIntegerv(GL_VIEWPORT, vp);
+		resize(vp[2], vp[3], _autoResize);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 }

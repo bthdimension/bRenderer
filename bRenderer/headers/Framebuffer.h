@@ -99,6 +99,7 @@ private:
 
 	virtual void create();
 	virtual void destroy();
+	virtual void bindBuffer(bool preserveCurrentFramebuffer);
 
 	/* Variables */
 	GLint _width, _height, _oldFbo = 0;
