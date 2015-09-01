@@ -12,7 +12,7 @@ TextSprite::TextSprite(ObjectManager *o, const std::string &name, vmml::Vector3f
 	createGeometry();
 
 	// Create shader and material
-	ShaderPtr shader = o->generateShader(name, 0, false, true, false, false, true, false, false, false, false, false, false, true);
+	ShaderPtr shader = o->generateShader(name, { 0, false, true, false, false, true, false, false, false, false, false, false, true });
 	MaterialPtr material = o->createMaterial(name, shader);
 	
 	// Add atlas texture to the material

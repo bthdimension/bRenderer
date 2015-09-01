@@ -21,6 +21,7 @@
 #include "OBJLoader.h"
 #include "TextureData.h"
 #include "IShaderData.h"
+#include "ShaderDataGenerator.h"
 
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
@@ -157,7 +158,7 @@ public:
 	*	the default shader will be used.
 	*
 	*/
-	ShaderPtr loadShaderFile(std::string shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true, bool cubicReflectionMap = false);
+	ShaderPtr loadShaderFile(const std::string &shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true, bool cubicReflectionMap = false);
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
@@ -167,25 +168,13 @@ public:
 	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
 	*	@param[in] isText Set true if the shader should be used for displaying text
 	*/
-	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText);
+	ShaderPtr generateShader(const std::string &shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText);
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
-	*	@param[in] shaderMaxLights The maximum number of light sources to be used
-	*	@param[in] ambientLighting Set true if the shader should support ambient lighting
-	*	@param[in] diffuseLighting Set true if the shader should support diffuse lighting
-	*	@param[in] specularLighting Set true if the shader should support specular lighting
-	*	@param[in] ambientColor Set true if the material specifies an ambient color (usually Ka)
-	*	@param[in] diffuseColor Set true if the material specifies a diffuse color (usually Kd)
-	*	@param[in] specularColor Set true if the material specifies a specular color (usually Ks)
-	*	@param[in] diffuseMap Set true if a texture should be used for diffuse coloring
-	*	@param[in] normalMap Set true if a texture should be used to define the normals
-	*	@param[in] specularMap Set true if a texture should be used to define specularity
-	*	@param[in] transparencyValue Set true if a transparency value should be passed
-	*	@param[in] variableNumberOfLights Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
-	*	@param[in] isText Set true if the shader should be used for displaying text
+	*	@param[in] shaderGeneratorSettings The settings defining the abilities the generated shader should have
 	*/
-	ShaderPtr generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText);
+	ShaderPtr generateShader(const std::string &shaderName, const ShaderGeneratorSettings &shaderGeneratorSettings);
 
 	/**	@brief Create empty material
 	*	@param[in] name Name of the material

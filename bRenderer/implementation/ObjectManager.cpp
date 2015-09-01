@@ -142,7 +142,7 @@ FontPtr ObjectManager::loadFont(const std::string &fileName, GLuint fontPixelSiz
 	return font;
 }
 
-ShaderPtr ObjectManager::loadShaderFile(std::string shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool cubicReflectionMap)
+ShaderPtr ObjectManager::loadShaderFile(const std::string &shaderName, GLuint shaderMaxLights, bool variableNumberOfLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool cubicReflectionMap)
 {
 	std::string name = getRawName(shaderName);
 
@@ -157,7 +157,7 @@ ShaderPtr ObjectManager::loadShaderFile(std::string shaderName, GLuint shaderMax
 	return nullptr;
 }
 
-ShaderPtr ObjectManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText)
+ShaderPtr ObjectManager::generateShader(const std::string &shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText)
 {
 	std::string name = getRawName(shaderName);
 
@@ -168,14 +168,14 @@ ShaderPtr ObjectManager::generateShader(std::string shaderName, GLuint shaderMax
 	return createShader(name, shaderGenerator);
 }
 
-ShaderPtr ObjectManager::generateShader(std::string shaderName, GLuint shaderMaxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText)
+ShaderPtr ObjectManager::generateShader(const std::string &shaderName, const ShaderGeneratorSettings &shaderGeneratorSettings)
 {
 	std::string name = getRawName(shaderName);
 
 	if (getShader(name))
 		return _shaders[name];
 
-	ShaderDataGenerator shaderGenerator(shaderMaxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, transparencyValue, variableNumberOfLights, isText);
+	ShaderDataGenerator shaderGenerator(shaderGeneratorSettings);
 	return createShader(name, shaderGenerator);
 }
 

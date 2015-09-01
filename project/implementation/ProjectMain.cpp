@@ -30,7 +30,7 @@ void ProjectMain::initFunction()
 	bRenderer().getObjects()->setShaderVersionES("#version 100");
 
 	// demo: load material and shader before loading the model
-	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", 2, true, true, true, true, true, true, true, true, true, false, false, false);	// create custom shader with a maximum of 2 lights
+	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// create custom shader with a maximum of 2 lights
 	ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile("flame", 0, false, true, true, false, false);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
 	MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
 
@@ -58,7 +58,7 @@ void ProjectMain::initFunction()
 
 	//////////////////////////////////TEXTTEST
 	FontPtr fontTest = bRenderer().getObjects()->loadFont("arial.ttf", 128);
-	ShaderPtr testi = bRenderer().getObjects()->generateShader("testi", 2, true, true, true, true, true, true, true, true, true, false, false, true);
+	ShaderPtr testi = bRenderer().getObjects()->generateShader("testi", { 2, true, true, true, true, true, true, true, true, true, false, false, true });
 	MaterialPtr testMaterial = bRenderer().getObjects()->loadObjMaterial("testi.mtl", "testi", testi);
 	TextSpritePtr testSprite = bRenderer().getObjects()->createTextSprite("test_text", testMaterial, "Benjamin's Test", fontTest);
 	/////////////////////////////////

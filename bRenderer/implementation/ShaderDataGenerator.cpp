@@ -18,33 +18,33 @@ ShaderDataGenerator::ShaderDataGenerator(GLuint maxLights, bool ambientLighting,
 	buildShader();
 }
 
-ShaderDataGenerator::ShaderDataGenerator(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText)
+ShaderDataGenerator::ShaderDataGenerator(const ShaderGeneratorSettings &shaderGeneratorSettings)
 	: _valid(false)
 {
-	create(maxLights, ambientLighting, diffuseLighting, specularLighting, ambientColor, diffuseColor, specularColor, diffuseMap, normalMap, specularMap, transparencyValue, variableNumberOfLights, isText);
+	create(shaderGeneratorSettings);
 }
 
-ShaderDataGenerator &ShaderDataGenerator::create(GLuint maxLights, bool ambientLighting, bool diffuseLighting, bool specularLighting, bool ambientColor, bool diffuseColor, bool specularColor, bool diffuseMap, bool normalMap, bool specularMap, bool transparencyValue, bool variableNumberOfLights, bool isText)
+ShaderDataGenerator &ShaderDataGenerator::create(const ShaderGeneratorSettings &shaderGeneratorSettings)
 {
-	_maxLights = maxLights;
-	_variableNumberOfLights = variableNumberOfLights;
+	_maxLights = shaderGeneratorSettings.maxLights;
+	_variableNumberOfLights = shaderGeneratorSettings.variableNumberOfLights;
 
-	_ambientLighting = ambientLighting;
-	_diffuseLighting = diffuseLighting;
-	_specularLighting = specularLighting;
+	_ambientLighting = shaderGeneratorSettings.ambientLighting;
+	_diffuseLighting = shaderGeneratorSettings.diffuseLighting;
+	_specularLighting = shaderGeneratorSettings.specularLighting;
 
-	_ambientColor = ambientColor;
-	_diffuseColor = diffuseColor;
-	_specularColor = specularColor;
+	_ambientColor = shaderGeneratorSettings.ambientColor;
+	_diffuseColor = shaderGeneratorSettings.diffuseColor;
+	_specularColor = shaderGeneratorSettings.specularColor;
 
-	_diffuseMap = diffuseMap;
-	_normalMap = normalMap;
-	_specularMap = specularMap;
+	_diffuseMap = shaderGeneratorSettings.diffuseMap;
+	_normalMap = shaderGeneratorSettings.normalMap;
+	_specularMap = shaderGeneratorSettings.specularMap;
 	_cubicReflectionMap = false;
 
-	_transparencyValue = transparencyValue;
+	_transparencyValue = shaderGeneratorSettings.transparencyValue;
 
-	_isText = isText;
+	_isText = shaderGeneratorSettings.isText;
 
 	buildShader();
 	
