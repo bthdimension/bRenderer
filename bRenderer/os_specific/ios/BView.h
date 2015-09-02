@@ -1,9 +1,12 @@
 #ifndef B_BVIEW_H
 #define B_BVIEW_H
 
+#include "headers/OSdetect.h"
+#ifdef B_OS_IOS
+
 #import <UIKit/UIKit.h>
 
-#include "../../headers/Renderer_GL.h"
+#include "headers/Renderer_GL.h"
 #include "Touch.h"
 
 @class EAGLContext;
@@ -53,5 +56,7 @@
 -(Touch)getLastDoubleTapLocation;
 
 @end
+
+#endif
 
 #endif /* defined(B_BVIEW_H) */

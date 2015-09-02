@@ -1,3 +1,6 @@
+#include "headers/OSdetect.h"
+#ifdef B_OS_IOS
+
 #include "headers/Renderer.h"
 #include "headers/IRenderProject.h"
 
@@ -60,7 +63,7 @@ void Renderer::runRenderer()
             }
          ];
         
-        _initialTime += (CACurrentMediaTime() - _initialTime) - _stopTime;
+        _startTime += (CACurrentMediaTime() - _startTime) - _stopTime;
         
         _running = true;
         bRenderer::log("Renderer started", bRenderer::LM_SYS);
@@ -72,7 +75,7 @@ void Renderer::stopRenderer()
     if(isRunning()){
         [_rendererCaller stop];
         
-        _stopTime = CACurrentMediaTime() - _initialTime;
+        _stopTime = CACurrentMediaTime() - _startTime;
 
         _running = false;
         bRenderer::log("Renderer stopped", bRenderer::LM_SYS);
@@ -107,12 +110,12 @@ void Renderer::terminateRenderer()
 void Renderer::update()
 {
      // get time
-    double currentTime = CACurrentMediaTime() - _initialTime;
+    double currentTime = CACurrentMediaTime() - _startTime;
     
     _view->bindFramebuffer();
     
     // clear
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    _view->clearScreen();
     
     // render here
     if (_loopFunction)
@@ -128,3 +131,5 @@ void Renderer::update()
     _view->setContextCurrent();
     _view->presentBuffer();
 }
+
+#endif

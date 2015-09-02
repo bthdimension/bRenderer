@@ -12,7 +12,7 @@ void Renderer::runRenderer()
 	_running = true;
 	bRenderer::log("Renderer started", bRenderer::LM_SYS);
 
-	_initialTime += (glfwGetTime() - _initialTime) - _stopTime;
+	_startTime += (glfwGetTime() - _startTime) - _stopTime;
 
 	// loop until the user closes the window
 	while (_running && _view->isRunning())
@@ -29,7 +29,7 @@ void Renderer::runRenderer()
 
 void Renderer::stopRenderer()
 {
-	_stopTime = (glfwGetTime() - _initialTime);
+	_stopTime = (glfwGetTime() - _startTime);
 	_running = false;
 	bRenderer::log("Renderer stopped", bRenderer::LM_SYS);
 }
@@ -57,12 +57,12 @@ void Renderer::terminateRenderer()
 void Renderer::update()
 {
     // get time
-    double currentTime = (glfwGetTime() - _initialTime);
+    double currentTime = (glfwGetTime() - _startTime);
     
 	_view->setContextCurrent();
 
 	// clear
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_view->clearScreen();
 
 	// render here
 	if (_loopFunction)

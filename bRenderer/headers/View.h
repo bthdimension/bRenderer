@@ -194,6 +194,10 @@ public:
      */
     void bindFramebuffer();
 
+	/**	@brief Clears the screen
+	*/
+	static void clearScreen();
+
 	/**	@brief Displays the buffer to the screen
 	*/
 	void presentBuffer();

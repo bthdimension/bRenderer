@@ -19,12 +19,6 @@
     <Filter Include="bRenderer\os_specific\ios">
       <UniqueIdentifier>{2252bc99-a8e5-4443-8f62-c6f65d1fe6b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="bRenderer\headers\Flamework">
-      <UniqueIdentifier>{e415e35e-6d73-468b-a69b-ef93da9d4d31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="bRenderer\implementation\Flamework">
-      <UniqueIdentifier>{45e66f69-980b-42bc-9bd7-c68a1d35c203}</UniqueIdentifier>
-    </Filter>
     <Filter Include="project">
       <UniqueIdentifier>{a125e7c8-332b-4a2e-a6fd-176a8a9611bb}</UniqueIdentifier>
     </Filter>
@@ -63,32 +57,14 @@
     <ClCompile Include="..\..\bRenderer\implementation\Camera.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Logger.cpp">
       <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Model.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Material.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\View_desktop.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\os_specific\desktop\TextureData_desktop.cpp">
       <Filter>bRenderer\os_specific\desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Renderer.cpp">
       <Filter>bRenderer\implementation</Filter>
@@ -104,9 +80,6 @@
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\OBJLoader.cpp">
       <Filter>bRenderer\implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp">
-      <Filter>bRenderer\implementation\Flamework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\bRenderer\implementation\Framebuffer.cpp">
       <Filter>bRenderer\implementation</Filter>
@@ -291,6 +264,30 @@
     <ClCompile Include="..\..\bRenderer\external\jsoncpp\jsoncpp.cpp">
       <Filter>bRenderer\external\jsoncpp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Geometry.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Material.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Model.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ModelData.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Shader.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ShaderDataFile.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\Texture.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bRenderer\implementation\ModelRenderer.cpp">
+      <Filter>bRenderer\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
@@ -299,41 +296,11 @@
     <ClInclude Include="..\..\bRenderer\headers\Camera.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Model.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\MatrixStack.h">
       <Filter>bRenderer\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\View.h">
       <Filter>bRenderer\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Texture.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\TextureData.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Shader.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\ModelData.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\MaterialData.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Material.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\IDrawable.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\GeometryData.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\Geometry.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\OSdetect.h">
       <Filter>bRenderer\headers</Filter>
@@ -367,9 +334,6 @@
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\IShaderData.h">
       <Filter>bRenderer\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h">
-      <Filter>bRenderer\headers\Flamework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ShaderSource.h">
       <Filter>bRenderer\headers</Filter>
@@ -445,6 +409,42 @@
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\external\jsoncpp\json.h">
       <Filter>bRenderer\external\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Geometry.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\GeometryData.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\IDrawable.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Material.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\MaterialData.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Model.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ModelData.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Shader.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ShaderDataFile.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\Texture.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\TextureData.h">
+      <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bRenderer\headers\ModelRenderer.h">
+      <Filter>bRenderer\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

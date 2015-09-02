@@ -156,11 +156,6 @@ class Input
 {
 public:
 
-#ifdef B_OS_IOS
-	/* Typedefs */
-	typedef int GLFWwindow;
-#endif
-
 	/* Functions */
 
 	/**	@brief Constructor

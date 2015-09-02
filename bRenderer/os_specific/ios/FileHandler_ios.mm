@@ -1,3 +1,6 @@
+#include "headers/OSdetect.h"
+#ifdef B_OS_IOS
+
 #include "headers/FileHandler.h"
 #include "headers/Logger.h"
 
@@ -36,3 +39,5 @@ namespace bRenderer
     }
 
 } // namespace bRenderer
+
+#endif

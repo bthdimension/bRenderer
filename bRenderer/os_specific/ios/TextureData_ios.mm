@@ -1,3 +1,6 @@
+#include "headers/OSdetect.h"
+#ifdef B_OS_IOS
+
 #include "headers/TextureData.h"
 
 TextureData &TextureData::load(const std::string &fileName)
@@ -34,3 +37,5 @@ TextureData &TextureData::load(const std::string &fileName)
     
     return *this;
 }
+
+#endif

@@ -69,6 +69,19 @@ bool View::initView(GLint width, GLint height, bool fullscreen, std::string wind
 	}
 	bRenderer::log("Using GLEW ", glewGetString(GLEW_VERSION), bRenderer::LM_SYS);
 
+	// OpenGL
+	// clear
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	clearScreen();
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+
+	// enable alpha
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	_initialized = true;
 
 	return true;
@@ -259,6 +272,11 @@ void View::setContextCurrent()
 void View::bindFramebuffer()
 {
 
+}
+
+void View::clearScreen()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void View::presentBuffer()

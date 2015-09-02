@@ -1,3 +1,6 @@
+#include "headers/OSdetect.h"
+#ifdef B_OS_IOS
+
 #include "headers/Input.h"
 
 Input::Input()
@@ -120,3 +123,5 @@ bool Input::isTouchDevice()
 {
 	return true;
 }
+
+#endif

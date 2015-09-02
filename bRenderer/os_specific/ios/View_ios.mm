@@ -1,3 +1,6 @@
+#include "headers/OSdetect.h"
+#ifdef B_OS_IOS
+
 #include "headers/View.h"
 #include <vector>
 
@@ -25,6 +28,19 @@ bool View::initView(std::string windowTitle)
     _view = [[BView alloc] initWithFrame:frame];
     
     _fullscreen = true;
+
+	// OpenGL
+	// clear
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	clearScreen();
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+
+	// enable alpha
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     _initialized = true;
     
@@ -227,6 +243,11 @@ void View::bindFramebuffer()
     [_view bindFramebuffer];
 }
 
+void View::clearScreen()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void View::presentBuffer()
 {
     [_view presentRenderbuffer];
@@ -236,3 +257,5 @@ static void windowSizeChanged(View::GLFWwindow* window, int width, int height)
 {
     // Not implemented on iOS
 }
+
+#endif

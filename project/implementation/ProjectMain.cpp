@@ -91,14 +91,14 @@ void ProjectMain::initFunction()
 	//////////////////////////////
 
 	//////////////////////////////TEST Depth Map
-	/*FramebufferPtr fboDepth = bRenderer().getObjects()->createFramebuffer("fboDepth");
-	DepthMapPtr depthMap = bRenderer().getObjects()->createDepthMap("depthMap", 0, 0);
+	//FramebufferPtr fboDepth = bRenderer().getObjects()->createFramebuffer("fboDepth");
+	//DepthMapPtr depthMap = bRenderer().getObjects()->createDepthMap("depthMap", 0, 0);
 
-	ShaderPtr depthShader = bRenderer().getObjects()->loadShaderFile("depthShader", 0, false, false, false, false, false);
-	MaterialPtr depthMaterial = bRenderer().getObjects()->createMaterial("depthMaterial", depthShader);
-	bRenderer().getObjects()->createSprite("depthSprite", depthMaterial);
+	//ShaderPtr depthShader = bRenderer().getObjects()->loadShaderFile("depthShader", 0, false, false, false, false, false);
+	//MaterialPtr depthMaterial = bRenderer().getObjects()->createMaterial("depthMaterial", depthShader);
+	//bRenderer().getObjects()->createSprite("depthSprite", depthMaterial);
 
-	depthMaterial->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP(), depthMap);*/
+	//depthMaterial->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP(), depthMap);
 	//////////////////////////////
 
 	// get shading language version
@@ -141,8 +141,8 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 
 	/// Draw scene ///	
 	
-	bRenderer().drawQueue(/*GL_LINES*/);
-	bRenderer().clearQueue();
+	bRenderer().getModelRenderer()->drawQueue(/*GL_LINES*/);
+	bRenderer().getModelRenderer()->clearQueue();
 	
 	if (!_running){
 		/// End postprocessing ///		
@@ -161,7 +161,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 			bRenderer().getObjects()->getMaterial("blurMaterial")->setTexture("fbo_texture", bRenderer().getObjects()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
 			bRenderer().getObjects()->getMaterial("blurMaterial")->setScalar("isVertical", static_cast<GLfloat>(b));
 			// draw
-			bRenderer().drawModel(bRenderer().getObjects()->getModel("blurSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+			bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("blurSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
 			b = !b;
 		}
 	
@@ -171,13 +171,13 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
         vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
 		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
         // draw
-		bRenderer().drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
+		bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
 
 		/*** Instructions ***/
 		titleScale = 0.1f;
 		scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
 		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.45f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
-		bRenderer().drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+		bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
     }
 	//////////////////////////////TEST Depth Map
 	//else{
@@ -186,7 +186,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	//	// translate
 	//	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
 	//	// draw
-	//	bRenderer().drawModel(bRenderer().getObjects()->getModel("depthSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+	//	bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("depthSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
 
 	//}
 	//////////////////////////////
@@ -233,19 +233,19 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	// translate and scale 
 	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(30.f, -24.0, 0.0)) * vmml::create_scaling(vmml::Vector3f(0.3f));
 	// submit to render queue
-	bRenderer().queueModelInstance("cave", "cave_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true, true);
+	bRenderer().getModelRenderer()->queueModelInstance("cave", "cave_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true, true);
 	
 	/*** Cave stream ***/
 	bRenderer().getObjects()->getProperties("streamProperties")->setScalar("offset", _offset);		// pass offset for wave effect
 	// submit to render queue
-	bRenderer().queueModelInstance("cave_stream", "cave_stream_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true, false, true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1.0f);
+	bRenderer().getModelRenderer()->queueModelInstance("cave_stream", "cave_stream_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true, false, true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1.0f);
 	
 	//////////////////////////////TESTreflections
 	/*** Sphere ***/
 	// translate and scale
 	modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, 5.0f, 40.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
 	// submit to render queue
-	bRenderer().queueModelInstance("sphere", "sphere_instance", camera, modelMatrix, std::vector<std::string>({ /*"torchLight",*/ "firstLight", "secondLight", "thirdLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("sphere", "sphere_instance", camera, modelMatrix, std::vector<std::string>({ /*"torchLight",*/ "firstLight", "secondLight", "thirdLight" }), true, false, true);
 	bRenderer().getObjects()->getModel("sphere")->getInstanceProperties("sphere_instance")->at(bRenderer().getObjects()->getShader("sphere"))->setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_INVERSE_VIEW_MATRIX(), vmml::Matrix3f(bRenderer().getObjects()->getCamera(camera)->getInverseViewMatrix()));
 	//////////////////////////////
 
@@ -254,21 +254,21 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	modelMatrix = vmml::create_translation(vmml::Vector3f(78.0f, -17.0f, 5.5f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-	bRenderer().queueModelInstance("crystal", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("crystal", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
 
 	/*** Crystal (green) ***/
 	// translate and scale 
 	modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, -17.0f, 15.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.7f, 0.2f));
-	bRenderer().queueModelInstance("crystal", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("crystal", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }), true, false, true);
 
 	/*** Crystal (red) ***/
 	// translate and scale 
 	modelMatrix = vmml::create_translation(vmml::Vector3f(218.0f, -17.0f, 4.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.8f, 0.2f, 0.2f));
-	bRenderer().queueModelInstance("crystal", "crystal_red", camera, modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("crystal", "crystal_red", camera, modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }), true, false, true);
 	bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	///*** Torch ***/
@@ -276,7 +276,7 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	modelMatrix = bRenderer().getObjects()->getCamera(camera)->getInverseViewMatrix();		// position and orient to match camera
 	modelMatrix *= vmml::create_translation(vmml::Vector3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::Vector3f(1.2f)) * vmml::create_rotation(1.64f, vmml::Vector3f::UNIT_Y); // now position it relative to the camera
 	// submit to render queue
-	bRenderer().queueModelInstance("torch", "torch_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight" }));
+	bRenderer().getModelRenderer()->queueModelInstance("torch", "torch_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight" }));
 
 	/*** Flame ***/
 	// pass additional properties to the shader
@@ -298,7 +298,7 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 		// model matrix
 		modelMatrix = translation * scaling * rotation;
 		// submit to render queue
-		bRenderer().queueModelInstance(bRenderer().getObjects()->getModel("flame"), ("flame_instance" + std::to_string(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-1.0f - 0.01f*z));  // negative distance because always in foreground
+		bRenderer().getModelRenderer()->queueModelInstance(bRenderer().getObjects()->getModel("flame"), ("flame_instance" + std::to_string(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-1.0f - 0.01f*z));  // negative distance because always in foreground
 	}
 
 	/*** Sparks ***/
@@ -318,7 +318,7 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 		modelMatrix = translation * scaling * rotation;
 
 		// submit to render queue
-		bRenderer().queueModelInstance(bRenderer().getObjects()->getModel("sparks"), ("sparks_instance" + std::to_string(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01f*z)); // negative distance because always in foreground
+		bRenderer().getModelRenderer()->queueModelInstance(bRenderer().getObjects()->getModel("sparks"), ("sparks_instance" + std::to_string(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01f*z)); // negative distance because always in foreground
 	}
 
 	//////////////////////////////////TEXTTEST
@@ -328,7 +328,7 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale / bRenderer().getView()->getAspectRatio(), titleScale));
 	modelMatrix = vmml::create_translation(vmml::Vector3f(78.f, 0.f, 10.f)) * bRenderer().getObjects()->getCamera("camera")->getInverseRotation() * scaling;
 	bRenderer().getObjects()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
-	bRenderer().queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
+	bRenderer().getModelRenderer()->queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
 	//////////////////////////////////
 }
 
@@ -490,7 +490,7 @@ void ProjectMain::updateReflections(FramebufferPtr fbo, CubeMapPtr cubeMap, cons
 		// Update scene
 		updateRenderQueue(camera, 0.0f);
 		// Draw scene into buffer
-		bRenderer().drawQueue(/*GL_LINES*/);
+		bRenderer().getModelRenderer()->drawQueue(/*GL_LINES*/);
 	}
 
 	fbo->unbind(defaultFBO);

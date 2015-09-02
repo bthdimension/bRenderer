@@ -60,6 +60,6 @@ typedef SSIZE_T ssize_t;
 //#define VMMLIB_NO_TYPEDEFS
 
 // Define VMMLIB_OLD_TYPEDEFS to keep using the old lowercase names (backwards compatibility)
-#define VMMLIB_OLD_TYPEDEFS
+//#define VMMLIB_OLD_TYPEDEFS
 
 #endif
