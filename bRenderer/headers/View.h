@@ -148,7 +148,7 @@ public:
      */
     BView* getUIView();
     
-    /**	@brief Attaches the underlying UIView to a UIView of your choosing
+    /**	@brief Attaches (adds as a subview) the underlying UIView to a UIView of your choosing
      *	@param[in] view The UIView to attach the view to
      */
     void attachToUIView(UIView* view);

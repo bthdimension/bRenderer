@@ -54,7 +54,7 @@ public:
 	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
 	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
 	*/
-	void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
+	virtual void drawModel(const std::string &modelName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
 
 	/**	@brief Draw specified model into the current framebuffer
 	*	@param[in] model The model to be drawn
@@ -65,7 +65,7 @@ public:
 	*	@param[in] doFrustumCulling Set true if the model should be tested against the view frustum (optional)
 	*	@param[in] cullIndividualGeometry Set true if all the geometry should be tested against the view frustum (optional)
 	*/
-	void drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
+	virtual void drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false);
 
 	/**	@brief Queue specified model into the render queue
 	*	@param[in] modelName Name of the model
@@ -80,7 +80,7 @@ public:
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
 	*/
-	void queueModelInstance(const std::string &modelName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+	virtual void queueModelInstance(const std::string &modelName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
 	/**	@brief Queue specified model into the render queue
 	*	@param[in] model The model to be drawn
@@ -96,7 +96,7 @@ public:
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
 	*/
-	void queueModelInstance(ModelPtr model, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+	virtual void queueModelInstance(ModelPtr model, const std::string &instanceName, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, bool cullIndividualGeometry = false, bool isTransparent = false, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
 	/**	@brief Draw specified text sprite into the current framebuffer
 	*	@param[in] textSpriteName Name of the text sprite
@@ -105,7 +105,7 @@ public:
 	*	@param[in] lightNames Names of the lights in a vector
 	*	@param[in] doFrustumCulling Set true if the text sprite should be tested against the view frustum (optional)
 	*/
-	void drawText(const std::string &textSpriteName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = false);
+	virtual void drawText(const std::string &textSpriteName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = false);
 
 	/**	@brief Queue specified text sprite into the render queue
 	*	@param[in] textSpriteName Name of the text sprite
@@ -118,7 +118,7 @@ public:
 	*	@param[in] blendDfactor Specifies how the red, green, blue, and alpha destination blending factors are computed (optional)
 	*	@param[in] customDistance If the function should not determine the distance to the camera a custom distance can be set (optional)
 	*/
-	void queueTextInstance(const std::string &textSpriteName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
+	virtual void queueTextInstance(const std::string &textSpriteName, const std::string &instanceName, const std::string &cameraName, const vmml::Matrix4f &modelMatrix, const std::vector<std::string> &lightNames, bool doFrustumCulling = true, GLenum blendSfactor = GL_SRC_ALPHA, GLenum blendDfactor = GL_ONE_MINUS_SRC_ALPHA, GLfloat customDistance = 10000.0f);
 
 	/**	@brief Draws the render queue into the current framebuffer
 	*	@param[in] mode
