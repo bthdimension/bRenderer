@@ -8,8 +8,8 @@ void ProjectMain::init()
 	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// fullscreen on iOS
 	else
-		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
-		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
+//		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
+		bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
 
 	// start main loop 
 	bRenderer().runRenderer();
@@ -120,10 +120,6 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	//bRenderer::log("FPS: " + std::to_string(1 / deltaTime));
 
 	//// Draw Scene and do postprocessing ////
-	/*
-	*	Performance is a bit better if we draw first and then do all the cpu-heavy updating
-	*	This way we can keep the cpu busy while the graphics card draws the scene (only works on highend graphics cards)
-	*/
 
 	/// Begin postprocessing ///
 	GLint defaultFBO;
@@ -330,6 +326,11 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	bRenderer().getObjects()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
 	bRenderer().getModelRenderer()->queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
 	//////////////////////////////////
+
+
+	// Quit renderer when escape is pressed
+	if (bRenderer().getInput()->getKeyState(bRenderer::KEY_ESCAPE))
+		bRenderer().terminateRenderer();
 }
 
 /* Camera movement */
