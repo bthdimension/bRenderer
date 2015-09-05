@@ -104,15 +104,15 @@ public:
 	*/
 	static void getScreenSize(GLint* width, GLint* height);
 
-	/**	@brief Returns the width of the viewport in pixels
+	/**	@brief Returns the width of the OpenGL viewport in pixels
 	*/
 	GLint getViewportWidth();
 
-	/**	@brief Returns the height of the viewport in pixels
+	/**	@brief Returns the height of the OpenGL viewport in pixels
 	*/
 	GLint getViewportHeight();
 
-	/**	@brief Gets the size of the viewport in pixels
+	/**	@brief Gets the size of the OpenGL viewport in pixels
 	*	@param[out] width The width in pixels
 	*	@param[out] height The height in pixels
 	*/
@@ -174,7 +174,7 @@ public:
 	*/
 	void setSize(GLint width, GLint height);
 
-	/**	@brief Sets the size of the viewport in pixels
+	/**	@brief Sets the size of the OpenGL viewport in pixels
 	*	@param[in] width The width in pixels
 	*	@param[in] height The height in pixels
 	*/

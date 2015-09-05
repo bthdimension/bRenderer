@@ -38,20 +38,22 @@ void Geometry::draw(GLenum mode)
 
 void Geometry::drawInstance(const std::string &instanceName, GLenum mode)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+	if (getInstanceProperties(instanceName)){
+		glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
 
-	if (_material)
-		_material->bind();
+		if (_material)
+			_material->bind();
 
-	if (_properties)
-		_properties->passToShader(_material->getShader());
+		if (_properties)
+			_properties->passToShader(_material->getShader());
 
-	// Instance properties may override properties set for the geometry in  general
-	getInstanceProperties(instanceName)->passToShader(_material->getShader());
+		// Instance properties may override properties set for the geometry in  general
+		getInstanceProperties(instanceName)->passToShader(_material->getShader());
 
-	glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
+		glDrawElements(mode, _nIndices, GL_UNSIGNED_SHORT, _indexData.get());
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 }
 
 

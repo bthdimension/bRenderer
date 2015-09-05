@@ -82,6 +82,14 @@ public:
 	/**	@brief Returns a pointer to the indices of the geometry
 	*/
 	IndexDataPtr    getIndexData()					{ return _indexData; }
+
+	/**	@brief Returns the number of vertices in the geometry
+	*/
+	size_t			getNumVertices()				{ return _nVertices; }
+
+	/**	@brief Returns the number of indices in the geometry
+	*/
+	size_t			getNumIndices()					{ return _nIndices; }
     
 	/**	@brief Sets the vertices of the geometry
 	*	@param[in] arg The new vertices that should be used for the geometry
