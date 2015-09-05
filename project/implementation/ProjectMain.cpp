@@ -213,7 +213,10 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 
 	/// Update render queue ///
 	updateRenderQueue("camera", deltaTime);
-	
+
+	// Quit renderer when escape is pressed
+	if (bRenderer().getInput()->getKeyState(bRenderer::KEY_ESCAPE) == bRenderer::INPUT_PRESS)
+		bRenderer().terminateRenderer();
 }
 
 /* This function is executed when terminating the renderer */
@@ -326,11 +329,6 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	bRenderer().getObjects()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
 	bRenderer().getModelRenderer()->queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
 	//////////////////////////////////
-
-
-	// Quit renderer when escape is pressed
-	if (bRenderer().getInput()->getKeyState(bRenderer::KEY_ESCAPE))
-		bRenderer().terminateRenderer();
 }
 
 /* Camera movement */
