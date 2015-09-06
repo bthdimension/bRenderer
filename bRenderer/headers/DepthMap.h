@@ -4,7 +4,7 @@
 #include <vector>
 #include "Texture.h"
 
-/** @brief Cube map
+/** @brief Depth map
 *	@author Benjamin Bürgisser
 */
 class DepthMap : public Texture
