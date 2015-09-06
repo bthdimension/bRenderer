@@ -2,13 +2,6 @@
 #include "headers/Configuration.h"
 #include "headers/ObjectManager.h"
 
-Sprite::Sprite(bool flipT, PropertiesPtr properties)
-{
-	createGeometry(flipT);
-
-	setProperties(properties);
-}
-
 Sprite::Sprite(MaterialPtr material, bool flipT, PropertiesPtr	properties)
 {
 	createGeometry(flipT);

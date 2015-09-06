@@ -510,23 +510,6 @@ void OBJLoader::createFaceNormals()
 		size_t nT = _texCoords.size();
 		if (nT > indexV1 && nT > indexV2 && nT > indexV3)
 		{
-			//// obtain each of this face's texture coordinates
-			//const vmml::Vector2f &t1 = _texCoords[indexV1];
-			//const vmml::Vector2f &t2 = _texCoords[indexV2];
-			//const vmml::Vector2f &t3 = _texCoords[indexV3];
-
-			//vmml::Vector2f u = t2 - t1;
-			//vmml::Vector2f v = t3 - t1;
-			//
-			//// method by opengl-tutorial.org
-			//GLfloat r = 1.0f / (u.x() * v.y() - u.y() * v.x());
-			//vmml::Vector3f tangent = (e * v.y() - f * u.y())*r;
-			//vmml::Vector3f bitangent = (f * u.x() - e * v.x())*r;
-
-			//face.tangent = tangent;
-			//face.bitangent = bitangent;
-
-			// method by "cplusplusguy"
 			vmml::Vector3f v1(0.0, 0.0, 0.0);
 			v1.cross(face.normal, vmml::Vector3f(0.0, 0.0, -1.0));
 			vmml::Vector3f v2(0.0, 0.0, 0.0);
@@ -539,7 +522,6 @@ void OBJLoader::createFaceNormals()
 			}
 			face.bitangent.cross(face.normal, face.tangent);
 			face.bitangent = vmml::normalize(face.bitangent);
-			// method end
 		}
 	}
 }

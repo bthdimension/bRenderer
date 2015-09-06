@@ -16,12 +16,6 @@ public:
 	Sprite(){}
 
 	/**	@brief Constructor
-	*	@param[in] flipT Flip T axis of texture
-	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
-	*/
-	Sprite(bool flipT,  PropertiesPtr properties = nullptr);
-
-	/**	@brief Constructor
 	*	@param[in] material
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
