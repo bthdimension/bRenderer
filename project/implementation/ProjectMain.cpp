@@ -8,8 +8,8 @@ void ProjectMain::init()
 	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// fullscreen on iOS
 	else
-//		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
-		bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
+		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
+		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
 
 	// start main loop 
 	bRenderer().runRenderer();
@@ -325,7 +325,7 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 
 	GLfloat titleScale = 6.f;
 	vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale / bRenderer().getView()->getAspectRatio(), titleScale));
-	modelMatrix = vmml::create_translation(vmml::Vector3f(78.f, 0.f, 10.f)) * bRenderer().getObjects()->getCamera("camera")->getInverseRotation() * scaling;
+	modelMatrix = vmml::create_translation(vmml::Vector3f(78.f, 0.f, 10.f)) * bRenderer().getObjects()->getCamera("camera")->getInverseRotationY() * scaling;
 	bRenderer().getObjects()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
 	bRenderer().getModelRenderer()->queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
 	//////////////////////////////////
