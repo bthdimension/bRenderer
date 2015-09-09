@@ -20,7 +20,7 @@
 
 	GLuint _defaultFramebuffer, _colorRenderbuffer, _depthRenderbuffer;
 
-	// the display link is used to create a render loop
+	// The display link is used to create a render loop
 	CAEAGLLayer *_eaglLayer;
     
     // OpenGL context

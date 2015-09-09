@@ -37,7 +37,7 @@ namespace bRenderer
 	std::string DEFAULT_WINDOW_TITLE() { return jsonValue.get("DEFAULT_WINDOW_TITLE", "bRenderer").asString(); }
 
 	/* Desktop specific file path configuration */
-	std::string DEFAULT_FILE_PATH() { static const std::string x = "data/"; return x; }
+	std::string DEFAULT_FILE_PATH() { return jsonValue.get("DEFAULT_FILE_PATH", "data/").asString(); }
 
 	/* OBJ loader default group name */
 	std::string DEFAULT_GROUP_NAME() { return jsonValue.get("DEFAULT_GROUP_NAME", "default").asString(); }

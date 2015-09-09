@@ -225,6 +225,7 @@
     <None Include="..\..\project\data\flame.vert" />
     <None Include="..\..\project\data\sphere.mtl" />
     <None Include="..\..\project\data\torch.mtl" />
+    <None Include="..\data\config.json" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\project\data\bTitle.png" />

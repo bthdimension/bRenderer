@@ -10,7 +10,7 @@
 #include "external/freetype-gl/freetype-gl.h"
 
 /** @brief A font that can be used to display text
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class Font
 {
@@ -46,7 +46,7 @@ public:
 	*/
 	GLuint getPixelSize() { return _fontPixelSize; }
 
-	/**	@brief Returns the fil name of the current font (including extension)
+	/**	@brief Returns the file name of the current font (including extension)
 	*/
 	const std::string &getFontFileName() { return _fontFileName; }
 

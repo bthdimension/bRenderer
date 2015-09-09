@@ -21,7 +21,7 @@ namespace bRenderer
 	const GLint INPUT_RELEASE = 0;		// The key or mouse button was pressed
 	const GLint INPUT_PRESS = 1;		// The key or mouse button was released
 	const GLint INPUT_REPEAT = 2;		// The key was held down until it repeated
-	const GLint INPUT_UNDEFINED = -1;	// Will be returned if the os doesn't support the input method
+	const GLint INPUT_UNDEFINED = -1;	// Will be returned if the OS doesn't support the input method
 
 	const GLint LEFT_MOUSE_BUTTON = 1;
 	const GLint RIGHT_MOUSE_BUTTON = 2;
@@ -150,7 +150,7 @@ namespace bRenderer
 } // namespace bRenderer
 
 /** @brief Maintenance of user inputs
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class Input
 {

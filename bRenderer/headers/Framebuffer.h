@@ -7,7 +7,7 @@
 #include "DepthMap.h"
 
 /** @brief A custom framebuffer object
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class Framebuffer
 {

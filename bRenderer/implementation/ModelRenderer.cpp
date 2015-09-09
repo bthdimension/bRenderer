@@ -42,7 +42,7 @@ void ModelRenderer::drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix,
 
 	GLint compareShader = -1;
 
-	// Frsutum culling
+	// Frustum culling
 	if (doFrustumCulling){
 		visibility = viewFrustumCulling(model->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
@@ -55,8 +55,8 @@ void ModelRenderer::drawModel(ModelPtr model, const vmml::Matrix4f &modelMatrix,
 		{
 			GeometryPtr geometry = i->second;
 
-			// Only do frsutum culling for the geometry if the model has more than one geometry object, 
-			// otherwise the culling restult of the whole model is the same as for the geometry
+			// Only do frustum culling for the geometry if the model has more than one geometry object, 
+			// otherwise the culling result of the whole model is the same as for the geometry
 			if (doFrustumCulling && cullIndividualGeometry && groupsModel.size() > 1){
 				visibility = viewFrustumCulling(geometry->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 				//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
@@ -118,7 +118,7 @@ void ModelRenderer::queueModelInstance(ModelPtr model, const std::string &instan
 	vmml::Matrix4f modelViewProjectionMatrix = projectionMatrix*modelViewMatrix;
 	vmml::Visibility visibility = vmml::VISIBILITY_FULL;
 
-	// Frsutum culling
+	// Frustum culling
 	if (doFrustumCulling){
 		visibility = viewFrustumCulling(model->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);
 		//if (visibility == vmml::VISIBILITY_NONE) 	bRenderer::log(modelName + " was culled");
@@ -172,7 +172,7 @@ void ModelRenderer::queueModelInstance(ModelPtr model, const std::string &instan
 			std::string geometryName = i->first;
 			GeometryPtr geometry = i->second;
 
-			// Only do frsutum culling for the geometry if the model has more than one geometry object, 
+			// Only do frustum culling for the geometry if the model has more than one geometry object, 
 			// otherwise the culling result of the whole model is the same as for the geometry
 			if (doFrustumCulling && cullIndividualGeometry && groupsModel.size() > 1){
 				visibility = viewFrustumCulling(geometry->getBoundingBoxObjectSpace(), modelViewProjectionMatrix);

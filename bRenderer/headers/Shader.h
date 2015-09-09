@@ -45,7 +45,7 @@ public:
 	*/
 	virtual ~Shader();
 
-	/**	@brief Binds the sahder and its attributes
+	/**	@brief Binds the shader and its attributes
 	*/
     virtual void bind();
     

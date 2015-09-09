@@ -13,7 +13,7 @@
 ///////////////////////////////////////////////
 
 /** @brief A light source to brighten up your day!
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class Light
 {

@@ -5,7 +5,7 @@
 #include "Texture.h"
 
 /** @brief Depth map
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class DepthMap : public Texture
 {

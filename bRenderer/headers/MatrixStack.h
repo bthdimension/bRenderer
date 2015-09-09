@@ -8,7 +8,7 @@
 
 
 /** @brief This is a matrix stack to temporarily store transformations 
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class MatrixStack
 {

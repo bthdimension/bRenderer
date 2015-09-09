@@ -5,7 +5,7 @@
 #include "Texture.h"
 
 /** @brief Cube map 
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class CubeMap : public Texture
 {
@@ -15,7 +15,7 @@ public:
 
 	/**	@brief Constructor
 	*	@param[in] data The texture data to be used (size needs to be 6) in the following order: 
-	*	left, right, bottom, top, front, back
+	*	left, right, bottom, top, front,  back
 	*/
 	CubeMap(const std::vector<TextureData> &data);
 

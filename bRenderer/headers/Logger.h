@@ -21,15 +21,15 @@ namespace bRenderer
 	 */
 	void log(const std::string &msg, LogMode mode = LM_INFO);
 
-	/**	@brief Write a GLEW error string to the console
-	 *	@param[in] arg The error to be displayed
+	/**	@brief Write an OpenGL string to the console
+	 *	@param[in] arg The OpenGL string to be displayed
 	 *	@param[in] mode Defines the mode of the logger (adds a tag to the string)
 	 */
 	void log(const GLubyte *arg, LogMode mode = LM_INFO);
 
-	/**	@brief Write a message and a GLEW error string to the console
+	/**	@brief Write a message and an OpenGL string to the console
 	 *	@param[in] msg The message to be displayed
-	 *	@param[in] arg The error to be displayed
+	 *	@param[in] arg The OpenGL string to be displayed
 	 *	@param[in] mode Defines the mode of the logger (adds a tag to the string)
 	 */
 	void log(const std::string &msg, const GLubyte *arg, LogMode mode = LM_INFO);

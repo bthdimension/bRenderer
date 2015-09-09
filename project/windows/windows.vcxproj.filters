@@ -502,6 +502,9 @@
     <None Include="..\..\project\data\cave_stream.vert">
       <Filter>project\data</Filter>
     </None>
+    <None Include="..\data\config.json">
+      <Filter>project\data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\project\data\bTitle.png">

@@ -15,7 +15,7 @@ struct ShaderGeneratorSettings
 	bool diffuseColor;				// Set true if the material specifies a diffuse color (usually Kd)
 	bool specularColor;				// Set true if the material specifies a specular color (usually Ks)
 	bool diffuseMap;				// Set true if a texture should be used for diffuse coloring
-	bool normalMap;					// Set true if a texture should be used to define the normals
+	bool normalMap;					// Set true if a texture should be used to define the normal vectors
 	bool specularMap;				// Set true if a texture should be used to define specularity
 	bool transparencyValue;			// Set true if a transparency value should be passed
 	bool variableNumberOfLights;	// Set true if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights
@@ -23,7 +23,7 @@ struct ShaderGeneratorSettings
 };
 
 /** @brief The underlying shader data is generated 
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class ShaderDataGenerator : public IShaderData
 {

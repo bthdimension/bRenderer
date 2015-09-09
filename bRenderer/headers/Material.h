@@ -106,7 +106,7 @@ public:
     ShaderPtr   getShader()                 { return _shader;       }
 
 	/**	@brief Sets the shader of the material
-	*	@param[in] arg Sahder for the material
+	*	@param[in] arg Shader for the material
 	*/
     void        setShader(ShaderPtr arg)    { _shader       = arg;  }
     

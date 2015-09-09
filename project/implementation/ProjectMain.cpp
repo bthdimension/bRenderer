@@ -6,10 +6,10 @@ void ProjectMain::init()
 	bRenderer::loadConfigFile("config.json");
 	// let the renderer create an OpenGL context and the main window
 	if(Input::isTouchDevice())
-		bRenderer().initRenderer(true);										// fullscreen on iOS
+		bRenderer().initRenderer(true);										// full screen on iOS
 	else
 		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
-		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// fullscreen using full width and height of the screen
+		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// full screen using full width and height of the screen
 
 	// start main loop 
 	bRenderer().runRenderer();
@@ -18,6 +18,10 @@ void ProjectMain::init()
 /* This function is executed when initializing the renderer */
 void ProjectMain::initFunction()
 {
+	// get shading language version
+	bRenderer::log("OpenGL Version: ", glGetString(GL_VERSION));
+	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
 	// initialize variables
 	_offset = 0.0f;
 	_randomOffset = 0.0f;
@@ -82,7 +86,7 @@ void ProjectMain::initFunction()
 
 	//////////////////////////////TESTreflections
 	bRenderer().getObjects()->loadObjModel("sphere.obj", true, true, true, 4, true, true);											// create custom shader with a maximum of 4 lights 
-	bRenderer().getObjects()->createCamera("reflectionCamera", 90.0, 16.f / 9.f, -1.0, 1000.0);																	// camera to capture reflecions
+	bRenderer().getObjects()->createCamera("reflectionCamera", 90.0, 16.f / 9.f, -1.0, 1000.0);																	// camera to capture reflections
 	FramebufferPtr fboRefl = bRenderer().getObjects()->createFramebuffer("fboRefl");																				// create framebuffer object
     fboRefl->resize(512, 512, false);
     CubeMapPtr reflCubeMap = bRenderer().getObjects()->createCubeMap("reflMap", 512);			// create cube map to bind to the fbo
@@ -101,9 +105,6 @@ void ProjectMain::initFunction()
 	//depthMaterial->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP(), depthMap);
 	//////////////////////////////
 
-	// get shading language version
-	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
-
 	//////////////////////////////TESTreflections
 	// get reflections for cube map
 	updateReflections(fboRefl, reflCubeMap, "reflectionCamera", vmml::Vector3f(-148.0, -5.0, -40.0));
@@ -119,12 +120,12 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	//bRenderer::log("deltaTime: "+std::to_string(deltaTime)+", elapsedTime: "+std::to_string(elapsedTime));
 	//bRenderer::log("FPS: " + std::to_string(1 / deltaTime));
 
-	//// Draw Scene and do postprocessing ////
+	//// Draw Scene and do post processing ////
 
-	/// Begin postprocessing ///
+	/// Begin post processing ///
 	GLint defaultFBO;
 	if (!_running){
-		bRenderer().getView()->setViewportSize(bRenderer().getView()->getWidth() / 5, bRenderer().getView()->getHeight() / 5);		// reduce vieport size
+		bRenderer().getView()->setViewportSize(bRenderer().getView()->getWidth() / 5, bRenderer().getView()->getHeight() / 5);		// reduce viewport size
 		defaultFBO = Framebuffer::getCurrentFramebuffer();	// get current fbo to bind it again after drawing the scene
 		bRenderer().getObjects()->getFramebuffer("fbo")->bindTexture(bRenderer().getObjects()->getTexture("fbo_texture1"), false);	// bind the fbo
 	}
@@ -141,7 +142,7 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 	bRenderer().getModelRenderer()->clearQueue();
 	
 	if (!_running){
-		/// End postprocessing ///		
+		/// End post processing ///		
         /*** Blur ***/
 		// translate
 		vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
@@ -431,7 +432,7 @@ void ProjectMain::updateCamera(const std::string &camera, const double &deltaTim
 void ProjectMain::deviceRotated()
 {
 	if (bRenderer().isInitialized()){
-		// set view to fullscreen after device rotation
+		// set view to full screen after device rotation
 		bRenderer().getView()->setFullscreen(true);
 		bRenderer::log("Device rotated");
 	}

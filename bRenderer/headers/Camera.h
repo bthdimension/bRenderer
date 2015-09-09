@@ -9,7 +9,7 @@
 #include "vmmlib/util.hpp"
 
 /** @brief A camera that defines the view and projection matrix in a scene
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class Camera
 {

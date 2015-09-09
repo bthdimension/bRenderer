@@ -21,7 +21,7 @@ public:
 	ModelData(){}
     
 	/**	@brief Constructor
-	*	@param[in] fileName The name of the obj file
+	*	@param[in] fileName The name of the OBJ file
 	*	@param[in] flipT Flip T axis of texture
 	*	@param[in] flipZ Flip Z axis of the geometry
 	*/
@@ -38,7 +38,7 @@ public:
 	virtual ~ModelData();
     
 	/**	@brief Loads the model from a file
-	*	@param[in] fileName The name of the obj file
+	*	@param[in] fileName The name of the OBJ file
 	*/
     virtual ModelData &load(const std::string &fileName);
     

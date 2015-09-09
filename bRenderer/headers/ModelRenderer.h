@@ -12,7 +12,7 @@
 
 
 /** @brief A helper class to efficiently draw and queue models with one function call
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class ModelRenderer
 {

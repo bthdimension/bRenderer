@@ -6,7 +6,7 @@
 #include "Font.h"
 
 /** @brief A simple text sprite to display 2d text on the screen
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class TextSprite : public Sprite
 {

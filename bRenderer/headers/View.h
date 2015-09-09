@@ -16,7 +16,7 @@
 *	The view class represents a window on desktop systems or a UIView on iOS. 
 *	The view possesses an OpenGL context and allows for a scene to be displayed to the screen.
 *
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class View
 {
@@ -72,7 +72,7 @@ public:
 	*/
 	bool isRunning();
 
-	/**	@brief Returns true if the view runs in fullscreen mode
+	/**	@brief Returns true if the view runs in full screen mode
 	*/
 	bool isFullscreen();
 
@@ -154,7 +154,7 @@ public:
     void attachToUIView(UIView* view);
 
 	/**	@brief Set fullscreen mode
-	*	@param[in] fullscreen Set fullscreen to be true if fullscreen is desired
+	*	@param[in] fullscreen Set true if full screen is desired
 	*/
 	void setFullscreen(bool fullscreen);
 

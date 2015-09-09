@@ -28,8 +28,10 @@ void Framebuffer::bind(bool preserveCurrentFramebuffer)
 	bindBuffer(preserveCurrentFramebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
+	GLenum status;
+	if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
+		bRenderer::log("Framebuffer status: " + std::to_string(status), bRenderer::LM_ERROR);
+	}
 }
 
 void Framebuffer::bindTexture(TexturePtr texture, bool preserveCurrentFramebuffer)
@@ -43,8 +45,10 @@ void Framebuffer::bindTexture(TexturePtr texture, bool preserveCurrentFramebuffe
 	// Important: glClear has to be called after binding the texture
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
+	GLenum status;
+	if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
+		bRenderer::log("Framebuffer status: " + std::to_string(status), bRenderer::LM_ERROR);
+	}
 }
 
 void Framebuffer::bindCubeMap(CubeMapPtr cubeMap, GLuint cubeFace, bool preserveCurrentFramebuffer)
@@ -59,8 +63,10 @@ void Framebuffer::bindCubeMap(CubeMapPtr cubeMap, GLuint cubeFace, bool preserve
 	// Important: glClear has to be called after binding the texture
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
+	GLenum status;
+	if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
+		bRenderer::log("Framebuffer status: " + std::to_string(status), bRenderer::LM_ERROR);
+	}
 }
 
 void Framebuffer::bindDepthMap(DepthMapPtr depthMap, bool preserveCurrentFramebuffer)
@@ -69,13 +75,13 @@ void Framebuffer::bindDepthMap(DepthMapPtr depthMap, bool preserveCurrentFramebu
 	// Resize and reset texture
 	depthMap->bind();
 #ifdef B_OS_DESKTOP
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _width, _height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, _width, _height, 0, GL_DEPTH_COMPONENT16, GL_FLOAT, 0);
 #endif
 #ifdef B_OS_IOS
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _width, _height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, _width, _height, 0, GL_DEPTH_COMPONENT16, GL_UNSIGNED_SHORT, 0);
 #endif	
 #ifdef B_OS_DESKTOP
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap->getTextureID(), 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap->getTextureID(), 0);
 	// No color output is needed
 	glDrawBuffer(GL_NONE);
 #endif
@@ -85,8 +91,10 @@ void Framebuffer::bindDepthMap(DepthMapPtr depthMap, bool preserveCurrentFramebu
 	// Important: glClear has to be called after binding the texture
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		bRenderer::log("FBO status incomplete", bRenderer::LM_ERROR);
+	GLenum status;
+	if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
+		bRenderer::log("Framebuffer status: " + std::to_string(status), bRenderer::LM_ERROR);
+	}
 }
 
 void Framebuffer::unbind()

@@ -17,7 +17,7 @@
 class IRenderProject;
 
 /** @brief The main class that is able to initialize and maintain everything that is necessary to render an image to the screen
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class Renderer
 {

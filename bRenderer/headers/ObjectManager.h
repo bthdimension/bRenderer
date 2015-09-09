@@ -27,7 +27,7 @@
 #include "vmmlib/util.hpp"
 
 /** @brief This class manages all objects in a project and makes sure no object is created twice
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class ObjectManager
 {

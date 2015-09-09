@@ -1,3 +1,4 @@
+/* Demo configuration file */
 {
 	"LOG_MODE_INFO" : "This may interest you",
 	"DEFAULT_WINDOW_TITLE" : "The Cave - Demo",

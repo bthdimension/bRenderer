@@ -7,7 +7,7 @@
 
 namespace bRenderer
 {
-	/**	@brief Loads a json file containing configurations
+	/**	@brief Loads a JSON file containing configurations
 	*	@param[in] fileName Filename including extension
 	*/
 	bool loadConfigFile(const std::string &fileName);

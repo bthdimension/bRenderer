@@ -11,7 +11,7 @@
 #include "external/obj_parser/obj_parser.hpp"
 
 /** @brief Loads and processes OBJ models and materials
-*	@author David Steiner, Benjamin Bürgisser
+*	@author David Steiner, Benjamin Buergisser
 */
 class OBJLoader
 {
@@ -80,11 +80,11 @@ public:
 	*/
 	static MaterialData loadMaterial(const std::string &fileName, const std::string &materialName);
 
-	/**	@brief Creates the face normals
+	/**	@brief Creates the normal vectors of the face
 	*/
 	void createFaceNormals();
 
-	/**	@brief Creates the vertex normals
+	/**	@brief Creates the normal vectors of the vertex
 	*/
 	void createVertexNormals();
 
@@ -142,7 +142,7 @@ private:
 	template< bool NORMAL >
 	void genFace(const IndexData &d1, const IndexData &d2, const IndexData &d3);
 
-	/**	@brief Loads an obj material
+	/**	@brief Loads an OBJ material
 	*	@param[in] fileName File name including extension
 	*	@param[out] materials The materials map the new material data is stored in
 	*	@param[in] materialName Name of the material

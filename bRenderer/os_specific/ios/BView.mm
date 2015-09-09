@@ -154,7 +154,7 @@
     glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
 }
 
-/* Display the Renderbuffer of the view  */
+/* Display the renderbuffer of the view  */
 - (void)presentRenderbuffer
 {
     // display the color buffer to the screen
@@ -187,10 +187,10 @@
     return self.center.y - [self getViewHeight]*0.5;
 }
 
-/* Set view to fullscreen */
+/* Set view to full screen */
 - (void) setFullscreen
 {
-    // set width and height to fullscreen
+    // set width and height to full screen
     _width = self.superview.frame.size.width;
     _height = self.superview.frame.size.height;
     

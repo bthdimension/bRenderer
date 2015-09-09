@@ -47,8 +47,6 @@ Shader::Shader(const IShaderData &shaderData)
             glDeleteProgram(_programID);
             _programID = 0;
         }
-        
-        //exit(0);
     }
     
     resetTexUnit();
@@ -240,8 +238,7 @@ bool Shader::compile(GLuint* shader, GLenum type, const std::string &src)
     glShaderSource(*shader, 1, &source, NULL);
 
     glCompileShader(*shader);
-    
-    //#if defined(DEBUG)
+
     GLint logLength;
     glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0) {
@@ -249,7 +246,6 @@ bool Shader::compile(GLuint* shader, GLenum type, const std::string &src)
         glGetShaderInfoLog(*shader, logLength, &logLength, &(*log.begin()));
 		bRenderer::log("Shader compile log:\n" + log);
     }
-    //#endif
     
     glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
     if (status == 0) {
@@ -265,7 +261,6 @@ bool Shader::link()
     GLint status;
     glLinkProgram(_programID);
     
-    //#if defined(DEBUG)
     GLint logLength;
     glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0) {
@@ -273,7 +268,6 @@ bool Shader::link()
         glGetProgramInfoLog(_programID, logLength, &logLength, &(*log.begin()));
         bRenderer::log("Program link log:\n" + log);
     }
-    //#endif
     
     glGetProgramiv(_programID, GL_LINK_STATUS, &status);
     if (status == 0) {

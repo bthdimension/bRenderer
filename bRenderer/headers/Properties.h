@@ -12,7 +12,7 @@
 *	The properties may be passed to the shader as uniforms. The names of the stored objects
 *	should therefore be chosen to match the names of the uniforms in the shader
 *
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class Properties
 {

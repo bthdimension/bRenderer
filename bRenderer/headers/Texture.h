@@ -18,7 +18,7 @@ public:
 
 	/**	@brief Constructor
 	*
-	*	This constructor generates a texture yet doesn't aplly any settings or data
+	*	This constructor generates a texture yet doesn't apply any settings or data
 	*/
 	Texture() { glGenTextures(1, &_textureID); }
 

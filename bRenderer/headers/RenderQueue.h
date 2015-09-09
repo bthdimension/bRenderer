@@ -18,7 +18,7 @@ struct RenderCall
 };
 
 /** @brief A queue that stores render calls and performs drawing in sorted order
-*	@author Benjamin Bürgisser
+*	@author Benjamin Buergisser
 */
 class RenderQueue : public IDrawable
 {
