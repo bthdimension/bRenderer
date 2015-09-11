@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B44186921BA3311100604D7F /* RenderProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B44186911BA3311100604D7F /* RenderProject.cpp */; };
 		B462EC641B9641C700D6FCD5 /* autofit.c in Sources */ = {isa = PBXBuildFile; fileRef = B462EC631B9641C700D6FCD5 /* autofit.c */; };
 		B462EC661B9641FD00D6FCD5 /* bdf.c in Sources */ = {isa = PBXBuildFile; fileRef = B462EC651B9641FD00D6FCD5 /* bdf.c */; };
 		B462EC681B96421000D6FCD5 /* cff.c in Sources */ = {isa = PBXBuildFile; fileRef = B462EC671B96421000D6FCD5 /* cff.c */; };
@@ -49,7 +50,6 @@
 		B462ECB21B96486B00D6FCD5 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B462ECB11B96486B00D6FCD5 /* libfreeimage.a */; };
 		B462ECB61B9648C000D6FCD5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B462ECB51B9648C000D6FCD5 /* OpenGL.framework */; };
 		B462ECB81B964C9900D6FCD5 /* libglfw.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B462ECB71B964C9900D6FCD5 /* libglfw.3.1.dylib */; };
-		B462ED4D1B9651F000D6FCD5 /* ProjectMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B462ED4C1B9651F000D6FCD5 /* ProjectMain.cpp */; };
 		B462ED4F1B96535F00D6FCD5 /* libGLEW.1.13.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B462ED4E1B96535F00D6FCD5 /* libGLEW.1.13.0.dylib */; };
 		B46A1BF31B97482B00CA7E48 /* platform.c in Sources */ = {isa = PBXBuildFile; fileRef = B46A1B8F1B97482B00CA7E48 /* platform.c */; };
 		B46A1BF41B97482B00CA7E48 /* texture-atlas.c in Sources */ = {isa = PBXBuildFile; fileRef = B46A1B911B97482B00CA7E48 /* texture-atlas.c */; };
@@ -152,6 +152,8 @@
 		B415BF0C1B965A2E005CC9B0 /* torch.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = torch.mtl; sourceTree = "<group>"; };
 		B415BF0D1B965A2E005CC9B0 /* torch.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = torch.obj; sourceTree = "<group>"; };
 		B415BF0E1B965A2E005CC9B0 /* torchSurface_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = torchSurface_Color.png; sourceTree = "<group>"; };
+		B441868F1BA3311100604D7F /* RenderProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderProject.h; sourceTree = "<group>"; };
+		B44186911BA3311100604D7F /* RenderProject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderProject.cpp; sourceTree = "<group>"; };
 		B462EC631B9641C700D6FCD5 /* autofit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = autofit.c; path = "externalLibraries/freetype-2.6/src/autofit/autofit.c"; sourceTree = "<group>"; };
 		B462EC651B9641FD00D6FCD5 /* bdf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bdf.c; path = "externalLibraries/freetype-2.6/src/bdf/bdf.c"; sourceTree = "<group>"; };
 		B462EC671B96421000D6FCD5 /* cff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cff.c; path = "externalLibraries/freetype-2.6/src/cff/cff.c"; sourceTree = "<group>"; };
@@ -194,8 +196,6 @@
 		B462ECB11B96486B00D6FCD5 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = externalLibraries/FreeImage3170/libfreeimage.a; sourceTree = "<group>"; };
 		B462ECB51B9648C000D6FCD5 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		B462ECB71B964C9900D6FCD5 /* libglfw.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.1.dylib; path = "externalLibraries/glfw-3.1.1/lib_osx/libglfw.3.1.dylib"; sourceTree = "<group>"; };
-		B462ED4A1B9651F000D6FCD5 /* ProjectMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectMain.h; sourceTree = "<group>"; };
-		B462ED4C1B9651F000D6FCD5 /* ProjectMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectMain.cpp; sourceTree = "<group>"; };
 		B462ED4E1B96535F00D6FCD5 /* libGLEW.1.13.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.1.13.0.dylib; path = "externalLibraries/glew-1.13.0/lib_osx/libGLEW.1.13.0.dylib"; sourceTree = "<group>"; };
 		B46A1B891B97482B00CA7E48 /* bRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bRenderer.h; sourceTree = "<group>"; };
 		B46A1B8C1B97482B00CA7E48 /* freetype-gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "freetype-gl.h"; sourceTree = "<group>"; };
@@ -399,6 +399,23 @@
 			path = project/data;
 			sourceTree = SOURCE_ROOT;
 		};
+		B441868E1BA3311100604D7F /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				B441868F1BA3311100604D7F /* RenderProject.h */,
+			);
+			name = headers;
+			sourceTree = "<group>";
+		};
+		B44186901BA3311100604D7F /* implementation */ = {
+			isa = PBXGroup;
+			children = (
+				B44186911BA3311100604D7F /* RenderProject.cpp */,
+			);
+			name = implementation;
+			path = project/implementation;
+			sourceTree = SOURCE_ROOT;
+		};
 		B462EC621B96419400D6FCD5 /* FT_MODULES */ = {
 			isa = PBXGroup;
 			children = (
@@ -428,23 +445,6 @@
 			);
 			name = FT_MODULES;
 			sourceTree = "<group>";
-		};
-		B462ED491B9651F000D6FCD5 /* headers */ = {
-			isa = PBXGroup;
-			children = (
-				B462ED4A1B9651F000D6FCD5 /* ProjectMain.h */,
-			);
-			name = headers;
-			sourceTree = "<group>";
-		};
-		B462ED4B1B9651F000D6FCD5 /* implementation */ = {
-			isa = PBXGroup;
-			children = (
-				B462ED4C1B9651F000D6FCD5 /* ProjectMain.cpp */,
-			);
-			name = implementation;
-			path = project/implementation;
-			sourceTree = SOURCE_ROOT;
 		};
 		B46A1B881B97482B00CA7E48 /* bRenderer */ = {
 			isa = PBXGroup;
@@ -635,9 +635,9 @@
 		B4AD0A9C1B961E5500CA7F01 /* project */ = {
 			isa = PBXGroup;
 			children = (
+				B441868E1BA3311100604D7F /* headers */,
+				B44186901BA3311100604D7F /* implementation */,
 				B415BEE41B965A2E005CC9B0 /* data */,
-				B462ED491B9651F000D6FCD5 /* headers */,
-				B462ED4B1B9651F000D6FCD5 /* implementation */,
 				B4D222CB1B9621F900D55C29 /* main.cpp */,
 			);
 			name = project;
@@ -713,6 +713,7 @@
 				B462EC841B96430300D6FCD5 /* ftbbox.c in Sources */,
 				B462EC7C1B96429700D6FCD5 /* ftlzw.c in Sources */,
 				B46A1BF61B97482B00CA7E48 /* vector.c in Sources */,
+				B44186921BA3311100604D7F /* RenderProject.cpp in Sources */,
 				B46A1C0F1B97482B00CA7E48 /* Sprite.cpp in Sources */,
 				B46A1BF51B97482B00CA7E48 /* texture-font.c in Sources */,
 				B462EC9A1B96438900D6FCD5 /* pcf.c in Sources */,
@@ -753,7 +754,6 @@
 				B46A1C0B1B97482B00CA7E48 /* Shader.cpp in Sources */,
 				B462EC6C1B96422A00D6FCD5 /* ftbitmap.c in Sources */,
 				B46A1BF31B97482B00CA7E48 /* platform.c in Sources */,
-				B462ED4D1B9651F000D6FCD5 /* ProjectMain.cpp in Sources */,
 				B46A1C021B97482B00CA7E48 /* Material.cpp in Sources */,
 				B46A1C1A1B97482B00CA7E48 /* Input_ios.mm in Sources */,
 				B46A1BFD1B97482B00CA7E48 /* DepthMap.cpp in Sources */,

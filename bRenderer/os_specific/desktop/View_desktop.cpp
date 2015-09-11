@@ -89,7 +89,7 @@ bool View::initView(GLint width, GLint height, bool fullscreen, std::string wind
 
 void View::terminateView()
 {
-	glfwTerminate();
+	glfwDestroyWindow(_window);
 	_initialized = false;
 }
 

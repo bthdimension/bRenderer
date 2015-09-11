@@ -27,7 +27,7 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Framebuffer() { destroy(); }
+	virtual ~Framebuffer() { deleteFramebuffer(); }
 
 	/**	@brief Bind the framebuffer object
 	*	@param[in] preserveCurrentFramebuffer If true the framebuffer that was active before binding is bound again when unbinding
@@ -93,12 +93,15 @@ public:
 	*/
 	static GLint getCurrentFramebuffer();
 
+	/**	@brief Delete the framebuffer
+	*/
+	virtual void deleteFramebuffer();
+
 private:
 
 	/* Functions */
 
 	virtual void create();
-	virtual void destroy();
 	virtual void bindBuffer(bool preserveCurrentFramebuffer);
 
 	/* Variables */

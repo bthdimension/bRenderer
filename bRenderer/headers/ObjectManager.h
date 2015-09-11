@@ -570,28 +570,33 @@ public:
 
 	/**	@brief Remove a shader
 	*	@param[in] name Name of the shader
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeShader(const std::string &name);
+	void removeShader(const std::string &name, bool del);
 
 	/**	@brief Remove a texture
 	*	@param[in] name Name of the texture
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeTexture(const std::string &name);
+	void removeTexture(const std::string &name, bool del);
 
 	/**	@brief Remove a cube map
 	*	@param[in] name Name of the cube map
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeCubeMap(const std::string &name);
+	void removeCubeMap(const std::string &name, bool del);
 
 	/**	@brief Remove a depth map
 	*	@param[in] name Name of the depth map
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeDepthMap(const std::string &name);
+	void removeDepthMap(const std::string &name, bool del);
 
 	/**	@brief Remove a font
 	*	@param[in] name Name of the font
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeFont(const std::string &name);
+	void removeFont(const std::string &name, bool del);
 
 	/**	@brief Remove a material
 	*	@param[in] name Name of the material
@@ -605,13 +610,15 @@ public:
 
 	/**	@brief Remove a 3D model
 	*	@param[in] name Name of the model
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeModel(const std::string &name);
+	void removeModel(const std::string &name, bool del);
 
 	/**	@brief Remove a text sprite
 	*	@param[in] name Name of the text sprite
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeTextSprite(const std::string &name);
+	void removeTextSprite(const std::string &name, bool del);
 
 	/**	@brief Remove a camera
 	*	@param[in] name Name of the camera
@@ -630,8 +637,9 @@ public:
 
 	/**	@brief Remove a framebuffer
 	*	@param[in] name Name of the framebuffer
+	*	@param[in] del Set true if the OpenGL object should be deleted
 	*/
-	void removeFramebuffer(const std::string &name);
+	void removeFramebuffer(const std::string &name, bool del);
 
 	/**	@brief Remove a drawable
 	*	@param[in] name Name of the drawable
@@ -639,8 +647,9 @@ public:
 	void removeDrawable(const std::string &name);
 
 	/**	@brief Clear all objects
+	*	@param[in] del Set true if the OpenGL objects should be deleted
 	*/
-	void clear();
+	void clear(bool del);
 
 private:
 	/* Functions */

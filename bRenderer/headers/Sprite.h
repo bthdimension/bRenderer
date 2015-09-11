@@ -45,7 +45,7 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Sprite() {}
+	virtual ~Sprite() { deleteModelGeometry(); }
 
 private:
 

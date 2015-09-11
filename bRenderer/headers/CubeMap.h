@@ -21,7 +21,7 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~CubeMap() {}
+	virtual ~CubeMap() { deleteTexture(); }
 
 	/**	@brief Binds the cube map
 	*	@param[in] texUnit Specifies which texture unit to bind it to

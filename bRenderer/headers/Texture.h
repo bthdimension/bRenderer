@@ -38,7 +38,7 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Texture();
+	virtual ~Texture() { deleteTexture(); }
     
 	/**	@brief Returns texture id
 	*/
@@ -48,6 +48,14 @@ public:
 	*	@param[in] texUnit Specifies which texture unit to bind it to
 	*/
     virtual void bind(GLint texUnit = GL_TEXTURE0);
+
+	/**	@brief Delete the OpenGL texture
+	*/
+	virtual void deleteTexture()
+	{
+		if (_textureID)
+			glDeleteTextures(1, &_textureID);
+	}
     
 private:
 

@@ -105,9 +105,6 @@
     <ClCompile Include="..\..\project\windows\main.cpp">
       <Filter>project</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\project\implementation\ProjectMain.cpp">
-      <Filter>project\implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\autofit\autofit.c">
       <Filter>externalLibraries\freetype</Filter>
     </ClCompile>
@@ -288,6 +285,9 @@
     <ClCompile Include="..\..\bRenderer\implementation\ModelRenderer.cpp">
       <Filter>bRenderer\implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\implementation\RenderProject.cpp">
+      <Filter>project\implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h">
@@ -355,9 +355,6 @@
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\Sprite.h">
       <Filter>bRenderer\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\project\headers\ProjectMain.h">
-      <Filter>project\headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\TextSprite.h">
       <Filter>bRenderer\headers</Filter>
@@ -445,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="..\..\bRenderer\headers\ModelRenderer.h">
       <Filter>bRenderer\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\RenderProject.h">
+      <Filter>project\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

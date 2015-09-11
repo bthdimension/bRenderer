@@ -54,14 +54,6 @@ Shader::Shader(const IShaderData &shaderData)
 	bRenderer::log("Number of available tex units: " + std::to_string(_maxTexUnits)+".", bRenderer::LM_INFO);
 }
 
-Shader::~Shader()
-{
-    if (_programID) {
-        glDeleteProgram(_programID);
-        _programID = 0;
-    }
-}
-
 void Shader::setUniform(const std::string &name, const vmml::Vector4f &arg)
 {
     glUseProgram(_programID);

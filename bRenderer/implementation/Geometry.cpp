@@ -2,11 +2,6 @@
 
 /* Public functions */
 
-Geometry::~Geometry()
-{
-	glDeleteBuffers(1, &_vertexBuffer);
-}
-
 void Geometry::initialize(GeometryDataPtr geometryData)
 {
 	// Create bounding volume

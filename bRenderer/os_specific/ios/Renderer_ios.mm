@@ -88,8 +88,8 @@ void Renderer::terminateRenderer()
         [_rendererCaller stop];
         _rendererCaller = nil;
         
-        _running = false;
-        _initialized = false;
+		_view->setContextCurrent();
+		reset();
         
         if (_terminateFunction)
             _terminateFunction();
@@ -98,8 +98,6 @@ void Renderer::terminateRenderer()
             _renderProject->terminateFunction();
         
         _view->terminateView();
-
-        reset();
         
         bRenderer::log("Renderer terminated", bRenderer::LM_SYS);
     }
@@ -112,6 +110,7 @@ void Renderer::update()
      // get time
     double currentTime = CACurrentMediaTime() - _startTime;
     
+	_view->setContextCurrent();
     _view->bindFramebuffer();
     
     // clear
@@ -128,7 +127,6 @@ void Renderer::update()
     _elapsedTime = currentTime;
     
     // display
-    _view->setContextCurrent();
     _view->presentBuffer();
 }
 

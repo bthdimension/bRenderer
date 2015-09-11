@@ -22,7 +22,7 @@ void Font::init(const std::string &fontFileName, GLuint fontPixelSize)
 		fontPixelSize = bRenderer::FONT_MAX_PIXEL_SIZE();
 	if (_fontFileName != fontFileName || _fontPixelSize != fontPixelSize){
 		if (_initialized)
-			reset();		// If the font has been initialized before everything has to be reset
+			deleteFont();		// If the font has been initialized before everything has to be reset
 
 		_atlas = ftgl::texture_atlas_new(8 * fontPixelSize, 8 * fontPixelSize, 1);
 		_font = ftgl::texture_font_new_from_file(_atlas, fontPixelSize, bRenderer::getFilePath(fontFileName).c_str());
@@ -37,8 +37,16 @@ void Font::init(const std::string &fontFileName, GLuint fontPixelSize)
 	_initialized = true;
 }
 
-void Font::reset()
+void Font::deleteFont()
 {
-	ftgl::texture_atlas_delete(_atlas);
-	ftgl::texture_font_delete(_font);
+	if (_atlas)
+		ftgl::texture_atlas_delete(_atlas);
+	if (_font)
+		ftgl::texture_font_delete(_font);
+	if (_atlasTexture)
+		_atlasTexture->deleteTexture();
+
+	_atlas = nullptr;
+	_font = nullptr;
+	_atlasTexture = nullptr;
 }

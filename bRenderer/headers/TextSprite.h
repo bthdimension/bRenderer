@@ -34,7 +34,7 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~TextSprite() {}
+	virtual ~TextSprite() { deleteModelGeometry(); }
 
 	/**	@brief Set a text string
 	*	@param[in] text The string to be displayed

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B44186971BA331E300604D7F /* RenderProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B44186961BA331E300604D7F /* RenderProject.cpp */; };
 		B46A1B5A1B97458900CA7E48 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B46A1AF41B97458900CA7E48 /* LICENSE.txt */; };
 		B46A1B5B1B97458900CA7E48 /* platform.c in Sources */ = {isa = PBXBuildFile; fileRef = B46A1AF61B97458900CA7E48 /* platform.c */; };
 		B46A1B5C1B97458900CA7E48 /* texture-atlas.c in Sources */ = {isa = PBXBuildFile; fileRef = B46A1AF81B97458900CA7E48 /* texture-atlas.c */; };
@@ -92,7 +93,6 @@
 		B47AD7031B82809B00AFC632 /* ftstroke.c in Sources */ = {isa = PBXBuildFile; fileRef = B47AD7021B82809B00AFC632 /* ftstroke.c */; };
 		B47AD7051B8280A900AFC632 /* ftsystem.c in Sources */ = {isa = PBXBuildFile; fileRef = B47AD7041B8280A900AFC632 /* ftsystem.c */; };
 		B47AD7071B8280B800AFC632 /* smooth.c in Sources */ = {isa = PBXBuildFile; fileRef = B47AD7061B8280B800AFC632 /* smooth.c */; };
-		B4CB8CCD1B72E43300FE041B /* ProjectMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4CB8C9F1B72E43300FE041B /* ProjectMain.cpp */; };
 		B4CB8CCE1B72E43300FE041B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CB8CA31B72E43300FE041B /* AppDelegate.m */; };
 		B4CB8CCF1B72E43300FE041B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CB8CA41B72E43300FE041B /* main.m */; };
 		B4CB8CD01B72E43300FE041B /* Project-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4CB8CA51B72E43300FE041B /* Project-Info.plist */; };
@@ -148,6 +148,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B44186941BA331E300604D7F /* RenderProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderProject.h; sourceTree = "<group>"; };
+		B44186961BA331E300604D7F /* RenderProject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderProject.cpp; sourceTree = "<group>"; };
 		B46A1AF01B97458900CA7E48 /* bRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bRenderer.h; sourceTree = "<group>"; };
 		B46A1AF31B97458900CA7E48 /* freetype-gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "freetype-gl.h"; sourceTree = "<group>"; };
 		B46A1AF41B97458900CA7E48 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
@@ -284,8 +286,6 @@
 		B47AD7021B82809B00AFC632 /* ftstroke.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ftstroke.c; path = "externalLibraries/freetype-2.6/src/base/ftstroke.c"; sourceTree = "<group>"; };
 		B47AD7041B8280A900AFC632 /* ftsystem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ftsystem.c; path = "externalLibraries/freetype-2.6/src/base/ftsystem.c"; sourceTree = "<group>"; };
 		B47AD7061B8280B800AFC632 /* smooth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = smooth.c; path = "externalLibraries/freetype-2.6/src/smooth/smooth.c"; sourceTree = "<group>"; };
-		B4CB8C9D1B72E43300FE041B /* ProjectMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectMain.h; sourceTree = "<group>"; };
-		B4CB8C9F1B72E43300FE041B /* ProjectMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectMain.cpp; sourceTree = "<group>"; };
 		B4CB8CA21B72E43300FE041B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B4CB8CA31B72E43300FE041B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B4CB8CA41B72E43300FE041B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -384,6 +384,22 @@
 				B59A67941ACC8BA900E3EB9B /* OpenGLES.framework */,
 			);
 			name = externalLibraries;
+			sourceTree = "<group>";
+		};
+		B44186931BA331E300604D7F /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				B44186941BA331E300604D7F /* RenderProject.h */,
+			);
+			path = headers;
+			sourceTree = "<group>";
+		};
+		B44186951BA331E300604D7F /* implementation */ = {
+			isa = PBXGroup;
+			children = (
+				B44186961BA331E300604D7F /* RenderProject.cpp */,
+			);
+			path = implementation;
 			sourceTree = "<group>";
 		};
 		B46A1AEF1B97458900CA7E48 /* bRenderer */ = {
@@ -565,6 +581,7 @@
 		B47AD6B81B827D4900AFC632 /* freetype-2.6 */ = {
 			isa = PBXGroup;
 			children = (
+				B47AD6B91B827D6200AFC632 /* FT_MODULES */,
 				B47AD6E81B827FA900AFC632 /* autofit.c */,
 				B47AD6EA1B827FB500AFC632 /* bdf.c */,
 				B47AD6EC1B827FC200AFC632 /* cff.c */,
@@ -581,7 +598,6 @@
 				B47AD7021B82809B00AFC632 /* ftstroke.c */,
 				B47AD7041B8280A900AFC632 /* ftsystem.c */,
 				B47AD7061B8280B800AFC632 /* smooth.c */,
-				B47AD6B91B827D6200AFC632 /* FT_MODULES */,
 			);
 			name = "freetype-2.6";
 			sourceTree = "<group>";
@@ -619,28 +635,12 @@
 		B4CB8C7E1B72E43300FE041B /* project */ = {
 			isa = PBXGroup;
 			children = (
+				B44186931BA331E300604D7F /* headers */,
+				B44186951BA331E300604D7F /* implementation */,
 				B4E4AD411B94F75800A9EAC4 /* data */,
-				B4CB8C9C1B72E43300FE041B /* headers */,
-				B4CB8C9E1B72E43300FE041B /* implementation */,
 				B4CB8CA11B72E43300FE041B /* resources */,
 			);
 			path = project;
-			sourceTree = "<group>";
-		};
-		B4CB8C9C1B72E43300FE041B /* headers */ = {
-			isa = PBXGroup;
-			children = (
-				B4CB8C9D1B72E43300FE041B /* ProjectMain.h */,
-			);
-			path = headers;
-			sourceTree = "<group>";
-		};
-		B4CB8C9E1B72E43300FE041B /* implementation */ = {
-			isa = PBXGroup;
-			children = (
-				B4CB8C9F1B72E43300FE041B /* ProjectMain.cpp */,
-			);
-			path = implementation;
 			sourceTree = "<group>";
 		};
 		B4CB8CA11B72E43300FE041B /* resources */ = {
@@ -867,10 +867,10 @@
 				B46A1B6F1B97458900CA7E48 /* ModelData.cpp in Sources */,
 				B47AD6F31B82800400AFC632 /* ftcache.c in Sources */,
 				B47AD6FD1B82806900AFC632 /* ftgzip.c in Sources */,
-				B4CB8CCD1B72E43300FE041B /* ProjectMain.cpp in Sources */,
 				B47AD6CF1B827E7100AFC632 /* ftwinfnt.c in Sources */,
 				B46A1B721B97458900CA7E48 /* OBJLoader.cpp in Sources */,
 				B46A1B701B97458900CA7E48 /* ModelRenderer.cpp in Sources */,
+				B44186971BA331E300604D7F /* RenderProject.cpp in Sources */,
 				B46A1B761B97458900CA7E48 /* ShaderDataFile.cpp in Sources */,
 				B47AD6D71B827EC000AFC632 /* pshinter.c in Sources */,
 				B47AD7071B8280B800AFC632 /* smooth.c in Sources */,

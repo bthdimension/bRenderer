@@ -35,11 +35,6 @@ Texture::Texture(const TextureData &data)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Texture::~Texture()
-{
-	glDeleteTextures(1, &_textureID);
-}
-
 void Texture::bind(GLint texUnit)
 {
     glActiveTexture(texUnit);

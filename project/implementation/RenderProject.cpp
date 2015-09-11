@@ -1,9 +1,9 @@
-#include "ProjectMain.h"
+#include "RenderProject.h"
 
 /* Initialize the Project */
-void ProjectMain::init()
+void RenderProject::init()
 {
-	bRenderer::loadConfigFile("config.json");
+	bRenderer::loadConfigFile("config.json");	// load custom configurations replacing the default values in Configuration.cpp
 	// let the renderer create an OpenGL context and the main window
 	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// full screen on iOS
@@ -16,9 +16,9 @@ void ProjectMain::init()
 }
 
 /* This function is executed when initializing the renderer */
-void ProjectMain::initFunction()
+void RenderProject::initFunction()
 {
-	// get shading language version
+	// get OpenGL and shading language version
 	bRenderer::log("OpenGL Version: ", glGetString(GL_VERSION));
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
@@ -33,8 +33,8 @@ void ProjectMain::initFunction()
 	bRenderer().getObjects()->setShaderVersionDesktop("#version 120");
 	bRenderer().getObjects()->setShaderVersionES("#version 100");
 
-	// demo: load material and shader before loading the model
-	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// create custom shader with a maximum of 2 lights
+	// load materials and shaders before loading the model
+	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// automatically generates a shader with a maximum of 2 lights
 	ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile("flame", 0, false, true, true, false, false);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
 	MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
 
@@ -43,15 +43,15 @@ void ProjectMain::initFunction()
 	PropertiesPtr streamProperties = bRenderer().getObjects()->createProperties("streamProperties");
 
 	// load models
-	bRenderer().getObjects()->loadObjModel("cave.obj", true, true, false, 4, true, false);								// create custom shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getObjects()->loadObjModel("cave.obj", true, true, false, 4, true, false);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
 	bRenderer().getObjects()->loadObjModel("cave_stream.obj", true, true, true, 4, false, false, streamProperties);		// automatically loads shader files according to the name of the material
-	bRenderer().getObjects()->loadObjModel("crystal.obj", false, true, customShader);										// the custom shader created above is used
-	bRenderer().getObjects()->loadObjModel("torch.obj", false, true, false, 1, false, true);								// create custom shader with a maximum of 1 light
+	bRenderer().getObjects()->loadObjModel("crystal.obj", false, true, customShader);									// the custom shader created above is used
+	bRenderer().getObjects()->loadObjModel("torch.obj", false, true, false, 1, false, true);							// create custom shader with a maximum of 1 light
 
 	// create sprites
 	bRenderer().getObjects()->createSprite("flame", flameMaterial, false, flameProperties);				// create a sprite using the material created above, to pass additional properties a Properties object is used
 	bRenderer().getObjects()->createSprite("sparks", "sparks.png");										// create a sprite displaying sparks as a texture
-	bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");								// create a sprite displaying the title as a texture
+	bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
 
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
@@ -61,10 +61,10 @@ void ProjectMain::initFunction()
 		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
 
 	//////////////////////////////////TEXTTEST
-	FontPtr fontTest = bRenderer().getObjects()->loadFont("arial.ttf", 128);
-	ShaderPtr testi = bRenderer().getObjects()->generateShader("testi", { 2, true, true, true, true, true, true, true, true, true, false, false, true });
-	MaterialPtr testMaterial = bRenderer().getObjects()->loadObjMaterial("testi.mtl", "testi", testi);
-	TextSpritePtr testSprite = bRenderer().getObjects()->createTextSprite("test_text", testMaterial, "Benjamin's Test", fontTest);
+	//FontPtr fontTest = bRenderer().getObjects()->loadFont("arial.ttf", 128);
+	//ShaderPtr testi = bRenderer().getObjects()->generateShader("testi", { 2, true, true, true, true, true, true, true, true, true, false, false, true });
+	//MaterialPtr testMaterial = bRenderer().getObjects()->loadObjMaterial("testi.mtl", "testi", testi);
+	//TextSpritePtr testSprite = bRenderer().getObjects()->createTextSprite("test_text", testMaterial, "Benjamin's Test", fontTest);
 	/////////////////////////////////
 
 	// create camera
@@ -115,10 +115,10 @@ void ProjectMain::initFunction()
 }
 
 /* Draw your scene here */
-void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTime)
+void RenderProject::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
 	//bRenderer::log("deltaTime: "+std::to_string(deltaTime)+", elapsedTime: "+std::to_string(elapsedTime));
-	//bRenderer::log("FPS: " + std::to_string(1 / deltaTime));
+//	bRenderer::log("FPS: " + std::to_string(1 / deltaTime));
 
 	//// Draw Scene and do post processing ////
 
@@ -221,13 +221,13 @@ void ProjectMain::loopFunction(const double &deltaTime, const double &elapsedTim
 }
 
 /* This function is executed when terminating the renderer */
-void ProjectMain::terminateFunction()
+void RenderProject::terminateFunction()
 {
 	bRenderer::log("I totally terminated this Renderer :-)");
 }
 
 /* Update render queue */
-void ProjectMain::updateRenderQueue(const std::string &camera, const double &deltaTime)
+void RenderProject::updateRenderQueue(const std::string &camera, const double &deltaTime)
 {
 	/*** Cave ***/
 	// translate and scale 
@@ -241,12 +241,12 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	bRenderer().getModelRenderer()->queueModelInstance("cave_stream", "cave_stream_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true, false, true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1.0f);
 	
 	//////////////////////////////TESTreflections
-	/*** Sphere ***/
-	// translate and scale
-	modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, 5.0f, 40.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
-	// submit to render queue
-	bRenderer().getModelRenderer()->queueModelInstance("sphere", "sphere_instance", camera, modelMatrix, std::vector<std::string>({ /*"torchLight",*/ "firstLight", "secondLight", "thirdLight" }), true, false, true);
-	bRenderer().getObjects()->getModel("sphere")->getInstanceProperties("sphere_instance")->at(bRenderer().getObjects()->getShader("sphere"))->setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_INVERSE_VIEW_MATRIX(), vmml::Matrix3f(bRenderer().getObjects()->getCamera(camera)->getInverseViewMatrix()));
+	///*** Sphere ***/
+	//// translate and scale
+	//modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, 5.0f, 40.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
+	//// submit to render queue
+	//bRenderer().getModelRenderer()->queueModelInstance("sphere", "sphere_instance", camera, modelMatrix, std::vector<std::string>({ /*"torchLight",*/ "firstLight", "secondLight", "thirdLight" }), true, false, true);
+	//bRenderer().getObjects()->getModel("sphere")->getInstanceProperties("sphere_instance")->at(bRenderer().getObjects()->getShader("sphere"))->setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_INVERSE_VIEW_MATRIX(), vmml::Matrix3f(bRenderer().getObjects()->getCamera(camera)->getInverseViewMatrix()));
 	//////////////////////////////
 
 	/*** Crystal (blue) ***/
@@ -324,16 +324,16 @@ void ProjectMain::updateRenderQueue(const std::string &camera, const double &del
 	//////////////////////////////////TEXTTEST
 	//bRenderer().getObjects()->getFont("arial")->setPixelSize(static_cast<int>(1 / deltaTime));
 
-	GLfloat titleScale = 6.f;
-	vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale / bRenderer().getView()->getAspectRatio(), titleScale));
-	modelMatrix = vmml::create_translation(vmml::Vector3f(78.f, 0.f, 10.f)) * bRenderer().getObjects()->getCamera("camera")->getInverseRotationY() * scaling;
-	bRenderer().getObjects()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
-	bRenderer().getModelRenderer()->queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
+	//GLfloat titleScale = 6.f;
+	//vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale / bRenderer().getView()->getAspectRatio(), titleScale));
+	//modelMatrix = vmml::create_translation(vmml::Vector3f(78.f, 0.f, 10.f)) * bRenderer().getObjects()->getCamera("camera")->getInverseRotationY() * scaling;
+	//bRenderer().getObjects()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
+	//bRenderer().getModelRenderer()->queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
 	//////////////////////////////////
 }
 
 /* Camera movement */
-void ProjectMain::updateCamera(const std::string &camera, const double &deltaTime)
+void RenderProject::updateCamera(const std::string &camera, const double &deltaTime)
 {
 	//// Adjust aspect ratio ////
 	bRenderer().getObjects()->getCamera(camera)->setAspectRatio(bRenderer().getView()->getAspectRatio());
@@ -341,6 +341,7 @@ void ProjectMain::updateCamera(const std::string &camera, const double &deltaTim
 	double deltaCameraY = 0.0;
 	double deltaCameraX = 0.0;
 	double cameraForward = 0.0;
+	double cameraSideward = 0.0;
 
 	/* iOS: control movement using touch screen */
 	if (Input::isTouchDevice()){
@@ -360,6 +361,8 @@ void ProjectMain::updateCamera(const std::string &camera, const double &deltaTim
 				// If touch is in left half of the view: move around
 				if (touch.startPositionX < bRenderer().getView()->getWidth() / 2){
 					cameraForward = -(touch.currentPositionY - touch.startPositionY) / 100;
+					cameraSideward = (touch.currentPositionX - touch.startPositionX) / 100;
+
 				}
 				// if touch is in right half of the view: look around
 				else
@@ -407,9 +410,9 @@ void ProjectMain::updateCamera(const std::string &camera, const double &deltaTim
 				cameraForward = 0.0;
 
 			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_A) == bRenderer::INPUT_PRESS)
-				bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(-_cameraSpeed*deltaTime);
+				cameraSideward = -1.0;
 			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_D) == bRenderer::INPUT_PRESS)
-				bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(_cameraSpeed*deltaTime);
+				cameraSideward = 1.0;
 			if (bRenderer().getInput()->getKeyState(bRenderer::KEY_UP) == bRenderer::INPUT_PRESS)
 				bRenderer().getObjects()->getCamera(camera)->moveCameraUpward(_cameraSpeed*deltaTime);
 			else if (bRenderer().getInput()->getKeyState(bRenderer::KEY_DOWN) == bRenderer::INPUT_PRESS)
@@ -425,11 +428,12 @@ void ProjectMain::updateCamera(const std::string &camera, const double &deltaTim
 	if (_running){
 		bRenderer().getObjects()->getCamera(camera)->moveCameraForward(cameraForward*_cameraSpeed*deltaTime);
 		bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
+		bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
 	}	
 }
 
 /* For iOS only: Handle device rotation */
-void ProjectMain::deviceRotated()
+void RenderProject::deviceRotated()
 {
 	if (bRenderer().isInitialized()){
 		// set view to full screen after device rotation
@@ -439,7 +443,7 @@ void ProjectMain::deviceRotated()
 }
 
 /* For iOS only: Handle app going into background */
-void ProjectMain::appWillResignActive()
+void RenderProject::appWillResignActive()
 {
 	if (bRenderer().isInitialized()){
 		// stop the renderer when the app isn't active
@@ -448,7 +452,7 @@ void ProjectMain::appWillResignActive()
 }
 
 /* For iOS only: Handle app coming back from background */
-void ProjectMain::appDidBecomeActive()
+void RenderProject::appDidBecomeActive()
 {
 	if (bRenderer().isInitialized()){
 		// run the renderer as soon as the app is active
@@ -457,7 +461,7 @@ void ProjectMain::appDidBecomeActive()
 }
 
 /* For iOS only: Handle app being terminated */
-void ProjectMain::appWillTerminate()
+void RenderProject::appWillTerminate()
 {
 	if (bRenderer().isInitialized()){
 		// terminate renderer before the app is closed
@@ -465,7 +469,7 @@ void ProjectMain::appWillTerminate()
 	}
 }
 
-void ProjectMain::updateReflections(FramebufferPtr fbo, CubeMapPtr cubeMap, const std::string &camera, const vmml::Vector3f &position)
+void RenderProject::updateReflections(FramebufferPtr fbo, CubeMapPtr cubeMap, const std::string &camera, const vmml::Vector3f &position)
 {
 	GLint defaultFBO = Framebuffer::getCurrentFramebuffer();				// get current fbo to bind it again after drawing the scene
 	bRenderer().getObjects()->getCamera(camera)->setPosition(position);
@@ -497,6 +501,6 @@ void ProjectMain::updateReflections(FramebufferPtr fbo, CubeMapPtr cubeMap, cons
 }
 
 /* Helper functions */
-GLfloat ProjectMain::randomNumber(GLfloat min, GLfloat max){
+GLfloat RenderProject::randomNumber(GLfloat min, GLfloat max){
 	return min + static_cast <GLfloat> (rand()) / (static_cast <GLfloat> (RAND_MAX / (max - min)));
 }

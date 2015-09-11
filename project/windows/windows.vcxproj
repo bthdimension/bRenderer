@@ -149,8 +149,8 @@
     <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\type1\type1.c" />
     <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\type42\type42.c" />
     <ClCompile Include="..\..\externalLibraries\freetype-2.6\src\winfonts\winfnt.c" />
-    <ClCompile Include="..\..\project\implementation\ProjectMain.cpp" />
     <ClCompile Include="..\..\project\windows\main.cpp" />
+    <ClCompile Include="..\implementation\RenderProject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bRenderer\bRenderer.h" />
@@ -204,7 +204,7 @@
     <ClInclude Include="..\..\bRenderer\headers\Touch.h" />
     <ClInclude Include="..\..\bRenderer\headers\View.h" />
     <ClInclude Include="..\..\bRenderer\os_specific\ios\BView.h" />
-    <ClInclude Include="..\..\project\headers\ProjectMain.h" />
+    <ClInclude Include="..\headers\RenderProject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bRenderer\os_specific\ios\BView.mm" />

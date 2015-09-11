@@ -696,28 +696,43 @@ vmml::Vector3f ObjectManager::getAmbientColor()
 	return _ambientColor;
 }
 
-void ObjectManager::removeShader(const std::string &name)
+void ObjectManager::removeShader(const std::string &name, bool del)
 {
+	if (del && _shaders.count(name) > 0){
+		_shaders[name]->deleteShader();
+	}
 	_shaders.erase(name);
 }
 
-void ObjectManager::removeTexture(const std::string &name)
+void ObjectManager::removeTexture(const std::string &name, bool del)
 {
+	if (del && _textures.count(name) > 0){
+		_textures[name]->deleteTexture();
+	}
 	_textures.erase(name);
 }
 
-void ObjectManager::removeCubeMap(const std::string &name)
+void ObjectManager::removeCubeMap(const std::string &name, bool del)
 {
+	if (del && _cubeMaps.count(name) > 0){
+		_cubeMaps[name]->deleteTexture();
+	}
 	_cubeMaps.erase(name);
 }
 
-void ObjectManager::removeDepthMap(const std::string &name)
+void ObjectManager::removeDepthMap(const std::string &name, bool del)
 {
+	if (del && _depthMaps.count(name) > 0){
+		_depthMaps[name]->deleteTexture();
+	}
 	_depthMaps.erase(name);
 }
 
-void ObjectManager::removeFont(const std::string &name)
+void ObjectManager::removeFont(const std::string &name, bool del)
 {
+	if (del && _fonts.count(name) > 0){
+		_fonts[name]->deleteFont();
+	}
 	_fonts.erase(name);
 }
 
@@ -731,13 +746,19 @@ void ObjectManager::removeProperties(const std::string &name)
 	_properties.erase(name);
 }
 
-void ObjectManager::removeModel(const std::string &name)
+void ObjectManager::removeModel(const std::string &name, bool del)
 {
+	if (del && _models.count(name) > 0){
+		_models[name]->deleteModelGeometry();
+	}
 	_models.erase(name);
 }
 
-void ObjectManager::removeTextSprite(const std::string &name)
+void ObjectManager::removeTextSprite(const std::string &name, bool del)
 {
+	if (del && _textSprites.count(name) > 0){
+		_textSprites[name]->deleteModelGeometry();
+	}
 	_textSprites.erase(name);
 }
 
@@ -756,8 +777,11 @@ void ObjectManager::removeLight(const std::string &name)
 	_lights.erase(name);
 }
 
-void ObjectManager::removeFramebuffer(const std::string &name)
+void ObjectManager::removeFramebuffer(const std::string &name, bool del)
 {
+	if (del && _framebuffers.count(name) > 0){
+		_framebuffers[name]->deleteFramebuffer();
+	}
 	_framebuffers.erase(name);
 }
 
@@ -766,21 +790,64 @@ void ObjectManager::removeDrawable(const std::string &name)
 	_drawables.erase(name);
 }
 
-void ObjectManager::clear()
+void ObjectManager::clear(bool del)
 {
+	if(del) for (auto i = _shaders.begin(); i != _shaders.end(); ++i)
+	{
+		i->second->deleteShader();
+	}
 	_shaders.clear();
+
+	if (del) for (auto i = _textures.begin(); i != _textures.end(); ++i)
+	{
+		i->second->deleteTexture();
+	}
 	_textures.clear();
+
+	if (del) for (auto i = _cubeMaps.begin(); i != _cubeMaps.end(); ++i)
+	{
+		i->second->deleteTexture();
+	}
 	_cubeMaps.clear();
+
+	if (del) for (auto i = _depthMaps.begin(); i != _depthMaps.end(); ++i)
+	{
+		i->second->deleteTexture();
+	}
 	_depthMaps.clear();
+
+	if (del) for (auto i = _fonts.begin(); i != _fonts.end(); ++i)
+	{
+		i->second->deleteFont();
+	}
 	_fonts.clear();
+
 	_materials.clear();
+	
 	_properties.clear();
+	
+	if (del) for (auto i = _models.begin(); i != _models.end(); ++i)
+	{
+		i->second->deleteModelGeometry();
+	}
 	_models.clear();
+
+	if (del) for (auto i = _textSprites.begin(); i != _textSprites.end(); ++i)
+	{
+		i->second->deleteModelGeometry();
+	}
 	_textSprites.clear();
+
 	_cameras.clear();
 	_matrixStacks.clear();
 	_lights.clear();
+	
+	if (del) for (auto i = _framebuffers.begin(); i != _framebuffers.end(); ++i)
+	{
+		i->second->deleteFramebuffer();
+	}
 	_framebuffers.clear();
+	
 	_drawables.clear();
 
 	_ambientColor = bRenderer::DEFAULT_AMBIENT_COLOR();

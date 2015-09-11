@@ -32,7 +32,9 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Geometry();
+	virtual ~Geometry() {
+        deleteGeometry();
+    }
 
 	/**	@brief Initializes the geometry object based on geometry data
 	*	@param[in] geometryData
@@ -127,6 +129,15 @@ public:
 	*	@param[in] arg The bounding box for the geometry in object space
 	*/
 	void            setBoundingBoxObjectSpace(vmml::AABBf arg)						{ _boundingBox = arg; }
+
+	/**	@brief Deletes the geometry
+	*/
+	virtual void deleteGeometry()
+	{
+		if (_vertexBuffer)
+			glDeleteBuffers(1, &_vertexBuffer);
+		_initialized = false;
+	}
 
 protected:
 

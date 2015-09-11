@@ -43,7 +43,10 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Shader();
+	virtual ~Shader()
+	{
+		deleteShader();
+	}
 
 	/**	@brief Binds the shader and its attributes
 	*/
@@ -163,8 +166,19 @@ public:
         }
     }
 
+	/**	@brief Returns the current texture unit used in the shader
+	*/
 	GLint getCurrentTexUnit() { return GL_TEXTURE0 + _cTexUnit; }
     
+	/**	@brief Deletes the shader
+	*/
+	virtual void deleteShader()
+	{
+		if (_programID) {
+			glDeleteProgram(_programID);
+		}
+	}
+
 protected:
 	
 	/* Functions */

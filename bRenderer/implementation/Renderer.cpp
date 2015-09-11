@@ -129,5 +129,5 @@ void Renderer::reset()
 	_elapsedTime = 0;
 
 	if (_objectManager)
-		_objectManager->clear();
+		_objectManager->clear(true);
 }

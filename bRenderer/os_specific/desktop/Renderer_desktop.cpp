@@ -36,8 +36,8 @@ void Renderer::stopRenderer()
 
 void Renderer::terminateRenderer()
 {
-	_running = false;
-	_initialized = false;
+    _view->setContextCurrent();
+	reset();
 
 	if (_terminateFunction)
 		_terminateFunction();
@@ -46,8 +46,7 @@ void Renderer::terminateRenderer()
 		_renderProject->terminateFunction();
 
 	_view->terminateView();
-
-	reset();
+	glfwTerminate();
 
 	bRenderer::log("Renderer terminated", bRenderer::LM_SYS);
 }

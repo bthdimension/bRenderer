@@ -30,7 +30,9 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Font()	{ reset(); }
+	virtual ~Font()	{
+        deleteFont();
+    }
 
 	/**	@brief Loads a font file
 	*	@param[in] fileName File name including extension
@@ -59,13 +61,15 @@ public:
 	*/
 	TexturePtr getAtlas(){ return _atlasTexture; }
 
+	/**	@brief Delete the font and its texture atlas
+	*/
+	virtual void deleteFont();
+
 private:
 
 	/* Functions */
 
 	void init(const std::string &fontFileName, GLuint fontPixelSize);
-
-	void reset();
 
 	/* Variables */
 

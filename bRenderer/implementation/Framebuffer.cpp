@@ -134,6 +134,15 @@ void Framebuffer::resize(GLint width, GLint height, bool autoResize)
 	}
 }
 
+void Framebuffer::deleteFramebuffer()
+{
+	if (_rbo_depth)
+		glDeleteRenderbuffers(1, &_rbo_depth);
+	if (_fbo)
+		glDeleteFramebuffers(1, &_fbo);
+
+}
+
 /* Private Functions */
 
 void Framebuffer::create()
@@ -168,14 +177,6 @@ void Framebuffer::create()
 	// unbind
 	unbind();
 }
-
-void Framebuffer::destroy()
-{
-	glDeleteRenderbuffers(1, &_rbo_depth);
-	glDeleteFramebuffers(1, &_fbo);
-
-}
-
 void Framebuffer::bindBuffer(bool preserveCurrentFramebuffer)
 {
 	_preserveCurrentFramebuffer = preserveCurrentFramebuffer;

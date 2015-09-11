@@ -58,7 +58,7 @@ public:
 
 	/**	@brief Virtual destructor
 	*/
-	virtual ~Model() {}
+	virtual ~Model() { deleteModelGeometry(); }
     
 	/**	@brief Draws the model to the screen
 	*	@param[in] mode
@@ -163,6 +163,16 @@ public:
 	*/
 	virtual void			removeGeometry(const std::string &name)								{ _groups.erase(name); }
 
+	/**	@brief Deletes all geometry of the model
+	*/
+	virtual void deleteModelGeometry()
+	{
+		for (auto i = _groups.begin(); i != _groups.end(); ++i)
+		{
+			i->second->deleteGeometry();
+		}
+		_groups.clear();
+	}
 
 private:
 
