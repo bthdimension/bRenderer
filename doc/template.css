@@ -283,6 +283,15 @@ h2{
 	line-height:55px;
 	font-weight: bold;
 }
+
+h3{
+	padding-left: 1.5%;
+	margin:0;
+	font-size:17px;
+	line-height:30px;
+	font-weight: bold;
+}
+
 h2.news{
 	padding-left: 3%;
 	margin:0;
@@ -298,6 +307,13 @@ h2.news{
 
 p{
 	padding-left: 1.5%;
+	padding-right: 1.5%;
+	margin-top:10px;
+	margin-bottom:25px;
+}
+
+ul{
+	padding-left: 3%;
 	padding-right: 1.5%;
 	margin-top:10px;
 	margin-bottom:25px;
@@ -338,6 +354,24 @@ a:hover {
 	color: black;
 	text-decoration: none;
 }
+
+a.linkButton:link, a.linkButton:visited
+{
+	background: #eeeeee; 
+	color: black; 
+	padding: 2px;
+	padding-left: 4px; padding-right: 5px; 
+	text-decoration:none;
+}
+
+a.linkButton:hover {
+	background: #eeeeee; 
+	color: black; 
+	padding: 2px; 
+	padding-left: 5px; padding-right: 4px; 
+	text-decoration:none;
+}
+
 .pictures{
 	float: left;
 	width: 33.33%;

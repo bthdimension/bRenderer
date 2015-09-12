@@ -37,6 +37,9 @@ public:
 	virtual void terminateFunction() = 0;
 
 protected:
+
+	/**	@brief Returns the project's instance of the renderer
+	*/
     Renderer& bRenderer()
     {
 		return _renderer;

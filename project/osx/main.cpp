@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	bRenderer::setStandardFilePath("../../../../../data");
+	bRenderer::setStandardFilePath("project/data");
 
 	// Create and initialize the RenderProject
 	RenderProject *project = new RenderProject();

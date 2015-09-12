@@ -81,7 +81,7 @@ public:
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
 	*	@param[in] materialName Name of the material
-	*	@param[in] shaderName Name of the shader (optional)
+	*	@param[in] shaderName Name of the shader (optional, if left empty, the material name will be used)
 	*	@param[in] maxLights The maximum number of light sources to be used (optional)
 	*	@param[in] variableNumberOfLights True if the number of lights may vary, otherwise the number of lights has to be the same as specified as maximum number of lights (optional)
 	*	@param[in] ambientLighting Set true if the shader supports ambient lighting (optional)
@@ -189,7 +189,7 @@ public:
 	*/
 	MaterialPtr createMaterial(const std::string &name, const MaterialData &materialData, ShaderPtr shader);
 
-	/**	@brief Create a material and a shader fitting its needs
+	/**	@brief Create a material and a shader fitting its characteristics
 	*	@param[in] name Name of the material and the shader
 	*	@param[in] materialData
 	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded
@@ -300,6 +300,9 @@ public:
 	CubeMapPtr createCubeMap(const std::string &name, const std::vector<TextureData> &data);
 
 	/**	@brief Create a cube map ((allows for creating empty cube maps e.g. for binding to a framebuffer)
+	*
+	*	Allows for specifying no image data for empty cube maps (e.g. to attach to a framebuffer)
+	*
 	*	@param[in] name The raw name of the cube map
 	*	@param[in] width Sets width and height since cube maps must use square sizes
 	*	@param[in] format

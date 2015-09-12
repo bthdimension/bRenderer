@@ -77,11 +77,11 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->createLight("torchLight", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 0.45f, -0.4f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1400.0f, 0.9f, 280.0f);
 
 	// postprocessing
-	bRenderer().getObjects()->createFramebuffer("fbo");																				// create framebuffer object
-	bRenderer().getObjects()->createTexture("fbo_texture1", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());	// create texture to bind to the fbo
-	bRenderer().getObjects()->createTexture("fbo_texture2", bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());	// create texture to bind to the fbo
-	ShaderPtr blurShader = bRenderer().getObjects()->loadShaderFile("blurShader", 0, false, false, false, false, false);				// load shader that blurs the texture
-	MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", blurShader);									// create an empty material to assign either texture1 or texture2 to
+	bRenderer().getObjects()->createFramebuffer("fbo");					// create framebuffer object
+	bRenderer().getObjects()->createTexture("fbo_texture1", 0.f, 0.f);	// create texture to bind to the fbo
+	bRenderer().getObjects()->createTexture("fbo_texture2", 0.f, 0.f);	// create texture to bind to the fbo
+	ShaderPtr blurShader = bRenderer().getObjects()->loadShaderFile("blurShader", 0, false, false, false, false, false);			// load shader that blurs the texture
+	MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", blurShader);								// create an empty material to assign either texture1 or texture2 to
 	bRenderer().getObjects()->createSprite("blurSprite", blurMaterial);																// create a sprite using the material created above
 
 	//////////////////////////////TESTreflections
@@ -174,6 +174,7 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
 		titleScale = 0.1f;
 		scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
 		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.45f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
+		// draw
 		bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
     }
 	//////////////////////////////TEST Depth Map

@@ -7,8 +7,8 @@ namespace bRenderer
     std::string SHADER_SOURCE_WHITE_SPACE() { return " "; }
     
     // Head
-	std::string SHADER_SOURCE_HEAD_ES() { return DEFAULT_SHADER_VERSION_ES() + SHADER_SOURCE_LINE_BREAK() + "precision mediump float" + SHADER_SOURCE_LINE_ENDING(); }
-	std::string SHADER_SOURCE_HEAD_DESKTOP() { return DEFAULT_SHADER_VERSION_DESKTOP() + SHADER_SOURCE_LINE_BREAK(); }
+	std::string SHADER_SOURCE_HEAD_ES() { return "#version 100" + SHADER_SOURCE_LINE_BREAK() + "precision mediump float" + SHADER_SOURCE_LINE_ENDING(); }
+	std::string SHADER_SOURCE_HEAD_DESKTOP() { return "#version 120" + SHADER_SOURCE_LINE_BREAK(); }
     
     // Lights
     std::string SHADER_SOURCE_NUM_LIGHTS() { return "uniform float " + DEFAULT_SHADER_UNIFORM_NUMBER_OF_LIGHTS() + SHADER_SOURCE_LINE_ENDING(); }

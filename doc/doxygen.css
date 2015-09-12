@@ -169,15 +169,15 @@ pre.fragment {
 
 div.fragment {
         padding: 4px 6px;
-        margin: 4px 8px 4px 2px;
+        margin: 4px 8px 25px 2px;
 	background-color: #FCFCFC;
 	border: 1px solid #D4D4D4;
 }
 
 div.line {
 	font-family: monospace, fixed;
-        font-size: 13px;
-	min-height: 13px;
+    font-size: 15px;
+	min-height: 15px;
 	line-height: 1.0;
 	text-wrap: unrestricted;
 	white-space: -moz-pre-wrap; /* Moz */
@@ -186,7 +186,8 @@ div.line {
 	white-space: pre-wrap;      /* CSS3  */
 	word-wrap: break-word;      /* IE 5.5+ */
 	text-indent: -53px;
-	padding-left: 53px;
+	padding-left: 62px;
+	padding-right: 5px;
 	padding-bottom: 0px;
 	margin: 0px;
 	-webkit-transition-property: background-color, box-shadow;
@@ -208,6 +209,7 @@ div.line.glow {
 
 
 span.lineno {
+	margin-left: -10px;
 	padding-right: 4px;
 	text-align: right;
 	border-right: 2px solid #0F0;
@@ -217,8 +219,8 @@ span.lineno {
 span.lineno a {
 	background-color: #D8D8D8;
 	font-family: monospace, fixed;
-    font-size: 13px;
-	min-height: 13px;
+    font-size: 15px;
+	min-height: 15px;
 	line-height: 1.0;
 }
 
