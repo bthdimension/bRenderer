@@ -299,7 +299,7 @@ public:
 	*/
 	CubeMapPtr createCubeMap(const std::string &name, const std::vector<TextureData> &data);
 
-	/**	@brief Create a cube map ((allows for creating empty cube maps e.g. for binding to a framebuffer)
+	/**	@brief Create a cube map
 	*
 	*	Allows for specifying no image data for empty cube maps (e.g. to attach to a framebuffer)
 	*
