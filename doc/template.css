@@ -343,6 +343,10 @@ ul{
 	margin-top:0;
 }
 
+ ul.innerList{
+	 margin-bottom:0;
+ }
+
 a:link, a:visited {
 	font-family: Arial;
 	color: black;
