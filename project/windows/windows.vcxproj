@@ -213,31 +213,34 @@
     <None Include="..\..\bRenderer\os_specific\ios\Renderer_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\TextureData_ios.mm" />
     <None Include="..\..\bRenderer\os_specific\ios\View_ios.mm" />
-    <None Include="..\..\project\data\blurShader.frag" />
-    <None Include="..\..\project\data\blurShader.vert" />
-    <None Include="..\..\project\data\cave.mtl" />
-    <None Include="..\..\project\data\cave_stream.frag" />
-    <None Include="..\..\project\data\cave_stream.mtl" />
-    <None Include="..\..\project\data\cave_stream.vert" />
-    <None Include="..\..\project\data\crystal.mtl" />
-    <None Include="..\..\project\data\flame.frag" />
-    <None Include="..\..\project\data\flame.mtl" />
-    <None Include="..\..\project\data\flame.vert" />
-    <None Include="..\..\project\data\sphere.mtl" />
-    <None Include="..\..\project\data\torch.mtl" />
+    <None Include="..\data\blurShader.frag" />
+    <None Include="..\data\blurShader.vert" />
+    <None Include="..\data\cave.mtl" />
+    <None Include="..\data\cave_stream.frag" />
+    <None Include="..\data\cave_stream.mtl" />
+    <None Include="..\data\cave_stream.vert" />
     <None Include="..\data\config.json" />
+    <None Include="..\data\crystal.mtl" />
+    <None Include="..\data\flame.frag" />
+    <None Include="..\data\flame.mtl" />
+    <None Include="..\data\flame.vert" />
+    <None Include="..\data\torch.mtl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\project\data\bTitle.png" />
-    <Image Include="..\..\project\data\cave_d.png" />
-    <Image Include="..\..\project\data\cave_n.png" />
-    <Image Include="..\..\project\data\cave_stream_n.png" />
-    <Image Include="..\..\project\data\crystal_d.png" />
-    <Image Include="..\..\project\data\crystal_n.png" />
-    <Image Include="..\..\project\data\crystal_s.png" />
-    <Image Include="..\..\project\data\flame.png" />
-    <Image Include="..\..\project\data\sparks.png" />
-    <Image Include="..\..\project\data\torchSurface_Color.png" />
+    <Image Include="..\data\basicTitle_light.png" />
+    <Image Include="..\data\cave_d.png" />
+    <Image Include="..\data\cave_n.png" />
+    <Image Include="..\data\cave_stream_n.png" />
+    <Image Include="..\data\crystal_d.png" />
+    <Image Include="..\data\crystal_n.png" />
+    <Image Include="..\data\crystal_s.png" />
+    <Image Include="..\data\flame.png" />
+    <Image Include="..\data\sparks.png" />
+    <Image Include="..\data\torchSurface_Color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="..\data\arial.ttf" />
+    <Font Include="..\data\KozGoPro-ExtraLight.otf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

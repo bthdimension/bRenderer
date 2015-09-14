@@ -4,6 +4,7 @@
 void RenderProject::init()
 {
 	bRenderer::loadConfigFile("config.json");	// load custom configurations replacing the default values in Configuration.cpp
+
 	// let the renderer create an OpenGL context and the main window
 	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// full screen on iOS
@@ -60,13 +61,6 @@ void RenderProject::initFunction()
 	else
 		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
 
-	//////////////////////////////////TEXTTEST
-	//FontPtr fontTest = bRenderer().getObjects()->loadFont("arial.ttf", 128);
-	//ShaderPtr testi = bRenderer().getObjects()->generateShader("testi", { 2, true, true, true, true, true, true, true, true, true, false, false, true });
-	//MaterialPtr testMaterial = bRenderer().getObjects()->loadObjMaterial("testi.mtl", "testi", testi);
-	//TextSpritePtr testSprite = bRenderer().getObjects()->createTextSprite("test_text", testMaterial, "Benjamin's Test", fontTest);
-	/////////////////////////////////
-
 	// create camera
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(-33.0, 0.f, -13.0), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
 
@@ -84,32 +78,6 @@ void RenderProject::initFunction()
 	MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", blurShader);								// create an empty material to assign either texture1 or texture2 to
 	bRenderer().getObjects()->createSprite("blurSprite", blurMaterial);																// create a sprite using the material created above
 
-	//////////////////////////////TESTreflections
-	bRenderer().getObjects()->loadObjModel("sphere.obj", true, true, true, 4, true, true);											// create custom shader with a maximum of 4 lights 
-	bRenderer().getObjects()->createCamera("reflectionCamera", 90.0, 16.f / 9.f, -1.0, 1000.0);																	// camera to capture reflections
-	FramebufferPtr fboRefl = bRenderer().getObjects()->createFramebuffer("fboRefl");																				// create framebuffer object
-    fboRefl->resize(512, 512, false);
-    CubeMapPtr reflCubeMap = bRenderer().getObjects()->createCubeMap("reflMap", 512);			// create cube map to bind to the fbo
-	//pass cube map to sphere
-	bRenderer().getObjects()->getMaterial("sphere")->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_CUBE_MAP(), reflCubeMap);
-	//////////////////////////////
-
-	//////////////////////////////TEST Depth Map
-	//FramebufferPtr fboDepth = bRenderer().getObjects()->createFramebuffer("fboDepth");
-	//DepthMapPtr depthMap = bRenderer().getObjects()->createDepthMap("depthMap", 0, 0);
-
-	//ShaderPtr depthShader = bRenderer().getObjects()->loadShaderFile("depthShader", 0, false, false, false, false, false);
-	//MaterialPtr depthMaterial = bRenderer().getObjects()->createMaterial("depthMaterial", depthShader);
-	//bRenderer().getObjects()->createSprite("depthSprite", depthMaterial);
-
-	//depthMaterial->setTexture(bRenderer::DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP(), depthMap);
-	//////////////////////////////
-
-	//////////////////////////////TESTreflections
-	// get reflections for cube map
-	updateReflections(fboRefl, reflCubeMap, "reflectionCamera", vmml::Vector3f(-148.0, -5.0, -40.0));
-	//////////////////////////////
-
 	// Update render queue
 	updateRenderQueue("camera", 0.0f);
 }
@@ -117,8 +85,7 @@ void RenderProject::initFunction()
 /* Draw your scene here */
 void RenderProject::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-	//bRenderer::log("deltaTime: "+std::to_string(deltaTime)+", elapsedTime: "+std::to_string(elapsedTime));
-//	bRenderer::log("FPS: " + std::to_string(1 / deltaTime));
+//	bRenderer::log("FPS: " + std::to_string(1 / deltaTime));	// write number of frames per second to the console every frame
 
 	//// Draw Scene and do post processing ////
 
@@ -129,12 +96,6 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
 		defaultFBO = Framebuffer::getCurrentFramebuffer();	// get current fbo to bind it again after drawing the scene
 		bRenderer().getObjects()->getFramebuffer("fbo")->bindTexture(bRenderer().getObjects()->getTexture("fbo_texture1"), false);	// bind the fbo
 	}
-	//////////////////////////////TEST Depth Map
-	//else{
-	//	defaultFBO = Framebuffer::getCurrentFramebuffer();	// get current fbo to bind it again after drawing the scene
-	//	bRenderer().getObjects()->getFramebuffer("fboDepth")->bindDepthMap(bRenderer().getObjects()->getDepthMap("depthMap"), false); // bind the fbo
-	//}
-	//////////////////////////////
 
 	/// Draw scene ///	
 	
@@ -177,18 +138,6 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
 		// draw
 		bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
     }
-	//////////////////////////////TEST Depth Map
-	//else{
-	//	bRenderer().getObjects()->getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
-
-	//	// translate
-	//	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
-	//	// draw
-	//	bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("depthSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
-
-	//}
-	//////////////////////////////
-
 
 	//// Camera Movement ////
 	updateCamera("camera", deltaTime);
@@ -240,15 +189,6 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	bRenderer().getObjects()->getProperties("streamProperties")->setScalar("offset", _offset);		// pass offset for wave effect
 	// submit to render queue
 	bRenderer().getModelRenderer()->queueModelInstance("cave_stream", "cave_stream_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight", "secondLight", "thirdLight" }), true, false, true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1.0f);
-	
-	//////////////////////////////TESTreflections
-	///*** Sphere ***/
-	//// translate and scale
-	//modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, 5.0f, 40.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
-	//// submit to render queue
-	//bRenderer().getModelRenderer()->queueModelInstance("sphere", "sphere_instance", camera, modelMatrix, std::vector<std::string>({ /*"torchLight",*/ "firstLight", "secondLight", "thirdLight" }), true, false, true);
-	//bRenderer().getObjects()->getModel("sphere")->getInstanceProperties("sphere_instance")->at(bRenderer().getObjects()->getShader("sphere"))->setMatrix(bRenderer::DEFAULT_SHADER_UNIFORM_INVERSE_VIEW_MATRIX(), vmml::Matrix3f(bRenderer().getObjects()->getCamera(camera)->getInverseViewMatrix()));
-	//////////////////////////////
 
 	/*** Crystal (blue) ***/
 	// translate and scale
@@ -322,15 +262,6 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 		bRenderer().getModelRenderer()->queueModelInstance(bRenderer().getObjects()->getModel("sparks"), ("sparks_instance" + std::to_string(z)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false, true, GL_SRC_ALPHA, GL_ONE, (-2.0f - 0.01f*z)); // negative distance because always in foreground
 	}
 
-	//////////////////////////////////TEXTTEST
-	//bRenderer().getObjects()->getFont("arial")->setPixelSize(static_cast<int>(1 / deltaTime));
-
-	//GLfloat titleScale = 6.f;
-	//vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale / bRenderer().getView()->getAspectRatio(), titleScale));
-	//modelMatrix = vmml::create_translation(vmml::Vector3f(78.f, 0.f, 10.f)) * bRenderer().getObjects()->getCamera("camera")->getInverseRotationY() * scaling;
-	//bRenderer().getObjects()->getTextSprite("test_text")->setText("FPS: " + std::to_string(static_cast<int>(1 / deltaTime)) + " \nthe cave - demo");
-	//bRenderer().getModelRenderer()->queueTextInstance("test_text", "textInstance_Test", "camera", modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }));
-	//////////////////////////////////
 }
 
 /* Camera movement */
@@ -468,37 +399,6 @@ void RenderProject::appWillTerminate()
 		// terminate renderer before the app is closed
 		bRenderer().terminateRenderer();
 	}
-}
-
-void RenderProject::updateReflections(FramebufferPtr fbo, CubeMapPtr cubeMap, const std::string &camera, const vmml::Vector3f &position)
-{
-	GLint defaultFBO = Framebuffer::getCurrentFramebuffer();				// get current fbo to bind it again after drawing the scene
-	bRenderer().getObjects()->getCamera(camera)->setPosition(position);
-
-	for (GLuint i = 0; i < 6; i++)
-	{
-		if (i == 0)
-			bRenderer().getObjects()->getCamera(camera)->setRotation(vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
-		if (i == 1)
-			bRenderer().getObjects()->getCamera(camera)->setRotation(vmml::Vector3f(0.f, M_PI_F / 2, 0.f));
-		if (i == 2)
-			bRenderer().getObjects()->getCamera(camera)->setRotation(vmml::Vector3f(-M_PI_F / 2, 0.f, 0.f));
-		if (i == 3)
-			bRenderer().getObjects()->getCamera(camera)->setRotation(vmml::Vector3f(M_PI_F / 2, 0.f, 0.f));
-		if (i == 4)
-			bRenderer().getObjects()->getCamera(camera)->setRotation(vmml::Vector3f(0.f, 0.f, 0.f));
-		if (i == 5)
-			bRenderer().getObjects()->getCamera(camera)->setRotation(vmml::Vector3f(0.f, 0.f, M_PI_F));
-		
-		// Bind buffer with cube map
-		fbo->bindCubeMap(cubeMap, i, false);
-		// Update scene
-		updateRenderQueue(camera, 0.0f);
-		// Draw scene into buffer
-		bRenderer().getModelRenderer()->drawQueue(/*GL_LINES*/);
-	}
-
-	fbo->unbind(defaultFBO);
 }
 
 /* Helper functions */

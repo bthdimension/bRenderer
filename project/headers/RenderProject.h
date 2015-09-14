@@ -52,9 +52,6 @@ private:
 	/* Camera movement */
 	void updateCamera(const std::string &camera, const double &deltaTime);
 
-	/* Update Reflections */
-	void updateReflections(FramebufferPtr fbo, CubeMapPtr cubeMap, const std::string &camera, const vmml::Vector3f &position);
-
 	/* Helper Functions */
 	GLfloat randomNumber(GLfloat min, GLfloat max);
 

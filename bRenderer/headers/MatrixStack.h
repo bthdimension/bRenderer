@@ -24,43 +24,28 @@ public:
 	*/
 	virtual ~MatrixStack(){}
 
-	/**	@brief Push a translation matrix to the stack
-	*	@param[in] transformationMatrix Matrix that moves an object in space
+	/**	@brief Push a matrix to the stack
+	*	@param[in] matrix
 	*/
-	void pushTranslation(const vmml::Matrix4f &transformationMatrix);
-
-	/**	@brief Push a scale matrix to the stack
-	*	@param[in] transformationMatrix Matrix that scales an object
-	*/
-	void pushScaling(const vmml::Matrix4f &transformationMatrix);
-
-	/**	@brief Push a rotation matrix to the stack
-	*	@param[in] transformationMatrix Matrix that rotates an object
-	*/
-	void pushRotation(const vmml::Matrix4f &transformationMatrix);
+	virtual void pushMatrix(const vmml::Matrix4f &matrix);
 
 	/**	@brief Delete last element on the stack
 	*/
-    void popMatrixStack();
+	virtual  void popMatrix();
 
 	/**	@brief Deletes all matrices in the stack
 	*/
-	void clearMatrixStack();
+	virtual void clearMatrixStack();
 
-	/**	@brief Returns the model matrix as the product of all pushed transformations
+	/**	@brief Returns the matrix as the product of all pushed transformations
 	*/
-    vmml::Matrix4f getModelMatrix();
-
-	/**	@brief Returns the normal matrix as the product of all pushed transformations
-	*/
-    vmml::Matrix4f getNormalMatrix();
+	virtual vmml::Matrix4f getMatrix();
 
 private:
 
 	/* Variables */
 
-    std::vector<vmml::Matrix4f> modelMatrixStack;
-	std::vector<vmml::Matrix4f> normalMatrixStack;
+    std::vector<vmml::Matrix4f> _matrixStack;
 };
 
 typedef std::shared_ptr<MatrixStack> MatrixStackPtr;

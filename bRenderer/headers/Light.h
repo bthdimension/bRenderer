@@ -6,13 +6,8 @@
 #include "Renderer_GL.h"
 #include "Configuration.h"
 
-///////////////////////////////////////////////
-//	
-//	TODO: create spot lights and sun light
-//
-///////////////////////////////////////////////
 
-/** @brief A light source to brighten up your day!
+/** @brief A simple point light source
 *	@author Benjamin Buergisser
 */
 class Light

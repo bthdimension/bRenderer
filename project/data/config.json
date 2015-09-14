@@ -1,11 +1,5 @@
 /* Demo configuration file */
 {
-	"LOG_MODE_INFO" : "This may interest you",
-	"DEFAULT_WINDOW_TITLE" : "The Cave - Demo",
 	"DEFAULT_VIEW_WIDTH" : 1024,
 	"DEFAULT_VIEW_HEIGHT" : 768
-	//"DEFAULT_FIELD_OF_VIEW" : 90.0,
-	//"DEFAULT_SHADER_UNIFORM_LIGHT_POSITION_VIEW_SPACE" : "ThePosition",
-	//"DEFAULT_AMBIENT_COLOR" : [ 0.0, 1.0, 0.2 ],
-	//"DEFAULT_LIGHT_COLOR" : [0.0,1.0,0.2],
 }
