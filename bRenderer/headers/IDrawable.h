@@ -3,7 +3,7 @@
 
 #include "Renderer_GL.h"
 
-/** @brief Interface for drawable objects
+/** @brief An interface for drawable objects.
 *	@author David Steiner
 */
 class IDrawable

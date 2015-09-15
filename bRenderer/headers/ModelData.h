@@ -3,7 +3,7 @@
 
 #include "GeometryData.h"
 
-/** @brief The underlying data of a model
+/** @brief The underlying data of a model.
 *	@author David Steiner
 */
 class OBJLoader;

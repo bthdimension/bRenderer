@@ -17,7 +17,10 @@ struct RenderCall
 	GLenum blendSfactor, blendDfactor;
 };
 
-/** @brief A queue that stores render calls and performs drawing in sorted order
+/** @brief A render queue stores render calls and performs drawing in sorted order. 
+*
+*	Transparent objects are drawn in a back-to-front order whereas opaque objects are arranged in a manner that avoids state changes as much as possible.
+*
 *	@author Benjamin Buergisser
 */
 class RenderQueue : public IDrawable

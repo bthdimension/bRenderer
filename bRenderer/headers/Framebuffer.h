@@ -6,7 +6,7 @@
 #include "CubeMap.h"
 #include "DepthMap.h"
 
-/** @brief A custom framebuffer object
+/** @brief A custom framebuffer object allows to draw to non-default framebuffer locations and offers the possibility to attach textures.
 *	@author Benjamin Buergisser
 */
 class Framebuffer

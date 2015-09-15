@@ -11,7 +11,7 @@
 #include "vmmlib/frustum_culler.hpp"
 
 
-/** @brief A helper class to efficiently draw and queue models with one function call
+/** @brief A helper class to efficiently draw and queue models with one function call.
 *	@author Benjamin Buergisser
 */
 class ModelRenderer

@@ -5,7 +5,7 @@
 #include "Configuration.h"
 #include "Font.h"
 
-/** @brief A simple text sprite to display 2d text on the screen
+/** @brief A simple text sprite to display 2d text on the screen.
 *	@author Benjamin Buergisser
 */
 class TextSprite : public Sprite

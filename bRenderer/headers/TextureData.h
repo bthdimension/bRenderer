@@ -7,7 +7,7 @@
 
 typedef std::shared_ptr< GLubyte > ImageDataPtr;
    
-/** @brief The underlying data of a texture
+/** @brief The underlying data of a texture.
 *	@author David Steiner
 */
 class TextureData

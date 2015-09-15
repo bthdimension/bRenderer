@@ -11,7 +11,7 @@
 
 class IShaderData;
 
-/** @brief Shader 
+/** @brief A shader class that represents a program to be run on the GPU.
 *	@author Rahul Mukhi, David Steiner
 */
 class Shader

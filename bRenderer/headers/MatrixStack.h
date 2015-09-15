@@ -7,7 +7,7 @@
 #include "vmmlib/vector.hpp"
 
 
-/** @brief This is a matrix stack to temporarily store transformations 
+/** @brief This is a matrix stack to temporarily store transformation matrices.
 *	@author Benjamin Buergisser
 */
 class MatrixStack

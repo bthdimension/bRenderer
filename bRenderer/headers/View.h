@@ -11,10 +11,10 @@
 #import "../os_specific/ios/BView.h"
 #endif
 
-/** @brief An abstraction of the view the scene is drawn into
+/** @brief An abstraction of the view the scene is drawn into.
 *
 *	The view class represents a window on desktop systems or a UIView on iOS. 
-*	The view possesses an OpenGL context and allows for a scene to be displayed to the screen.
+*	It possesses an OpenGL context and allows for a scene to be displayed to the screen.
 *
 *	@author Benjamin Buergisser
 */

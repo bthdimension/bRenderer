@@ -13,7 +13,7 @@
 class ObjectManager;
 class ModelData;
 
-/** @brief A 3d model that can be rendered to the screen
+/** @brief A 3d model that can be rendered to the screen.
 *	@author Rahul Mukhi, David Steiner
 */
 class Model : public IDrawable

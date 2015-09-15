@@ -10,7 +10,7 @@
 #include "vmmlib/matrix.hpp"
 #include "external/obj_parser/obj_parser.hpp"
 
-/** @brief Loads and processes OBJ models and materials
+/** @brief Loads and processes OBJ models and materials.
 *	@author David Steiner, Benjamin Buergisser
 */
 class OBJLoader

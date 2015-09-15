@@ -7,7 +7,7 @@
 #include "Configuration.h"
 
 
-/** @brief A simple point light source
+/** @brief A simple point light source.
 *	@author Benjamin Buergisser
 */
 class Light

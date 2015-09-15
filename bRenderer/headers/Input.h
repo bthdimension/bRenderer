@@ -149,7 +149,7 @@ namespace bRenderer
 
 } // namespace bRenderer
 
-/** @brief Maintenance of user inputs
+/** @brief The input class is closely coupled to a view to retrieve actions taken by the user directly from the underlying UIView or window that it concerns. 
 *	@author Benjamin Buergisser
 */
 class Input

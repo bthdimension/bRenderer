@@ -4,7 +4,7 @@
 #include <string>
 #include "Renderer_GL.h"
 
-/** @brief Interface for the underlying data of a shader
+/** @brief An interface for the underlying data of a shader.
 *	@author Benjamin Buergisser
 */
 class IShaderData

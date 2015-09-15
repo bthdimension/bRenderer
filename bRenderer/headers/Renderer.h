@@ -16,7 +16,7 @@
 
 class IRenderProject;
 
-/** @brief The main class that is able to initialize and maintain everything that is necessary to render an image to the screen
+/** @brief The main class that is able to initialize and maintain the render loop as well as a view, an input object, an object manager and a model renderer.
 *	@author Benjamin Buergisser
 */
 class Renderer

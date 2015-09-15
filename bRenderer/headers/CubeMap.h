@@ -4,7 +4,7 @@
 #include <vector>
 #include "Texture.h"
 
-/** @brief Cube map 
+/** @brief The cube map consists of six textures arranged in the shape of a cube.
 *	@author Benjamin Buergisser
 */
 class CubeMap : public Texture

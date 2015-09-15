@@ -3,7 +3,7 @@
 
 #include "Model.h"
 
-/** @brief A 2d plane that can be rendered to the screen
+/** @brief A 2d plane that can be rendered to the screen.
 *	@author Benjamin Buergisser
 */
 class Sprite : public Model

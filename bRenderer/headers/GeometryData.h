@@ -7,8 +7,6 @@
 #include "MaterialData.h"
 #include "Texture.h"
 
-class GeometryDataImpl;
-
 struct IndexData
 {
     GLushort vertexIndex;
@@ -121,6 +119,9 @@ struct Vertex
 
 typedef GLushort Index;
 
+/** @brief The underlying data of a geometry object.
+*	@author David Steiner
+*/
 struct GeometryData
 {
     typedef std::vector< Vertex >   VboVertices;

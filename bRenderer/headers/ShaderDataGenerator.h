@@ -22,7 +22,7 @@ struct ShaderGeneratorSettings
 	bool isText;					// Set true if the shader should be used for displaying text
 };
 
-/** @brief The underlying shader data is generated 
+/** @brief The underlying data of a shader is generated.
 *	@author Benjamin Buergisser
 */
 class ShaderDataGenerator : public IShaderData

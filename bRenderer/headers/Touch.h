@@ -3,6 +3,9 @@
 
 #include <map>
 
+/** @brief An object that holds the characteristics of a touch on a touch screen.
+*	@author Benjamin Buergisser
+*/
 struct Touch
 {
     GLfloat startPositionX;

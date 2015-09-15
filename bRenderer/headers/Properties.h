@@ -7,10 +7,10 @@
 
 #include "Shader.h"
 
-/** @brief Properties such as matrices, vectors and scalars that can be associated with a model
+/** @brief A properties object caches data to pass to a shader (such as matrices, vectors and scalars) and can be associated with a drawable object.
 *
 *	The properties may be passed to the shader as uniforms. The names of the stored objects
-*	should therefore be chosen to match the names of the uniforms in the shader
+*	should therefore be chosen to match the names of the uniforms in the shader.
 *
 *	@author Benjamin Buergisser
 */

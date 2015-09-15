@@ -3,7 +3,7 @@
 
 #include "IShaderData.h"
 
-/** @brief The underlying shader data is loaded from shader files
+/** @brief The underlying data of a shader is loaded from shader files.
 *	@author David Steiner
 */
 class ShaderDataFile : public IShaderData

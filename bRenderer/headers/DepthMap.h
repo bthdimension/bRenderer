@@ -4,7 +4,7 @@
 #include <vector>
 #include "Texture.h"
 
-/** @brief Depth map
+/** @brief The depth map stores depth values in a texture.
 *	@author Benjamin Buergisser
 */
 class DepthMap : public Texture

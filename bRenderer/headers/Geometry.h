@@ -13,7 +13,7 @@
 #include "Geometry.h"
 #include "vmmlib/aabb.hpp"
 
-/** @brief The geometry that can be rendered to the screen
+/** @brief A geometry object containing vertices and indices that can be rendered to the screen.
 *	@author Rahul Mukhi, David Steiner
 */
 class Geometry : public IDrawable

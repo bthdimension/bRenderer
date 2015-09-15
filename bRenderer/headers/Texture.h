@@ -7,7 +7,7 @@
 
 class TextureData;
 
-/** @brief Texture
+/** @brief  An image that can be applied to a surface of a drawable object.
 *	@author Rahul Mukhi, David Steiner
 */
 class Texture

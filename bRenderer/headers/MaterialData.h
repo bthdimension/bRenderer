@@ -4,6 +4,9 @@
 #include <unordered_map>
 #include "vmmlib/vector.hpp"
 
+/** @brief The underlying data of a material.
+*	@author David Steiner
+*/
 struct MaterialData
 {
     typedef std::unordered_map<std::string, std::string>		TextureMap;

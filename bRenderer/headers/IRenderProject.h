@@ -4,7 +4,7 @@
 /* bRenderer includes */
 #include "../bRenderer.h"
 
-/** @brief This interface needs to be implemented if the renderer should be used in an object oriented manner
+/** @brief This interface needs to be implemented if the renderer should be used in an object oriented manner.
 *	@author Benjamin Buergisser
 */
 class IRenderProject

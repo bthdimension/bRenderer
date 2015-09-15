@@ -9,7 +9,7 @@
 
 class ObjectManager;
 
-/** @brief A material associated with textures and a shader to define the look of an object
+/** @brief A material is associated with textures and a shader to define the look of an object.
 *	@author David Steiner
 */
 class Material
