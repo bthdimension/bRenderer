@@ -26,6 +26,20 @@
 /* vmmlib includes */
 #include "vmmlib/util.hpp"
 
+/* Flags */
+enum Options {
+	NO_OPTION = 0,
+	VariableNumberOfLights = 0x01,
+	AmbientLighting = 0x02,
+	DiffuseLighting = 0x04,
+	SpecularLighting = 0x08,
+	CubicReflectionMap = 0x10,
+	ShaderFromFile = 0x20,
+	FlipT = 0x40,
+	FlipZ = 0x80,
+	IsText = 0x100
+};
+
 /** @brief This class manages all objects in a project and makes sure no object is created twice.
 *	@author Benjamin Buergisser
 */
@@ -47,6 +61,7 @@ public:
 	typedef std::unordered_map< std::string, LightPtr >			LightMap;
 	typedef std::unordered_map< std::string, FramebufferPtr >	FramebufferMap;
 	typedef std::unordered_map< std::string, DrawablePtr >		DrawableMap;
+	typedef unsigned char OPTIONS;
 
 	/* Functions */
 
@@ -88,6 +103,18 @@ public:
 	*/
 	MaterialPtr loadObjMaterial(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true);
 
+	/**	@brief Load a material with option flags
+	*	@param[in] fileName File name including extension
+	*	@param[in] materialName Name of the material
+	*	@param[in] shaderName Name of the shader (optional, if left empty, the material name will be used)
+	*	@param[in] maxLights The maximum number of light sources to be used (optional)
+	*	@param[in] options Valid options are "VariableNumberOfLights" and "AmbientLighting" (optional)
+	*/
+	MaterialPtr loadObjMaterial_o(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION)
+	{
+		return loadObjMaterial(fileName, materialName, shaderName, shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting));
+	}
+
 	/**	@brief Load a material
 	*	@param[in] fileName File name including extension
 	*	@param[in] materialName Name of the material
@@ -110,6 +137,20 @@ public:
 	*/
 	ModelPtr loadObjModel(const std::string &fileName, bool flipT = false, bool flipZ = false, bool shaderFromFile = false, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, PropertiesPtr properties = nullptr);
 
+	/**	@brief Load a 3D model with option flags
+	*	@param[in] fileName File name including extension
+	*	@param[in] shaderFromFile Set true if for every material a shader file with the same name should be loaded (optional)
+	*	@param[in] maxLights The maximum number of light sources to be used (optional)
+	*	@param[in] options Valid options are "FlipT", "FlipZ", "ShaderFromFile", "VariableNumberOfLights" and "AmbientLighting" (optional)
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*
+	*	This function will automatically create one shader for every material of the model
+	*
+	*/
+	ModelPtr loadObjModel_o(const std::string &fileName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
+		return loadObjModel(fileName, (options & FlipT), (options & FlipZ), (options & ShaderFromFile), shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), properties);
+	}
+
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
 	*	@param[in] flipT Flip T axis of texture
@@ -119,6 +160,16 @@ public:
 	*/
 	ModelPtr loadObjModel(const std::string &fileName, bool flipT, bool flipZ, ShaderPtr shader, PropertiesPtr	properties = nullptr);
 
+	/**	@brief Load a 3D model with option flags
+	*	@param[in] fileName File name including extension
+	*	@param[in] shader Custom shader for the model
+	*	@param[in] options Valid options are "FlipT" and "FlipZ"
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr loadObjModel_o(const std::string &fileName, ShaderPtr shader, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
+		return loadObjModel(fileName, (options & FlipT), (options & FlipZ), shader, properties);
+	}
+
 	/**	@brief Load a 3D model
 	*	@param[in] fileName File name including extension
 	*	@param[in] flipT Flip T axis of texture
@@ -127,6 +178,16 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr loadObjModel(const std::string &fileName, bool flipT, bool flipZ, MaterialPtr material, PropertiesPtr	properties = nullptr);
+
+	/**	@brief Load a 3D model with option flags
+	*	@param[in] fileName File name including extension
+	*	@param[in] material Custom material for the model
+	*	@param[in] options Valid options are "FlipT" and "FlipZ"
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr loadObjModel_o(const std::string &fileName, MaterialPtr material, OPTIONS options = NO_OPTION, PropertiesPtr	properties = nullptr){
+		return loadObjModel(fileName, (options & FlipT), (options & FlipZ), material, properties);
+	}
 
 	/**	@brief Load a texture
 	*	@param[in] fileName File name including extension
@@ -160,6 +221,19 @@ public:
 	*/
 	ShaderPtr loadShaderFile(const std::string &shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool diffuseLighting = true, bool specularLighting = true, bool cubicReflectionMap = false);
 
+	/**	@brief Load a shader with option flags
+	*	@param[in] shaderName Name of the shader
+	*	@param[in] maxLights The maximum number of light sources to be used  (optional)
+	*	@param[in] options Valid options are "VariableNumberOfLights", "AmbientLighting", "DiffuseLighting", "SpecularLighting", "cubicReflectionMap" (optional)
+	*
+	*	If no shaders with the chosen name exist or no name is passed to the function
+	*	the default shader will be used.
+	*
+	*/
+	ShaderPtr loadShaderFile_o(const std::string &shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION){
+		return loadShaderFile(shaderName, shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), (options & DiffuseLighting), (options & SpecularLighting), (options & CubicReflectionMap));
+	}
+	
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
 	*	@param[in] shaderMaxLights The maximum number of light sources to be used
@@ -169,6 +243,16 @@ public:
 	*	@param[in] isText Set true if the shader should be used for displaying text
 	*/
 	ShaderPtr generateShader(const std::string &shaderName, GLuint shaderMaxLights, bool ambientLighting, const MaterialData &materialData, bool variableNumberOfLights, bool isText);
+
+	/**	@brief Generate a shader with option flags
+	*	@param[in] shaderName Name of the shader
+	*	@param[in] shaderMaxLights The maximum number of light sources to be used
+	*	@param[in] materialData All necessary information for the shader is read from the material data
+	*	@param[in] options Valid options are "VariableNumberOfLights", "IsText" and "AmbientLighting" (optional)
+	*/
+	ShaderPtr generateShader_o(const std::string &shaderName, GLuint shaderMaxLights, const MaterialData &materialData, OPTIONS options = NO_OPTION){
+		return generateShader(shaderName, shaderMaxLights, (options & AmbientLighting), materialData, (options & VariableNumberOfLights), (options &IsText));
+	}
 
 	/**	@brief Generate a shader
 	*	@param[in] shaderName Name of the shader
@@ -200,6 +284,16 @@ public:
 	*/
 	MaterialPtr createMaterialShaderCombination(const std::string &name, const MaterialData &materialData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, bool isText = false);
 
+	/**	@brief Create a material and a shader fitting its characteristics with option flags
+	*	@param[in] name Name of the material and the shader
+	*	@param[in] materialData
+	*	@param[in] shaderMaxLights (optional)
+	*	@param[in] options Valid options are "ShaderFromFile", "VariableNumberOfLights", "AmbientLighting" and "IsText" (optional)
+	*/
+	MaterialPtr createMaterialShaderCombination_o(const std::string &name, const MaterialData &materialData, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION){
+		return createMaterialShaderCombination(name, materialData, (options & ShaderFromFile), shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), (options & IsText));
+	}
+
 	/**	@brief Create properties
 	*	@param[in] name Name of the properties
 	*/
@@ -215,6 +309,17 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr createModel(const std::string &name, const ModelData &modelData, bool shaderFromFile, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), bool variableNumberOfLights = false, bool ambientLighting = true, PropertiesPtr properties = nullptr);
+
+	/**	@brief Create a model with option flags
+	*	@param[in] name The raw name of the model
+	*	@param[in] modelData
+	*	@param[in] maxLights The maximum number of light sources to be used (optional)
+	*	@param[in] options Valid options are "ShaderFromFile", "VariableNumberOfLights" and "AmbientLighting"
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr createModel_o(const std::string &name, const ModelData &modelData, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
+		return createModel(name, modelData, (options & ShaderFromFile), shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), properties);
+	}
 
 	/**	@brief Create a model
 	*	@param[in] name The raw name of the model
@@ -258,6 +363,38 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr createSprite(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights = 0, bool variableNumberOfLights = false, bool flipT = false, PropertiesPtr properties = nullptr);
+
+	/**	@brief Create a sprite with option flags
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] material
+	*	@param[in] options Valid option is "FlipT" (optional)
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr createSprite_o(const std::string &name, MaterialPtr material, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
+		return createSprite(name, material, (options & FlipT), properties);
+	}
+
+	/**	@brief Create a sprite with option flags
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] textureFileName	The filename of the texture that should be loaded and displayed
+	*	@param[in] shader
+	*	@param[in] options Valid option is "FlipT" (optional)
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr createSprite_o(const std::string &name, const std::string &textureFileName, ShaderPtr shader, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
+		return createSprite(name, textureFileName, shader, (options & FlipT), properties);
+	}
+
+	/**	@brief Create a sprite with option flags
+	*	@param[in] name The raw name of the sprite
+	*	@param[in] textureFileName The filename of the texture that should be loaded and displayed
+	*	@param[in] shaderMaxLights The maximum number of light sources to be used (optional)
+	*	@param[in] options Valid options are "VariableNumberOfLights" and "FlipT" (optional)
+	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
+	*/
+	ModelPtr createSprite_o(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights = 0, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
+		return createSprite(name, textureFileName, shaderMaxLights, (options & VariableNumberOfLights), (options & FlipT), properties);
+	}
 
 	/**	@brief Create a text sprite to display strings on the screen
 	*	@param[in] name The raw name of the sprite
