@@ -137,9 +137,9 @@ AABB< T >::AABB( const Vector< 3, T >& pMin,
 template< typename T >
 AABB< T >::AABB( const Vector< 4, T >& sphere )
 {
-    _max = _min = sphere.getCenter();
-    _max += sphere.getRadius();
-    _min -= sphere.getRadius();
+    _max = _min = Vector< 3, T >(sphere[0], sphere[1], sphere[2]);
+    _max += sphere[3];
+    _min -= sphere[3];
 }
 
 template< typename T >
@@ -153,11 +153,11 @@ AABB< T >::AABB( T cx, T cy, T cz, T size )
 template< typename T >
 inline bool AABB< T >::isIn( const Vector< 4, T >& sphere )
 {
-    Vector< 3, T > sv ( sphere.getCenter() );
-    sv += sphere.getRadius();
+    Vector< 3, T > sv ( sphere[0], sphere[1], sphere[2] );
+    sv += sphere[3];
     if ( sv.x() > _max.x() || sv.y() > _max.y() || sv.z() > _max.z() )
         return false;
-    sv -= sphere.getRadius() * 2.0f;
+    sv -= sphere[3] * 2.0f;
     if ( sv.x() < _min.x() || sv.y() < _min.y() || sv.z() < _min.z() )
         return false;
     return true;

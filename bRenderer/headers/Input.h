@@ -23,9 +23,9 @@ namespace bRenderer
 	const GLint INPUT_REPEAT = 2;		// The key was held down until it repeated
 	const GLint INPUT_UNDEFINED = -1;	// Will be returned if the OS doesn't support the input method
 
-	const GLint LEFT_MOUSE_BUTTON = 1;
-	const GLint RIGHT_MOUSE_BUTTON = 2;
-	const GLint MIDDLE_MOUSE_BUTTON = 3;
+	const GLint LEFT_MOUSE_BUTTON = 0;
+	const GLint RIGHT_MOUSE_BUTTON = 1;
+	const GLint MIDDLE_MOUSE_BUTTON = 2;
 
 	const GLint KEY_SPACE = 32;
 	const GLint KEY_APOSTROPHE = 39;		// '

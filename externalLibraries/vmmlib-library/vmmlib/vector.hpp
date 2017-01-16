@@ -416,6 +416,7 @@ typedef vmml::Vector< 4, int > Vector4i;
 typedef vmml::Vector< 2, unsigned > Vector2ui;
 typedef vmml::Vector< 3, unsigned > Vector3ui;
 typedef vmml::Vector< 4, unsigned > Vector4ui;
+typedef vmml::Vector< 2, double > Vector2d;
 typedef vmml::Vector< 3, double > Vector3d;
 typedef vmml::Vector< 4, double > Vector4d;
 typedef vmml::Vector< 2, float > Vector2f;

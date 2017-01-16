@@ -29,15 +29,15 @@
 /* Flags */
 enum Options {
 	NO_OPTION = 0,
-	VariableNumberOfLights = 0x01,
-	AmbientLighting = 0x02,
-	DiffuseLighting = 0x04,
-	SpecularLighting = 0x08,
-	CubicReflectionMap = 0x10,
-	ShaderFromFile = 0x20,
-	FlipT = 0x40,
-	FlipZ = 0x80,
-	IsText = 0x100
+	VARIABLE_NUMBER_OF_LIGHTS = 0x01,
+	AMBIENT_LIGHTING = 0x02,
+	DIFFUSE_LIGHTING = 0x04,
+	SPECULAR_LIGHTING = 0x08,
+	CUBIC_REFLECTION_MAP = 0x10,
+	SHADER_FROM_FILE = 0x20,
+	FLIP_T = 0x40,
+	FLIP_Z = 0x80,
+	IS_TEXT = 0x100
 };
 
 /** @brief This class manages all objects in a project and makes sure no object is created twice.
@@ -112,7 +112,7 @@ public:
 	*/
 	MaterialPtr loadObjMaterial_o(const std::string &fileName, const std::string &materialName, const std::string &shaderName = "", GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION)
 	{
-		return loadObjMaterial(fileName, materialName, shaderName, shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting));
+		return loadObjMaterial(fileName, materialName, shaderName, shaderMaxLights, (options & VARIABLE_NUMBER_OF_LIGHTS), (options & AMBIENT_LIGHTING));
 	}
 
 	/**	@brief Load a material
@@ -148,7 +148,7 @@ public:
 	*
 	*/
 	ModelPtr loadObjModel_o(const std::string &fileName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
-		return loadObjModel(fileName, (options & FlipT), (options & FlipZ), (options & ShaderFromFile), shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), properties);
+		return loadObjModel(fileName, (options & FLIP_T), (options & FLIP_Z), (options & SHADER_FROM_FILE), shaderMaxLights, (options & VARIABLE_NUMBER_OF_LIGHTS), (options & AMBIENT_LIGHTING), properties);
 	}
 
 	/**	@brief Load a 3D model
@@ -167,7 +167,7 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr loadObjModel_o(const std::string &fileName, ShaderPtr shader, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
-		return loadObjModel(fileName, (options & FlipT), (options & FlipZ), shader, properties);
+		return loadObjModel(fileName, (options & FLIP_T), (options & FLIP_Z), shader, properties);
 	}
 
 	/**	@brief Load a 3D model
@@ -186,7 +186,7 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr loadObjModel_o(const std::string &fileName, MaterialPtr material, OPTIONS options = NO_OPTION, PropertiesPtr	properties = nullptr){
-		return loadObjModel(fileName, (options & FlipT), (options & FlipZ), material, properties);
+		return loadObjModel(fileName, (options & FLIP_T), (options & FLIP_Z), material, properties);
 	}
 
 	/**	@brief Load a texture
@@ -231,7 +231,7 @@ public:
 	*
 	*/
 	ShaderPtr loadShaderFile_o(const std::string &shaderName, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION){
-		return loadShaderFile(shaderName, shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), (options & DiffuseLighting), (options & SpecularLighting), (options & CubicReflectionMap));
+		return loadShaderFile(shaderName, shaderMaxLights, (options & VARIABLE_NUMBER_OF_LIGHTS), (options & AMBIENT_LIGHTING), (options & DIFFUSE_LIGHTING), (options & SPECULAR_LIGHTING), (options & CUBIC_REFLECTION_MAP));
 	}
 	
 	/**	@brief Generate a shader
@@ -251,7 +251,7 @@ public:
 	*	@param[in] options Valid options are "VariableNumberOfLights", "IsText" and "AmbientLighting" (optional)
 	*/
 	ShaderPtr generateShader_o(const std::string &shaderName, GLuint shaderMaxLights, const MaterialData &materialData, OPTIONS options = NO_OPTION){
-		return generateShader(shaderName, shaderMaxLights, (options & AmbientLighting), materialData, (options & VariableNumberOfLights), (options &IsText));
+		return generateShader(shaderName, shaderMaxLights, (options & AMBIENT_LIGHTING), materialData, (options & VARIABLE_NUMBER_OF_LIGHTS), (options &IS_TEXT));
 	}
 
 	/**	@brief Generate a shader
@@ -291,7 +291,7 @@ public:
 	*	@param[in] options Valid options are "ShaderFromFile", "VariableNumberOfLights", "AmbientLighting" and "IsText" (optional)
 	*/
 	MaterialPtr createMaterialShaderCombination_o(const std::string &name, const MaterialData &materialData, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION){
-		return createMaterialShaderCombination(name, materialData, (options & ShaderFromFile), shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), (options & IsText));
+		return createMaterialShaderCombination(name, materialData, (options & SHADER_FROM_FILE), shaderMaxLights, (options & VARIABLE_NUMBER_OF_LIGHTS), (options & AMBIENT_LIGHTING), (options & IS_TEXT));
 	}
 
 	/**	@brief Create properties
@@ -318,7 +318,7 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr createModel_o(const std::string &name, const ModelData &modelData, GLuint shaderMaxLights = bRenderer::DEFAULT_SHADER_MAX_LIGHTS(), OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
-		return createModel(name, modelData, (options & ShaderFromFile), shaderMaxLights, (options & VariableNumberOfLights), (options & AmbientLighting), properties);
+		return createModel(name, modelData, (options & SHADER_FROM_FILE), shaderMaxLights, (options & VARIABLE_NUMBER_OF_LIGHTS), (options & AMBIENT_LIGHTING), properties);
 	}
 
 	/**	@brief Create a model
@@ -371,7 +371,7 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr createSprite_o(const std::string &name, MaterialPtr material, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
-		return createSprite(name, material, (options & FlipT), properties);
+		return createSprite(name, material, (options & FLIP_T), properties);
 	}
 
 	/**	@brief Create a sprite with option flags
@@ -382,7 +382,7 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr createSprite_o(const std::string &name, const std::string &textureFileName, ShaderPtr shader, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
-		return createSprite(name, textureFileName, shader, (options & FlipT), properties);
+		return createSprite(name, textureFileName, shader, (options & FLIP_T), properties);
 	}
 
 	/**	@brief Create a sprite with option flags
@@ -393,7 +393,7 @@ public:
 	*	@param[in] properties Properties that will be passed to the shader of the model (optional)
 	*/
 	ModelPtr createSprite_o(const std::string &name, const std::string &textureFileName, GLuint shaderMaxLights = 0, OPTIONS options = NO_OPTION, PropertiesPtr properties = nullptr){
-		return createSprite(name, textureFileName, shaderMaxLights, (options & VariableNumberOfLights), (options & FlipT), properties);
+		return createSprite(name, textureFileName, shaderMaxLights, (options & VARIABLE_NUMBER_OF_LIGHTS), (options & FLIP_T), properties);
 	}
 
 	/**	@brief Create a text sprite to display strings on the screen
